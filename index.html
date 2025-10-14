@@ -1,482 +1,845 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Czech Badminton - ligové statistiky</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
-        .kolo-checkbox { cursor: pointer; }
-        .kolo-checkbox:hover { background-color: #eff6ff; }
-        .soutez-tab { transition: all 0.2s; }
-        .soutez-tab.active { background: linear-gradient(to right, #2563eb, #4f46e5); color: white; }
-        /* Dark mode tweaks */
-        .dark { background-color: #0b0b0b !important; color: #ddd !important; }
-        .dark .card { background: #111 !important; color: #ddd !important; }
-        .dark table { background: #161616; }
-        .modal-backdrop { background: rgba(0,0,0,0.5); position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 60; }
-        .modal { background: white; padding: 1rem; border-radius: 0.5rem; max-width: 720px; width: 95%; max-height: 80vh; overflow: auto; }
-        .dark .modal { background: #1b1b1b; color: #ddd; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .kolo-checkbox {
+            cursor: pointer;
+        }
+        .kolo-checkbox:hover {
+            background-color: #eff6ff;
+        }
+        .soutez-tab {
+            transition: all 0.2s;
+        }
+        .soutez-tab.active {
+            background: linear-gradient(to right, #2563eb, #4f46e5);
+            color: white;
+        }
+        .clickable {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .clickable:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            z-index: 10;
+            border-radius: 12px 12px 0 0;
+        }
+        .close {
+            color: #9ca3af;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+        .close:hover {
+            color: #ef4444;
+        }
+        body.dark-mode {
+            background: linear-gradient(to bottom right, #1f2937, #111827) !important;
+        }
+        body.dark-mode .bg-white {
+            background-color: #1f2937 !important;
+            color: #f3f4f6;
+        }
+        body.dark-mode .text-gray-800 {
+            color: #f3f4f6 !important;
+        }
+        body.dark-mode .text-gray-700 {
+            color: #e5e7eb !important;
+        }
+        body.dark-mode .text-gray-600 {
+            color: #d1d5db !important;
+        }
+        body.dark-mode .text-gray-500 {
+            color: #9ca3af !important;
+        }
+        body.dark-mode .bg-gray-50 {
+            background-color: #374151 !important;
+        }
+        body.dark-mode .bg-gray-100 {
+            background-color: #374151 !important;
+        }
+        body.dark-mode .bg-gray-200 {
+            background-color: #4b5563 !important;
+        }
+        body.dark-mode .border-gray-200 {
+            border-color: #4b5563 !important;
+        }
+        body.dark-mode .border-gray-300 {
+            border-color: #6b7280 !important;
+        }
+        body.dark-mode input,
+        body.dark-mode select {
+            background-color: #374151 !important;
+            color: #f3f4f6 !important;
+            border-color: #6b7280 !important;
+        }
+        body.dark-mode .modal-content {
+            background-color: #1f2937 !important;
+        }
+        body.dark-mode .modal-header {
+            background-color: #1f2937 !important;
+        }
+        body.dark-mode table {
+            color: #f3f4f6;
+        }
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+            table {
+                font-size: 0.75rem;
+            }
+            .soutez-tab {
+                font-size: 0.875rem;
+                padding: 0.5rem 1rem;
+            }
+        }
     </style>
 </head>
-<body class="min-h-screen p-4 bg-gradient-to-br from-red-600 to-red-800">
-  <div class="max-w-7xl mx-auto">
-    <div class="card bg-white rounded-xl shadow-lg p-6 mb-6">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-800 mb-2">🏸 Czech Badminton - ligové statistiky</h1>
-          <p class="text-gray-600">Přehled zápasů, tabulky a statistiky hráčů</p>
-          <p class="text-sm text-blue-600 mt-2" id="aktualizaceInfo">Načítání dat...</p>
-          <p id="hracMesice" class="mt-2 text-sm text-gray-700"></p>
-        </div>
-        <div class="flex gap-2 items-center">
-          <button id="darkToggle" onclick="toggleDarkMode()" class="bg-gray-700 text-white px-3 py-2 rounded-lg shadow-lg">🌓 Dark</button>
-        </div>
-      </div>
-
-      <div class="mt-6 flex flex-wrap gap-2">
-        <button onclick="zmenitSoutez('extraliga')" id="tab-extraliga" class="soutez-tab px-6 py-3 rounded-lg font-semibold">🏆 Extraliga</button>
-        <button onclick="zmenitSoutez('prvni-liga-vychod')" id="tab-prvni-liga-vychod" class="soutez-tab px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700">📍 1. liga - Východ</button>
-        <button onclick="zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700">📍 1. liga - Západ</button>
-      </div>
-    </div>
-
-    <div class="flex gap-2 mb-4">
-      <button class="bg-blue-100 text-blue-700 px-3 py-1 rounded" onclick="filtrPosledniKolo()">Poslední kolo</button>
-      <button class="bg-green-100 text-green-700 px-3 py-1 rounded" onclick="vyberVsechnaKola()">Aktuální kolo</button>
-    </div>
-
-    <!-- Tabulka -->
-    <div id="tabulkaContainer" class="card bg-white rounded-xl shadow-lg p-6 mb-6" style="display:none">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">🏆 Tabulka - <span id="tabulkaSoutez"></span></h2>
-        <div id="bodovaniInfo" class="text-sm text-gray-600"></div>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr class="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
-              <th class="p-2">#</th>
-              <th class="p-2 text-left">Tým</th>
-              <th class="p-2">Utkání</th>
-              <th class="p-2">V</th>
-              <th class="p-2">R</th>
-              <th class="p-2">P</th>
-              <th class="p-2">Zápasy</th>
-              <th class="p-2">Sety</th>
-              <th class="p-2">Body</th>
-              <th class="p-2">Bodů</th>
-            </tr>
-          </thead>
-          <tbody id="tabulkaTable"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Statistiky -->
-    <div id="statistikyContainer" class="card bg-white rounded-xl shadow-lg p-6 mb-6" style="display:none">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">📊 Statistiky hráčů</h2>
-      </div>
-
-      <!-- Filtry -->
-      <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1">Vyhledat hráče</label>
-            <input id="hledatHrace" oninput="zobrazitData()" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" placeholder="Zadejte jméno..."/>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1">Tým</label>
-            <select id="filtrTym" onchange="zobrazitData()" class="w-full border border-gray-300 rounded px-3 py-2 text-sm"><option value="">Všechny týmy</option></select>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1">Min. zápasů</label>
-            <input id="minZapasy" type="number" min="0" value="0" oninput="zobrazitData()" class="w-full border border-gray-300 rounded px-3 py-2 text-sm"/>
-          </div>
-        </div>
-
-        <div class="border-t border-gray-300 pt-3 mt-3">
-          <div class="flex justify-between items-center mb-2">
-            <label class="text-xs font-medium text-gray-600">Filtr podle kol</label>
-            <div class="flex gap-2">
-              <button onclick="vyberVsechnaKola()" class="text-xs text-blue-600 hover:text-blue-800">Vybrat vše</button>
-              <button onclick="zrusVsechnaKola()" class="text-xs text-red-600 hover:text-red-800">Zrušit vše</button>
+<body class="min-h-screen p-2 md:p-4" style="background: linear-gradient(to bottom right, #d93831, #a82820);">
+    <div class="max-w-7xl mx-auto">
+        <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">🏸 Czech Badminton</h1>
+                    <p class="text-sm md:text-base text-gray-600">Přehled zápasů, tabulky a statistiky hráčů</p>
+                    <p class="text-xs md:text-sm text-blue-600 mt-2" id="aktualizaceInfo">Načítání dat...</p>
+                </div>
+                <button onclick="toggleDarkMode()" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                    <span id="darkModeIcon">🌙</span> <span id="darkModeText">Dark Mode</span>
+                </button>
             </div>
-          </div>
-          <div id="kolaCheckboxy" class="flex flex-wrap gap-2"></div>
+            
+            <div class="mt-4 md:mt-6 flex flex-wrap gap-2">
+                <button onclick="zmenitSoutez('extraliga')" id="tab-extraliga" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base">
+                    🏆 Extraliga
+                </button>
+                <button onclick="zmenitSoutez('prvni-liga-vychod')" id="tab-prvni-liga-vychod" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base">
+                    🥈 1. liga - Východ
+                </button>
+                <button onclick="zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base">
+                    🥈 1. liga - Západ
+                </button>
+            </div>
         </div>
-      </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-              <th class="p-2">#</th>
-              <th class="p-2 text-left">Hráč</th>
-              <th class="p-2 text-left">Tým</th>
-              <th class="p-2">Z</th>
-              <th class="p-2">V</th>
-              <th class="p-2">P</th>
-              <th class="p-2">Win %</th>
-            </tr>
-          </thead>
-          <tbody id="statistikyTable"></tbody>
-        </table>
-      </div>
+        <div id="rychleFiltry" class="bg-white rounded-xl shadow-lg p-3 md:p-4 mb-4 md:mb-6" style="display: none;">
+            <div class="flex flex-wrap gap-2">
+                <button onclick="filtrPoslednichXKol(1)" class="px-3 md:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs md:text-sm">
+                    📅 Poslední kolo
+                </button>
+                <button onclick="filtrPoslednichXKol(3)" class="px-3 md:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs md:text-sm">
+                    📅 3 kola
+                </button>
+                <button onclick="filtrAktualniKolo()" class="px-3 md:px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-xs md:text-sm">
+                    ⚡ Aktuální
+                </button>
+                <button onclick="vymazatFiltry()" class="px-3 md:px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors text-xs md:text-sm">
+                    ✕ Vše
+                </button>
+            </div>
+        </div>
+
+        <div id="hracMesiceContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
+            <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4">🔥 TOP 3 Hráči (min. 5 zápasů)</h2>
+            <div id="hracMesiceObsah" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        </div>
+
+        <div id="tabulkaContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
+            <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSekce('tabulkaObsah')">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800">🏆 Tabulka - <span id="tabulkaSoutez"></span></h2>
+                <span id="tabulkaToggle" class="text-xl md:text-2xl">▼</span>
+            </div>
+            <div id="tabulkaObsah">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs md:text-sm">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
+                                <th class="text-center p-2 md:p-3 font-semibold">#</th>
+                                <th class="text-left p-2 md:p-3 font-semibold">Tým</th>
+                                <th class="text-center p-2 md:p-3 font-semibold">U</th>
+                                <th class="text-center p-2 md:p-3 font-semibold">V</th>
+                                <th class="text-center p-2 md:p-3 font-semibold">R</th>
+                                <th class="text-center p-2 md:p-3 font-semibold">P</th>
+                                <th class="text-center p-2 md:p-3 font-semibold">Zápasy</th>
+                                <th class="text-center p-2 md:p-3 font-semibold">Sety</th>
+                                <th class="text-center p-2 md:p-3 font-semibold">Body</th>
+                                <th class="text-center p-2 md:p-3 font-semibold font-bold">Bodů</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabulkaTable"></tbody>
+                    </table>
+                </div>
+                <div class="mt-4 text-xs md:text-sm text-gray-600" id="bodovaniInfo"></div>
+            </div>
+        </div>
+
+        <div id="zapasyContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="toggleSekce('zapasyObsah')">
+                    <h2 class="text-lg md:text-xl font-bold text-gray-800">📋 Zápasy (<span id="pocetZapasu">0</span>)</h2>
+                    <span id="zapasyToggle" class="text-xl md:text-2xl">▼</span>
+                </div>
+            </div>
+            <div id="zapasyObsah">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="bg-gray-100 border-b-2 border-gray-200">
+                                <th class="text-left p-2 font-semibold text-gray-700">Kolo</th>
+                                <th class="text-left p-2 font-semibold text-gray-700">Datum</th>
+                                <th class="text-left p-2 font-semibold text-gray-700">Disciplína</th>
+                                <th class="text-left p-2 font-semibold text-gray-700">Tým D</th>
+                                <th class="text-left p-2 font-semibold text-gray-700">Domácí</th>
+                                <th class="text-left p-2 font-semibold text-gray-700">Tým H</th>
+                                <th class="text-left p-2 font-semibold text-gray-700">Hosté</th>
+                                <th class="text-left p-2 font-semibold text-gray-700">Výsl.</th>
+                                <th class="text-left p-2 font-semibold text-gray-700">Skóre</th>
+                            </tr>
+                        </thead>
+                        <tbody id="zapasyTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="statistikyContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
+            <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSekce('statistikyObsah')">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800">📊 Statistiky hráčů</h2>
+                <span id="statistikyToggle" class="text-xl md:text-2xl">▼</span>
+            </div>
+            <div id="statistikyObsah">
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 md:p-4 mb-4">
+                    <h3 class="text-xs md:text-sm font-semibold text-gray-700 mb-3">🔍 Filtry</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Hráč</label>
+                            <input type="text" id="hledatHrace" placeholder="Jméno..." class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="zobrazitData()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Tým</label>
+                            <select id="filtrTym" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="zobrazitData()">
+                                <option value="">Všechny týmy</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Disciplína</label>
+                            <select id="filtrDisciplina" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="zobrazitData()">
+                                <option value="">Vše</option>
+                                <option value="dvouhra">Dvouhry</option>
+                                <option value="ctyrhra">Čtyřhry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Min. zápasů</label>
+                            <input type="number" id="minZapasy" value="0" min="0" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="zobrazitData()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Řadit</label>
+                            <select id="razeniSloupec" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="zobrazitData()">
+                                <option value="winrate">Win %</option>
+                                <option value="zapasy">Zápasy</option>
+                                <option value="vyhry">Výhry</option>
+                                <option value="jmeno">Jméno</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="vymazatFiltry()" class="w-full bg-gray-500 hover:bg-gray-600 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded transition-colors">
+                                ✕ Reset
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-gray-300 pt-3 mt-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-xs font-medium text-gray-600">Kola</label>
+                            <div class="flex gap-2">
+                                <button onclick="vyberVsechnaKola()" class="text-xs text-blue-600 hover:text-blue-800">Vše</button>
+                                <button onclick="zrusVsechnaKola()" class="text-xs text-red-600 hover:text-red-800">Žádné</button>
+                            </div>
+                        </div>
+                        <div id="kolaCheckboxy" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                                <th class="text-center p-2 font-semibold">#</th>
+                                <th class="text-left p-2 font-semibold">Hráč</th>
+                                <th class="text-left p-2 font-semibold">Tým</th>
+                                <th class="text-center p-2 font-semibold">Z</th>
+                                <th class="text-center p-2 font-semibold">V</th>
+                                <th class="text-center p-2 font-semibold">P</th>
+                                <th class="text-center p-2 font-semibold">Win%</th>
+                                <th class="text-center p-2 font-semibold">Forma</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statistikyTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="prazdnyStav" class="bg-white rounded-xl shadow-lg p-8 md:p-12 text-center">
+            <div class="text-5xl md:text-6xl mb-4">🏸</div>
+            <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-2">Zatím žádné zápasy</h3>
+            <p class="text-sm md:text-base text-gray-500">Data se načítají...</p>
+        </div>
     </div>
 
-  </div>
-
-  <!-- Modal -->
-  <div id="modal" style="display:none" class="modal-backdrop">
-    <div class="modal">
-      <div id="modalContent"></div>
-      <div class="mt-3 text-right"><button onclick="closeModal()" class="px-3 py-1 rounded bg-gray-200">Zavřít</button></div>
+    <div id="hracModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="zavritModal('hracModal')">&times;</span>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalHracJmeno"></h2>
+                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalHracInfo"></p>
+            </div>
+            <div class="p-4 md:p-6">
+                <div id="modalHracObsah"></div>
+            </div>
+        </div>
     </div>
-  </div>
 
-<script>
-/* ---------- Data containers ---------- */
-let zapasy = {'extraliga': [], 'prvni-liga-vychod': [], 'prvni-liga-zapad': []};
-let tymy = {'extraliga': [], 'prvni-liga-vychod': [], 'prvni-liga-zapad': []};
-let vybrana_kola = new Set();
-let aktualni_soutez = 'extraliga';
+    <div id="tymModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="zavritModal('tymModal')">&times;</span>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalTymNazev"></h2>
+                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalTymInfo"></p>
+            </div>
+            <div class="p-4 md:p-6">
+                <div id="modalTymObsah"></div>
+            </div>
+        </div>
+    </div>
 
-const soutezNazvy = {
-  'extraliga': 'Extraliga',
-  'prvni-liga-vychod': '1. liga - Východ',
-  'prvni-liga-zapad': '1. liga - Západ'
-};
+    <script>
+        let zapasy = {'extraliga': [],'prvni-liga-vychod': [],'prvni-liga-zapad': []};
+        let tymy = {'extraliga': [],'prvni-liga-vychod': [],'prvni-liga-zapad': []};
+        let vybrana_kola = new Set();
+        let aktualni_soutez = 'extraliga';
+        const soutezNazvy = {'extraliga': 'Extraliga','prvni-liga-vychod': '1. liga - Východ','prvni-liga-zapad': '1. liga - Západ'};
 
-/* ---------- Utility parsers ---------- */
-function parseVysledek(vysledek){
-  if(!vysledek) return {domaci:0,hoste:0};
-  const parts = vysledek.split(':');
-  return {domaci: parseInt(parts[0]) || 0, hoste: parseInt(parts[1]) || 0};
-}
-function parseSety(sety){
-  if(!sety) return {domaciBody:0,hosteBody:0};
-  const setArr = sety.split(',').map(s=>s.trim());
-  let dom=0, hos=0;
-  setArr.forEach(set=>{
-    const p=set.split(':');
-    dom += parseInt(p[0]) || 0;
-    hos += parseInt(p[1]) || 0;
-  });
-  return {domaciBody: dom, hosteBody: hos};
-}
-function getHraciFromTeam(team){ return team ? team.split(',').map(h=>h.trim()).filter(Boolean) : []; }
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            document.getElementById('darkModeIcon').textContent = isDark ? '☀️' : '🌙';
+            document.getElementById('darkModeText').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+        }
 
-/* ---------- Data loading ---------- */
-async function nacistData(){
-  try{
-    const res = await fetch('badminton-data.json');
-    if(!res.ok) throw new Error('Soubor nenalezen');
-    const data = await res.json();
-    zapasy = data.zapasy || zapasy;
-    tymy = data.tymy || tymy;
-    document.getElementById('aktualizaceInfo').textContent = '✓ Poslední aktualizace: ' + (data.aktualizace || '-');
-    zmenitSoutez('extraliga');
-  }catch(e){
-    console.error(e);
-    document.getElementById('aktualizaceInfo').textContent = '❌ Nepodařilo se načíst data';
-    document.getElementById('tabulkaContainer').style.display = 'none';
-    document.getElementById('statistikyContainer').style.display = 'none';
-  }
-}
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeIcon').textContent = '☀️';
+            document.getElementById('darkModeText').textContent = 'Light Mode';
+        }
 
-/* ---------- UI helpers ---------- */
-function toggleDarkMode(){ document.body.classList.toggle('dark'); }
-function openModal(html){ document.getElementById('modalContent').innerHTML = html; document.getElementById('modal').style.display='flex'; }
-function closeModal(){ document.getElementById('modal').style.display='none'; }
+        async function nacistData() {
+            try {
+                const response = await fetch('badminton-data.json');
+                if (!response.ok) throw new Error('Soubor nenalezen');
+                const data = await response.json();
+                zapasy = data.zapasy;
+                tymy = data.tymy;
+                document.getElementById('aktualizaceInfo').textContent = '✓ Aktualizace: ' + data.aktualizace;
+                zmenitSoutez('extraliga');
+            } catch (error) {
+                console.error('Chyba:', error);
+                document.getElementById('aktualizaceInfo').textContent = '❌ Chyba načítání';
+                document.getElementById('prazdnyStav').innerHTML = '<div class="text-6xl mb-4">⚠️</div><h3 class="text-xl font-semibold text-gray-700 mb-2">Chyba</h3><p class="text-gray-500">Soubor badminton-data.json nenalezen</p>';
+            }
+        }
 
-/* ---------- Tabs / filters ---------- */
-function zmenitSoutez(soutez){
-  aktualni_soutez = soutez;
-  document.querySelectorAll('.soutez-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-' + soutez).classList.add('active');
-  document.getElementById('tabulkaSoutez').textContent = soutezNazvy[soutez];
-  vybrana_kola.clear();
-  aktualizovatSelecty();
-  zobrazitData();
-}
+        function zmenitSoutez(soutez) {
+            aktualni_soutez = soutez;
+            document.querySelectorAll('.soutez-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            const activeTab = document.getElementById('tab-' + soutez);
+            activeTab.classList.add('active');
+            activeTab.classList.remove('bg-gray-200', 'text-gray-700');
+            document.getElementById('tabulkaSoutez').textContent = soutezNazvy[soutez];
+            vybrana_kola.clear();
+            aktualizovatSelecty();
+            zobrazitData();
+        }
 
-function aktualizovatSelecty(){
-  const filtrTym = document.getElementById('filtrTym');
-  if(!filtrTym) return;
-  const current = filtrTym.value;
-  filtrTym.innerHTML = '<option value=\"\">Všechny týmy</option>' + (tymy[aktualni_soutez] || []).map(t=>`<option value=\"${t}\">${t}</option>`).join('');
-  if((tymy[aktualni_soutez]||[]).includes(current)) filtrTym.value = current;
-}
+        function toggleSekce(id) {
+            const obsah = document.getElementById(id);
+            const toggle = document.getElementById(id.replace('Obsah', 'Toggle'));
+            if (obsah.style.display === 'none') {
+                obsah.style.display = 'block';
+                toggle.textContent = '▼';
+            } else {
+                obsah.style.display = 'none';
+                toggle.textContent = '▶';
+            }
+        }
 
-function aktualizovatKolaCheckboxy(){
-  const vsechna = [...new Set((zapasy[aktualni_soutez]||[]).map(z=>z.kolo))].sort((a,b)=> (parseInt(a)||0) - (parseInt(b)||0));
-  const container = document.getElementById('kolaCheckboxy');
-  if(!vsechna.length){ container.innerHTML = '<span class=\"text-xs text-gray-500\">Žádná kola</span>'; return; }
-  container.innerHTML = vsechna.map(k=>{
-    const checked = (vybrana_kola.size===0 || vybrana_kola.has(k)) ? 'checked' : '';
-    return `<label class="kolo-checkbox flex items-center gap-1 px-3 py-1 border border-gray-300 rounded bg-white"><input type="checkbox" value="${k}" onchange="toggleKolo('${k}')" ${checked} class="w-3 h-3"/><span class="text-xs">Kolo ${k}</span></label>`;
-  }).join('');
-}
+        function aktualizovatSelecty() {
+            const filtrTym = document.getElementById('filtrTym');
+            if (filtrTym) {
+                const currentFiltr = filtrTym.value;
+                filtrTym.innerHTML = '<option value="">Všechny týmy</option>' + tymy[aktualni_soutez].map(t => '<option value="' + t + '">' + t + '</option>').join('');
+                if (tymy[aktualni_soutez].includes(currentFiltr)) filtrTym.value = currentFiltr;
+            }
+        }
 
-function toggleKolo(k){ if(vybrana_kola.has(k)) vybrana_kola.delete(k); else vybrana_kola.add(k); zobrazitData(); }
-function vyberVsechnaKola(){ vybrana_kola.clear(); aktualizovatKolaCheckboxy(); zobrazitData(); }
-function zrusVsechnaKola(){ vybrana_kola = new Set(); const c = document.querySelectorAll('#kolaCheckboxy input[type=\"checkbox\"]'); c.forEach(x=>x.checked=false); zobrazitData(); }
+        function aktualizovatKolaCheckboxy() {
+            const vsechnaKola = [...new Set(zapasy[aktualni_soutez].map(z => z.kolo))].sort((a, b) => parseInt(a) - parseInt(b));
+            const container = document.getElementById('kolaCheckboxy');
+            if (vsechnaKola.length === 0) {
+                container.innerHTML = '<span class="text-xs text-gray-500">Žádná kola</span>';
+                return;
+            }
+            container.innerHTML = vsechnaKola.map(kolo => '<label class="kolo-checkbox flex items-center gap-1 px-2 py-1 border border-gray-300 rounded bg-white text-xs"><input type="checkbox" value="' + kolo + '" onchange="toggleKolo(\'' + kolo + '\')" ' + (vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? 'checked' : '') + ' class="w-3 h-3"><span>K' + kolo + '</span></label>').join('');
+        }
 
-/* ---------- Statistické výpočty ---------- */
-function vypocitejStatistiky(){
-  const stats = {};
-  const filtrTym = document.getElementById('filtrTym') ? document.getElementById('filtrTym').value : '';
-  const minZapasy = document.getElementById('minZapasy') ? parseInt(document.getElementById('minZapasy').value) : 0;
+        function toggleKolo(kolo) {
+            if (vybrana_kola.has(kolo)) vybrana_kola.delete(kolo);
+            else vybrana_kola.add(kolo);
+            zobrazitData();
+        }
 
-  (zapasy[aktualni_soutez]||[]).forEach(z=>{
-    if(vybrana_kola.size>0 && !vybrana_kola.has(z.kolo)) return;
-    const vys = parseVysledek(z.vysledek);
-    const body = parseSety(z.sety);
-    const domaciHraci = getHraciFromTeam(z.domaci);
-    const hosteHraci = getHraciFromTeam(z.hoste);
-    const domaciVyhral = vys.domaci > vys.hoste;
-    const domSkrec = z.domaci === 'SKREČ';
-    const hosSkrec = z.hoste === 'SKREČ';
+        function vyberVsechnaKola() {
+            vybrana_kola.clear();
+            aktualizovatKolaCheckboxy();
+            zobrazitData();
+        }
 
-    if(!domSkrec){
-      domaciHraci.forEach(hrac=>{
-        if(filtrTym && z.tymDomaci !== filtrTym) return;
-        if(!stats[hrac]) stats[hrac] = {zapasy:0, vyhry:0, prohry:0, setVyhrane:0, setProhrane:0, bodyVyhrane:0, bodyProhrane:0, tymy:{} , last:[]};
-        stats[hrac].zapasy++;
-        if(domaciVyhral) stats[hrac].vyhry++; else stats[hrac].prohry++;
-        stats[hrac].setVyhrane += vys.domaci;
-        stats[hrac].setProhrane += vys.hoste;
-        stats[hrac].bodyVyhrane += body.domaciBody;
-        stats[hrac].bodyProhrane += body.hosteBody;
-        stats[hrac].tymy[z.tymDomaci] = (stats[hrac].tymy[z.tymDomaci]||0)+1;
-        stats[hrac].last.push({kolo:z.kolo, datum:z.datum, disciplina:z.disciplina, vysledek:z.vysledek, proti: z.hoste});
-      });
-    }
-    if(!hosSkrec){
-      hosteHraci.forEach(hrac=>{
-        if(filtrTym && z.tymHoste !== filtrTym) return;
-        if(!stats[hrac]) stats[hrac] = {zapasy:0, vyhry:0, prohry:0, setVyhrane:0, setProhrane:0, bodyVyhrane:0, bodyProhrane:0, tymy:{} , last:[]};
-        stats[hrac].zapasy++;
-        if(!domaciVyhral) stats[hrac].vyhry++; else stats[hrac].prohry++;
-        stats[hrac].setVyhrane += vys.hoste;
-        stats[hrac].setProhrane += vys.domaci;
-        stats[hrac].bodyVyhrane += body.hosteBody;
-        stats[hrac].bodyProhrane += body.domaciBody;
-        stats[hrac].tymy[z.tymHoste] = (stats[hrac].tymy[z.tymHoste]||0)+1;
-        stats[hrac].last.push({kolo:z.kolo, datum:z.datum, disciplina:z.disciplina, vysledek:z.vysledek, proti: z.domaci});
-      });
-    }
-  });
+        function zrusVsechnaKola() {
+            vybrana_kola = new Set();
+            document.querySelectorAll('#kolaCheckboxy input[type="checkbox"]').forEach(cb => cb.checked = false);
+            zobrazitData();
+        }
 
-  // odstranit hráče pod minZapasy
-  Object.keys(stats).forEach(h=>{
-    if(stats[h].zapasy < (document.getElementById('minZapasy')?parseInt(document.getElementById('minZapasy').value):0)){
-      delete stats[h];
-    }
-  });
+        function filtrPoslednichXKol(pocet) {
+            const vsechnaKola = [...new Set(zapasy[aktualni_soutez].map(z => z.kolo))].sort((a, b) => parseInt(b) - parseInt(a));
+            vybrana_kola = new Set(vsechnaKola.slice(0, pocet));
+            aktualizovatKolaCheckboxy();
+            zobrazitData();
+        }
 
-  return stats;
-}
+        function filtrAktualniKolo() {
+            const vsechnaKola = [...new Set(zapasy[aktualni_soutez].map(z => z.kolo))].sort((a, b) => parseInt(b) - parseInt(a));
+            if (vsechnaKola.length > 0) {
+                vybrana_kola = new Set([vsechnaKola[0]]);
+                aktualizovatKolaCheckboxy();
+                zobrazitData();
+            }
+        }
 
-function vypocitejTabulku(){
-  const tab = {}; const utk = {};
-  (zapasy[aktualni_soutez]||[]).forEach(z=>{
-    const key = `${z.kolo}|${z.tymDomaci}|${z.tymHoste}`;
-    if(!utk[key]) utk[key] = {kolo:z.kolo, domaci:z.tymDomaci, hoste:z.tymHoste, zapasy:[]};
-    utk[key].zapasy.push(z);
-  });
+        function vymazatFiltry() {
+            document.getElementById('hledatHrace').value = '';
+            document.getElementById('filtrTym').value = '';
+            document.getElementById('filtrDisciplina').value = '';
+            document.getElementById('minZapasy').value = '0';
+            document.getElementById('razeniSloupec').value = 'winrate';
+            vybrana_kola.clear();
+            aktualizovatKolaCheckboxy();
+            zobrazitData();
+        }
 
-  const jePrvni = aktualni_soutez.includes('prvni-liga');
+        function parseVysledek(vysledek) {
+            const parts = vysledek.split(':');
+            return { domaci: parseInt(parts[0]) || 0, hoste: parseInt(parts[1]) || 0 };
+        }
 
-  Object.values(utk).forEach(u=>{
-    const dom = u.domaci, hos = u.hoste;
-    if(!dom || !hos) return;
-    if(!tab[dom]) tab[dom] = {utkani:0, vyhry:0, remizy:0, prohry:0, zapasyV:0, zapasyP:0, setyV:0, setyP:0, bodyV:0, bodyP:0, body:0};
-    if(!tab[hos]) tab[hos] = JSON.parse(JSON.stringify(tab[dom] = tab[dom] || {utkani:0, vyhry:0, remizy:0, prohry:0, zapasyV:0, zapasyP:0, setyV:0, setyP:0, bodyV:0, bodyP:0, body:0}));
-    let domZ=0, hosZ=0, domSet=0, hosSet=0, domBody=0, hosBody=0;
-    u.zapasy.forEach(z=>{
-      const v = parseVysledek(z.vysledek);
-      const b = parseSety(z.sety);
-      if(v.domaci > v.hoste) domZ++; else if(v.hoste > v.domaci) hosZ++;
-      domSet += v.domaci; hosSet += v.hoste;
-      domBody += b.domaciBody; hosBody += b.hosteBody;
-    });
+        function parseSety(sety) {
+            if (!sety) return { domaciBody: 0, hosteBody: 0 };
+            const setArr = sety.split(',').map(s => s.trim());
+            let domaciBody = 0, hosteBody = 0;
+            setArr.forEach(set => {
+                const parts = set.split(':');
+                domaciBody += parseInt(parts[0]) || 0;
+                hosteBody += parseInt(parts[1]) || 0;
+            });
+            return { domaciBody, hosteBody };
+        }
 
-    let domBodyTab=0, hosBodyTab=0;
-    if(jePrvni){
-      if(domZ === hosZ){ domBodyTab = 2; hosBodyTab = 2; tab[dom].remizy++; tab[hos].remizy++; }
-      else if(domZ > hosZ){ domBodyTab = 3; hosBodyTab = 1; tab[dom].vyhry++; tab[hos].prohry++; }
-      else { hosBodyTab = 3; domBodyTab = 1; tab[hos].vyhry++; tab[dom].prohry++; }
-    } else {
-      const domVy = domZ > hosZ;
-      if(domVy){
-        if(domZ >= 6){ domBodyTab = 3; hosBodyTab = 0; }
-        else if(domZ >=4){ domBodyTab = 2; hosBodyTab = 1; }
-        tab[dom].vyhry++; tab[hos].prohry++;
-      } else {
-        if(hosZ >= 6){ hosBodyTab = 3; domBodyTab = 0; }
-        else if(hosZ >=4){ hosBodyTab = 2; domBodyTab = 1; }
-        tab[hos].vyhry++; tab[dom].prohry++;
-      }
-    }
+        function getHraciFromTeam(team) {
+            return team.split(',').map(h => h.trim()).filter(h => h);
+        }
 
-    tab[dom].utkani++; tab[dom].zapasyV += domZ; tab[dom].zapasyP += hosZ; tab[dom].setyV += domSet; tab[dom].setyP += hosSet; tab[dom].bodyV += domBody; tab[dom].bodyP += hosBody; tab[dom].body += domBodyTab;
-    tab[hos].utkani++; tab[hos].zapasyV += hosZ; tab[hos].zapasyP += domZ; tab[hos].setyV += hosSet; tab[hos].setyP += domSet; tab[hos].bodyV += hosBody; tab[hos].bodyP += domBody; tab[hos].body += hosBodyTab;
-  });
+        function getForma(hrac, vsechnyZapasy) {
+            const hracovaZapasy = vsechnyZapasy.filter(z => {
+                const domaciHraci = getHraciFromTeam(z.domaci);
+                const hosteHraci = getHraciFromTeam(z.hoste);
+                return domaciHraci.includes(hrac) || hosteHraci.includes(hrac);
+            }).slice(-5);
+            return hracovaZapasy.map(zapas => {
+                const vysledek = parseVysledek(zapas.vysledek);
+                const domaciHraci = getHraciFromTeam(zapas.domaci);
+                const jeHracDomaci = domaciHraci.includes(hrac);
+                const vyhral = jeHracDomaci ? (vysledek.domaci > vysledek.hoste) : (vysledek.hoste > vysledek.domaci);
+                return vyhral ? 'V' : 'P';
+            }).join('');
+        }
 
-  return tab;
-}
+        function zobrazitHracMesice() {
+            const stats = vypocitejStatistiky();
+            const hraciList = Object.keys(stats).filter(h => stats[h].zapasy >= 5);
+            hraciList.sort((a, b) => {
+                const winRateA = stats[a].zapasy > 0 ? (stats[a].vyhry / stats[a].zapasy) : 0;
+                const winRateB = stats[b].zapasy > 0 ? (stats[b].vyhry / stats[b].zapasy) : 0;
+                return winRateB - winRateA;
+            });
+            const top3 = hraciList.slice(0, 3);
+            const container = document.getElementById('hracMesiceObsah');
+            if (top3.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm">Nedostatek dat</p>';
+                return;
+            }
+            container.innerHTML = top3.map((hrac, idx) => {
+                const s = stats[hrac];
+                const winRate = ((s.vyhry / s.zapasy) * 100).toFixed(1);
+                const medals = ['🥇', '🥈', '🥉'];
+                const colors = ['bg-yellow-100 border-yellow-400', 'bg-gray-100 border-gray-400', 'bg-orange-100 border-orange-400'];
+                return '<div class="border-2 ' + colors[idx] + ' rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition-all" onclick="zobrazitDetailHrace(\'' + hrac + '\')">' +
+                    '<div class="text-3xl md:text-4xl mb-2">' + medals[idx] + '</div>' +
+                    '<div class="font-bold text-base md:text-lg text-gray-800 mb-1">' + hrac + '</div>' +
+                    '<div class="text-xl md:text-2xl font-bold text-blue-600 mb-1">' + winRate + '%</div>' +
+                    '<div class="text-xs md:text-sm text-gray-600">' + s.vyhry + 'V / ' + s.prohry + 'P (' + s.zapasy + ' zápasů)</div>' +
+                    '</div>';
+            }).join('');
+        }
 
-/* ---------- Helpers for UI formatting ---------- */
-function formatDiff(val){
-  const arrow = val > 0 ? '▲' : val < 0 ? '▼' : '–';
-  const cls = val > 0 ? 'text-green-600' : val < 0 ? 'text-red-600' : 'text-gray-400';
-  return `<span class="${cls} ml-1 text-xs">${arrow}${val>=0?'+':''}${val}</span>`;
-}
+        function vypocitejStatistiky() {
+            const stats = {};
+            const filtrTym = document.getElementById('filtrTym') ? document.getElementById('filtrTym').value : '';
+            const filtrDisciplina = document.getElementById('filtrDisciplina') ? document.getElementById('filtrDisciplina').value : '';
+            zapasy[aktualni_soutez].forEach(zapas => {
+                if (vybrana_kola.size > 0 && !vybrana_kola.has(zapas.kolo)) return;
+                if (filtrDisciplina) {
+                    const jeDvouhra = zapas.disciplina && zapas.disciplina.toLowerCase().includes('dvouhra');
+                    const jeCtyrhra = zapas.disciplina && (zapas.disciplina.toLowerCase().includes('čtyřhra') || zapas.disciplina.toLowerCase().includes('ctyrhra') || zapas.disciplina.toLowerCase().includes('smíšená'));
+                    if (filtrDisciplina === 'dvouhra' && !jeDvouhra) return;
+                    if (filtrDisciplina === 'ctyrhra' && !jeCtyrhra) return;
+                }
+                const vysledek = parseVysledek(zapas.vysledek);
+                const bodyData = parseSety(zapas.sety);
+                const domaciHraci = getHraciFromTeam(zapas.domaci);
+                const hosteHraci = getHraciFromTeam(zapas.hoste);
+                const domaciVyhral = vysledek.domaci > vysledek.hoste;
+                const domaciSkrecovali = zapas.domaci === 'SKREČ';
+                const hosteSkrecovali = zapas.hoste === 'SKREČ';
+                if (!domaciSkrecovali) {
+                    domaciHraci.forEach(hrac => {
+                        if (filtrTym && zapas.tymDomaci !== filtrTym) return;
+                        if (!stats[hrac]) stats[hrac] = {zapasy: 0, vyhry: 0, prohry: 0, setVyhrane: 0, setProhrane: 0, bodyVyhrane: 0, bodyProhrane: 0, tymy: {}, vsechnyZapasy: []};
+                        stats[hrac].zapasy++;
+                        if (domaciVyhral) stats[hrac].vyhry++; else stats[hrac].prohry++;
+                        stats[hrac].setVyhrane += vysledek.domaci;
+                        stats[hrac].setProhrane += vysledek.hoste;
+                        stats[hrac].bodyVyhrane += bodyData.domaciBody;
+                        stats[hrac].bodyProhrane += bodyData.hosteBody;
+                        if (zapas.tymDomaci) stats[hrac].tymy[zapas.tymDomaci] = (stats[hrac].tymy[zapas.tymDomaci] || 0) + 1;
+                        stats[hrac].vsechnyZapasy.push(zapas);
+                    });
+                }
+                if (!hosteSkrecovali) {
+                    hosteHraci.forEach(hrac => {
+                        if (filtrTym && zapas.tymHoste !== filtrTym) return;
+                        if (!stats[hrac]) stats[hrac] = {zapasy: 0, vyhry: 0, prohry: 0, setVyhrane: 0, setProhrane: 0, bodyVyhrane: 0, bodyProhrane: 0, tymy: {}, vsechnyZapasy: []};
+                        stats[hrac].zapasy++;
+                        if (!domaciVyhral) stats[hrac].vyhry++; else stats[hrac].prohry++;
+                        stats[hrac].setVyhrane += vysledek.hoste;
+                        stats[hrac].setProhrane += vysledek.domaci;
+                        stats[hrac].bodyVyhrane += bodyData.hosteBody;
+                        stats[hrac].bodyProhrane += bodyData.domaciBody;
+                        if (zapas.tymHoste) stats[hrac].tymy[zapas.tymHoste] = (stats[hrac].tymy[zapas.tymHoste] || 0) + 1;
+                        stats[hrac].vsechnyZapasy.push(zapas);
+                    });
+                }
+            });
+            return stats;
+        }
 
-/* ---------- Clickable details ---------- */
-function zobrazTymDetail(tym){
-  const all = (zapasy[aktualni_soutez]||[]).filter(z=>z.tymDomaci===tym || z.tymHoste===tym);
-  const doma = all.filter(z=>z.tymDomaci===tym);
-  const venku = all.filter(z=>z.tymHoste===tym);
-  const html = `<h3 class="text-lg font-semibold mb-2">${tym}</h3><p>Doma: ${doma.length} zápasů<br/>Venku: ${venku.length} zápasů</p><hr/><div style="margin-top:0.5rem;">${all.slice().reverse().map(z=>`<div class="py-1 border-b"><strong>Kolo ${z.kolo}</strong> — ${z.datum || '-'} — ${z.disciplina || '-'} — ${z.vysledek || '-'}</div>`).join('')}</div>`;
-  openModal(html);
-}
+        function zobrazitDetailHrace(hrac) {
+            const stats = vypocitejStatistiky();
+            const s = stats[hrac];
+            if (!s) return;
+            const modal = document.getElementById('hracModal');
+            document.getElementById('modalHracJmeno').textContent = '👤 ' + hrac;
+            const winRate = ((s.vyhry / s.zapasy) * 100).toFixed(1);
+            const nejTym = Object.keys(s.tymy).length > 0 ? Object.entries(s.tymy).sort((a, b) => b[1] - a[1])[0][0] : '-';
+            document.getElementById('modalHracInfo').textContent = nejTym + ' • ' + s.zapasy + ' zápasů • ' + winRate + '% úspěšnost';
+            const forma = getForma(hrac, zapasy[aktualni_soutez]);
+            const formaHtml = forma.split('').map(v => '<span class="inline-block w-6 h-6 md:w-8 md:h-8 leading-6 md:leading-8 text-center rounded font-bold text-xs md:text-sm ' + (v === 'V' ? 'bg-green-500 text-white' : 'bg-red-500 text-white') + '">' + v + '</span>').join('');
+            const zapasyHrace = s.vsechnyZapasy.map(zapas => {
+                const vysledek = parseVysledek(zapas.vysledek);
+                const domaciHraci = getHraciFromTeam(zapas.domaci);
+                const hosteHraci = getHraciFromTeam(zapas.hoste);
+                const jeHracDomaci = domaciHraci.includes(hrac);
+                const vyhral = jeHracDomaci ? (vysledek.domaci > vysledek.hoste) : (vysledek.hoste > vysledek.domaci);
+                return '<tr class="border-b border-gray-200 text-xs ' + (vyhral ? 'bg-green-50' : 'bg-red-50') + '"><td class="p-2">K' + zapas.kolo + '</td><td class="p-2">' + (zapas.datum || '-') + '</td><td class="p-2">' + zapas.disciplina + '</td><td class="p-2 font-semibold">' + (jeHracDomaci ? zapas.tymDomaci : zapas.tymHoste) + '</td><td class="p-2">' + (jeHracDomaci ? zapas.tymHoste : zapas.tymDomaci) + '</td><td class="p-2 font-bold ' + (vyhral ? 'text-green-600' : 'text-red-600') + '">' + (vyhral ? '✓ W' : '✗ L') + '</td><td class="p-2">' + zapas.vysledek + '</td></tr>';
+            }).join('');
+            const souperiCount = {};
+            s.vsechnyZapasy.forEach(zapas => {
+                const domaciHraci = getHraciFromTeam(zapas.domaci);
+                const hosteHraci = getHraciFromTeam(zapas.hoste);
+                const jeHracDomaci = domaciHraci.includes(hrac);
+                const souperi = jeHracDomaci ? hosteHraci : domaciHraci;
+                souperi.forEach(souper => souperiCount[souper] = (souperiCount[souper] || 0) + 1);
+            });
+            const nejSouperi = Object.entries(souperiCount).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([souper, pocet]) => '<span class="inline-block bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-full text-xs mr-2 mb-2">' + souper + ' (' + pocet + 'x)</span>').join('');
+            document.getElementById('modalHracObsah').innerHTML = '<div class="grid grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6"><div class="bg-blue-50 border border-blue-200 rounded-lg p-3 md:p-4"><div class="text-xs text-gray-600 mb-1">Zápasy</div><div class="text-2xl md:text-3xl font-bold text-blue-600">' + s.zapasy + '</div></div><div class="bg-green-50 border border-green-200 rounded-lg p-3 md:p-4"><div class="text-xs text-gray-600 mb-1">Výhry</div><div class="text-2xl md:text-3xl font-bold text-green-600">' + s.vyhry + '</div></div><div class="bg-red-50 border border-red-200 rounded-lg p-3 md:p-4"><div class="text-xs text-gray-600 mb-1">Prohry</div><div class="text-2xl md:text-3xl font-bold text-red-600">' + s.prohry + '</div></div></div><div class="mb-4 md:mb-6"><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">📈 Forma (posledních 5)</h3><div class="flex gap-1 md:gap-2">' + (formaHtml || '<span class="text-gray-500 text-xs">Nedostatek dat</span>') + '</div></div><div class="mb-4 md:mb-6"><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">🎯 Nejčastější soupeři</h3><div>' + (nejSouperi || '<span class="text-gray-500 text-xs">Žádná data</span>') + '</div></div><div><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">📋 Všechny zápasy (' + s.zapasy + ')</h3><div class="overflow-x-auto"><table class="w-full"><thead><tr class="bg-gray-100 border-b-2 border-gray-200 text-xs"><th class="text-left p-2">Kolo</th><th class="text-left p-2">Datum</th><th class="text-left p-2">Disciplína</th><th class="text-left p-2">Tým</th><th class="text-left p-2">Soupeř</th><th class="text-left p-2">Výsl.</th><th class="text-left p-2">Skóre</th></tr></thead><tbody>' + zapasyHrace + '</tbody></table></div></div>';
+            modal.style.display = 'block';
+        }
 
-function zobrazDetailHrace(jmeno){
-  const all = (zapasy[aktualni_soutez]||[]).filter(z=> (z.domaci||'').includes(jmeno) || (z.hoste||'').includes(jmeno));
-  const poslednich = all.slice(-5).reverse();
-  const html = `<h3 class="text-lg font-semibold mb-2">${jmeno}</h3>` + (poslednich.length ? `<div>${poslednich.map(z=>`<div class="py-1 border-b"><strong>${z.disciplina}</strong> — ${z.kolo} — ${z.vysledek} — proti: ${ (z.domaci||'').includes(jmeno) ? z.hoste : z.domaci }</div>`).join('')}</div>` : '<p>Žádné zápasy</p>');
-  openModal(html);
-}
+        function zobrazitDetailTymu(tym) {
+            const tabulkaData = vypocitejTabulku();
+            const t = tabulkaData[tym];
+            if (!t) return;
+            const modal = document.getElementById('tymModal');
+            document.getElementById('modalTymNazev').textContent = '🏆 ' + tym;
+            document.getElementById('modalTymInfo').textContent = t.utkani + ' utkání • ' + t.vyhry + 'V / ' + t.remizy + 'R / ' + t.prohry + 'P • ' + t.body + ' bodů';
+            const zapasyTymu = zapasy[aktualni_soutez].filter(z => z.tymDomaci === tym || z.tymHoste === tym);
+            const domaci = zapasyTymu.filter(z => z.tymDomaci === tym);
+            const hoste = zapasyTymu.filter(z => z.tymHoste === tym);
+            let domaciVyhry = 0, domaciProhry = 0, hosteVyhry = 0, hosteProhry = 0;
+            domaci.forEach(z => {
+                const v = parseVysledek(z.vysledek);
+                if (v.domaci > v.hoste) domaciVyhry++; else domaciProhry++;
+            });
+            hoste.forEach(z => {
+                const v = parseVysledek(z.vysledek);
+                if (v.hoste > v.domaci) hosteVyhry++; else hosteProhry++;
+            });
+            const hraci = {};
+            zapasyTymu.forEach(zapas => {
+                const jeDomaci = zapas.tymDomaci === tym;
+                const hraciTymu = jeDomaci ? getHraciFromTeam(zapas.domaci) : getHraciFromTeam(zapas.hoste);
+                hraciTymu.forEach(h => {
+                    if (!hraci[h]) hraci[h] = { zapasy: 0, vyhry: 0, prohry: 0 };
+                    hraci[h].zapasy++;
+                    const v = parseVysledek(zapas.vysledek);
+                    const vyhral = jeDomaci ? (v.domaci > v.hoste) : (v.hoste > v.domaci);
+                    if (vyhral) hraci[h].vyhry++; else hraci[h].prohry++;
+                });
+            });
+            const hraciHtml = Object.entries(hraci).sort((a, b) => b[1].zapasy - a[1].zapasy).map(([hrac, st]) => {
+                const winRate = ((st.vyhry / st.zapasy) * 100).toFixed(1);
+                return '<tr class="border-b border-gray-200 hover:bg-gray-50 text-xs"><td class="p-2"><span class="clickable" onclick="zobrazitDetailHrace(\'' + hrac + '\')">' + hrac + '</span></td><td class="p-2 text-center">' + st.zapasy + '</td><td class="p-2 text-center text-green-600 font-semibold">' + st.vyhry + '</td><td class="p-2 text-center text-red-600 font-semibold">' + st.prohry + '</td><td class="p-2 text-center font-bold ' + (parseFloat(winRate) >= 50 ? 'text-green-600' : 'text-red-600') + '">' + winRate + '%</td></tr>';
+            }).join('');
+            document.getElementById('modalTymObsah').innerHTML = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6"><div class="bg-blue-50 border border-blue-200 rounded-lg p-3 md:p-4"><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">🏠 Bilance doma</h3><div class="text-xl md:text-2xl font-bold text-blue-600 mb-2">' + domaciVyhry + 'V / ' + domaciProhry + 'P</div><div class="text-xs md:text-sm text-gray-600">' + domaci.length + ' zápasů</div></div><div class="bg-purple-50 border border-purple-200 rounded-lg p-3 md:p-4"><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">✈️ Bilance venku</h3><div class="text-xl md:text-2xl font-bold text-purple-600 mb-2">' + hosteVyhry + 'V / ' + hosteProhry + 'P</div><div class="text-xs md:text-sm text-gray-600">' + hoste.length + ' zápasů</div></div></div><div><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">👥 Hráči týmu (' + Object.keys(hraci).length + ')</h3><div class="overflow-x-auto"><table class="w-full"><thead><tr class="bg-gray-100 border-b-2 border-gray-200 text-xs"><th class="text-left p-2">Hráč</th><th class="text-center p-2">Z</th><th class="text-center p-2">V</th><th class="text-center p-2">P</th><th class="text-center p-2">Win%</th></tr></thead><tbody>' + hraciHtml + '</tbody></table></div></div>';
+            modal.style.display = 'block';
+        }
 
-/* ---------- Render UI ---------- */
-function zobrazitData(){
-  // prázdný stav
-  if(!(zapasy[aktualni_soutez]||[]).length){
-    document.getElementById('tabulkaContainer').style.display='none';
-    document.getElementById('statistikyContainer').style.display='none';
-    return;
-  }
-  document.getElementById('tabulkaContainer').style.display='block';
-  document.getElementById('statistikyContainer').style.display='block';
+        function zavritModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
 
-  // kola
-  aktualizovatKolaCheckboxy();
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) event.target.style.display = 'none';
+        }
 
-  // hrac mesice
-  document.getElementById('hracMesice').textContent = '⭐ Hráč měsíce: ' + (hracMesice() || '-');
+        function vypocitejTabulku() {
+            const tabulka = {};
+            const utkani = {};
+            const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
+            zapasy[aktualni_soutez].forEach(zapas => {
+                const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
+                if (!utkani[klic]) utkani[klic] = {kolo: zapas.kolo, domaci: zapas.tymDomaci, hoste: zapas.tymHoste, zapasy: []};
+                utkani[klic].zapasy.push(zapas);
+            });
+            Object.values(utkani).forEach(utk => {
+                const domaci = utk.domaci;
+                const hoste = utk.hoste;
+                if (!domaci || !hoste) return;
+                if (!tabulka[domaci]) tabulka[domaci] = {utkani: 0, vyhry: 0, remizy: 0, prohry: 0, zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0};
+                if (!tabulka[hoste]) tabulka[hoste] = {utkani: 0, vyhry: 0, remizy: 0, prohry: 0, zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0};
+                let domaciZapasy = 0, hosteZapasy = 0, domaciSety = 0, hosteSety = 0, domaciBody = 0, hosteBody = 0;
+                utk.zapasy.forEach(zapas => {
+                    const vysledek = parseVysledek(zapas.vysledek);
+                    const bodyData = parseSety(zapas.sety);
+                    if (vysledek.domaci > vysledek.hoste) domaciZapasy++; else hosteZapasy++;
+                    domaciSety += vysledek.domaci;
+                    hosteSety += vysledek.hoste;
+                    domaciBody += bodyData.domaciBody;
+                    hosteBody += bodyData.hosteBody;
+                });
+                let domaciBodyTabulka = 0, hosteBodyTabulka = 0;
+                if (jePrvniLiga) {
+                    if (domaciZapasy === hosteZapasy) {
+                        domaciBodyTabulka = 2; hosteBodyTabulka = 2;
+                        tabulka[domaci].remizy++; tabulka[hoste].remizy++;
+                    } else if (domaciZapasy > hosteZapasy) {
+                        domaciBodyTabulka = 3; hosteBodyTabulka = 1;
+                        tabulka[domaci].vyhry++; tabulka[hoste].prohry++;
+                    } else {
+                        hosteBodyTabulka = 3; domaciBodyTabulka = 1;
+                        tabulka[hoste].vyhry++; tabulka[domaci].prohry++;
+                    }
+                } else {
+                    const domaciVyhral = domaciZapasy > hosteZapasy;
+                    if (domaciVyhral) {
+                        if (domaciZapasy >= 6) { domaciBodyTabulka = 3; hosteBodyTabulka = 0; }
+                        else if (domaciZapasy >= 4) { domaciBodyTabulka = 2; hosteBodyTabulka = 1; }
+                        tabulka[domaci].vyhry++; tabulka[hoste].prohry++;
+                    } else {
+                        if (hosteZapasy >= 6) { hosteBodyTabulka = 3; domaciBodyTabulka = 0; }
+                        else if (hosteZapasy >= 4) { hosteBodyTabulka = 2; domaciBodyTabulka = 1; }
+                        tabulka[hoste].vyhry++; tabulka[domaci].prohry++;
+                    }
+                }
+                tabulka[domaci].utkani++; tabulka[domaci].zapasyV += domaciZapasy; tabulka[domaci].zapasyP += hosteZapasy;
+                tabulka[domaci].setyV += domaciSety; tabulka[domaci].setyP += hosteSety;
+                tabulka[domaci].bodyV += domaciBody; tabulka[domaci].bodyP += hosteBody; tabulka[domaci].body += domaciBodyTabulka;
+                tabulka[hoste].utkani++; tabulka[hoste].zapasyV += hosteZapasy; tabulka[hoste].zapasyP += domaciZapasy;
+                tabulka[hoste].setyV += hosteSety; tabulka[hoste].setyP += domaciSety;
+                tabulka[hoste].bodyV += hosteBody; tabulka[hoste].bodyP += domaciBody; tabulka[hoste].body += hosteBodyTabulka;
+            });
+            return tabulka;
+        }
 
-  // STATISTIKY
-  const stats = vypocitejStatistiky();
-  let hraci = Object.keys(stats);
-  const hled = document.getElementById('hledatHrace').value.toLowerCase();
-  if(hled) hraci = hraci.filter(h=>h.toLowerCase().includes(hled));
-  const razeni = 'winrate'; // for simplicity keep default sort by winrate
-  hraci.sort((a,b)=>{
-    const A = stats[a], B = stats[b];
-    const wrA = A.zapasy? A.vyhry / A.zapasy : 0;
-    const wrB = B.zapasy? B.vyhry / B.zapasy : 0;
-    if(Math.abs(wrB-wrA) > 0.0001) return wrB-wrA;
-    return B.zapasy - A.zapasy;
-  });
-
-  const statTable = document.getElementById('statistikyTable');
-  statTable.innerHTML = '';
-  hraci.forEach((h, idx)=>{
-    const s = stats[h];
-    const winPct = s.zapasy ? ((s.vyhry / s.zapasy)*100).toFixed(1) : '0.0';
-    const nej = Object.keys(s.tymy || {})[0] || '-';
-    const row = document.createElement('tr');
-    row.className = 'border-b border-gray-200 hover:bg-blue-50';
-    row.innerHTML =
-      `<td class="p-2 text-center font-bold">${idx+1}</td>` +
-      `<td class="p-2 font-semibold cursor-pointer text-blue-700" onclick="zobrazDetailHrace('${h.replace(/'/g,"\\'")}')">${h}</td>` +
-      `<td class="p-2 text-blue-600 cursor-pointer" onclick="zobrazTymDetail('${nej.replace(/'/g,"\\'")}')">${nej}</td>` +
-      `<td class="p-2 text-center">${s.zapasy}</td>` +
-      `<td class="p-2 text-center text-green-600 font-semibold">${s.vyhry}</td>` +
-      `<td class="p-2 text-center text-red-600 font-semibold">${s.prohry}</td>` +
-      `<td class="p-2 text-center font-bold ${parseFloat(winPct) >= 50 ? 'text-green-600' : 'text-red-600'}">${winPct}%</td>`;
-    statTable.appendChild(row);
-  });
-
-  // TABULKA
-  const tabData = vypocitejTabulku();
-  let teamKeys = Object.keys(tabData);
-  teamKeys.sort((a,b)=>{
-    const A = tabData[a], B = tabData[b];
-    if(B.body !== A.body) return B.body - A.body;
-    if(B.vyhry !== A.vyhry) return B.vyhry - A.vyhry;
-    const diffA = (A.zapasyV - A.zapasyP), diffB = (B.zapasyV - B.zapasyP);
-    if(diffB !== diffA) return diffB - diffA;
-    const setA = (A.setyV - A.setyP), setB = (B.setyV - B.setyP);
-    if(setB !== setA) return setB - setA;
-    return (B.bodyV - B.bodyP) - (A.bodyV - A.bodyP);
-  });
-
-  const tableBody = document.getElementById('tabulkaTable');
-  tableBody.innerHTML = '';
-  teamKeys.forEach((t, idx)=>{
-    const rowData = tabData[t];
-    const rZap = rowData.zapasyV - rowData.zapasyP;
-    const rSet = rowData.setyV - rowData.setyP;
-    const rBody = rowData.bodyV - rowData.bodyP;
-    let pozCls = '';
-    if(idx===0) pozCls='bg-yellow-100 font-bold';
-    else if(idx===1) pozCls='bg-gray-100 font-bold';
-    else if(idx===2) pozCls='bg-orange-100 font-bold';
-    const row = document.createElement('tr');
-    row.className = 'border-b border-gray-200 hover:bg-green-50';
-    row.innerHTML =
-      `<td class="p-2 text-center font-bold ${pozCls}">${idx+1}.</td>` +
-      `<td class="p-2 font-semibold ${pozCls} cursor-pointer text-blue-700" onclick="zobrazTymDetail('${t.replace(/'/g,"\\'")}')">${t}</td>` +
-      `<td class="p-2 text-center">${rowData.utkani}</td>` +
-      `<td class="p-2 text-center text-green-600 font-semibold">${rowData.vyhry}</td>` +
-      `<td class="p-2 text-center text-yellow-600 font-semibold">${rowData.remizy}</td>` +
-      `<td class="p-2 text-center text-red-600 font-semibold">${rowData.prohry}</td>` +
-      `<td class="p-2 text-center text-sm">${rowData.zapasyV}:${rowData.zapasyP} ${formatDiff(rZap)}</td>` +
-      `<td class="p-2 text-center text-sm">${rowData.setyV}:${rowData.setyP} ${formatDiff(rSet)}</td>` +
-      `<td class="p-2 text-center text-sm">${rowData.bodyV}:${rowData.bodyP} ${formatDiff(rBody)}</td>` +
-      `<td class="p-2 text-center font-bold text-lg text-blue-700">${rowData.body}</td>`;
-    tableBody.appendChild(row);
-  });
-
-}
-
-/* ---------- Extra computations ---------- */
-function hracMesice(){
-  const stats = vypocitejStatistiky();
-  const arr = Object.entries(stats).filter(([_,s])=>s.zapasy >= 3);
-  arr.sort((a,b)=> (b[1].vyhry / b[1].zapasy) - (a[1].vyhry / a[1].zapasy));
-  return arr[0] ? arr[0][0] : '';
-}
-
-/* ---------- Initialisation ---------- */
-nacistData();
-
-/* Fallback: if no data file is present, create demo data so UI is visible (won't overwrite your file) */
-setTimeout(()=>{
-  if((zapasy['extraliga']||[]).length === 0){
-    zapasy['extraliga'] = [
-      {kolo:'1', datum:'2025-10-01', disciplina:'Smíšená', tymDomaci:'SK Prosek', domaci:'Klára, Radka', tymHoste:'TJ Sokol', hoste:'Petr, Jan', vysledek:'5:3', sety:'21:15,18:21,21:19'},
-      {kolo:'1', datum:'2025-10-01', disciplina:'Dvouhra', tymDomaci:'ABC', domaci:'Karel', tymHoste:'SK Prosek', hoste:'Klára', vysledek:'2:6', sety:'12:21,11:21'},
-      {kolo:'2', datum:'2025-10-08', disciplina:'Čtyřhra', tymDomaci:'SK Prosek', domaci:'Klára, Karel', tymHoste:'XYZ', hoste:'Jan, Petr', vysledek:'4:4', sety:'21:19,19:21,21:18'}
-    ];
-    tymy['extraliga'] = ['SK Prosek','TJ Sokol','ABC','XYZ'];
-    zmenitSoutez('extraliga');
-  }
-}, 500);
-
-/* expose some functions for onclick attributes in generated HTML (needed in some browsers) */
-window.zobrazDetailHrace = zobrazDetailHrace;
-window.zobrazTymDetail = zobrazTymDetail;
-window.filtrPosledniKolo = function(){ const vse = [...new Set((zapasy[aktualni_soutez]||[]).map(z=>z.kolo))]; const posled = vse.sort((a,b)=>(parseInt(a)||0)-(parseInt(b)||0)).pop(); vybrana_kola = new Set([posled]); zobrazitData(); };
-window.vyberVsechnaKola = vyberVsechnaKola;
-window.zrusVsechnaKola = zrusVsechnaKola;
-
-</script>
+        function zobrazitData() {
+            if (zapasy[aktualni_soutez].length === 0) {
+                ['zapasyContainer','statistikyContainer','tabulkaContainer','hracMesiceContainer','rychleFiltry'].forEach(id => document.getElementById(id).style.display = 'none');
+                document.getElementById('prazdnyStav').style.display = 'block';
+                return;
+            }
+            ['zapasyContainer','statistikyContainer','tabulkaContainer','hracMesiceContainer','rychleFiltry'].forEach(id => document.getElementById(id).style.display = 'block');
+            document.getElementById('prazdnyStav').style.display = 'none';
+            aktualizovatKolaCheckboxy();
+            zobrazitHracMesice();
+            document.getElementById('pocetZapasu').textContent = zapasy[aktualni_soutez].length;
+            const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
+            const bodovaniInfo = document.getElementById('bodovaniInfo');
+            if (jePrvniLiga) {
+                bodovaniInfo.innerHTML = '<p class="font-semibold mb-2">Bodování 1. ligy:</p><ul class="list-disc list-inside space-y-1 text-xs md:text-sm"><li>Výhra (8:0, 7:1, 6:2, 5:3) = 3 body</li><li>Remíza (4:4) = 2 body pro oba týmy</li><li>Prohra (3:5, 2:6, 1:7, 0:8) = 1 bod</li></ul>';
+            } else {
+                bodovaniInfo.innerHTML = '<p class="font-semibold mb-2">Bodování extraligy:</p><ul class="list-disc list-inside space-y-1 text-xs md:text-sm"><li>Výhra 7:0, 6:1 = 3 body</li><li>Výhra 5:2, 4:3 = 2 body</li><li>Prohra 3:4, 2:5 = 1 bod</li><li>Prohra 1:6, 0:7 = 0 bodů</li></ul>';
+            }
+            const zapasyTable = document.getElementById('zapasyTable');
+            zapasyTable.innerHTML = '';
+            zapasy[aktualni_soutez].forEach(zapas => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 hover:bg-gray-50';
+                row.innerHTML = '<td class="p-2">' + zapas.kolo + '</td><td class="p-2">' + (zapas.datum || '-') + '</td><td class="p-2">' + zapas.disciplina + '</td><td class="p-2 text-blue-600 clickable" onclick="zobrazitDetailTymu(\'' + (zapas.tymDomaci || '') + '\')">' + (zapas.tymDomaci || '-') + '</td><td class="p-2 ' + (zapas.domaci === 'SKREČ' ? 'text-red-500 font-semibold' : '') + '">' + zapas.domaci + '</td><td class="p-2 text-blue-600 clickable" onclick="zobrazitDetailTymu(\'' + (zapas.tymHoste || '') + '\')">' + (zapas.tymHoste || '-') + '</td><td class="p-2 ' + (zapas.hoste === 'SKREČ' ? 'text-red-500 font-semibold' : '') + '">' + zapas.hoste + '</td><td class="p-2 font-bold">' + zapas.vysledek + '</td><td class="p-2 text-xs text-gray-600">' + (zapas.sety || '-') + '</td>';
+                zapasyTable.appendChild(row);
+            });
+            const stats = vypocitejStatistiky();
+            let hraciList = Object.keys(stats);
+            const hledatText = document.getElementById('hledatHrace') ? document.getElementById('hledatHrace').value.toLowerCase() : '';
+            const minZapasy = document.getElementById('minZapasy') ? parseInt(document.getElementById('minZapasy').value) : 0;
+            const razeniSloupec = document.getElementById('razeniSloupec') ? document.getElementById('razeniSloupec').value : 'winrate';
+            if (hledatText) hraciList = hraciList.filter(hrac => hrac.toLowerCase().includes(hledatText));
+            if (minZapasy > 0) hraciList = hraciList.filter(hrac => stats[hrac].zapasy >= minZapasy);
+            hraciList.sort((a, b) => {
+                const sA = stats[a];
+                const sB = stats[b];
+                switch(razeniSloupec) {
+                    case 'winrate':
+                        const winRateA = sA.zapasy > 0 ? (sA.vyhry / sA.zapasy) : 0;
+                        const winRateB = sB.zapasy > 0 ? (sB.vyhry / sB.zapasy) : 0;
+                        if (Math.abs(winRateA - winRateB) < 0.001) return sB.zapasy - sA.zapasy;
+                        return winRateB - winRateA;
+                    case 'zapasy':
+                        return sB.zapasy - sA.zapasy;
+                    case 'vyhry':
+                        return sB.vyhry - sA.vyhry;
+                    case 'jmeno':
+                        return a.localeCompare(b, 'cs');
+                    default:
+                        return 0;
+                }
+            });
+            const statistikyTable = document.getElementById('statistikyTable');
+            statistikyTable.innerHTML = '';
+            hraciList.forEach((hrac, idx) => {
+                const s = stats[hrac];
+                const winRatio = s.zapasy > 0 ? ((s.vyhry / s.zapasy) * 100).toFixed(1) : '0.0';
+                const nejTym = Object.keys(s.tymy).length > 0 ? Object.entries(s.tymy).sort((a, b) => b[1] - a[1])[0][0] : '-';
+                const winColor = parseFloat(winRatio) >= 50 ? 'text-green-600' : 'text-red-600';
+                const forma = getForma(hrac, zapasy[aktualni_soutez]);
+                const formaHtml = forma.split('').map(v => '<span class="inline-block w-5 h-5 leading-5 text-center rounded font-bold text-xs ' + (v === 'V' ? 'bg-green-500 text-white' : 'bg-red-500 text-white') + '">' + v + '</span>').join(' ');
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 hover:bg-blue-50';
+                row.innerHTML = '<td class="p-2 text-center font-bold text-gray-500">' + (idx + 1) + '</td><td class="p-2 font-semibold clickable" onclick="zobrazitDetailHrace(\'' + hrac + '\')">' + hrac + '</td><td class="p-2 text-blue-600 clickable" onclick="zobrazitDetailTymu(\'' + nejTym + '\')">' + nejTym + '</td><td class="p-2 text-center">' + s.zapasy + '</td><td class="p-2 text-center text-green-600 font-semibold">' + s.vyhry + '</td><td class="p-2 text-center text-red-600 font-semibold">' + s.prohry + '</td><td class="p-2 text-center font-bold ' + winColor + '">' + winRatio + '%</td><td class="p-2 text-center">' + (formaHtml || '-') + '</td>';
+                statistikyTable.appendChild(row);
+            });
+            const tabulkaData = vypocitejTabulku();
+            const tymy = Object.keys(tabulkaData);
+            tymy.sort((a, b) => {
+                const tA = tabulkaData[a];
+                const tB = tabulkaData[b];
+                if (tB.body !== tA.body) return tB.body - tA.body;
+                if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
+                const rozdilZapasyA = tA.zapasyV - tA.zapasyP;
+                const rozdilZapasyB = tB.zapasyV - tB.zapasyP;
+                if (rozdilZapasyB !== rozdilZapasyA) return rozdilZapasyB - rozdilZapasyA;
+                const rozdilSetyA = tA.setyV - tA.setyP;
+                const rozdilSetyB = tB.setyV - tB.setyP;
+                if (rozdilSetyB !== rozdilSetyA) return rozdilSetyB - rozdilSetyA;
+                const rozdilBodyA = tA.bodyV - tA.bodyP;
+                const rozdilBodyB = tB.bodyV - tB.bodyP;
+                return rozdilBodyB - rozdilBodyA;
+            });
+            const tabulkaTable = document.getElementById('tabulkaTable');
+            tabulkaTable.innerHTML = '';
+            tymy.forEach((tym, idx) => {
+                const t = tabulkaData[tym];
+                const rozdilZapasy = t.zapasyV - t.zapasyP;
+                const rozdilSety = t.setyV - t.setyP;
+                const rozdilBody = t.bodyV - t.bodyP;
+                let poziceClass = '';
+                if (idx === 0) poziceClass = 'bg-yellow-100 font-bold';
+                else if (idx === 1) poziceClass = 'bg-gray-100 font-bold';
+                else if (idx === 2) poziceClass = 'bg-orange-100 font-bold';
+                const sipkaZapasy = rozdilZapasy > 0 ? '↗' : (rozdilZapasy < 0 ? '↘' : '→');
+                const sipkaSety = rozdilSety > 0 ? '↗' : (rozdilSety < 0 ? '↘' : '→');
+                const sipkaBody = rozdilBody > 0 ? '↗' : (rozdilBody < 0 ? '↘' : '→');
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 hover:bg-green-50';
+                row.innerHTML = '<td class="p-2 text-center font-bold ' + poziceClass + '">' + (idx + 1) + '.</td><td class="p-2 font-semibold ' + poziceClass + ' clickable" onclick="zobrazitDetailTymu(\'' + tym + '\')">' + tym + '</td><td class="p-2 text-center">' + t.utkani + '</td><td class="p-2 text-center text-green-600 font-semibold">' + t.vyhry + '</td><td class="p-2 text-center text-yellow-600 font-semibold">' + t.remizy + '</td><td class="p-2 text-center text-red-600 font-semibold">' + t.prohry + '</td><td class="p-2 text-center"><span class="font-semibold">' + t.zapasyV + ':' + t.zapasyP + '</span> <span class="text-xs ' + (rozdilZapasy >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaZapasy + (rozdilZapasy >= 0 ? '+' : '') + rozdilZapasy + '</span></td><td class="p-2 text-center"><span class="font-semibold">' + t.setyV + ':' + t.setyP + '</span> <span class="text-xs ' + (rozdilSety >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaSety + (rozdilSety >= 0 ? '+' : '') + rozdilSety + '</span></td><td class="p-2 text-center"><span class="font-semibold">' + t.bodyV + ':' + t.bodyP + '</span> <span class="text-xs ' + (rozdilBody >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaBody + (rozdilBody >= 0 ? '+' : '') + rozdilBody + '</span></td><td class="p-2 text-center font-bold text-base md:text-lg text-blue-700">' + t.body + '</td>';
+                tabulkaTable.appendChild(row);
+            });
+        }
+        nacistData();
+    </script>
 </body>
 </html>
