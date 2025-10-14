@@ -71,8 +71,48 @@ const Players = {
             return '<tr class="border-b border-gray-200 hover:bg-blue-50"><td class="p-2 text-center font-bold text-gray-500">' + (idx + 1) + '</td><td class="p-2 font-semibold clickable" onclick="Modals.zobrazitDetailHrace(\'' + hrac + '\')">' + hrac + '</td><td class="p-2 text-blue-600 clickable" onclick="Modals.zobrazitDetailTymu(\'' + nejTym + '\')">' + nejTym + '</td><td class="p-2 text-center">' + s.zapasy + '</td><td class="p-2 text-center text-green-600 font-semibold">' + s.vyhry + '</td><td class="p-2 text-center text-red-600 font-semibold">' + s.prohry + '</td><td class="p-2 text-center font-bold ' + winColor + '">' + winRatio + '%</td><td class="p-2 text-center">' + (formaHtml || '-') + '</td></tr>';
         }).join('');
         
-        const filtryHtml = '<div class="bg-gray-50 border border-gray-200 rounded-lg p-3 md:p-4 mb-4"><h3 class="text-xs md:text-sm font-semibold text-gray-700 mb-3">🔍 Filtry</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3"><div><label class="block text-xs font-medium text-gray-600 mb-1">Hráč</label><input type="text" id="hledatHrace" placeholder="Jméno..." class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="App.zobrazitData()"></div><div><label class="block text-xs font-medium text-gray-600 mb-1">Tým</label><select id="filtrTym" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()"><option value="">Všechny týmy</option></select></div><div><label class="block text-xs font-medium text-gray-600 mb-1">Disciplína</label><select id="filtrDisciplina" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()"><option value="">Vše</option><option value="dvouhra">Dvouhry</option><option value="ctyrhra">Čtyřhry</option></select></div><div><label class="block text-xs font-medium text-gray-600 mb-1">Min. zápasů</label><input type="number" id="minZapasy" value="0" min="0" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="App.zobrazitData()"></div><div><label class="block text-xs font-medium text-gray-600 mb-1">Řadit</label><select id="razeniSloupec" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()"><option value="winrate">Win %</option><option value="zapasy">Zápasy</option><option value="vyhry">Výhry</option><option value="jmeno">Jméno</option></select></div><div class="flex items-end"><button onclick="Filters.vymazat()" class="w-full bg-gray-500 hover:bg-gray-600 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded transition-colors">✕ Reset</button></div></div><div class="border-t border-gray-300 pt-3 mt-3"><div class="flex justify-between items-center mb-2"><label class="text-xs font-medium text-gray-600">Kola</label><div class="flex gap-2"><button onclick="Filters.vyberVsechna()" class="text-xs text-blue-600 hover:text-blue-800">Vše</button><button onclick="Filters.zrusVsechna()" class="text-xs text-red-600 hover:text-red-800">Žádné</button></div></div><div id="kolaCheckboxy" class="flex flex-wrap gap-2"></div></div></div>';
+        // Vytvoř HTML s filtry včetně selectu pro týmy
+        const tymyOptions = Data.tymy[aktualni_soutez].map(t => '<option value="' + t + '">' + t + '</option>').join('');
         
-        document.getElementById('statistikyObsah').innerHTML = filtryHtml + '<div class="overflow-x-auto"><table class="w-full text-xs"><thead><tr class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white"><th class="text-center p-2 font-semibold">#</th><th class="text-left p-2 font-semibold">Hráč</th><th class="text-left p-2 font-semibold">Tým</th><th class="text-center p-2 font-semibold">Z</th><th class="text-center p-2 font-semibold">V</th><th class="text-center p-2 font-semibold">P</th><th class="text-center p-2 font-semibold">Win%</th><th class="text-center p-2 font-semibold">Forma</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+        const filtryHtml = '<div class="bg-gray-50 border border-gray-200 rounded-lg p-3 md:p-4 mb-4">' +
+            '<h3 class="text-xs md:text-sm font-semibold text-gray-700 mb-3">🔍 Filtry</h3>' +
+            '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">' +
+            '<div><label class="block text-xs font-medium text-gray-600 mb-1">Hráč</label>' +
+            '<input type="text" id="hledatHrace" placeholder="Jméno..." class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="App.zobrazitData()"></div>' +
+            '<div><label class="block text-xs font-medium text-gray-600 mb-1">Tým</label>' +
+            '<select id="filtrTym" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()">' +
+            '<option value="">Všechny týmy</option>' + tymyOptions + '</select></div>' +
+            '<div><label class="block text-xs font-medium text-gray-600 mb-1">Disciplína</label>' +
+            '<select id="filtrDisciplina" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()">' +
+            '<option value="">Vše</option><option value="dvouhra">Dvouhry</option><option value="ctyrhra">Čtyřhry</option></select></div>' +
+            '<div><label class="block text-xs font-medium text-gray-600 mb-1">Min. zápasů</label>' +
+            '<input type="number" id="minZapasy" value="0" min="0" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="App.zobrazitData()"></div>' +
+            '<div><label class="block text-xs font-medium text-gray-600 mb-1">Řadit</label>' +
+            '<select id="razeniSloupec" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()">' +
+            '<option value="winrate">Win %</option><option value="zapasy">Zápasy</option><option value="vyhry">Výhry</option><option value="jmeno">Jméno</option></select></div>' +
+            '<div class="flex items-end"><button onclick="Filters.vymazat()" class="w-full bg-gray-500 hover:bg-gray-600 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded transition-colors">✕ Reset</button></div>' +
+            '</div>' +
+            '<div class="border-t border-gray-300 pt-3 mt-3">' +
+            '<div class="flex justify-between items-center mb-2">' +
+            '<label class="text-xs font-medium text-gray-600">Kola</label>' +
+            '<div class="flex gap-2">' +
+            '<button onclick="Filters.vyberVsechna()" class="text-xs text-blue-600 hover:text-blue-800">Vše</button>' +
+            '<button onclick="Filters.zrusVsechna()" class="text-xs text-red-600 hover:text-red-800">Žádné</button>' +
+            '</div></div>' +
+            '<div id="kolaCheckboxy" class="flex flex-wrap gap-2"></div>' +
+            '</div></div>';
+        
+        document.getElementById('statistikyObsah').innerHTML = filtryHtml + 
+            '<div class="overflow-x-auto"><table class="w-full text-xs">' +
+            '<thead><tr class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">' +
+            '<th class="text-center p-2 font-semibold">#</th>' +
+            '<th class="text-left p-2 font-semibold">Hráč</th>' +
+            '<th class="text-left p-2 font-semibold">Tým</th>' +
+            '<th class="text-center p-2 font-semibold">Z</th>' +
+            '<th class="text-center p-2 font-semibold">V</th>' +
+            '<th class="text-center p-2 font-semibold">P</th>' +
+            '<th class="text-center p-2 font-semibold">Win%</th>' +
+            '<th class="text-center p-2 font-semibold">Forma</th>' +
+            '</tr></thead><tbody>' + rows + '</tbody></table></div>';
     }
 };
