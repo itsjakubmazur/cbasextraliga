@@ -1,6 +1,8 @@
 const Filters = {
     render(aktualni_soutez, vybrana_kola) {
         const container = document.getElementById('rychleFiltry');
+        if (!container) return;
+        
         container.innerHTML = `
             <div class="flex flex-wrap gap-2">
                 <button onclick="Filters.poslednichXKol(1)" class="px-3 md:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs md:text-sm">
@@ -36,19 +38,28 @@ const Filters = {
     },
 
     vymazat() {
-        document.getElementById('hledatHrace').value = '';
-        document.getElementById('filtrTym').value = '';
-        document.getElementById('filtrDisciplina').value = '';
-        document.getElementById('minZapasy').value = '0';
-        document.getElementById('razeniSloupec').value = 'winrate';
+        const hledatHrace = document.getElementById('hledatHrace');
+        const filtrTym = document.getElementById('filtrTym');
+        const filtrDisciplina = document.getElementById('filtrDisciplina');
+        const minZapasy = document.getElementById('minZapasy');
+        const razeniSloupec = document.getElementById('razeniSloupec');
+        
+        if (hledatHrace) hledatHrace.value = '';
+        if (filtrTym) filtrTym.value = '';
+        if (filtrDisciplina) filtrDisciplina.value = '';
+        if (minZapasy) minZapasy.value = '0';
+        if (razeniSloupec) razeniSloupec.value = 'winrate';
+        
         App.vybrana_kola.clear();
         App.aktualizovatKolaCheckboxy();
         App.zobrazitData();
     },
 
     renderKolaCheckboxy(aktualni_soutez, vybrana_kola) {
-        const vsechnaKola = [...new Set(Data.zapasy[aktualni_soutez].map(z => z.kolo))].sort((a, b) => parseInt(a) - parseInt(b));
         const container = document.getElementById('kolaCheckboxy');
+        if (!container) return; // DŮLEŽITÉ: kontrola existence!
+        
+        const vsechnaKola = [...new Set(Data.zapasy[aktualni_soutez].map(z => z.kolo))].sort((a, b) => parseInt(a) - parseInt(b));
         
         if (vsechnaKola.length === 0) {
             container.innerHTML = '<span class="text-xs text-gray-500">Žádná kola</span>';
@@ -81,7 +92,8 @@ const Filters = {
 
     zrusVsechna() {
         App.vybrana_kola = new Set();
-        document.querySelectorAll('#kolaCheckboxy input[type="checkbox"]').forEach(cb => cb.checked = false);
+        const checkboxy = document.querySelectorAll('#kolaCheckboxy input[type="checkbox"]');
+        checkboxy.forEach(cb => cb.checked = false);
         App.zobrazitData();
     }
 };
