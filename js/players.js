@@ -130,12 +130,26 @@ const Players = {
         hraciList.sort((a, b) => {
             const sA = stats[a];
             const sB = stats[b];
+            
             switch(razeniSloupec) {
                 case 'winrate':
+                    // Nové standardní řazení:
+                    // 1. Počet výher
+                    if (sB.vyhry !== sA.vyhry) return sB.vyhry - sA.vyhry;
+                    
+                    // 2. Win rate (%)
                     const winRateA = sA.zapasy > 0 ? (sA.vyhry / sA.zapasy) : 0;
                     const winRateB = sB.zapasy > 0 ? (sB.vyhry / sB.zapasy) : 0;
-                    if (Math.abs(winRateA - winRateB) < 0.001) return sB.zapasy - sA.zapasy;
-                    return winRateB - winRateA;
+                    if (Math.abs(winRateA - winRateB) > 0.001) return winRateB - winRateA;
+                    
+                    // 3. Počet zápasů celkem
+                    if (sB.zapasy !== sA.zapasy) return sB.zapasy - sA.zapasy;
+                    
+                    // 4. Poměr setů
+                    const setRatioA = (sA.setVyhrane + sA.setProhrane) > 0 ? (sA.setVyhrane / (sA.setVyhrane + sA.setProhrane)) : 0;
+                    const setRatioB = (sB.setVyhrane + sB.setProhrane) > 0 ? (sB.setVyhrane / (sB.setVyhrane + sB.setProhrane)) : 0;
+                    return setRatioB - setRatioA;
+                    
                 case 'zapasy':
                     return sB.zapasy - sA.zapasy;
                 case 'vyhry':
