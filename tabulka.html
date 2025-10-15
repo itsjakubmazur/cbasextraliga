@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabulka extraligy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: white;
+        }
+        .soutez-tab {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .soutez-tab.active {
+            background: #2563eb;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-6xl mx-auto">
+        <!-- Výběr soutěže -->
+        <div class="mb-4 flex flex-wrap gap-2">
+            <button onclick="zmenitSoutez('extraliga')" id="tab-extraliga" class="soutez-tab px-4 py-2 rounded-lg font-semibold text-sm bg-blue-600 text-white">
+                🏆 Extraliga
+            </button>
+            <button onclick="zmenitSoutez('prvni-liga-vychod')" id="tab-prvni-liga-vychod" class="soutez-tab px-4 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm">
+                🥈 1. liga - Východ
+            </button>
+            <button onclick="zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab px-4 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm">
+                🥈 1. liga - Západ
+            </button>
+        </div>
+
+        <!-- Tabulka -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
+                            <th class="text-center p-2 font-semibold">#</th>
+                            <th class="text-left p-2 font-semibold">Tým</th>
+                            <th class="text-center p-2 font-semibold">U</th>
+                            <th class="text-center p-2 font-semibold">V</th>
+                            <th class="text-center p-2 font-semibold">R</th>
+                            <th class="text-center p-2 font-semibold">P</th>
+                            <th class="text-center p-2 font-semibold">Zápasy</th>
+                            <th class="text-center p-2 font-semibold">Sety</th>
+                            <th class="text-center p-2 font-semibold">Body</th>
+                            <th class="text-center p-2 font-semibold font-bold">Bodů</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabulkaBody"></tbody>
+                </table>
+            </div>
+            <div class="p-3 text-xs text-gray-600 bg-gray-50" id="bodovaniInfo"></div>
+        </div>
+
+        <div class="mt-3 text-xs text-gray-500 text-center">
+            <a href="https://itsjakubmazur.github.io/cbasextraliga/" target="_blank" class="text-blue-600 hover:underline">
+                Zobrazit kompletní statistiky →
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let zapasy = {};
+        let aktualni_soutez = 'extraliga';
+
+        async function nacistData() {
+            try {
+                const response = await fetch('badminton-data.json');
+                const data = await response.json();
+                zapasy = data.zapasy;
+                zobrazitTabulku();
+            } catch (error) {
+                console.error('Chyba načítání:', error);
+                document.getElementById('tabulkaBody').innerHTML = 
+                    '<tr><td colspan="10" class="p-4 text-center text-red-600">Nepodařilo se načíst data</td></tr>';
+            }
+        }
+
+        function zmenitSoutez(soutez) {
+            aktualni_soutez = soutez;
+            document.querySelectorAll('.soutez-tab').forEach(tab => {
+                tab.classList.remove('active', 'bg-blue-600', 'text-white');
+                tab.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            document.getElementById('tab-' + soutez).classList.add('active', 'bg-blue-600', 'text-white');
+            document.getElementById('tab-' + soutez).classList.remove('bg-gray-200', 'text-gray-700');
+            zobrazitTabulku();
+        }
+
+        function parseVysledek(vysledek) {
+            const parts = vysledek.split(':');
+            return { domaci: parseInt(parts[0]) || 0, hoste: parseInt(parts[1]) || 0 };
+        }
+
+        function parseSety(sety) {
+            if (!sety) return { domaciBody: 0, hosteBody: 0 };
+            const setArr = sety.split(',').map(s => s.trim());
+            let domaciBody = 0, hosteBody = 0;
+            setArr.forEach(set => {
+                const parts = set.split(':');
+                domaciBody += parseInt(parts[0]) || 0;
+                hosteBody += parseInt(parts[1]) || 0;
+            });
+            return { domaciBody, hosteBody };
+        }
+
+        function zobrazitTabulku() {
+            const tabulka = {};
+            const utkani = {};
+            const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
+            
+            zapasy[aktualni_soutez].forEach(zapas => {
+                const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
+                if (!utkani[klic]) utkani[klic] = {
+                    kolo: zapas.kolo, domaci: zapas.tymDomaci, hoste: zapas.tymHoste, zapasy: []
+                };
+                utkani[klic].zapasy.push(zapas);
+            });
+            
+            Object.values(utkani).forEach(utk => {
+                const domaci = utk.domaci;
+                const hoste = utk.hoste;
+                if (!domaci || !hoste) return;
+                
+                if (!tabulka[domaci]) tabulka[domaci] = {
+                    utkani: 0, vyhry: 0, remizy: 0, prohry: 0,
+                    zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0
+                };
+                if (!tabulka[hoste]) tabulka[hoste] = {
+                    utkani: 0, vyhry: 0, remizy: 0, prohry: 0,
+                    zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0
+                };
+                
+                let dz = 0, hz = 0, ds = 0, hs = 0, db = 0, hb = 0;
+                utk.zapasy.forEach(z => {
+                    const v = parseVysledek(z.vysledek);
+                    const bd = parseSety(z.sety);
+                    if (v.domaci > v.hoste) dz++; else hz++;
+                    ds += v.domaci; hs += v.hoste;
+                    db += bd.domaciBody; hb += bd.hosteBody;
+                });
+                
+                let dbt = 0, hbt = 0;
+                if (jePrvniLiga) {
+                    if (dz === hz) { dbt = 2; hbt = 2; tabulka[domaci].remizy++; tabulka[hoste].remizy++; }
+                    else if (dz > hz) { dbt = 3; hbt = 1; tabulka[domaci].vyhry++; tabulka[hoste].prohry++; }
+                    else { hbt = 3; dbt = 1; tabulka[hoste].vyhry++; tabulka[domaci].prohry++; }
+                } else {
+                    if (dz > hz) {
+                        if (dz >= 6) { dbt = 3; hbt = 0; }
+                        else if (dz >= 4) { dbt = 2; hbt = 1; }
+                        tabulka[domaci].vyhry++; tabulka[hoste].prohry++;
+                    } else {
+                        if (hz >= 6) { hbt = 3; dbt = 0; }
+                        else if (hz >= 4) { hbt = 2; dbt = 1; }
+                        tabulka[hoste].vyhry++; tabulka[domaci].prohry++;
+                    }
+                }
+                
+                tabulka[domaci].utkani++; tabulka[domaci].zapasyV += dz; tabulka[domaci].zapasyP += hz;
+                tabulka[domaci].setyV += ds; tabulka[domaci].setyP += hs;
+                tabulka[domaci].bodyV += db; tabulka[domaci].bodyP += hb; tabulka[domaci].body += dbt;
+                tabulka[hoste].utkani++; tabulka[hoste].zapasyV += hz; tabulka[hoste].zapasyP += dz;
+                tabulka[hoste].setyV += hs; tabulka[hoste].setyP += ds;
+                tabulka[hoste].bodyV += hb; tabulka[hoste].bodyP += db; tabulka[hoste].body += hbt;
+            });
+            
+            const tymy = Object.keys(tabulka);
+            tymy.sort((a, b) => {
+                const tA = tabulka[a], tB = tabulka[b];
+                if (tB.body !== tA.body) return tB.body - tA.body;
+                if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
+                const rza = tA.zapasyV - tA.zapasyP, rzb = tB.zapasyV - tB.zapasyP;
+                if (rzb !== rza) return rzb - rza;
+                const rsa = tA.setyV - tA.setyP, rsb = tB.setyV - tB.setyP;
+                if (rsb !== rsa) return rsb - rsa;
+                return (tB.bodyV - tB.bodyP) - (tA.bodyV - tA.bodyP);
+            });
+            
+            const rows = tymy.map((tym, idx) => {
+                const t = tabulka[tym];
+                const rz = t.zapasyV - t.zapasyP, rs = t.setyV - t.setyP, rb = t.bodyV - t.bodyP;
+                let pc = '';
+                if (idx === 0) pc = 'bg-yellow-100 font-bold';
+                else if (idx === 1) pc = 'bg-gray-100 font-bold';
+                else if (idx === 2) pc = 'bg-orange-100 font-bold';
+                const sz = rz > 0 ? '↗' : (rz < 0 ? '↘' : '→');
+                const ss = rs > 0 ? '↗' : (rs < 0 ? '↘' : '→');
+                const sb = rb > 0 ? '↗' : (rb < 0 ? '↘' : '→');
+                return '<tr class="border-b hover:bg-gray-50">' +
+                    '<td class="p-2 text-center font-bold ' + pc + '">' + (idx + 1) + '.</td>' +
+                    '<td class="p-2 font-semibold ' + pc + '">' + tym + '</td>' +
+                    '<td class="p-2 text-center">' + t.utkani + '</td>' +
+                    '<td class="p-2 text-center text-green-600 font-semibold">' + t.vyhry + '</td>' +
+                    '<td class="p-2 text-center text-yellow-600 font-semibold">' + t.remizy + '</td>' +
+                    '<td class="p-2 text-center text-red-600 font-semibold">' + t.prohry + '</td>' +
+                    '<td class="p-2 text-center text-xs">' + t.zapasyV + ':' + t.zapasyP + ' <span class="' + (rz >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sz + (rz >= 0 ? '+' : '') + rz + '</span></td>' +
+                    '<td class="p-2 text-center text-xs">' + t.setyV + ':' + t.setyP + ' <span class="' + (rs >= 0 ? 'text-green-600' : 'text-red-600') + '">' + ss + (rs >= 0 ? '+' : '') + rs + '</span></td>' +
+                    '<td class="p-2 text-center text-xs">' + t.bodyV + ':' + t.bodyP + ' <span class="' + (rb >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sb + (rb >= 0 ? '+' : '') + rb + '</span></td>' +
+                    '<td class="p-2 text-center font-bold text-lg text-blue-700">' + t.body + '</td></tr>';
+            }).join('');
+            
+            document.getElementById('tabulkaBody').innerHTML = rows;
+            document.getElementById('bodovaniInfo').innerHTML = jePrvniLiga
+                ? '<strong>Bodování 1. ligy:</strong> Výhra = 3 body, Remíza = 2 body, Prohra = 1 bod'
+                : '<strong>Bodování extraligy:</strong> Výhra 7:0,6:1 = 3 body | Výhra 5:2,4:3 = 2 body | Prohra 3:4,2:5 = 1 bod | Prohra 1:6,0:7 = 0 bodů';
+        }
+
+        nacistData();
+    </script>
+</body>
+</html>
