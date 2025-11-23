@@ -133,17 +133,47 @@
                 </table>
             </div>
 
-            <div class="mt-6 flex gap-2">
-                <button
-                    onclick="exportJSON()"
-                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
-                    📤 Exportovat JSON
-                </button>
-                <button
-                    onclick="copyToClipboard()"
-                    class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
-                    📋 Kopírovat JSON
-                </button>
+            <!-- Export sekce -->
+            <div class="mt-6 border-t pt-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">📥 Sloučení s existujícím badminton-data.json</h3>
+                <p class="text-sm text-gray-600 mb-4">Nahrajte váš současný badminton-data.json a nové zápasy budou automaticky přidány</p>
+
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-4">
+                        <label class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors cursor-pointer">
+                            📁 Nahrát badminton-data.json
+                            <input type="file" id="existingDataFile" accept=".json" onchange="loadExistingData()" class="hidden">
+                        </label>
+                        <span id="fileStatus" class="text-sm text-gray-600"></span>
+                    </div>
+
+                    <div id="mergeInfo" class="bg-green-50 border-l-4 border-green-500 p-4" style="display: none;">
+                        <p class="text-sm text-green-800">
+                            <strong>✓ Soubor nahrán:</strong><br>
+                            <span id="mergeStats"></span>
+                        </p>
+                    </div>
+
+                    <div class="flex gap-2 flex-wrap">
+                        <button
+                            onclick="downloadMergedData()"
+                            id="mergeButton"
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                            style="display: none;">
+                            💾 Stáhnout sloučený badminton-data.json
+                        </button>
+                        <button
+                            onclick="exportJSON()"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                            📤 Exportovat pouze nové zápasy
+                        </button>
+                        <button
+                            onclick="copyToClipboard()"
+                            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                            📋 Kopírovat JSON
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -157,6 +187,7 @@
 
     <script>
         let parsedMatches = [];
+        let existingData = null;
 
         const disciplineMap = {
             '1. dvouhra mužů': 'Dvouhra mužů',
@@ -409,17 +440,137 @@
             });
         }
 
+        function loadExistingData() {
+            const fileInput = document.getElementById('existingDataFile');
+            const file = fileInput.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    existingData = JSON.parse(e.target.result);
+
+                    // Validace struktury
+                    if (!existingData.zapasy || !existingData.zapasy.extraliga) {
+                        alert('❌ Neplatný formát badminton-data.json!');
+                        existingData = null;
+                        return;
+                    }
+
+                    // Zobrazíme statistiky
+                    const extraligaCount = existingData.zapasy.extraliga.length;
+                    const vychod = existingData.zapasy['prvni-liga-vychod']?.length || 0;
+                    const zapad = existingData.zapasy['prvni-liga-zapad']?.length || 0;
+                    const total = extraligaCount + vychod + zapad;
+
+                    document.getElementById('mergeStats').innerHTML =
+                        `Extraliga: ${extraligaCount} zápasů<br>` +
+                        `1. liga Východ: ${vychod} zápasů<br>` +
+                        `1. liga Západ: ${zapad} zápasů<br>` +
+                        `<strong>Celkem: ${total} zápasů</strong>`;
+
+                    document.getElementById('mergeInfo').style.display = 'block';
+                    document.getElementById('mergeButton').style.display = 'inline-block';
+                    document.getElementById('fileStatus').textContent = '✓ ' + file.name;
+                    document.getElementById('fileStatus').className = 'text-sm text-green-600 font-semibold';
+
+                } catch (error) {
+                    console.error('Chyba při načítání:', error);
+                    alert('❌ Chyba při načítání souboru: ' + error.message);
+                    existingData = null;
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+        function downloadMergedData() {
+            const kolo = document.getElementById('kolo').value.trim();
+            const datum = document.getElementById('datum').value;
+            const tymDomaci = document.getElementById('tymDomaci').value.trim();
+            const tymHoste = document.getElementById('tymHoste').value.trim();
+            const soutez = document.getElementById('soutez').value;
+
+            if (!kolo || !tymDomaci || !tymHoste) {
+                alert('❌ Vyplňte prosím všechny informace o utkání!');
+                return;
+            }
+
+            if (!existingData) {
+                alert('❌ Nejprve nahrajte badminton-data.json!');
+                return;
+            }
+
+            // Vytvoříme nové zápasy
+            const newMatches = parsedMatches.map(match => ({
+                id: match.id,
+                kolo: kolo,
+                datum: datum || '',
+                disciplina: match.disciplina,
+                domaci: match.domaci,
+                hoste: match.hoste,
+                vysledek: match.vysledek,
+                sety: match.sety,
+                tymDomaci: tymDomaci,
+                tymHoste: tymHoste
+            }));
+
+            // Sloučíme s existujícími daty
+            const mergedData = JSON.parse(JSON.stringify(existingData)); // Deep copy
+
+            if (!mergedData.zapasy[soutez]) {
+                mergedData.zapasy[soutez] = [];
+            }
+
+            // Přidáme nové zápasy
+            mergedData.zapasy[soutez].push(...newMatches);
+
+            // Aktualizujeme datum aktualizace
+            mergedData.aktualizace = new Date().toLocaleString('cs-CZ');
+
+            // Stáhneme sloučený soubor
+            const json = JSON.stringify(mergedData, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'badminton-data.json';
+            link.click();
+            URL.revokeObjectURL(url);
+
+            const soutezNames = {
+                'extraliga': 'Extraligy',
+                'prvni-liga-vychod': '1. ligy Východ',
+                'prvni-liga-zapad': '1. ligy Západ'
+            };
+
+            alert(
+                '✅ Sloučený badminton-data.json byl stažen!\n\n' +
+                `Přidáno ${newMatches.length} nových zápasů do ${soutezNames[soutez]}.\n\n` +
+                'Soubor můžete nyní nahrát na GitHub.'
+            );
+        }
+
         function clearAll() {
             if (confirm('Opravdu chcete vymazat všechna data?')) {
                 document.getElementById('htmlInput').value = '';
                 parsedMatches = [];
+                existingData = null;
                 document.getElementById('kolo').value = '';
                 document.getElementById('datum').value = '';
                 document.getElementById('tymDomaci').value = '';
                 document.getElementById('tymHoste').value = '';
+                document.getElementById('fileStatus').textContent = '';
+                document.getElementById('mergeInfo').style.display = 'none';
+                document.getElementById('mergeButton').style.display = 'none';
                 document.getElementById('emptyState').style.display = 'block';
                 document.getElementById('matchInfoContainer').style.display = 'none';
                 document.getElementById('resultsContainer').style.display = 'none';
+
+                // Reset file input
+                const fileInput = document.getElementById('existingDataFile');
+                if (fileInput) fileInput.value = '';
             }
         }
     </script>
