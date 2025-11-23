@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CzechBadminton.cz Parser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        .editable-cell {
+            min-width: 100px;
+            padding: 4px;
+            border: 1px solid transparent;
+            cursor: text;
+        }
+        .editable-cell:hover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .editable-cell:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: #dbeafe;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 p-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Hlavička -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">🏸 CzechBadminton.cz Parser</h1>
+            <p class="text-gray-600">Automatické parsování výsledků zápasů z czechbadminton.cz</p>
+            <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4">
+                <p class="text-sm text-blue-800">
+                    <strong>Postup:</strong><br>
+                    1. Otevřete stránku zápasu na czechbadminton.cz<br>
+                    2. Stiskněte <kbd class="bg-white px-2 py-1 rounded border">Ctrl+U</kbd> (Zobrazit zdrojový kód)<br>
+                    3. Zkopírujte celý HTML kód a vložte ho do pole níže<br>
+                    4. Klikněte na "Parsovat HTML"
+                </p>
+            </div>
+        </div>
+
+        <!-- HTML Input -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">📋 Vložte HTML kód</h2>
+            <textarea
+                id="htmlInput"
+                class="w-full h-64 border border-gray-300 rounded-lg p-4 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Vložte sem celý HTML kód ze stránky zápasu..."
+            ></textarea>
+            <div class="mt-4 flex gap-2">
+                <button
+                    onclick="parseHTML()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    🔍 Parsovat HTML
+                </button>
+                <button
+                    onclick="clearAll()"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    🗑️ Vymazat vše
+                </button>
+            </div>
+        </div>
+
+        <!-- Info o utkání -->
+        <div id="matchInfoContainer" class="bg-white rounded-xl shadow-lg p-6 mb-6" style="display: none;">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">📅 Informace o utkání</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Kolo</label>
+                    <input
+                        type="text"
+                        id="kolo"
+                        placeholder="např. 1"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Datum</label>
+                    <input
+                        type="date"
+                        id="datum"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tým domácích</label>
+                    <input
+                        type="text"
+                        id="tymDomaci"
+                        placeholder="např. BA Plzeň"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tým hostů</label>
+                    <input
+                        type="text"
+                        id="tymHoste"
+                        placeholder="např. SK Meteor Praha"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Soutěž</label>
+                <select id="soutez" class="w-full md:w-1/2 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                    <option value="extraliga">🏆 Extraliga</option>
+                    <option value="prvni-liga-vychod">📍 1. liga - Východ</option>
+                    <option value="prvni-liga-zapad">📍 1. liga - Západ</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tabulka s výsledky -->
+        <div id="resultsContainer" class="bg-white rounded-xl shadow-lg p-6 mb-6" style="display: none;">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">✅ Rozpoznané zápasy (<span id="pocetZapasu">0</span>)</h2>
+            <p class="text-sm text-gray-600 mb-4">💡 Klikněte na buňku pro úpravu dat</p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                            <th class="p-3 text-center font-semibold">#</th>
+                            <th class="p-3 text-left font-semibold">Disciplína</th>
+                            <th class="p-3 text-left font-semibold">Domácí</th>
+                            <th class="p-3 text-left font-semibold">Hosté</th>
+                            <th class="p-3 text-center font-semibold">Výsledek</th>
+                            <th class="p-3 text-left font-semibold">Sety</th>
+                            <th class="p-3 text-center font-semibold">Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTable"></tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 flex gap-2">
+                <button
+                    onclick="exportJSON()"
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    📤 Exportovat JSON
+                </button>
+                <button
+                    onclick="copyToClipboard()"
+                    class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    📋 Kopírovat JSON
+                </button>
+            </div>
+        </div>
+
+        <!-- Prázdný stav -->
+        <div id="emptyState" class="bg-white rounded-xl shadow-lg p-12 text-center">
+            <div class="text-6xl mb-4">🏸</div>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">Zatím žádná data</h3>
+            <p class="text-gray-500">Vložte HTML kód z czechbadminton.cz výše a klikněte na "Parsovat HTML"</p>
+        </div>
+    </div>
+
+    <script>
+        let parsedMatches = [];
+
+        const disciplineMap = {
+            '1. dvouhra mužů': 'Dvouhra mužů',
+            '2. dvouhra mužů': 'Dvouhra mužů',
+            '3. dvouhra mužů': 'Dvouhra mužů',
+            '1. dvouhra žen': 'Dvouhra žen',
+            '2. dvouhra žen': 'Dvouhra žen',
+            '1. čtyřhra mužů': 'Čtyřhra mužů',
+            '2. čtyřhra mužů': 'Čtyřhra mužů',
+            'čtyřhra žen': 'Čtyřhra žen',
+            'smíšená čtyřhra': 'Smíšená čtyřhra'
+        };
+
+        function parseHTML() {
+            const htmlInput = document.getElementById('htmlInput').value;
+
+            if (!htmlInput.trim()) {
+                alert('❌ Vložte prosím HTML kód!');
+                return;
+            }
+
+            try {
+                // Vytvoříme dočasný DOM element pro parsování
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlInput, 'text/html');
+
+                // Najdeme všechny řádky tabulky
+                const rows = doc.querySelectorAll('tbody tr');
+
+                if (rows.length === 0) {
+                    alert('❌ Nepodařilo se najít žádné zápasy v HTML kódu!');
+                    return;
+                }
+
+                parsedMatches = [];
+
+                rows.forEach((row, index) => {
+                    const cells = row.querySelectorAll('td');
+
+                    if (cells.length < 6) return;
+
+                    // Extrahujeme data
+                    const matchNumber = cells[0].textContent.trim();
+                    const disciplineRaw = cells[1].textContent.trim();
+                    const discipline = disciplineMap[disciplineRaw] || disciplineRaw;
+
+                    // Domácí hráči
+                    const homeCell = cells[2];
+                    const homePlayers = extractPlayers(homeCell);
+
+                    // Hostující hráči
+                    const awayCell = cells[3];
+                    const awayPlayers = extractPlayers(awayCell);
+
+                    const result = cells[4].textContent.trim();
+                    const sets = cells[5].textContent.trim();
+
+                    parsedMatches.push({
+                        id: Date.now() + index,
+                        matchNumber: matchNumber,
+                        disciplina: discipline,
+                        domaci: homePlayers,
+                        hoste: awayPlayers,
+                        vysledek: result,
+                        sety: sets
+                    });
+                });
+
+                if (parsedMatches.length > 0) {
+                    document.getElementById('emptyState').style.display = 'none';
+                    document.getElementById('matchInfoContainer').style.display = 'block';
+                    document.getElementById('resultsContainer').style.display = 'block';
+                    displayResults();
+                    alert('✅ Úspěšně rozpoznáno ' + parsedMatches.length + ' zápasů!');
+                } else {
+                    alert('❌ Nepodařilo se rozpoznat žádné zápasy!');
+                }
+            } catch (error) {
+                console.error('Chyba při parsování:', error);
+                alert('❌ Chyba při parsování HTML: ' + error.message);
+            }
+        }
+
+        function extractPlayers(cell) {
+            // Najdeme všechny odkazy na hráče
+            const links = cell.querySelectorAll('a.link');
+            const players = [];
+
+            links.forEach(link => {
+                const playerName = link.textContent.trim();
+                if (playerName) {
+                    players.push(playerName);
+                }
+            });
+
+            // Spojíme hráče čárkou a mezerou
+            return players.join(', ');
+        }
+
+        function displayResults() {
+            const tbody = document.getElementById('resultsTable');
+            tbody.innerHTML = '';
+
+            document.getElementById('pocetZapasu').textContent = parsedMatches.length;
+
+            parsedMatches.forEach((match, index) => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 hover:bg-blue-50';
+
+                row.innerHTML = `
+                    <td class="p-3 text-center font-semibold text-gray-500">${match.matchNumber}</td>
+                    <td class="p-3">
+                        <div contenteditable="true"
+                             class="editable-cell"
+                             data-index="${index}"
+                             data-field="disciplina"
+                             onblur="updateMatch(this)">${match.disciplina}</div>
+                    </td>
+                    <td class="p-3">
+                        <div contenteditable="true"
+                             class="editable-cell"
+                             data-index="${index}"
+                             data-field="domaci"
+                             onblur="updateMatch(this)">${match.domaci}</div>
+                    </td>
+                    <td class="p-3">
+                        <div contenteditable="true"
+                             class="editable-cell"
+                             data-index="${index}"
+                             data-field="hoste"
+                             onblur="updateMatch(this)">${match.hoste}</div>
+                    </td>
+                    <td class="p-3 text-center">
+                        <div contenteditable="true"
+                             class="editable-cell font-bold"
+                             data-index="${index}"
+                             data-field="vysledek"
+                             onblur="updateMatch(this)">${match.vysledek}</div>
+                    </td>
+                    <td class="p-3">
+                        <div contenteditable="true"
+                             class="editable-cell text-xs"
+                             data-index="${index}"
+                             data-field="sety"
+                             onblur="updateMatch(this)">${match.sety}</div>
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="deleteMatch(${index})"
+                                class="text-red-600 hover:text-red-800 font-semibold">
+                            🗑️
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateMatch(element) {
+            const index = parseInt(element.dataset.index);
+            const field = element.dataset.field;
+            const value = element.textContent.trim();
+
+            if (parsedMatches[index]) {
+                parsedMatches[index][field] = value;
+            }
+        }
+
+        function deleteMatch(index) {
+            if (confirm('Opravdu chcete smazat tento zápas?')) {
+                parsedMatches.splice(index, 1);
+                displayResults();
+            }
+        }
+
+        function exportJSON() {
+            const kolo = document.getElementById('kolo').value.trim();
+            const datum = document.getElementById('datum').value;
+            const tymDomaci = document.getElementById('tymDomaci').value.trim();
+            const tymHoste = document.getElementById('tymHoste').value.trim();
+
+            if (!kolo) {
+                alert('❌ Vyplňte prosím číslo kola!');
+                return;
+            }
+
+            if (!tymDomaci || !tymHoste) {
+                alert('❌ Vyplňte prosím názvy týmů!');
+                return;
+            }
+
+            // Vytvoříme pole zápasů ve formátu pro badminton-data.json
+            const exportData = parsedMatches.map(match => ({
+                id: match.id,
+                kolo: kolo,
+                datum: datum || '',
+                disciplina: match.disciplina,
+                domaci: match.domaci,
+                hoste: match.hoste,
+                vysledek: match.vysledek,
+                sety: match.sety,
+                tymDomaci: tymDomaci,
+                tymHoste: tymHoste
+            }));
+
+            // Stáhneme jako JSON soubor
+            const json = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `zapasy_kolo${kolo}_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+
+            alert('✅ JSON byl stažen!\n\nTento soubor můžete nyní přidat do vašeho badminton-data.json souboru.');
+        }
+
+        function copyToClipboard() {
+            const kolo = document.getElementById('kolo').value.trim();
+            const datum = document.getElementById('datum').value;
+            const tymDomaci = document.getElementById('tymDomaci').value.trim();
+            const tymHoste = document.getElementById('tymHoste').value.trim();
+
+            if (!kolo || !tymDomaci || !tymHoste) {
+                alert('❌ Vyplňte prosím všechny informace o utkání!');
+                return;
+            }
+
+            const exportData = parsedMatches.map(match => ({
+                id: match.id,
+                kolo: kolo,
+                datum: datum || '',
+                disciplina: match.disciplina,
+                domaci: match.domaci,
+                hoste: match.hoste,
+                vysledek: match.vysledek,
+                sety: match.sety,
+                tymDomaci: tymDomaci,
+                tymHoste: tymHoste
+            }));
+
+            const json = JSON.stringify(exportData, null, 2);
+
+            navigator.clipboard.writeText(json).then(() => {
+                alert('✅ JSON byl zkopírován do schránky!\n\nMůžete ho nyní vložit do vašeho badminton-data.json souboru.');
+            }).catch(err => {
+                console.error('Chyba při kopírování:', err);
+                alert('❌ Nepodařilo se zkopírovat do schránky. Zkuste použít tlačítko "Exportovat JSON".');
+            });
+        }
+
+        function clearAll() {
+            if (confirm('Opravdu chcete vymazat všechna data?')) {
+                document.getElementById('htmlInput').value = '';
+                parsedMatches = [];
+                document.getElementById('kolo').value = '';
+                document.getElementById('datum').value = '';
+                document.getElementById('tymDomaci').value = '';
+                document.getElementById('tymHoste').value = '';
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('matchInfoContainer').style.display = 'none';
+                document.getElementById('resultsContainer').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
