@@ -1,85 +1,79 @@
 const Players = {
     renderTop3(aktualni_soutez, vybrana_kola) {
-        // Vytvoř filtr kol pro TOP 3
         const vsechnaKola = [...new Set(Data.zapasy[aktualni_soutez].map(z => z.kolo))].sort((a, b) => parseInt(b) - parseInt(a));
-        
-        const kolaCheckboxy = vsechnaKola.map(kolo => 
-            '<label class="kolo-checkbox flex items-center gap-1 px-2 py-1 border-2 ' + 
-            (vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white') + 
+
+        const kolaCheckboxy = vsechnaKola.map(kolo =>
+            '<label class="kolo-checkbox flex items-center gap-1 px-1.5 py-0.5 border ' +
+            (vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white') +
             ' rounded cursor-pointer hover:border-blue-400 transition-all">' +
-            '<input type="checkbox" value="' + kolo + '" onchange="Players.toggleKoloTop3(\'' + kolo + '\')" ' + 
-            (vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? 'checked' : '') + 
+            '<input type="checkbox" value="' + kolo + '" onchange="Players.toggleKoloTop3(\'' + kolo + '\')" ' +
+            (vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? 'checked' : '') +
             ' class="w-3 h-3">' +
-            '<span class="text-xs font-medium">Kolo ' + kolo + '</span>' +
+            '<span class="text-xs font-medium">' + kolo + '</span>' +
             '</label>'
         ).join('');
-        
-        const filterHtml = '<div class="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3">' +
-            '<div class="flex flex-wrap items-center gap-2 mb-2">' +
-            '<span class="text-xs font-semibold text-blue-800">Filtr kol pro TOP 3:</span>' +
-            '<button onclick="Players.vyberVsechnaKolaTop3()" class="text-xs px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Vše</button>' +
-            '<button onclick="Players.zrusVsechnaKolaTop3()" class="text-xs px-2 py-1 bg-gray-500 text-white rounded hover:bg-gray-600">Žádné</button>' +
-            '<button onclick="Players.poslednichXKolTop3(2)" class="text-xs px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600">Poslední 2 kola</button>' +
+
+        const kolaLabel = vybrana_kola.size === 0 ? 'Všechna kola' : vybrana_kola.size + '/' + vsechnaKola.length + ' kol';
+        const filterHtml = '<div class="mb-3">' +
+            '<div class="flex flex-wrap items-center gap-2">' +
+            '<button onclick="Players.toggleTop3Filtr()" class="text-xs px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded hover:bg-blue-100 font-medium">Filtr kol: ' + kolaLabel + ' ▾</button>' +
+            '<button onclick="Players.poslednichXKolTop3(2)" class="text-xs px-2 py-1 bg-green-50 border border-green-200 text-green-700 rounded hover:bg-green-100">Poslední 2</button>' +
+            '<button onclick="Players.vyberVsechnaKolaTop3()" class="text-xs px-2 py-1 bg-gray-50 border border-gray-200 text-gray-600 rounded hover:bg-gray-100">Vše</button>' +
             '</div>' +
-            '<div class="flex flex-wrap gap-2">' + kolaCheckboxy + '</div>' +
+            '<div id="top3KolaPanel" class="mt-2 bg-blue-50 border border-blue-200 rounded-lg p-2" style="display:none;">' +
+            '<div class="flex flex-wrap gap-1">' + kolaCheckboxy + '</div>' +
+            '</div>' +
             '</div>';
-        
+
         const stats = Statistics.vypocitejStatistiky(aktualni_soutez, vybrana_kola);
-        const hraciList = Object.keys(stats).filter(h => stats[h].zapasy >= 1); // Změna: min 1 zápas místo 5
-        
-        // Seřaď podle pravidel (stejně jako tabulka statistik): 1. Počet výher, 2. Win rate, 3. Počet zápasů, 4. Poměr setů
+        const hraciList = Object.keys(stats).filter(h => stats[h].zapasy >= 1);
+
         hraciList.sort((a, b) => {
             const sA = stats[a];
             const sB = stats[b];
-
-            // 1. Počet výher (sestupně)
             if (sB.vyhry !== sA.vyhry) return sB.vyhry - sA.vyhry;
-
-            // 2. Win rate (sestupně)
             const winRateA = sA.zapasy > 0 ? (sA.vyhry / sA.zapasy) : 0;
             const winRateB = sB.zapasy > 0 ? (sB.vyhry / sB.zapasy) : 0;
             if (Math.abs(winRateA - winRateB) > 0.001) return winRateB - winRateA;
-
-            // 3. Počet zápasů celkem (sestupně)
             if (sB.zapasy !== sA.zapasy) return sB.zapasy - sA.zapasy;
-
-            // 4. Poměr setů (sestupně)
             const setRatioA = (sA.setVyhrane + sA.setProhrane) > 0 ? (sA.setVyhrane / (sA.setVyhrane + sA.setProhrane)) : 0;
             const setRatioB = (sB.setVyhrane + sB.setProhrane) > 0 ? (sB.setVyhrane / (sB.setVyhrane + sB.setProhrane)) : 0;
             return setRatioB - setRatioA;
         });
-        
+
         const top3 = hraciList.slice(0, 3);
-        const container = document.getElementById('hracMesiceObsah');
-        
+
         if (top3.length === 0) {
-            document.getElementById('hracMesiceContainer').innerHTML = 
-                '<h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4">🔥 TOP 3 Hráči</h2>' +
+            document.getElementById('hracMesiceContainer').innerHTML =
+                '<div class="flex items-center justify-between mb-2"><h2 class="text-sm md:text-base font-bold text-gray-800">🔥 TOP 3 Hráči</h2></div>' +
                 filterHtml +
-                '<p class="text-gray-500 text-sm">Žádní hráči pro vybraná kola</p>';
+                '<p class="text-gray-500 text-xs">Žádní hráči pro vybraná kola</p>';
             return;
         }
-        
+
+        const medals = ['🥇', '🥈', '🥉'];
+        const colors = ['border-yellow-400 bg-yellow-50', 'border-gray-300 bg-gray-50', 'border-orange-300 bg-orange-50'];
+
         const html = top3.map((hrac, idx) => {
             const s = stats[hrac];
             const winRate = ((s.vyhry / s.zapasy) * 100).toFixed(1);
-            const setRatio = ((s.setVyhrane / (s.setVyhrane + s.setProhrane)) * 100).toFixed(1);
-            const medals = ['🥇', '🥈', '🥉'];
-            const colors = ['bg-yellow-100 border-yellow-400', 'bg-gray-100 border-gray-400', 'bg-orange-100 border-orange-400'];
-            
-            return '<div class="border-2 ' + colors[idx] + ' rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition-all" onclick="Modals.zobrazitDetailHrace(\'' + hrac + '\')">' +
-                '<div class="text-3xl md:text-4xl mb-2">' + medals[idx] + '</div>' +
-                '<div class="font-bold text-base md:text-lg text-gray-800 mb-1">' + hrac + '</div>' +
-                '<div class="text-xl md:text-2xl font-bold text-blue-600 mb-1">' + winRate + '%</div>' +
-                '<div class="text-xs md:text-sm text-gray-600 mb-2">' + s.vyhry + 'V / ' + s.prohry + 'P (' + s.zapasy + ' zápasů)</div>' +
-                '<div class="text-xs text-gray-500">Sety: ' + setRatio + '% (' + s.setVyhrane + '/' + (s.setVyhrane + s.setProhrane) + ')</div>' +
+            return '<div class="border ' + colors[idx] + ' rounded-lg p-2 md:p-3 text-center cursor-pointer hover:shadow-md transition-all min-w-0" onclick="Modals.zobrazitDetailHrace(\'' + hrac + '\')">' +
+                '<div class="text-lg md:text-xl leading-none">' + medals[idx] + '</div>' +
+                '<div class="font-bold text-xs md:text-sm text-gray-800 mt-1 truncate">' + hrac + '</div>' +
+                '<div class="text-sm md:text-lg font-bold text-blue-600 leading-tight">' + winRate + '%</div>' +
+                '<div class="text-xs text-gray-500 leading-tight">' + s.vyhry + 'V/' + s.prohry + 'P · ' + s.zapasy + 'z</div>' +
                 '</div>';
         }).join('');
-        
-        document.getElementById('hracMesiceContainer').innerHTML = 
-            '<h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4">🔥 TOP 3 Hráči</h2>' +
+
+        document.getElementById('hracMesiceContainer').innerHTML =
+            '<div class="flex items-center justify-between mb-2"><h2 class="text-sm md:text-base font-bold text-gray-800">🔥 TOP 3 Hráči</h2></div>' +
             filterHtml +
-            '<div class="grid grid-cols-1 md:grid-cols-3 gap-4">' + html + '</div>';
+            '<div class="grid grid-cols-3 gap-2 md:gap-3">' + html + '</div>';
+    },
+
+    toggleTop3Filtr() {
+        const panel = document.getElementById('top3KolaPanel');
+        if (panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     },
 
     toggleKoloTop3(kolo) {
