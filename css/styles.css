@@ -119,6 +119,206 @@ body.dark-mode table {
     color: #f3f4f6;
 }
 
+/* Playoff bracket */
+.playoff-bracket {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    overflow-x: auto;
+    padding: 16px 0;
+}
+
+.playoff-round {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 220px;
+    flex-shrink: 0;
+}
+
+.playoff-round-title {
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    text-align: center;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 4px;
+}
+
+.playoff-match {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+    transition: box-shadow 0.2s;
+}
+
+.playoff-match:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.playoff-match-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+}
+
+.playoff-match-teams {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.playoff-vs {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #9ca3af;
+    padding: 2px 0;
+}
+
+.playoff-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: white;
+    border: 1px solid #e5e7eb;
+}
+
+.playoff-team-green {
+    background: #f0fdf4;
+    border-color: #86efac;
+}
+
+.playoff-team-blue {
+    background: #eff6ff;
+    border-color: #93c5fd;
+}
+
+.playoff-team-pending {
+    background: #f3f4f6;
+    border: 1px dashed #d1d5db;
+}
+
+.playoff-seed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #374151;
+    flex-shrink: 0;
+}
+
+.playoff-team-green .playoff-seed {
+    background: #bbf7d0;
+    color: #166534;
+}
+
+.playoff-team-blue .playoff-seed {
+    background: #bfdbfe;
+    color: #1e40af;
+}
+
+.playoff-team-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playoff-connector-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 40px 8px 0;
+    min-height: 100%;
+}
+
+.playoff-arrow {
+    font-size: 1.5rem;
+    color: #d1d5db;
+    font-weight: 700;
+}
+
+.playoff-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Dark mode - playoff */
+body.dark-mode .playoff-match {
+    background: #374151;
+    border-color: #4b5563;
+}
+
+body.dark-mode .playoff-round-title {
+    color: #9ca3af;
+    border-color: #4b5563;
+}
+
+body.dark-mode .playoff-match-label {
+    color: #6b7280;
+}
+
+body.dark-mode .playoff-team {
+    background: #1f2937;
+    border-color: #4b5563;
+}
+
+body.dark-mode .playoff-team-green {
+    background: #14532d;
+    border-color: #166534;
+}
+
+body.dark-mode .playoff-team-blue {
+    background: #1e3a5f;
+    border-color: #1e40af;
+}
+
+body.dark-mode .playoff-team-pending {
+    background: #374151;
+    border-color: #6b7280;
+}
+
+body.dark-mode .playoff-seed {
+    background: #4b5563;
+    color: #e5e7eb;
+}
+
+body.dark-mode .playoff-team-green .playoff-seed {
+    background: #166534;
+    color: #bbf7d0;
+}
+
+body.dark-mode .playoff-team-blue .playoff-seed {
+    background: #1e40af;
+    color: #bfdbfe;
+}
+
+body.dark-mode .playoff-vs {
+    color: #6b7280;
+}
+
+body.dark-mode .playoff-arrow {
+    color: #6b7280;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .modal-content {
@@ -133,5 +333,26 @@ body.dark-mode table {
     .soutez-tab {
         font-size: 0.875rem;
         padding: 0.5rem 1rem;
+    }
+
+    .playoff-bracket {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .playoff-round {
+        min-width: 0;
+    }
+
+    .playoff-connector-col {
+        flex-direction: row;
+        padding: 0;
+        min-height: auto;
+        justify-content: center;
+        padding: 4px 0;
+    }
+
+    .playoff-arrow {
+        transform: rotate(90deg);
     }
 }
