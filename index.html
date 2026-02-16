@@ -50,6 +50,14 @@
             <div id="tabulkaObsah"></div>
         </div>
 
+        <div id="playoffContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
+            <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="App.toggleSekce('playoffObsah')">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800">🏅 Play-off pavouk - <span id="playoffSoutez"></span></h2>
+                <span id="playoffToggle" class="text-xl md:text-2xl">▼</span>
+            </div>
+            <div id="playoffObsah"></div>
+        </div>
+
         <div id="zapasyContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
             <div class="flex justify-between items-center mb-4">
                 <div class="flex items-center gap-3 cursor-pointer" onclick="App.toggleSekce('zapasyObsah')">
@@ -105,6 +113,7 @@
     <script src="js/data.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/table.js"></script>
+    <script src="js/playoff.js"></script>
     <script src="js/matches.js"></script>
     <script src="js/modals.js"></script>
     <script src="js/filters.js"></script>

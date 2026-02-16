@@ -73,14 +73,14 @@ const App = {
 
     zobrazitData() {
         if (Data.zapasy[this.aktualni_soutez].length === 0) {
-            ['zapasyContainer','statistikyContainer','tabulkaContainer','hracMesiceContainer','rychleFiltry'].forEach(id => 
+            ['zapasyContainer','statistikyContainer','tabulkaContainer','hracMesiceContainer','rychleFiltry','playoffContainer'].forEach(id =>
                 document.getElementById(id).style.display = 'none'
             );
             document.getElementById('prazdnyStav').style.display = 'block';
             return;
         }
 
-        ['zapasyContainer','statistikyContainer','tabulkaContainer','hracMesiceContainer','rychleFiltry'].forEach(id => 
+        ['zapasyContainer','statistikyContainer','tabulkaContainer','hracMesiceContainer','rychleFiltry','playoffContainer'].forEach(id =>
             document.getElementById(id).style.display = 'block'
         );
         document.getElementById('prazdnyStav').style.display = 'none';
@@ -91,6 +91,8 @@ const App = {
         Filters.render(this.aktualni_soutez, this.vybrana_kola);
         Players.renderTop3(this.aktualni_soutez, this.vybrana_kola);
         Table.render(this.aktualni_soutez);
+        document.getElementById('playoffSoutez').textContent = Data.soutezNazvy[this.aktualni_soutez];
+        Playoff.render(this.aktualni_soutez);
         Matches.render(this.aktualni_soutez);
         Players.renderStatistiky(this.aktualni_soutez, this.vybrana_kola);
     }
