@@ -115,17 +115,19 @@ const Modals = {
                     if (v.hoste > v.domaci) vyhraneZapasy++; else prohraneZapasy++;
                 }
             });
+            const remiza = vyhraneZapasy === prohraneZapasy;
             const vyhrano = vyhraneZapasy > prohraneZapasy;
-            const bgColor = vyhrano ? 'bg-green-50' : 'bg-red-50';
-            const textColor = vyhrano ? 'text-green-600' : 'text-red-600';
-            
+            const bgColor = remiza ? 'bg-yellow-50' : (vyhrano ? 'bg-green-50' : 'bg-red-50');
+            const textColor = remiza ? 'text-yellow-600' : (vyhrano ? 'text-green-600' : 'text-red-600');
+            const stavText = remiza ? '⚖ Remíza' : (vyhrano ? '✓ Výhra' : '✗ Prohra');
+
             return '<tr class="border-b ' + bgColor + ' text-xs">' +
                 '<td class="p-2">K' + u.kolo + '</td>' +
                 '<td class="p-2">' + (u.datum || '-') + '</td>' +
                 '<td class="p-2">' + (u.doma ? '🏠 Doma' : '✈️ Venku') + '</td>' +
                 '<td class="p-2 font-semibold">' + u.souper + '</td>' +
                 '<td class="p-2 font-bold ' + textColor + '">' + vyhraneZapasy + ':' + prohraneZapasy + '</td>' +
-                '<td class="p-2">' + (vyhrano ? '✓ Výhra' : '✗ Prohra') + '</td>' +
+                '<td class="p-2">' + stavText + '</td>' +
                 '</tr>';
         }).join('');
         
