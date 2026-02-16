@@ -27,28 +27,26 @@ const Players = {
         const stats = Statistics.vypocitejStatistiky(aktualni_soutez, vybrana_kola);
         const hraciList = Object.keys(stats).filter(h => stats[h].zapasy >= 1); // Změna: min 1 zápas místo 5
         
-        // Seřaď podle pravidel: 1. Win rate, 2. Počet výher, 3. Poměr setů, 4. Poměr míčků
+        // Seřaď podle pravidel (stejně jako tabulka statistik): 1. Počet výher, 2. Win rate, 3. Počet zápasů, 4. Poměr setů
         hraciList.sort((a, b) => {
             const sA = stats[a];
             const sB = stats[b];
-            
-            // 1. Win rate (sestupně)
+
+            // 1. Počet výher (sestupně)
+            if (sB.vyhry !== sA.vyhry) return sB.vyhry - sA.vyhry;
+
+            // 2. Win rate (sestupně)
             const winRateA = sA.zapasy > 0 ? (sA.vyhry / sA.zapasy) : 0;
             const winRateB = sB.zapasy > 0 ? (sB.vyhry / sB.zapasy) : 0;
             if (Math.abs(winRateA - winRateB) > 0.001) return winRateB - winRateA;
-            
-            // 2. Počet výher (sestupně)
-            if (sB.vyhry !== sA.vyhry) return sB.vyhry - sA.vyhry;
-            
-            // 3. Poměr setů (sestupně)
+
+            // 3. Počet zápasů celkem (sestupně)
+            if (sB.zapasy !== sA.zapasy) return sB.zapasy - sA.zapasy;
+
+            // 4. Poměr setů (sestupně)
             const setRatioA = (sA.setVyhrane + sA.setProhrane) > 0 ? (sA.setVyhrane / (sA.setVyhrane + sA.setProhrane)) : 0;
             const setRatioB = (sB.setVyhrane + sB.setProhrane) > 0 ? (sB.setVyhrane / (sB.setVyhrane + sB.setProhrane)) : 0;
-            if (Math.abs(setRatioA - setRatioB) > 0.001) return setRatioB - setRatioA;
-            
-            // 4. Poměr míčků (sestupně)
-            const bodyRatioA = (sA.bodyVyhrane + sA.bodyProhrane) > 0 ? (sA.bodyVyhrane / (sA.bodyVyhrane + sA.bodyProhrane)) : 0;
-            const bodyRatioB = (sB.bodyVyhrane + sB.bodyProhrane) > 0 ? (sB.bodyVyhrane / (sB.bodyVyhrane + sB.bodyProhrane)) : 0;
-            return bodyRatioB - bodyRatioA;
+            return setRatioB - setRatioA;
         });
         
         const top3 = hraciList.slice(0, 3);
@@ -120,9 +118,17 @@ const Players = {
         const stats = Statistics.vypocitejStatistiky(aktualni_soutez, vybrana_kola);
         let hraciList = Object.keys(stats);
         
-        const hledatText = document.getElementById('hledatHrace')?.value.toLowerCase() || '';
-        const minZapasy = parseInt(document.getElementById('minZapasy')?.value) || 0;
+        // Uložení aktuálních hodnot filtrů před překreslením
+        const hledatHraceEl = document.getElementById('hledatHrace');
+        const hledatHodnota = hledatHraceEl?.value || '';
+        const hledatText = hledatHodnota.toLowerCase();
+        const bylFokus = document.activeElement === hledatHraceEl;
+        const kurzorPozice = hledatHraceEl?.selectionStart || 0;
+        const minZapasyHodnota = document.getElementById('minZapasy')?.value || '0';
+        const minZapasy = parseInt(minZapasyHodnota) || 0;
         const razeniSloupec = document.getElementById('razeniSloupec')?.value || 'winrate';
+        const filtrTymHodnota = document.getElementById('filtrTym')?.value || '';
+        const filtrDisciplinaHodnota = document.getElementById('filtrDisciplina')?.value || '';
         
         if (hledatText) hraciList = hraciList.filter(hrac => hrac.toLowerCase().includes(hledatText));
         if (minZapasy > 0) hraciList = hraciList.filter(hrac => stats[hrac].zapasy >= minZapasy);
@@ -172,24 +178,24 @@ const Players = {
             return '<tr class="border-b border-gray-200 hover:bg-blue-50"><td class="p-2 text-center font-bold text-gray-500">' + (idx + 1) + '</td><td class="p-2 font-semibold clickable" onclick="Modals.zobrazitDetailHrace(\'' + hrac + '\')">' + hrac + '</td><td class="p-2 text-blue-600 clickable" onclick="Modals.zobrazitDetailTymu(\'' + nejTym + '\')">' + nejTym + '</td><td class="p-2 text-center">' + s.zapasy + '</td><td class="p-2 text-center text-green-600 font-semibold">' + s.vyhry + '</td><td class="p-2 text-center text-red-600 font-semibold">' + s.prohry + '</td><td class="p-2 text-center font-bold ' + winColor + '">' + winRatio + '%</td><td class="p-2 text-center">' + (formaHtml || '-') + '</td></tr>';
         }).join('');
         
-        const tymyOptions = Data.tymy[aktualni_soutez].map(t => '<option value="' + t + '">' + t + '</option>').join('');
+        const tymyOptions = Data.tymy[aktualni_soutez].map(t => '<option value="' + t + '"' + (t === filtrTymHodnota ? ' selected' : '') + '>' + t + '</option>').join('');
         
         const filtryHtml = '<div class="bg-gray-50 border border-gray-200 rounded-lg p-3 md:p-4 mb-4">' +
             '<h3 class="text-xs md:text-sm font-semibold text-gray-700 mb-3">🔍 Filtry</h3>' +
             '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">' +
             '<div><label class="block text-xs font-medium text-gray-600 mb-1">Hráč</label>' +
-            '<input type="text" id="hledatHrace" placeholder="Jméno..." class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="App.zobrazitData()"></div>' +
+            '<input type="text" id="hledatHrace" placeholder="Jméno..." value="' + hledatHodnota.replace(/"/g, '&quot;') + '" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="Players.renderStatistiky(App.aktualni_soutez, App.vybrana_kola)"></div>' +
             '<div><label class="block text-xs font-medium text-gray-600 mb-1">Tým</label>' +
             '<select id="filtrTym" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()">' +
             '<option value="">Všechny týmy</option>' + tymyOptions + '</select></div>' +
             '<div><label class="block text-xs font-medium text-gray-600 mb-1">Disciplína</label>' +
             '<select id="filtrDisciplina" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()">' +
-            '<option value="">Vše</option><option value="dvouhra">Dvouhry</option><option value="ctyrhra">Čtyřhry</option></select></div>' +
+            '<option value="">Vše</option><option value="dvouhra"' + (filtrDisciplinaHodnota === 'dvouhra' ? ' selected' : '') + '>Dvouhry</option><option value="ctyrhra"' + (filtrDisciplinaHodnota === 'ctyrhra' ? ' selected' : '') + '>Čtyřhry</option></select></div>' +
             '<div><label class="block text-xs font-medium text-gray-600 mb-1">Min. zápasů</label>' +
-            '<input type="number" id="minZapasy" value="0" min="0" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="App.zobrazitData()"></div>' +
+            '<input type="number" id="minZapasy" value="' + minZapasyHodnota + '" min="0" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" oninput="Players.renderStatistiky(App.aktualni_soutez, App.vybrana_kola)"></div>' +
             '<div><label class="block text-xs font-medium text-gray-600 mb-1">Řadit</label>' +
-            '<select id="razeniSloupec" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="App.zobrazitData()">' +
-            '<option value="winrate">Win %</option><option value="zapasy">Zápasy</option><option value="vyhry">Výhry</option><option value="jmeno">Jméno</option></select></div>' +
+            '<select id="razeniSloupec" class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm" onchange="Players.renderStatistiky(App.aktualni_soutez, App.vybrana_kola)">' +
+            '<option value="winrate"' + (razeniSloupec === 'winrate' ? ' selected' : '') + '>Win %</option><option value="zapasy"' + (razeniSloupec === 'zapasy' ? ' selected' : '') + '>Zápasy</option><option value="vyhry"' + (razeniSloupec === 'vyhry' ? ' selected' : '') + '>Výhry</option><option value="jmeno"' + (razeniSloupec === 'jmeno' ? ' selected' : '') + '>Jméno</option></select></div>' +
             '<div class="flex items-end"><button onclick="Filters.vymazat()" class="w-full bg-gray-500 hover:bg-gray-600 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded transition-colors">✕ Reset</button></div>' +
             '</div>' +
             '<div class="border-t border-gray-300 pt-3 mt-3">' +
@@ -214,5 +220,17 @@ const Players = {
             '<th class="text-center p-2 font-semibold">Win%</th>' +
             '<th class="text-center p-2 font-semibold">Forma</th>' +
             '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+
+        // Vykreslení checkboxů kol (musí být po innerHTML, protože ten vytváří nový #kolaCheckboxy)
+        Filters.renderKolaCheckboxy(aktualni_soutez, vybrana_kola);
+
+        // Obnovení fokusu na vyhledávací pole po překreslení
+        if (bylFokus) {
+            const el = document.getElementById('hledatHrace');
+            if (el) {
+                el.focus();
+                el.setSelectionRange(kurzorPozice, kurzorPozice);
+            }
+        }
     }
 };

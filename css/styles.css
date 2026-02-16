@@ -42,6 +42,10 @@ body {
     overflow-y: auto;
 }
 
+#hracModal {
+    z-index: 1010;
+}
+
 .modal-content {
     background-color: white;
     margin: 2% auto;
