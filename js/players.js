@@ -221,6 +221,9 @@ const Players = {
             '<th class="text-center p-2 font-semibold">Forma</th>' +
             '</tr></thead><tbody>' + rows + '</tbody></table></div>';
 
+        // Vykreslení checkboxů kol (musí být po innerHTML, protože ten vytváří nový #kolaCheckboxy)
+        Filters.renderKolaCheckboxy(aktualni_soutez, vybrana_kola);
+
         // Obnovení fokusu na vyhledávací pole po překreslení
         if (bylFokus) {
             const el = document.getElementById('hledatHrace');

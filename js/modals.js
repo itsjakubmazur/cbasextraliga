@@ -35,7 +35,8 @@ const Modals = {
                 '<td class="p-2">' + (jeDom ? zapas.tymHoste : zapas.tymDomaci) + '</td>' +
                 '<td class="p-2 text-gray-600">' + souperiText + '</td>' +
                 '<td class="p-2 font-bold ' + (vyhral ? 'text-green-600' : 'text-red-600') + '">' + (vyhral ? '✓ W' : '✗ L') + '</td>' +
-                '<td class="p-2">' + zapas.vysledek + '</td>' +
+                '<td class="p-2 font-semibold">' + zapas.vysledek + '</td>' +
+                '<td class="p-2 text-gray-500">' + (zapas.sety || '-') + '</td>' +
                 '</tr>';
         }).join('');
         
@@ -57,7 +58,7 @@ const Modals = {
             '<div class="mb-4 md:mb-6"><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">📈 Forma (posledních 5)</h3><div class="flex gap-1 md:gap-2">' + (formaHtml || '<span class="text-gray-500 text-xs">Nedostatek dat</span>') + '</div></div>' +
             '<div class="mb-4 md:mb-6"><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">🎯 Nejčastější soupeři</h3><div>' + (nejSouperi || '<span class="text-gray-500 text-xs">Žádná data</span>') + '</div></div>' +
             '<div><h3 class="text-sm md:text-lg font-bold text-gray-800 mb-3">📋 Všechny zápasy (' + s.zapasy + ')</h3><div class="overflow-x-auto"><table class="w-full"><thead><tr class="bg-gray-100 border-b-2 text-xs">' +
-            '<th class="text-left p-2">Kolo</th><th class="text-left p-2">Datum</th><th class="text-left p-2">Disciplína</th><th class="text-left p-2">Můj tým</th><th class="text-left p-2">Soupeř tým</th><th class="text-left p-2">Soupeři</th><th class="text-left p-2">Výsl.</th><th class="text-left p-2">Skóre</th>' +
+            '<th class="text-left p-2">Kolo</th><th class="text-left p-2">Datum</th><th class="text-left p-2">Disciplína</th><th class="text-left p-2">Můj tým</th><th class="text-left p-2">Soupeř tým</th><th class="text-left p-2">Soupeři</th><th class="text-left p-2">Výsl.</th><th class="text-left p-2">Sety</th><th class="text-left p-2">Skóre</th>' +
             '</tr></thead><tbody>' + zapasyHrace + '</tbody></table></div></div>';
         modal.style.display = 'block';
     },
