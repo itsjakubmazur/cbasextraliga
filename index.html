@@ -42,20 +42,16 @@
             <div id="hracMesiceObsah" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         </div>
 
-        <div id="tabulkaContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
-            <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="App.toggleSekce('tabulkaObsah')">
-                <h2 class="text-lg md:text-xl font-bold text-gray-800">🏆 Tabulka - <span id="tabulkaSoutez"></span></h2>
-                <span id="tabulkaToggle" class="text-xl md:text-2xl">▼</span>
+        <div id="tabulkaPlayoffContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800"><span id="tabulkaPlayoffIcon">🏆</span> <span id="tabulkaPlayoffTitle">Tabulka</span> - <span id="tabulkaSoutez"></span></h2>
+                <div class="view-toggle" id="viewToggle">
+                    <button class="view-toggle-btn active" id="viewToggleZakladni" onclick="App.prepnoutPohled('zakladni')">Základní část</button>
+                    <button class="view-toggle-btn" id="viewTogglePlayoff" onclick="App.prepnoutPohled('playoff')">Play-off</button>
+                </div>
             </div>
             <div id="tabulkaObsah"></div>
-        </div>
-
-        <div id="playoffContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
-            <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="App.toggleSekce('playoffObsah')">
-                <h2 class="text-lg md:text-xl font-bold text-gray-800">🏅 Play-off pavouk - <span id="playoffSoutez"></span></h2>
-                <span id="playoffToggle" class="text-xl md:text-2xl">▼</span>
-            </div>
-            <div id="playoffObsah"></div>
+            <div id="playoffObsah" style="display: none;"></div>
         </div>
 
         <div id="zapasyContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
