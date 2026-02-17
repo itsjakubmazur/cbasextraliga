@@ -100,6 +100,18 @@
                 </div>
             </div>
 
+            <div class="border-t border-gray-200 mt-6 pt-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">🏆 Historie extraligových vítězů</h3>
+                <div class="flex gap-2 mb-3">
+                    <input type="text" id="novaSezona" placeholder="Sezóna (např. 2024/2025)" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-yellow-500 w-48">
+                    <input type="text" id="novyVitez" placeholder="Vítězný tým" class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-yellow-500">
+                    <button onclick="pridatViteze()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
+                        + Přidat
+                    </button>
+                </div>
+                <div id="seznamVitezu" class="border border-gray-200 rounded-lg p-3 max-h-64 overflow-y-auto"></div>
+            </div>
+
             <button onclick="toggleSprava()" class="mt-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
                 Zavřít
             </button>
@@ -356,6 +368,7 @@
             'prvni-liga-zapad': [],
             'prvni-liga-playoff': []
         };
+        let vitezove = [];
         let vybrana_kola = new Set();
         let aktualni_soutez = 'extraliga';
 
@@ -418,6 +431,9 @@
                 }
             }
 
+            const ulozeniVitezove = localStorage.getItem('badmintonVitezove');
+            if (ulozeniVitezove) vitezove = JSON.parse(ulozeniVitezove);
+
             if (ulozeniHraci) hraci = JSON.parse(ulozeniHraci);
             if (ulozeneTymy) {
                 const parsed = JSON.parse(ulozeneTymy);
@@ -436,6 +452,7 @@
             localStorage.setItem('badmintonZapasy', JSON.stringify(zapasy));
             localStorage.setItem('badmintonHraci', JSON.stringify(hraci));
             localStorage.setItem('badmintonTymy', JSON.stringify(tymy));
+            localStorage.setItem('badmintonVitezove', JSON.stringify(vitezove));
         }
 
         function toggleSprava() {
@@ -443,6 +460,7 @@
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
             if (panel.style.display === 'block') {
                 zobrazitSpravuTymu();
+                zobrazitViteze();
             }
         }
 
@@ -601,6 +619,55 @@
                 '<div class="flex justify-between items-center py-2 border-b border-gray-100">' +
                 '<span class="text-sm">' + t + '</span>' +
                 '<button onclick="smazatTym(\'' + t.replace(/'/g, "\\'") + '\')" class="text-red-600 hover:text-red-800 text-sm">🗑️</button>' +
+                '</div>'
+            ).join('');
+        }
+
+        function pridatViteze() {
+            const sezona = document.getElementById('novaSezona').value.trim();
+            const tym = document.getElementById('novyVitez').value.trim();
+            if (!sezona || !tym) {
+                alert('Vyplňte sezónu i vítězný tým');
+                return;
+            }
+            // Check if season already exists
+            const existuje = vitezove.find(v => v.sezona === sezona);
+            if (existuje) {
+                if (!confirm('Sezóna ' + sezona + ' už má vítěze (' + existuje.tym + '). Přepsat?')) return;
+                existuje.tym = tym;
+            } else {
+                vitezove.push({ sezona: sezona, tym: tym });
+            }
+            ulozitData();
+            zobrazitViteze();
+            document.getElementById('novaSezona').value = '';
+            document.getElementById('novyVitez').value = '';
+        }
+
+        function smazatViteze(sezona) {
+            if (confirm('Smazat vítěze sezóny ' + sezona + '?')) {
+                vitezove = vitezove.filter(v => v.sezona !== sezona);
+                ulozitData();
+                zobrazitViteze();
+            }
+        }
+
+        function zobrazitViteze() {
+            const container = document.getElementById('seznamVitezu');
+            if (!container) return;
+            if (vitezove.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm">Žádní vítězové</p>';
+                return;
+            }
+            const sorted = [...vitezove].sort((a, b) => {
+                const rokA = parseInt(a.sezona) || 0;
+                const rokB = parseInt(b.sezona) || 0;
+                return rokB - rokA;
+            });
+            container.innerHTML = sorted.map(v =>
+                '<div class="flex justify-between items-center py-2 border-b border-gray-100">' +
+                '<span class="text-sm"><strong>' + v.sezona + '</strong> — ' + v.tym + '</span>' +
+                '<button onclick="smazatViteze(\'' + v.sezona.replace(/'/g, "\\'") + '\')" class="text-red-600 hover:text-red-800 text-sm">🗑️</button>' +
                 '</div>'
             ).join('');
         }
@@ -1350,6 +1417,7 @@
             const webData = {
                 zapasy: zapasy,
                 tymy: tymy,
+                vitezove: vitezove,
                 datum: new Date().toISOString()
             };
 
@@ -1374,8 +1442,9 @@
                 zapasy: zapasy,
                 hraci: hraci,
                 tymy: tymy,
+                vitezove: vitezove,
                 datum: new Date().toISOString(),
-                verze: '2.0'
+                verze: '3.0'
             };
             
             const json = JSON.stringify(backup, null, 2);
@@ -1439,7 +1508,9 @@
                         } else {
                             tymy.extraliga = backup.tymy;
                         }
-                        
+
+                        if (backup.vitezove) vitezove = backup.vitezove;
+
                         ulozitData();
                         aktualizovatSelecty();
                         zobrazitSpravuHracu();

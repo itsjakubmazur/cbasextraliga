@@ -17,6 +17,7 @@ const Data = {
         'prvni-liga-zapad': '1. liga - Západ',
         'prvni-liga-playoff': '1. liga - Play-off'
     },
+    vitezove: [],
 
     async nacist() {
         try {
@@ -25,6 +26,7 @@ const Data = {
             const data = await response.json();
             this.zapasy = { ...this.zapasy, ...data.zapasy };
             this.tymy = { ...this.tymy, ...data.tymy };
+            if (data.vitezove) this.vitezove = data.vitezove;
             const datumAktualizace = data.datum ? new Date(data.datum).toLocaleString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'neznámé';
             document.getElementById('aktualizaceInfo').textContent = '✓ Aktualizace: ' + datumAktualizace;
             return true;
