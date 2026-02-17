@@ -694,6 +694,12 @@ body.dark-mode .clickable:focus-visible {
     padding-right: 4px;
 }
 
+.vitezove-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .champions-entry {
     display: flex;
     align-items: center;

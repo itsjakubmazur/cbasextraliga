@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Historie vítězů nejvyšší badmintonové ligy - Česká republika a Československo.">
+    <meta name="theme-color" content="#d93831">
+    <title>Historie vítězů nejvyšší ligy - Czech Badminton</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen p-2 md:p-4" style="background: linear-gradient(to bottom right, #d93831, #a82820);">
+    <div class="max-w-7xl mx-auto">
+        <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">🏸 Neoficiální ligové tabulky Czech Badminton</h1>
+                    <p class="text-sm md:text-base text-gray-600">Přehled zápasů, tabulky a statistiky hráčů</p>
+                </div>
+                <button onclick="toggleDarkMode()" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                    <span id="darkModeIcon">🌙</span> <span id="darkModeText">Dark Mode</span>
+                </button>
+            </div>
+
+            <div class="mt-4 md:mt-6 flex flex-wrap gap-2">
+                <a href="index.html" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base hover:bg-gray-300 transition-colors">
+                    🏸 Ligové tabulky
+                </a>
+                <span class="soutez-tab active px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base">
+                    🏆 Historie vítězů
+                </span>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
+            <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4">🏆 Historie vítězů nejvyšší ligy</h2>
+
+            <div class="mb-6" id="topTymy">
+                <p class="text-gray-500 text-center py-4">Načítání dat...</p>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-base md:text-lg font-bold text-gray-700 mb-3 pb-2 border-b-2 border-gray-200">
+                    Česká republika (od sezóny 1992/93)
+                </h3>
+                <div id="vitezoveCR" class="vitezove-list"></div>
+            </div>
+
+            <div>
+                <h3 class="text-base md:text-lg font-bold text-gray-700 mb-3 pb-2 border-b-2 border-gray-200">
+                    Československo (do sezóny 1991/92)
+                </h3>
+                <div id="vitezoveCSR" class="vitezove-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function init() {
+            try {
+                const response = await fetch('badminton-data.json');
+                const data = await response.json();
+                render(data.vitezove || []);
+            } catch (e) {
+                console.error('Chyba načítání:', e);
+                document.getElementById('topTymy').innerHTML =
+                    '<p class="text-red-500 text-center py-4">Nepodařilo se načíst data.</p>';
+            }
+
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeIcon').textContent = '☀️';
+                document.getElementById('darkModeText').textContent = 'Light Mode';
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            document.getElementById('darkModeIcon').textContent = isDark ? '☀️' : '🌙';
+            document.getElementById('darkModeText').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+        }
+
+        function escapeHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        function render(vitezove) {
+            const sorted = [...vitezove].sort((a, b) => {
+                const rokA = parseInt(a.sezona) || 0;
+                const rokB = parseInt(b.sezona) || 0;
+                return rokB - rokA;
+            });
+
+            // Split: ČR = 1992/93+, ČSR = 1991/92 and earlier
+            const cr = sorted.filter(v => parseInt(v.sezona) >= 1992);
+            const csr = sorted.filter(v => parseInt(v.sezona) < 1992);
+
+            // Count titles per team (exclude non-played seasons)
+            const tituly = {};
+            sorted.forEach(v => {
+                if (v.tym.toLowerCase().includes('nehráno')) return;
+                tituly[v.tym] = (tituly[v.tym] || 0) + 1;
+            });
+
+            const topTymy = Object.entries(tituly)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            const medalColors = [
+                'bg-yellow-100 border-yellow-400 text-yellow-800',
+                'bg-gray-100 border-gray-400 text-gray-700',
+                'bg-orange-100 border-orange-400 text-orange-800',
+                'bg-blue-50 border-blue-300 text-blue-700',
+                'bg-blue-50 border-blue-300 text-blue-700'
+            ];
+
+            const topHtml = topTymy.map((t, i) =>
+                '<div class="inline-flex items-center gap-2 px-3 py-1.5 border rounded-full text-xs md:text-sm font-semibold ' + medalColors[i] + '">' +
+                    '<span>' + escapeHtml(t[0]) + '</span>' +
+                    '<span class="font-bold">' + t[1] + 'x</span>' +
+                '</div>'
+            ).join(' ');
+
+            document.getElementById('topTymy').innerHTML =
+                '<div class="text-sm font-semibold text-gray-600 mb-2">Nejúspěšnější týmy:</div>' +
+                '<div class="flex flex-wrap gap-2">' + topHtml + '</div>';
+
+            document.getElementById('vitezoveCR').innerHTML = renderList(cr, true);
+            document.getElementById('vitezoveCSR').innerHTML = renderList(csr, false);
+        }
+
+        function renderList(items, highlightFirst) {
+            if (items.length === 0) {
+                return '<p class="text-gray-500 text-center py-4">Žádná data.</p>';
+            }
+
+            return items.map((v, i) => {
+                const isCurrent = highlightFirst && i === 0;
+                return '<div class="champions-entry ' + (isCurrent ? 'champions-entry-current' : '') + '">' +
+                    '<div class="champions-season">' + escapeHtml(v.sezona) + '</div>' +
+                    '<div class="champions-team">' + escapeHtml(v.tym) + '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        init();
+    </script>
+</body>
+</html>
