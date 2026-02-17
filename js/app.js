@@ -138,7 +138,7 @@ const App = {
 
     zobrazitData() {
         if (Data.zapasy[this.aktualni_soutez].length === 0) {
-            ['zapasyContainer','statistikyContainer','tabulkaPlayoffContainer','hracMesiceContainer','rychleFiltry','vitezoveContainer'].forEach(id => {
+            ['zapasyContainer','statistikyContainer','tabulkaPlayoffContainer','hracMesiceContainer','rychleFiltry'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = 'none';
             });
@@ -150,17 +150,6 @@ const App = {
             document.getElementById(id).style.display = 'block'
         );
         document.getElementById('prazdnyStav').style.display = 'none';
-
-        // Show champions section only for extraliga
-        const vitezoveContainer = document.getElementById('vitezoveContainer');
-        if (vitezoveContainer) {
-            if (this.aktualni_soutez === 'extraliga') {
-                vitezoveContainer.style.display = 'block';
-                Champions.render();
-            } else {
-                vitezoveContainer.style.display = 'none';
-            }
-        }
 
         this.aktualizovatKolaCheckboxy();
         this.aktualizovatSelecty();

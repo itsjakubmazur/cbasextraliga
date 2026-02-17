@@ -54,7 +54,7 @@ const Champions = {
 
         container.innerHTML =
             '<div class="mb-4">' +
-                '<div class="text-sm font-semibold text-gray-600 mb-2">Nejuspesnejsi tymy:</div>' +
+                '<div class="text-sm font-semibold text-gray-600 mb-2">Nejúspěšnější týmy:</div>' +
                 '<div class="flex flex-wrap gap-2">' + topHtml + '</div>' +
             '</div>' +
             '<div class="champions-timeline">' + timelineHtml + '</div>';
