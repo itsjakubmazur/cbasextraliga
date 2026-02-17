@@ -136,6 +136,7 @@ body.dark-mode .text-red-600 { color: #f87171 !important; }
 
 /* Purple backgrounds & text */
 body.dark-mode .bg-purple-50 { background-color: #3b0764 !important; }
+body.dark-mode .bg-purple-100 { background-color: #4c1d95 !important; }
 body.dark-mode .border-purple-200 { border-color: #6b21a8 !important; }
 body.dark-mode .text-purple-600 { color: #c084fc !important; }
 
@@ -490,6 +491,25 @@ body.dark-mode .view-toggle-btn.active {
     text-overflow: ellipsis;
 }
 
+.playoff-series-score {
+    margin-left: auto;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #374151;
+    min-width: 18px;
+    text-align: center;
+}
+
+.playoff-series-result {
+    text-align: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #6b7280;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed #e5e7eb;
+}
+
 .playoff-legend {
     display: flex;
     flex-wrap: wrap;
@@ -590,8 +610,103 @@ body.dark-mode .playoff-vs {
     color: #6b7280;
 }
 
+body.dark-mode .playoff-series-score {
+    color: #e5e7eb;
+}
+
+body.dark-mode .playoff-series-result {
+    color: #9ca3af;
+    border-color: #4b5563;
+}
+
+/* Champion banner dark mode */
+body.dark-mode .bg-yellow-50.border-yellow-400 {
+    background-color: #713f12 !important;
+    border-color: #ca8a04 !important;
+}
+
+body.dark-mode .text-yellow-800 {
+    color: #fde68a !important;
+}
+
 body.dark-mode .bracket-line {
     stroke: #6b7280;
+}
+
+/* Smooth section transitions */
+#zapasyObsah,
+#statistikyObsah,
+#playoffObsah,
+#tabulkaObsah {
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Active filter indicator */
+.filter-active {
+    position: relative;
+}
+
+.filter-active::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* Accessibility: focus-visible styles */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+.clickable:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+body.dark-mode button:focus-visible,
+body.dark-mode input:focus-visible,
+body.dark-mode select:focus-visible,
+body.dark-mode .clickable:focus-visible {
+    outline-color: #60a5fa;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white !important;
+        padding: 0 !important;
+    }
+
+    .soutez-tab,
+    #rychleFiltry,
+    #hracMesiceContainer,
+    .view-toggle,
+    button[onclick*="toggleDarkMode"],
+    .cursor-pointer[onclick*="toggleSekce"] span {
+        display: none !important;
+    }
+
+    .bg-white {
+        box-shadow: none !important;
+    }
+
+    .modal {
+        display: none !important;
+    }
+
+    #zapasyObsah,
+    #statistikyObsah {
+        display: block !important;
+    }
 }
 
 /* Responsive */

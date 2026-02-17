@@ -10,39 +10,119 @@ const Playoff = {
         } else {
             const tabulkaData = Statistics.vypocitejTabulku(aktualni_soutez);
             const tymy = this.seraditTymy(tabulkaData);
-            container.innerHTML = this.renderExtraligaBracket(tymy, tabulkaData);
+            const playoffResults = this.getPlayoffResults(aktualni_soutez);
+            container.innerHTML = this.renderExtraligaBracket(tymy, tabulkaData, playoffResults);
         }
     },
 
-    seraditTymy(tabulkaData) {
-        const tymy = Object.keys(tabulkaData);
-        tymy.sort((a, b) => {
-            const tA = tabulkaData[a];
-            const tB = tabulkaData[b];
-            if (tB.body !== tA.body) return tB.body - tA.body;
-            if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
-            const rozdilZapasyA = tA.zapasyV - tA.zapasyP;
-            const rozdilZapasyB = tB.zapasyV - tB.zapasyP;
-            if (rozdilZapasyB !== rozdilZapasyA) return rozdilZapasyB - rozdilZapasyA;
-            const rozdilSetyA = tA.setyV - tA.setyP;
-            const rozdilSetyB = tB.setyV - tB.setyP;
-            if (rozdilSetyB !== rozdilSetyA) return rozdilSetyB - rozdilSetyA;
-            const rozdilBodyA = tA.bodyV - tA.bodyP;
-            const rozdilBodyB = tB.bodyV - tB.bodyP;
-            return rozdilBodyB - rozdilBodyA;
+    // Extract playoff results from match data, grouped by round and matchup
+    getPlayoffResults(soutez) {
+        const zapasy = Data.zapasy[soutez] || [];
+        const results = {};
+
+        zapasy.forEach(z => {
+            if (!Statistics.isPlayoffKolo(z.kolo)) return;
+            const kolo = z.kolo.replace(/\.$/, '').trim().toUpperCase();
+            const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
+            if (!results[klic]) {
+                results[klic] = {
+                    kolo: kolo,
+                    tym1: z.tymDomaci,
+                    tym2: z.tymHoste,
+                    zapasy: []
+                };
+            }
+            results[klic].zapasy.push(z);
         });
-        return tymy;
+
+        // Calculate series scores for each matchup
+        Object.values(results).forEach(r => {
+            let v1 = 0, v2 = 0;
+            r.zapasy.forEach(z => {
+                const v = Statistics.parseVysledek(z.vysledek);
+                const jeTym1Domaci = z.tymDomaci === r.tym1;
+                if (jeTym1Domaci) {
+                    if (v.domaci > v.hoste) v1++; else v2++;
+                } else {
+                    if (v.hoste > v.domaci) v1++; else v2++;
+                }
+            });
+            r.skore1 = v1;
+            r.skore2 = v2;
+            r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
+        });
+
+        return results;
     },
 
-    teamCard(name, seed, highlight, conference) {
+    // Get playoff results for 1. liga from the shared playoff pool
+    getPlayoffResultsPrvniLiga() {
+        const zapasy = Data.zapasy['prvni-liga-playoff'] || [];
+        const results = {};
+
+        zapasy.forEach(z => {
+            const kolo = (z.kolo || 'QF').replace(/\.$/, '').trim().toUpperCase();
+            const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
+            if (!results[klic]) {
+                results[klic] = {
+                    kolo: kolo,
+                    tym1: z.tymDomaci,
+                    tym2: z.tymHoste,
+                    zapasy: []
+                };
+            }
+            results[klic].zapasy.push(z);
+        });
+
+        Object.values(results).forEach(r => {
+            let v1 = 0, v2 = 0;
+            r.zapasy.forEach(z => {
+                const v = Statistics.parseVysledek(z.vysledek);
+                const jeTym1Domaci = z.tymDomaci === r.tym1;
+                if (jeTym1Domaci) {
+                    if (v.domaci > v.hoste) v1++; else v2++;
+                } else {
+                    if (v.hoste > v.domaci) v1++; else v2++;
+                }
+            });
+            r.skore1 = v1;
+            r.skore2 = v2;
+            r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
+        });
+
+        return results;
+    },
+
+    // Find a result for a specific matchup between two teams in a given round
+    findResult(results, kolo, tym1, tym2) {
+        const klic1 = kolo + '-' + [tym1, tym2].sort().join('-');
+        return results[klic1] || null;
+    },
+
+    // Find winner of a match involving a specific team in a given round
+    findWinnerFromRound(results, kolo, team) {
+        return Object.values(results).find(r =>
+            r.kolo === kolo && (r.tym1 === team || r.tym2 === team)
+        );
+    },
+
+    seraditTymy(tabulkaData) {
+        return Statistics.seraditTymyPodleTabulky(tabulkaData);
+    },
+
+    teamCard(name, seed, highlight, conference, seriesScore) {
         const cls = highlight || '';
         const confBadge = conference
             ? '<span class="playoff-conf-badge playoff-conf-' + conference + '">' + (conference === 'V' ? 'V' : 'Z') + '</span>'
             : '';
+        const scoreHtml = seriesScore !== undefined
+            ? '<span class="playoff-series-score">' + seriesScore + '</span>'
+            : '';
         return '<div class="playoff-team ' + cls + '">' +
             '<span class="playoff-seed">' + seed + '</span>' +
             confBadge +
-            '<span class="playoff-team-name clickable" onclick="Modals.zobrazitDetailTymu(\'' + name.replace(/'/g, "\\'") + '\')">' + name + '</span>' +
+            '<span class="playoff-team-name clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(name) + '\')">' + Statistics.escapeHtml(name) + '</span>' +
+            scoreHtml +
             '</div>';
     },
 
@@ -53,50 +133,100 @@ const Playoff = {
             '</div>';
     },
 
-    matchBox(team1Html, team2Html, label) {
+    matchBox(team1Html, team2Html, label, seriesResult) {
+        const resultHtml = seriesResult
+            ? '<div class="playoff-series-result">' + seriesResult + '</div>'
+            : '';
         return '<div class="playoff-match">' +
             (label ? '<div class="playoff-match-label">' + label + '</div>' : '') +
             '<div class="playoff-match-teams">' +
             team1Html +
             '<div class="playoff-vs">vs</div>' +
             team2Html +
-            '</div></div>';
+            '</div>' +
+            resultHtml +
+            '</div>';
     },
 
-    renderExtraligaBracket(tymy, data) {
+    renderExtraligaBracket(tymy, data, playoffResults) {
         if (tymy.length < 6) {
             return '<p class="text-gray-500 text-center py-4">Nedostatek týmů pro zobrazení pavouka.</p>';
         }
 
         const t = (i) => tymy[i] || '?';
+        const res = playoffResults || {};
+
+        // QF results
+        const qfRes1 = this.findResult(res, 'QF', t(2), t(5));
+        const qfRes2 = this.findResult(res, 'QF', t(3), t(4));
+        const qfVitez1 = qfRes1?.vitez || null;
+        const qfVitez2 = qfRes2?.vitez || null;
 
         const qf1 = this.matchBox(
-            this.teamCard(t(2), '3.', 'playoff-team-blue'),
-            this.teamCard(t(5), '6.', 'playoff-team-blue'),
-            'Čtvrtfinále 1'
+            this.teamCard(t(2), '3.', qfVitez1 === t(2) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes1 ? (qfRes1.tym1 === t(2) ? qfRes1.skore1 : qfRes1.skore2) : undefined),
+            this.teamCard(t(5), '6.', qfVitez1 === t(5) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes1 ? (qfRes1.tym1 === t(5) ? qfRes1.skore1 : qfRes1.skore2) : undefined),
+            'Čtvrtfinále 1',
+            qfRes1 ? qfRes1.skore1 + ':' + qfRes1.skore2 : null
         );
         const qf2 = this.matchBox(
-            this.teamCard(t(3), '4.', 'playoff-team-blue'),
-            this.teamCard(t(4), '5.', 'playoff-team-blue'),
-            'Čtvrtfinále 2'
+            this.teamCard(t(3), '4.', qfVitez2 === t(3) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes2 ? (qfRes2.tym1 === t(3) ? qfRes2.skore1 : qfRes2.skore2) : undefined),
+            this.teamCard(t(4), '5.', qfVitez2 === t(4) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes2 ? (qfRes2.tym1 === t(4) ? qfRes2.skore1 : qfRes2.skore2) : undefined),
+            'Čtvrtfinále 2',
+            qfRes2 ? qfRes2.skore1 + ':' + qfRes2.skore2 : null
         );
+
+        // SF results
+        const sfTym1A = t(0); // 1st seed always in SF1
+        const sfTym1B = qfVitez1; // winner of QF1
+        const sfTym2A = t(1); // 2nd seed always in SF2
+        const sfTym2B = qfVitez2; // winner of QF2
+
+        const sfRes1 = sfTym1B ? this.findResult(res, 'SF', sfTym1A, sfTym1B) : null;
+        const sfRes2 = sfTym2B ? this.findResult(res, 'SF', sfTym2A, sfTym2B) : null;
+        const sfVitez1 = sfRes1?.vitez || null;
+        const sfVitez2 = sfRes2?.vitez || null;
 
         const sf1 = this.matchBox(
-            this.teamCard(t(0), '1.', 'playoff-team-green'),
-            this.pendingCard('Vítěz ČF 1'),
-            'Semifinále 1'
+            this.teamCard(sfTym1A, '1.', sfVitez1 === sfTym1A ? 'playoff-team-green' : 'playoff-team-green', null, sfRes1 ? (sfRes1.tym1 === sfTym1A ? sfRes1.skore1 : sfRes1.skore2) : undefined),
+            sfTym1B
+                ? this.teamCard(sfTym1B, 'QF', sfVitez1 === sfTym1B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1B ? sfRes1.skore1 : sfRes1.skore2) : undefined)
+                : this.pendingCard('Vítěz ČF 1'),
+            'Semifinále 1',
+            sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null
         );
         const sf2 = this.matchBox(
-            this.teamCard(t(1), '2.', 'playoff-team-green'),
-            this.pendingCard('Vítěz ČF 2'),
-            'Semifinále 2'
+            this.teamCard(sfTym2A, '2.', sfVitez2 === sfTym2A ? 'playoff-team-green' : 'playoff-team-green', null, sfRes2 ? (sfRes2.tym1 === sfTym2A ? sfRes2.skore1 : sfRes2.skore2) : undefined),
+            sfTym2B
+                ? this.teamCard(sfTym2B, 'QF', sfVitez2 === sfTym2B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2B ? sfRes2.skore1 : sfRes2.skore2) : undefined)
+                : this.pendingCard('Vítěz ČF 2'),
+            'Semifinále 2',
+            sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null
         );
 
+        // Final
+        const fTym1 = sfVitez1 || null;
+        const fTym2 = sfVitez2 || null;
+        const fRes = (fTym1 && fTym2) ? this.findResult(res, 'F', fTym1, fTym2) : null;
+
         const final_ = this.matchBox(
-            this.pendingCard('Vítěz SF 1'),
-            this.pendingCard('Vítěz SF 2'),
-            'Finále (Final Four)'
+            fTym1
+                ? this.teamCard(fTym1, 'SF', fRes?.vitez === fTym1 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym1 ? fRes.skore1 : fRes.skore2) : undefined)
+                : this.pendingCard('Vítěz SF 1'),
+            fTym2
+                ? this.teamCard(fTym2, 'SF', fRes?.vitez === fTym2 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym2 ? fRes.skore1 : fRes.skore2) : undefined)
+                : this.pendingCard('Vítěz SF 2'),
+            'Finále (Final Four)',
+            fRes ? fRes.skore1 + ':' + fRes.skore2 : null
         );
+
+        // Champion banner
+        const champion = fRes?.vitez || null;
+        const championHtml = champion
+            ? '<div class="mt-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl text-center">' +
+              '<div class="text-2xl">🏆</div>' +
+              '<div class="font-bold text-lg text-yellow-800">Mistr: ' + Statistics.escapeHtml(champion) + '</div>' +
+              '</div>'
+            : '';
 
         return '<div class="bracket-wrapper">' +
             '<div class="bracket-round bracket-round-qf">' +
@@ -126,11 +256,12 @@ const Playoff = {
                 '</div>' +
             '</div>' +
         '</div>' +
+        championHtml +
         '<div class="playoff-legend mt-4">' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> Přímý postup do Final Four (1.–2.)</span>' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm ml-4"><span class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></span> Čtvrtfinále (3.–6.)</span>' +
         '</div>' +
-        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulce základní části.</p>';
+        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulce základní části. Výsledky se doplňují automaticky z dat play-off (kolo: QF/SF/F).</p>';
     },
 
     renderPrvniLigaBracket() {
@@ -144,56 +275,95 @@ const Playoff = {
             return '<p class="text-gray-500 text-center py-4">Nedostatek týmů pro zobrazení pavouka.</p>';
         }
 
-        // Čtvrtfinále: crossover East vs West
-        // 1.V vs 4.Z, 3.V vs 2.Z, 2.V vs 3.Z, 4.V vs 1.Z
-        const qf1 = this.matchBox(
-            this.teamCard(tymyV[0], '1.', 'playoff-team-east', 'V'),
-            this.teamCard(tymyZ[3], '4.', 'playoff-team-west', 'Z'),
-            'Čtvrtfinále 1'
-        );
-        const qf2 = this.matchBox(
-            this.teamCard(tymyV[2], '3.', 'playoff-team-east', 'V'),
-            this.teamCard(tymyZ[1], '2.', 'playoff-team-west', 'Z'),
-            'Čtvrtfinále 2'
-        );
-        const qf3 = this.matchBox(
-            this.teamCard(tymyV[1], '2.', 'playoff-team-east', 'V'),
-            this.teamCard(tymyZ[2], '3.', 'playoff-team-west', 'Z'),
-            'Čtvrtfinále 3'
-        );
-        const qf4 = this.matchBox(
-            this.teamCard(tymyV[3], '4.', 'playoff-team-east', 'V'),
-            this.teamCard(tymyZ[0], '1.', 'playoff-team-west', 'Z'),
-            'Čtvrtfinále 4'
-        );
+        const res = this.getPlayoffResultsPrvniLiga();
 
-        // Semifinále: winners cross
+        // QF: crossover East vs West
+        const qfPairs = [
+            { v: 0, z: 3, label: 'Čtvrtfinále 1' }, // 1.V vs 4.Z
+            { v: 2, z: 1, label: 'Čtvrtfinále 2' }, // 3.V vs 2.Z
+            { v: 1, z: 2, label: 'Čtvrtfinále 3' }, // 2.V vs 3.Z
+            { v: 3, z: 0, label: 'Čtvrtfinále 4' }  // 4.V vs 1.Z
+        ];
+
+        const qfResults = [];
+        const qfBoxes = qfPairs.map((pair, i) => {
+            const teamV = tymyV[pair.v];
+            const teamZ = tymyZ[pair.z];
+            const qfRes = this.findResult(res, 'QF', teamV, teamZ);
+            qfResults.push(qfRes);
+            const vitez = qfRes?.vitez || null;
+
+            return this.matchBox(
+                this.teamCard(teamV, (pair.v + 1) + '.', vitez === teamV ? 'playoff-team-green' : 'playoff-team-east', 'V', qfRes ? (qfRes.tym1 === teamV ? qfRes.skore1 : qfRes.skore2) : undefined),
+                this.teamCard(teamZ, (pair.z + 1) + '.', vitez === teamZ ? 'playoff-team-green' : 'playoff-team-west', 'Z', qfRes ? (qfRes.tym1 === teamZ ? qfRes.skore1 : qfRes.skore2) : undefined),
+                pair.label,
+                qfRes ? qfRes.skore1 + ':' + qfRes.skore2 : null
+            );
+        });
+
+        // SF: QF1 winner vs QF2 winner, QF3 winner vs QF4 winner
+        const sfTym1A = qfResults[0]?.vitez || null;
+        const sfTym1B = qfResults[1]?.vitez || null;
+        const sfTym2A = qfResults[2]?.vitez || null;
+        const sfTym2B = qfResults[3]?.vitez || null;
+
+        const sfRes1 = (sfTym1A && sfTym1B) ? this.findResult(res, 'SF', sfTym1A, sfTym1B) : null;
+        const sfRes2 = (sfTym2A && sfTym2B) ? this.findResult(res, 'SF', sfTym2A, sfTym2B) : null;
+
         const sf1 = this.matchBox(
-            this.pendingCard('Vítěz ČF 1'),
-            this.pendingCard('Vítěz ČF 2'),
-            'Semifinále 1'
+            sfTym1A
+                ? this.teamCard(sfTym1A, 'QF', sfRes1?.vitez === sfTym1A ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1A ? sfRes1.skore1 : sfRes1.skore2) : undefined)
+                : this.pendingCard('Vítěz ČF 1'),
+            sfTym1B
+                ? this.teamCard(sfTym1B, 'QF', sfRes1?.vitez === sfTym1B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1B ? sfRes1.skore1 : sfRes1.skore2) : undefined)
+                : this.pendingCard('Vítěz ČF 2'),
+            'Semifinále 1',
+            sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null
         );
         const sf2 = this.matchBox(
-            this.pendingCard('Vítěz ČF 3'),
-            this.pendingCard('Vítěz ČF 4'),
-            'Semifinále 2'
+            sfTym2A
+                ? this.teamCard(sfTym2A, 'QF', sfRes2?.vitez === sfTym2A ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2A ? sfRes2.skore1 : sfRes2.skore2) : undefined)
+                : this.pendingCard('Vítěz ČF 3'),
+            sfTym2B
+                ? this.teamCard(sfTym2B, 'QF', sfRes2?.vitez === sfTym2B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2B ? sfRes2.skore1 : sfRes2.skore2) : undefined)
+                : this.pendingCard('Vítěz ČF 4'),
+            'Semifinále 2',
+            sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null
         );
 
-        // Finále
+        // Final
+        const fTym1 = sfRes1?.vitez || null;
+        const fTym2 = sfRes2?.vitez || null;
+        const fRes = (fTym1 && fTym2) ? this.findResult(res, 'F', fTym1, fTym2) : null;
+
         const final_ = this.matchBox(
-            this.pendingCard('Vítěz SF 1'),
-            this.pendingCard('Vítěz SF 2'),
-            'Finále'
+            fTym1
+                ? this.teamCard(fTym1, 'SF', fRes?.vitez === fTym1 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym1 ? fRes.skore1 : fRes.skore2) : undefined)
+                : this.pendingCard('Vítěz SF 1'),
+            fTym2
+                ? this.teamCard(fTym2, 'SF', fRes?.vitez === fTym2 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym2 ? fRes.skore1 : fRes.skore2) : undefined)
+                : this.pendingCard('Vítěz SF 2'),
+            'Finále',
+            fRes ? fRes.skore1 + ':' + fRes.skore2 : null
         );
+
+        // Champion banner
+        const champion = fRes?.vitez || null;
+        const championHtml = champion
+            ? '<div class="mt-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl text-center">' +
+              '<div class="text-2xl">🏆</div>' +
+              '<div class="font-bold text-lg text-yellow-800">Mistr: ' + Statistics.escapeHtml(champion) + '</div>' +
+              '</div>'
+            : '';
 
         return '<div class="bracket-wrapper">' +
             '<div class="bracket-round bracket-round-qf">' +
                 '<div class="bracket-round-title">Čtvrtfinále</div>' +
                 '<div class="bracket-matches bracket-matches-4">' +
-                    '<div class="bracket-match-slot">' + qf1 + '</div>' +
-                    '<div class="bracket-match-slot">' + qf2 + '</div>' +
-                    '<div class="bracket-match-slot">' + qf3 + '</div>' +
-                    '<div class="bracket-match-slot">' + qf4 + '</div>' +
+                    '<div class="bracket-match-slot">' + qfBoxes[0] + '</div>' +
+                    '<div class="bracket-match-slot">' + qfBoxes[1] + '</div>' +
+                    '<div class="bracket-match-slot">' + qfBoxes[2] + '</div>' +
+                    '<div class="bracket-match-slot">' + qfBoxes[3] + '</div>' +
                 '</div>' +
             '</div>' +
             '<div class="bracket-connector-col">' +
@@ -216,11 +386,12 @@ const Playoff = {
                 '</div>' +
             '</div>' +
         '</div>' +
+        championHtml +
         '<div class="playoff-legend mt-4">' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm"><span class="w-3 h-3 rounded-sm border" style="background:#fef3c7;border-color:#fbbf24;width:12px;height:12px"></span> Východ</span>' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm ml-3"><span class="w-3 h-3 rounded-sm border" style="background:#dbeafe;border-color:#60a5fa;width:12px;height:12px"></span> Západ</span>' +
         '</div>' +
-        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulkách základní části obou skupin. Play-off 1. ligy je jednotné – týmy Východu hrají křížem proti týmům Západu.</p>';
+        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulkách základní části obou skupin. Výsledky play-off se zapisují do klíče "prvni-liga-playoff" v JSON s kolo: QF/SF/F.</p>';
     },
 
     drawConnectors() {

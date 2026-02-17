@@ -28,18 +28,7 @@ const Players = {
         const stats = Statistics.vypocitejStatistiky(aktualni_soutez, vybrana_kola);
         const hraciList = Object.keys(stats).filter(h => stats[h].zapasy >= 1);
 
-        hraciList.sort((a, b) => {
-            const sA = stats[a];
-            const sB = stats[b];
-            if (sB.vyhry !== sA.vyhry) return sB.vyhry - sA.vyhry;
-            const winRateA = sA.zapasy > 0 ? (sA.vyhry / sA.zapasy) : 0;
-            const winRateB = sB.zapasy > 0 ? (sB.vyhry / sB.zapasy) : 0;
-            if (Math.abs(winRateA - winRateB) > 0.001) return winRateB - winRateA;
-            if (sB.zapasy !== sA.zapasy) return sB.zapasy - sA.zapasy;
-            const setRatioA = (sA.setVyhrane + sA.setProhrane) > 0 ? (sA.setVyhrane / (sA.setVyhrane + sA.setProhrane)) : 0;
-            const setRatioB = (sB.setVyhrane + sB.setProhrane) > 0 ? (sB.setVyhrane / (sB.setVyhrane + sB.setProhrane)) : 0;
-            return setRatioB - setRatioA;
-        });
+        Statistics.seraditHraceStandardne(hraciList, stats);
 
         const top3 = hraciList.slice(0, 3);
 
@@ -57,9 +46,9 @@ const Players = {
         const html = top3.map((hrac, idx) => {
             const s = stats[hrac];
             const winRate = ((s.vyhry / s.zapasy) * 100).toFixed(1);
-            return '<div class="border ' + colors[idx] + ' rounded-lg p-2 md:p-3 text-center cursor-pointer hover:shadow-md transition-all min-w-0" onclick="Modals.zobrazitDetailHrace(\'' + hrac + '\')">' +
+            return '<div class="border ' + colors[idx] + ' rounded-lg p-2 md:p-3 text-center cursor-pointer hover:shadow-md transition-all min-w-0" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(hrac) + '\')">' +
                 '<div class="text-lg md:text-xl leading-none">' + medals[idx] + '</div>' +
-                '<div class="font-bold text-xs md:text-sm text-gray-800 mt-1 truncate">' + hrac + '</div>' +
+                '<div class="font-bold text-xs md:text-sm text-gray-800 mt-1 truncate">' + Statistics.escapeHtml(hrac) + '</div>' +
                 '<div class="text-sm md:text-lg font-bold text-blue-600 leading-tight">' + winRate + '%</div>' +
                 '<div class="text-xs text-gray-500 leading-tight">' + s.vyhry + 'V/' + s.prohry + 'P · ' + s.zapasy + 'z</div>' +
                 '</div>';
@@ -127,39 +116,20 @@ const Players = {
         if (hledatText) hraciList = hraciList.filter(hrac => hrac.toLowerCase().includes(hledatText));
         if (minZapasy > 0) hraciList = hraciList.filter(hrac => stats[hrac].zapasy >= minZapasy);
         
-        hraciList.sort((a, b) => {
-            const sA = stats[a];
-            const sB = stats[b];
-            
-            switch(razeniSloupec) {
-                case 'winrate':
-                    // Nové standardní řazení:
-                    // 1. Počet výher
-                    if (sB.vyhry !== sA.vyhry) return sB.vyhry - sA.vyhry;
-                    
-                    // 2. Win rate (%)
-                    const winRateA = sA.zapasy > 0 ? (sA.vyhry / sA.zapasy) : 0;
-                    const winRateB = sB.zapasy > 0 ? (sB.vyhry / sB.zapasy) : 0;
-                    if (Math.abs(winRateA - winRateB) > 0.001) return winRateB - winRateA;
-                    
-                    // 3. Počet zápasů celkem
-                    if (sB.zapasy !== sA.zapasy) return sB.zapasy - sA.zapasy;
-                    
-                    // 4. Poměr setů
-                    const setRatioA = (sA.setVyhrane + sA.setProhrane) > 0 ? (sA.setVyhrane / (sA.setVyhrane + sA.setProhrane)) : 0;
-                    const setRatioB = (sB.setVyhrane + sB.setProhrane) > 0 ? (sB.setVyhrane / (sB.setVyhrane + sB.setProhrane)) : 0;
-                    return setRatioB - setRatioA;
-                    
-                case 'zapasy':
-                    return sB.zapasy - sA.zapasy;
-                case 'vyhry':
-                    return sB.vyhry - sA.vyhry;
-                case 'jmeno':
-                    return a.localeCompare(b, 'cs');
-                default:
-                    return 0;
-            }
-        });
+        if (razeniSloupec === 'winrate') {
+            Statistics.seraditHraceStandardne(hraciList, stats);
+        } else {
+            hraciList.sort((a, b) => {
+                const sA = stats[a];
+                const sB = stats[b];
+                switch(razeniSloupec) {
+                    case 'zapasy': return sB.zapasy - sA.zapasy;
+                    case 'vyhry': return sB.vyhry - sA.vyhry;
+                    case 'jmeno': return a.localeCompare(b, 'cs');
+                    default: return 0;
+                }
+            });
+        }
         
         const rows = hraciList.map((hrac, idx) => {
             const s = stats[hrac];
@@ -169,7 +139,7 @@ const Players = {
             const forma = Statistics.getForma(hrac, Data.zapasy[aktualni_soutez]);
             const formaHtml = forma.split('').map(v => '<span class="inline-block w-5 h-5 leading-5 text-center rounded font-bold text-xs ' + (v === 'V' ? 'bg-green-500 text-white' : 'bg-red-500 text-white') + '">' + v + '</span>').join(' ');
             
-            return '<tr class="border-b border-gray-200 hover:bg-blue-50"><td class="p-2 text-center font-bold text-gray-500">' + (idx + 1) + '</td><td class="p-2 font-semibold clickable" onclick="Modals.zobrazitDetailHrace(\'' + hrac + '\')">' + hrac + '</td><td class="p-2 text-blue-600 clickable" onclick="Modals.zobrazitDetailTymu(\'' + nejTym + '\')">' + nejTym + '</td><td class="p-2 text-center">' + s.zapasy + '</td><td class="p-2 text-center text-green-600 font-semibold">' + s.vyhry + '</td><td class="p-2 text-center text-red-600 font-semibold">' + s.prohry + '</td><td class="p-2 text-center font-bold ' + winColor + '">' + winRatio + '%</td><td class="p-2 text-center">' + (formaHtml || '-') + '</td></tr>';
+            return '<tr class="border-b border-gray-200 hover:bg-blue-50"><td class="p-2 text-center font-bold text-gray-500">' + (idx + 1) + '</td><td class="p-2 font-semibold clickable" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(hrac) + '\')">' + Statistics.escapeHtml(hrac) + '</td><td class="p-2 text-blue-600 clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(nejTym) + '\')">' + Statistics.escapeHtml(nejTym) + '</td><td class="p-2 text-center">' + s.zapasy + '</td><td class="p-2 text-center text-green-600 font-semibold">' + s.vyhry + '</td><td class="p-2 text-center text-red-600 font-semibold">' + s.prohry + '</td><td class="p-2 text-center font-bold ' + winColor + '">' + winRatio + '%</td><td class="p-2 text-center">' + (formaHtml || '-') + '</td></tr>';
         }).join('');
         
         const tymyOptions = Data.tymy[aktualni_soutez].map(t => '<option value="' + t + '"' + (t === filtrTymHodnota ? ' selected' : '') + '>' + t + '</option>').join('');

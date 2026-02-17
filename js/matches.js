@@ -1,10 +1,17 @@
 const Matches = {
     render(aktualni_soutez) {
-        document.getElementById('pocetZapasu').textContent = Data.zapasy[aktualni_soutez].length;
-        
+        // For 1. liga, include playoff matches from shared playoff pool
+        let zapasyKZobrazeni = [...Data.zapasy[aktualni_soutez]];
+        const jePrvniLiga = aktualni_soutez.includes('prvni-liga') && aktualni_soutez !== 'prvni-liga-playoff';
+        if (jePrvniLiga && Data.zapasy['prvni-liga-playoff']?.length > 0) {
+            zapasyKZobrazeni = zapasyKZobrazeni.concat(Data.zapasy['prvni-liga-playoff']);
+        }
+
+        document.getElementById('pocetZapasu').textContent = zapasyKZobrazeni.length;
+
         // Seskupit zápasy podle utkání (kolo + týmy)
         const utkani = {};
-        Data.zapasy[aktualni_soutez].forEach(zapas => {
+        zapasyKZobrazeni.forEach(zapas => {
             const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
             if (!utkani[klic]) {
                 utkani[klic] = {
@@ -44,13 +51,17 @@ const Matches = {
                     '</tr>';
             }).join('');
             
+            const jePlayoff = Statistics.isPlayoffKolo(utk.kolo);
+            const koloLabel = jePlayoff ? Statistics.playoffKoloNazev(utk.kolo) : 'Kolo ' + utk.kolo;
+            const headerBg = jePlayoff ? 'bg-purple-100 hover:bg-purple-200' : 'bg-gray-100 hover:bg-gray-200';
+
             return '<tbody>' +
-                '<tr class="bg-gray-100 hover:bg-gray-200 cursor-pointer border-t-2 border-gray-300" onclick="Matches.toggleDetail(\'detail-' + idx + '\')">' +
-                '<td class="p-3 font-bold">Kolo ' + utk.kolo + '</td>' +
+                '<tr class="' + headerBg + ' cursor-pointer border-t-2 border-gray-300" onclick="Matches.toggleDetail(\'detail-' + idx + '\')">' +
+                '<td class="p-3 font-bold">' + koloLabel + '</td>' +
                 '<td class="p-3">' + (utk.datum || '-') + '</td>' +
-                '<td class="p-3 font-semibold text-blue-600 clickable" onclick="event.stopPropagation(); Modals.zobrazitDetailTymu(\'' + utk.tymDomaci + '\')">' + utk.tymDomaci + '</td>' +
+                '<td class="p-3 font-semibold text-blue-600 clickable" onclick="event.stopPropagation(); Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(utk.tymDomaci) + '\')">' + Statistics.escapeHtml(utk.tymDomaci) + '</td>' +
                 '<td class="p-3 text-center text-2xl font-bold ' + vysledekClass + '">' + domaciVyhry + ' : ' + hosteVyhry + '</td>' +
-                '<td class="p-3 font-semibold text-purple-600 clickable" onclick="event.stopPropagation(); Modals.zobrazitDetailTymu(\'' + utk.tymHoste + '\')">' + utk.tymHoste + '</td>' +
+                '<td class="p-3 font-semibold text-purple-600 clickable" onclick="event.stopPropagation(); Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(utk.tymHoste) + '\')">' + Statistics.escapeHtml(utk.tymHoste) + '</td>' +
                 '<td class="p-3 text-right"><span id="toggle-' + idx + '" class="text-xl">▶</span></td>' +
                 '</tr>' +
                 '<tr id="detail-' + idx + '" style="display: none;"><td colspan="6" class="p-0">' +

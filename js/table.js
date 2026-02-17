@@ -1,23 +1,7 @@
 const Table = {
     render(aktualni_soutez) {
         const tabulkaData = Statistics.vypocitejTabulku(aktualni_soutez);
-        const tymy = Object.keys(tabulkaData);
-        
-        tymy.sort((a, b) => {
-            const tA = tabulkaData[a];
-            const tB = tabulkaData[b];
-            if (tB.body !== tA.body) return tB.body - tA.body;
-            if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
-            const rozdilZapasyA = tA.zapasyV - tA.zapasyP;
-            const rozdilZapasyB = tB.zapasyV - tB.zapasyP;
-            if (rozdilZapasyB !== rozdilZapasyA) return rozdilZapasyB - rozdilZapasyA;
-            const rozdilSetyA = tA.setyV - tA.setyP;
-            const rozdilSetyB = tB.setyV - tB.setyP;
-            if (rozdilSetyB !== rozdilSetyA) return rozdilSetyB - rozdilSetyA;
-            const rozdilBodyA = tA.bodyV - tA.bodyP;
-            const rozdilBodyB = tB.bodyV - tB.bodyP;
-            return rozdilBodyB - rozdilBodyA;
-        });
+        const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
         
         const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
         const legendaInfo = jePrvniLiga
@@ -47,7 +31,7 @@ const Table = {
             const sipkaSety = rozdilSety > 0 ? '↗' : (rozdilSety < 0 ? '↘' : '→');
             const sipkaBody = rozdilBody > 0 ? '↗' : (rozdilBody < 0 ? '↘' : '→');
             
-            return '<tr class="border-b border-gray-200 hover:bg-green-50"><td class="p-2 text-center font-bold ' + poziceClass + '">' + (idx + 1) + '.</td><td class="p-2 font-semibold ' + poziceClass + ' clickable" onclick="Modals.zobrazitDetailTymu(\'' + tym + '\')">' + tym + '</td><td class="p-2 text-center">' + t.utkani + '</td><td class="p-2 text-center text-green-600 font-semibold">' + t.vyhry + '</td><td class="p-2 text-center text-yellow-600 font-semibold">' + t.remizy + '</td><td class="p-2 text-center text-red-600 font-semibold">' + t.prohry + '</td><td class="p-2 text-center"><span class="font-semibold">' + t.zapasyV + ':' + t.zapasyP + '</span> <span class="text-xs ' + (rozdilZapasy >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaZapasy + (rozdilZapasy >= 0 ? '+' : '') + rozdilZapasy + '</span></td><td class="p-2 text-center"><span class="font-semibold">' + t.setyV + ':' + t.setyP + '</span> <span class="text-xs ' + (rozdilSety >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaSety + (rozdilSety >= 0 ? '+' : '') + rozdilSety + '</span></td><td class="p-2 text-center"><span class="font-semibold">' + t.bodyV + ':' + t.bodyP + '</span> <span class="text-xs ' + (rozdilBody >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaBody + (rozdilBody >= 0 ? '+' : '') + rozdilBody + '</span></td><td class="p-2 text-center font-bold text-base md:text-lg text-blue-700">' + t.body + '</td></tr>';
+            return '<tr class="border-b border-gray-200 hover:bg-green-50"><td class="p-2 text-center font-bold ' + poziceClass + '">' + (idx + 1) + '.</td><td class="p-2 font-semibold ' + poziceClass + ' clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' + Statistics.escapeHtml(tym) + '</td><td class="p-2 text-center">' + t.utkani + '</td><td class="p-2 text-center text-green-600 font-semibold">' + t.vyhry + '</td><td class="p-2 text-center text-yellow-600 font-semibold">' + t.remizy + '</td><td class="p-2 text-center text-red-600 font-semibold">' + t.prohry + '</td><td class="p-2 text-center"><span class="font-semibold">' + t.zapasyV + ':' + t.zapasyP + '</span> <span class="text-xs ' + (rozdilZapasy >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaZapasy + (rozdilZapasy >= 0 ? '+' : '') + rozdilZapasy + '</span></td><td class="p-2 text-center"><span class="font-semibold">' + t.setyV + ':' + t.setyP + '</span> <span class="text-xs ' + (rozdilSety >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaSety + (rozdilSety >= 0 ? '+' : '') + rozdilSety + '</span></td><td class="p-2 text-center"><span class="font-semibold">' + t.bodyV + ':' + t.bodyP + '</span> <span class="text-xs ' + (rozdilBody >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaBody + (rozdilBody >= 0 ? '+' : '') + rozdilBody + '</span></td><td class="p-2 text-center font-bold text-base md:text-lg text-blue-700">' + t.body + '</td></tr>';
         }).join('');
         
         document.getElementById('tabulkaObsah').innerHTML = '<div class="overflow-x-auto"><table class="w-full text-xs md:text-sm"><thead><tr class="text-white" style="background-color:#ed1c24"><th class="text-center p-2 md:p-3 font-semibold">#</th><th class="text-left p-2 md:p-3 font-semibold">Tým</th><th class="text-center p-2 md:p-3 font-semibold">U</th><th class="text-center p-2 md:p-3 font-semibold">V</th><th class="text-center p-2 md:p-3 font-semibold">R</th><th class="text-center p-2 md:p-3 font-semibold">P</th><th class="text-center p-2 md:p-3 font-semibold">Zápasy</th><th class="text-center p-2 md:p-3 font-semibold">Sety</th><th class="text-center p-2 md:p-3 font-semibold">Body</th><th class="text-center p-2 md:p-3 font-semibold font-bold">Bodů</th></tr></thead><tbody>' + rows + '</tbody></table></div><div class="mt-4 text-xs md:text-sm text-gray-600">' + legendaInfo + '<div class="mt-3">' + bodovaniInfo + '</div></div>';
