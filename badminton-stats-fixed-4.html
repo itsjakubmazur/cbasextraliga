@@ -34,7 +34,10 @@
                     <p class="text-gray-600">Kompletní evidence zápasů a automatické statistiky</p>
                     <p class="text-sm text-green-600 mt-2">✓ Data se automaticky ukládají do paměti prohlížeče</p>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="toggleImportPanel()" class="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
+                        📥 Import z webu
+                    </button>
                     <button onclick="exportovatProWeb()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
                         📤 Exportovat pro web
                     </button>
@@ -115,6 +118,67 @@
             <button onclick="toggleSprava()" class="mt-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
                 Zavřít
             </button>
+        </div>
+
+        <!-- Import z czechbadminton.cz -->
+        <div id="importPanel" class="bg-white rounded-xl shadow-lg p-6 mb-6" style="display: none;">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">📥 Import zápasů z czechbadminton.cz</h2>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                <p class="text-sm text-blue-800">
+                    <strong>Postup:</strong><br>
+                    1. Otevřete stránku utkání na czechbadminton.cz<br>
+                    2. Stiskněte <kbd class="bg-white px-2 py-1 rounded border">Ctrl+U</kbd> (Zobrazit zdrojový kód)<br>
+                    3. Zkopírujte celý HTML kód (Ctrl+A, Ctrl+C) a vložte ho níže<br>
+                    4. Klikněte na "Parsovat HTML"
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">HTML kód ze stránky zápasu</label>
+                <textarea
+                    id="importHtmlInput"
+                    class="w-full h-64 border border-gray-300 rounded-lg p-4 font-mono text-sm focus:ring-2 focus:ring-blue-500"
+                    placeholder="Vložte sem celý HTML kód ze stránky zápasu..."></textarea>
+            </div>
+
+            <div class="flex gap-2 mb-4">
+                <button onclick="parseImportHTML()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    🔍 Parsovat HTML
+                </button>
+                <button onclick="clearImport()" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    🗑️ Vymazat
+                </button>
+                <button onclick="toggleImportPanel()" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    Zavřít
+                </button>
+            </div>
+
+            <!-- Rozpoznané zápasy -->
+            <div id="importedMatchesContainer" style="display: none;">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">✅ Rozpoznané zápasy (<span id="importedCount">0</span>)</h3>
+                <p class="text-sm text-orange-600 mb-3">⚠️ Zkontrolujte data a pak je přidejte do systému</p>
+
+                <div class="overflow-x-auto mb-4">
+                    <table class="w-full text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-orange-600 to-red-600 text-white">
+                                <th class="p-2 text-center">#</th>
+                                <th class="p-2 text-left">Disciplína</th>
+                                <th class="p-2 text-left">Domácí</th>
+                                <th class="p-2 text-left">Hosté</th>
+                                <th class="p-2 text-center">Výsledek</th>
+                                <th class="p-2 text-left">Sety</th>
+                            </tr>
+                        </thead>
+                        <tbody id="importedMatchesTable"></tbody>
+                    </table>
+                </div>
+
+                <button onclick="importMatches()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    ✅ Přidat všechny zápasy do systému
+                </button>
+            </div>
         </div>
 
         <!-- Formulář -->
@@ -1526,6 +1590,171 @@
             };
             
             input.click();
+        }
+
+        // Import z czechbadminton.cz
+        let importedMatches = [];
+
+        const importDisciplineMap = {
+            '1. dvouhra mužů': 'Dvouhra mužů',
+            '2. dvouhra mužů': 'Dvouhra mužů',
+            '3. dvouhra mužů': 'Dvouhra mužů',
+            '1. dvouhra žen': 'Dvouhra žen',
+            '2. dvouhra žen': 'Dvouhra žen',
+            '1. čtyřhra mužů': 'Čtyřhra mužů',
+            '2. čtyřhra mužů': 'Čtyřhra mužů',
+            'čtyřhra žen': 'Čtyřhra žen',
+            'smíšená čtyřhra': 'Smíšená čtyřhra'
+        };
+
+        function toggleImportPanel() {
+            const panel = document.getElementById('importPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function extractPlayersFromCell(cell) {
+            const links = cell.querySelectorAll('a.link');
+            const players = [];
+            links.forEach(link => {
+                const playerName = link.textContent.trim();
+                if (playerName) players.push(playerName);
+            });
+            return players.join(', ');
+        }
+
+        function parseImportHTML() {
+            const htmlInput = document.getElementById('importHtmlInput').value;
+            if (!htmlInput.trim()) {
+                alert('❌ Vložte prosím HTML kód!');
+                return;
+            }
+
+            try {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlInput, 'text/html');
+                const rows = doc.querySelectorAll('tbody tr');
+
+                if (rows.length === 0) {
+                    alert('❌ Nepodařilo se najít žádné zápasy v HTML kódu!');
+                    return;
+                }
+
+                importedMatches = [];
+
+                rows.forEach((row) => {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length < 6) return;
+
+                    const matchNumber = cells[0].textContent.trim();
+                    const disciplineRaw = cells[1].textContent.trim();
+                    const discipline = importDisciplineMap[disciplineRaw] || disciplineRaw;
+
+                    const homePlayers = extractPlayersFromCell(cells[2]);
+                    const awayPlayers = extractPlayersFromCell(cells[3]);
+
+                    const result = cells[4].textContent.trim();
+                    const sets = cells[5].textContent.trim();
+
+                    importedMatches.push({
+                        matchNumber: matchNumber,
+                        disciplina: discipline,
+                        domaci: homePlayers,
+                        hoste: awayPlayers,
+                        vysledek: result,
+                        sety: sets
+                    });
+
+                    // Automaticky přidat hráče do seznamu
+                    const players = homePlayers.split(',').concat(awayPlayers.split(',')).map(h => h.trim());
+                    players.forEach(p => {
+                        if (p && !hraci.includes(p)) {
+                            hraci.push(p);
+                        }
+                    });
+                });
+
+                if (importedMatches.length > 0) {
+                    hraci.sort();
+                    ulozitData();
+                    displayImportedMatches();
+                    alert('✅ Úspěšně rozpoznáno ' + importedMatches.length + ' zápasů!');
+                } else {
+                    alert('❌ Nepodařilo se rozpoznat žádné zápasy!');
+                }
+            } catch (error) {
+                console.error('Chyba při parsování:', error);
+                alert('❌ Chyba při parsování HTML: ' + error.message);
+            }
+        }
+
+        function displayImportedMatches() {
+            const tbody = document.getElementById('importedMatchesTable');
+            tbody.innerHTML = '';
+
+            document.getElementById('importedCount').textContent = importedMatches.length;
+            document.getElementById('importedMatchesContainer').style.display = 'block';
+
+            importedMatches.forEach((match) => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 hover:bg-orange-50';
+                row.innerHTML =
+                    '<td class="p-2 text-center font-semibold text-gray-500">' + match.matchNumber + '</td>' +
+                    '<td class="p-2">' + match.disciplina + '</td>' +
+                    '<td class="p-2">' + match.domaci + '</td>' +
+                    '<td class="p-2">' + match.hoste + '</td>' +
+                    '<td class="p-2 text-center font-bold">' + match.vysledek + '</td>' +
+                    '<td class="p-2 text-xs">' + match.sety + '</td>';
+                tbody.appendChild(row);
+            });
+        }
+
+        function importMatches() {
+            const kolo = document.getElementById('kolo').value.trim();
+            const datum = document.getElementById('datum').value;
+            const tymDomaci = document.getElementById('tymDomaci').value.trim();
+            const tymHoste = document.getElementById('tymHoste').value.trim();
+
+            if (!kolo) {
+                alert('❌ Vyplňte prosím číslo kola v horním formuláři!');
+                return;
+            }
+            if (!tymDomaci || !tymHoste) {
+                alert('❌ Vyplňte prosím názvy týmů v horním formuláři!');
+                return;
+            }
+            if (importedMatches.length === 0) {
+                alert('❌ Nejprve parsujte HTML kód!');
+                return;
+            }
+
+            let pridanoZapasu = 0;
+            importedMatches.forEach(match => {
+                zapasy[aktualni_soutez].push({
+                    id: Date.now() + Math.random(),
+                    kolo: kolo,
+                    datum: datum || '',
+                    disciplina: match.disciplina,
+                    domaci: match.domaci,
+                    hoste: match.hoste,
+                    vysledek: match.vysledek,
+                    sety: match.sety,
+                    tymDomaci: tymDomaci,
+                    tymHoste: tymHoste
+                });
+                pridanoZapasu++;
+            });
+
+            ulozitData();
+            zobrazitData();
+            clearImport();
+            toggleImportPanel();
+            alert('✅ Úspěšně přidáno ' + pridanoZapasu + ' zápasů do ' + soutezNazvy[aktualni_soutez] + '!');
+        }
+
+        function clearImport() {
+            document.getElementById('importHtmlInput').value = '';
+            importedMatches = [];
+            document.getElementById('importedMatchesContainer').style.display = 'none';
         }
 
         nacistData();
