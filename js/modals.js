@@ -27,8 +27,9 @@ const Modals = {
             const partnerText = partneri.length > 0 ? ' (s ' + partneri.join(', ') + ')' : '';
             const souperiText = souperi.join(', ');
             
+            const koloText = Statistics.isPlayoffKolo(zapas.kolo) ? Statistics.playoffKoloNazev(zapas.kolo) : 'K' + zapas.kolo;
             return '<tr class="border-b text-xs ' + (vyhral ? 'bg-green-50' : 'bg-red-50') + '">' +
-                '<td class="p-2">K' + zapas.kolo + '</td>' +
+                '<td class="p-2">' + koloText + '</td>' +
                 '<td class="p-2">' + (zapas.datum || '-') + '</td>' +
                 '<td class="p-2">' + zapas.disciplina + '</td>' +
                 '<td class="p-2 font-semibold">' + (jeDom ? zapas.tymDomaci : zapas.tymHoste) + partnerText + '</td>' +
@@ -121,8 +122,9 @@ const Modals = {
             const textColor = remiza ? 'text-yellow-600' : (vyhrano ? 'text-green-600' : 'text-red-600');
             const stavText = remiza ? '⚖ Remíza' : (vyhrano ? '✓ Výhra' : '✗ Prohra');
 
+            const koloText = Statistics.isPlayoffKolo(u.kolo) ? Statistics.playoffKoloNazev(u.kolo) : 'K' + u.kolo;
             return '<tr class="border-b ' + bgColor + ' text-xs">' +
-                '<td class="p-2">K' + u.kolo + '</td>' +
+                '<td class="p-2">' + koloText + '</td>' +
                 '<td class="p-2">' + (u.datum || '-') + '</td>' +
                 '<td class="p-2">' + (u.doma ? '🏠 Doma' : '✈️ Venku') + '</td>' +
                 '<td class="p-2 font-semibold">' + u.souper + '</td>' +
@@ -147,7 +149,7 @@ const Modals = {
         const hraciHtml = Object.entries(hraci).sort((a, b) => b[1].zapasy - a[1].zapasy).map(([h, st]) => {
             const wr = ((st.vyhry / st.zapasy) * 100).toFixed(1);
             return '<tr class="border-b hover:bg-gray-50 text-xs">' +
-                '<td class="p-2"><span class="clickable" onclick="Modals.zobrazitDetailHrace(\'' + h + '\')">' + h + '</span></td>' +
+                '<td class="p-2"><span class="clickable" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(h) + '\')">' + Statistics.escapeHtml(h) + '</span></td>' +
                 '<td class="p-2 text-center">' + st.zapasy + '</td>' +
                 '<td class="p-2 text-center text-green-600 font-semibold">' + st.vyhry + '</td>' +
                 '<td class="p-2 text-center text-red-600 font-semibold">' + st.prohry + '</td>' +

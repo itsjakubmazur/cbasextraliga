@@ -6,7 +6,11 @@ const App = {
     async init() {
         const success = await Data.nacist();
         if (success) {
-            this.zmenitSoutez('extraliga');
+            // Read league from URL hash if present
+            const hash = window.location.hash.replace('#', '');
+            const validSouteze = ['extraliga', 'prvni-liga-vychod', 'prvni-liga-zapad'];
+            const soutez = validSouteze.includes(hash) ? hash : 'extraliga';
+            this.zmenitSoutez(soutez);
         }
 
         if (localStorage.getItem('darkMode') === 'true') {
@@ -14,6 +18,26 @@ const App = {
             document.getElementById('darkModeIcon').textContent = '☀️';
             document.getElementById('darkModeText').textContent = 'Light Mode';
         }
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // Handle browser back/forward for league switching
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.replace('#', '');
+            const validSouteze = ['extraliga', 'prvni-liga-vychod', 'prvni-liga-zapad'];
+            if (validSouteze.includes(hash) && hash !== this.aktualni_soutez) {
+                this.zmenitSoutez(hash);
+            }
+        });
     },
 
     toggleDarkMode() {
@@ -26,6 +50,11 @@ const App = {
 
     zmenitSoutez(soutez) {
         this.aktualni_soutez = soutez;
+
+        // Update URL hash for shareable links
+        if (window.location.hash.replace('#', '') !== soutez) {
+            history.replaceState(null, '', '#' + soutez);
+        }
 
         document.querySelectorAll('.soutez-tab').forEach(tab => {
             tab.classList.remove('active');
@@ -94,7 +123,9 @@ const App = {
         if (filtrTym) {
             const currentFiltr = filtrTym.value;
             filtrTym.innerHTML = '<option value="">Všechny týmy</option>' +
-                Data.tymy[this.aktualni_soutez].map(t => '<option value="' + t + '">' + t + '</option>').join('');
+                Data.tymy[this.aktualni_soutez].map(t =>
+                    '<option value="' + Statistics.escapeAttr(t) + '">' + Statistics.escapeHtml(t) + '</option>'
+                ).join('');
             if (Data.tymy[this.aktualni_soutez].includes(currentFiltr)) {
                 filtrTym.value = currentFiltr;
             }

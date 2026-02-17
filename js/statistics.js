@@ -1,4 +1,30 @@
 const Statistics = {
+    // Playoff round detection - kolo values like "QF", "SF", "F" are playoff
+    isPlayoffKolo(kolo) {
+        if (!kolo) return false;
+        const k = kolo.replace(/\.$/, '').trim();
+        return ['QF', 'SF', 'F'].includes(k.toUpperCase());
+    },
+
+    // Map playoff kolo codes to display names
+    playoffKoloNazev(kolo) {
+        const k = kolo.replace(/\.$/, '').trim().toUpperCase();
+        const nazvy = { 'QF': 'Čtvrtfinále', 'SF': 'Semifinále', 'F': 'Finále' };
+        return nazvy[k] || kolo;
+    },
+
+    // Utility: HTML escape to prevent XSS
+    escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    },
+
+    // Utility: Escape string for use in onclick attribute
+    escapeAttr(str) {
+        return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    },
+
     parseVysledek(vysledek) {
         const parts = vysledek.split(':');
         return { domaci: parseInt(parts[0]) || 0, hoste: parseInt(parts[1]) || 0 };
@@ -18,6 +44,43 @@ const Statistics = {
 
     getHraciFromTeam(team) {
         return team.split(',').map(h => h.trim()).filter(h => h);
+    },
+
+    // Centralized sorting logic for league standings (used by Table and Playoff)
+    seraditTymyPodleTabulky(tabulkaData) {
+        const tymy = Object.keys(tabulkaData);
+        tymy.sort((a, b) => {
+            const tA = tabulkaData[a];
+            const tB = tabulkaData[b];
+            if (tB.body !== tA.body) return tB.body - tA.body;
+            if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
+            const rozdilZapasyA = tA.zapasyV - tA.zapasyP;
+            const rozdilZapasyB = tB.zapasyV - tB.zapasyP;
+            if (rozdilZapasyB !== rozdilZapasyA) return rozdilZapasyB - rozdilZapasyA;
+            const rozdilSetyA = tA.setyV - tA.setyP;
+            const rozdilSetyB = tB.setyV - tB.setyP;
+            if (rozdilSetyB !== rozdilSetyA) return rozdilSetyB - rozdilSetyA;
+            const rozdilBodyA = tA.bodyV - tA.bodyP;
+            const rozdilBodyB = tB.bodyV - tB.bodyP;
+            return rozdilBodyB - rozdilBodyA;
+        });
+        return tymy;
+    },
+
+    // Centralized sorting logic for player stats (used by Players TOP3 and statistics table)
+    seraditHraceStandardne(hraciList, stats) {
+        return hraciList.sort((a, b) => {
+            const sA = stats[a];
+            const sB = stats[b];
+            if (sB.vyhry !== sA.vyhry) return sB.vyhry - sA.vyhry;
+            const winRateA = sA.zapasy > 0 ? (sA.vyhry / sA.zapasy) : 0;
+            const winRateB = sB.zapasy > 0 ? (sB.vyhry / sB.zapasy) : 0;
+            if (Math.abs(winRateA - winRateB) > 0.001) return winRateB - winRateA;
+            if (sB.zapasy !== sA.zapasy) return sB.zapasy - sA.zapasy;
+            const setRatioA = (sA.setVyhrane + sA.setProhrane) > 0 ? (sA.setVyhrane / (sA.setVyhrane + sA.setProhrane)) : 0;
+            const setRatioB = (sB.setVyhrane + sB.setProhrane) > 0 ? (sB.setVyhrane / (sB.setVyhrane + sB.setProhrane)) : 0;
+            return setRatioB - setRatioA;
+        });
     },
 
     getForma(hrac, vsechnyZapasy) {
@@ -58,18 +121,23 @@ const Statistics = {
             const domaciHraci = this.getHraciFromTeam(zapas.domaci);
             const hosteHraci = this.getHraciFromTeam(zapas.hoste);
             const domaciVyhral = vysledek.domaci > vysledek.hoste;
-            
+            const jeRemiza = vysledek.domaci === vysledek.hoste;
+
+            const initHrac = () => ({
+                zapasy: 0, vyhry: 0, prohry: 0, remizy: 0,
+                setVyhrane: 0, setProhrane: 0,
+                bodyVyhrane: 0, bodyProhrane: 0,
+                tymy: {}, vsechnyZapasy: []
+            });
+
             if (zapas.domaci !== 'SKREČ') {
                 domaciHraci.forEach(hrac => {
                     if (filtrTym && zapas.tymDomaci !== filtrTym) return;
-                    if (!stats[hrac]) stats[hrac] = {
-                        zapasy: 0, vyhry: 0, prohry: 0,
-                        setVyhrane: 0, setProhrane: 0,
-                        bodyVyhrane: 0, bodyProhrane: 0,
-                        tymy: {}, vsechnyZapasy: []
-                    };
+                    if (!stats[hrac]) stats[hrac] = initHrac();
                     stats[hrac].zapasy++;
-                    if (domaciVyhral) stats[hrac].vyhry++; else stats[hrac].prohry++;
+                    if (jeRemiza) stats[hrac].remizy++;
+                    else if (domaciVyhral) stats[hrac].vyhry++;
+                    else stats[hrac].prohry++;
                     stats[hrac].setVyhrane += vysledek.domaci;
                     stats[hrac].setProhrane += vysledek.hoste;
                     stats[hrac].bodyVyhrane += bodyData.domaciBody;
@@ -78,18 +146,15 @@ const Statistics = {
                     stats[hrac].vsechnyZapasy.push(zapas);
                 });
             }
-            
+
             if (zapas.hoste !== 'SKREČ') {
                 hosteHraci.forEach(hrac => {
                     if (filtrTym && zapas.tymHoste !== filtrTym) return;
-                    if (!stats[hrac]) stats[hrac] = {
-                        zapasy: 0, vyhry: 0, prohry: 0,
-                        setVyhrane: 0, setProhrane: 0,
-                        bodyVyhrane: 0, bodyProhrane: 0,
-                        tymy: {}, vsechnyZapasy: []
-                    };
+                    if (!stats[hrac]) stats[hrac] = initHrac();
                     stats[hrac].zapasy++;
-                    if (!domaciVyhral) stats[hrac].vyhry++; else stats[hrac].prohry++;
+                    if (jeRemiza) stats[hrac].remizy++;
+                    else if (!domaciVyhral) stats[hrac].vyhry++;
+                    else stats[hrac].prohry++;
                     stats[hrac].setVyhrane += vysledek.hoste;
                     stats[hrac].setProhrane += vysledek.domaci;
                     stats[hrac].bodyVyhrane += bodyData.hosteBody;
@@ -107,8 +172,10 @@ const Statistics = {
         const tabulka = {};
         const utkani = {};
         const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
-        
+
         Data.zapasy[aktualni_soutez].forEach(zapas => {
+            // Skip playoff matches in regular season table
+            if (this.isPlayoffKolo(zapas.kolo)) return;
             const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
             if (!utkani[klic]) utkani[klic] = {
                 kolo: zapas.kolo,
