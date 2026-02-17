@@ -21,12 +21,84 @@
             background: #2563eb;
             color: white;
         }
+        .view-toggle {
+            display: inline-flex;
+            background: linear-gradient(135deg, #fecaca, #fecdd3);
+            border: 2px solid #d93831;
+            border-radius: 10px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .view-toggle-btn {
+            padding: 6px 16px;
+            border-radius: 7px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #991b1b;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+        }
+        .view-toggle-btn:hover {
+            color: #7f1d1d;
+            background: rgba(255,255,255,0.4);
+        }
+        .view-toggle-btn.active {
+            background: white;
+            color: #d93831;
+            box-shadow: 0 2px 6px rgba(217,56,49,0.3);
+        }
+        .playoff-match {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            background: #f9fafb;
+        }
+        .playoff-match-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .playoff-team-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px 0;
+        }
+        .playoff-team-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .playoff-team-score {
+            font-size: 0.85rem;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+        }
+        .playoff-winner {
+            color: #15803d;
+        }
+        .playoff-loser {
+            color: #6b7280;
+        }
+        .playoff-champion {
+            background: linear-gradient(135deg, #fefce8, #fef9c3);
+            border: 2px solid #facc15;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
     <div class="max-w-6xl mx-auto">
         <!-- Výběr soutěže -->
-        <div class="mb-4 flex flex-wrap gap-2">
+        <div class="mb-4 flex flex-wrap items-center gap-2">
             <button onclick="zmenitSoutez('extraliga')" id="tab-extraliga" class="soutez-tab px-4 py-2 rounded-lg font-semibold text-sm bg-blue-600 text-white">
                 🏆 Extraliga
             </button>
@@ -36,10 +108,16 @@
             <button onclick="zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab px-4 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm">
                 🥈 1. liga - Západ
             </button>
+            <div class="ml-auto">
+                <div class="view-toggle" id="viewToggle">
+                    <button class="view-toggle-btn active" id="btnZakladni" onclick="prepnoutPohled('zakladni')">Základní část</button>
+                    <button class="view-toggle-btn" id="btnPlayoff" onclick="prepnoutPohled('playoff')">Play-off</button>
+                </div>
+            </div>
         </div>
 
-        <!-- Tabulka -->
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+        <!-- Tabulka (základní část) -->
+        <div id="tabulkaView" class="bg-white rounded-lg shadow overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
@@ -62,6 +140,9 @@
             <div class="p-3 text-xs text-gray-600 bg-gray-50" id="bodovaniInfo"></div>
         </div>
 
+        <!-- Play-off pohled -->
+        <div id="playoffView" style="display: none;"></div>
+
         <div class="mt-3 text-xs text-gray-500 text-center">
             <a href="https://itsjakubmazur.github.io/cbasextraliga/" target="_blank" class="text-blue-600 hover:underline">
                 Zobrazit kompletní statistiky →
@@ -72,6 +153,7 @@
     <script>
         let zapasy = {};
         let aktualni_soutez = 'extraliga';
+        let aktualni_pohled = 'zakladni';
 
         async function nacistData() {
             try {
@@ -81,7 +163,7 @@
                 zobrazitTabulku();
             } catch (error) {
                 console.error('Chyba načítání:', error);
-                document.getElementById('tabulkaBody').innerHTML = 
+                document.getElementById('tabulkaBody').innerHTML =
                     '<tr><td colspan="10" class="p-4 text-center text-red-600">Nepodařilo se načíst data</td></tr>';
             }
         }
@@ -94,7 +176,26 @@
             });
             document.getElementById('tab-' + soutez).classList.add('active', 'bg-blue-600', 'text-white');
             document.getElementById('tab-' + soutez).classList.remove('bg-gray-200', 'text-gray-700');
-            zobrazitTabulku();
+            if (aktualni_pohled === 'zakladni') {
+                zobrazitTabulku();
+            } else {
+                zobrazitPlayoff();
+            }
+        }
+
+        function prepnoutPohled(pohled) {
+            aktualni_pohled = pohled;
+            document.getElementById('btnZakladni').classList.toggle('active', pohled === 'zakladni');
+            document.getElementById('btnPlayoff').classList.toggle('active', pohled === 'playoff');
+            if (pohled === 'zakladni') {
+                document.getElementById('tabulkaView').style.display = 'block';
+                document.getElementById('playoffView').style.display = 'none';
+                zobrazitTabulku();
+            } else {
+                document.getElementById('tabulkaView').style.display = 'none';
+                document.getElementById('playoffView').style.display = 'block';
+                zobrazitPlayoff();
+            }
         }
 
         function parseVysledek(vysledek) {
@@ -114,24 +215,37 @@
             return { domaciBody, hosteBody };
         }
 
+        function isPlayoffKolo(kolo) {
+            if (!kolo) return false;
+            const k = kolo.replace(/\.$/, '').trim();
+            return ['QF', 'SF', 'F'].includes(k.toUpperCase());
+        }
+
+        function escapeHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
         function zobrazitTabulku() {
             const tabulka = {};
             const utkani = {};
             const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
-            
-            zapasy[aktualni_soutez].forEach(zapas => {
+
+            (zapasy[aktualni_soutez] || []).forEach(zapas => {
+                if (isPlayoffKolo(zapas.kolo)) return;
                 const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
                 if (!utkani[klic]) utkani[klic] = {
                     kolo: zapas.kolo, domaci: zapas.tymDomaci, hoste: zapas.tymHoste, zapasy: []
                 };
                 utkani[klic].zapasy.push(zapas);
             });
-            
+
             Object.values(utkani).forEach(utk => {
                 const domaci = utk.domaci;
                 const hoste = utk.hoste;
                 if (!domaci || !hoste) return;
-                
+
                 if (!tabulka[domaci]) tabulka[domaci] = {
                     utkani: 0, vyhry: 0, remizy: 0, prohry: 0,
                     zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0
@@ -140,7 +254,7 @@
                     utkani: 0, vyhry: 0, remizy: 0, prohry: 0,
                     zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0
                 };
-                
+
                 let dz = 0, hz = 0, ds = 0, hs = 0, db = 0, hb = 0;
                 utk.zapasy.forEach(z => {
                     const v = parseVysledek(z.vysledek);
@@ -149,7 +263,7 @@
                     ds += v.domaci; hs += v.hoste;
                     db += bd.domaciBody; hb += bd.hosteBody;
                 });
-                
+
                 let dbt = 0, hbt = 0;
                 if (jePrvniLiga) {
                     if (dz === hz) { dbt = 2; hbt = 2; tabulka[domaci].remizy++; tabulka[hoste].remizy++; }
@@ -166,7 +280,7 @@
                         tabulka[hoste].vyhry++; tabulka[domaci].prohry++;
                     }
                 }
-                
+
                 tabulka[domaci].utkani++; tabulka[domaci].zapasyV += dz; tabulka[domaci].zapasyP += hz;
                 tabulka[domaci].setyV += ds; tabulka[domaci].setyP += hs;
                 tabulka[domaci].bodyV += db; tabulka[domaci].bodyP += hb; tabulka[domaci].body += dbt;
@@ -174,7 +288,7 @@
                 tabulka[hoste].setyV += hs; tabulka[hoste].setyP += ds;
                 tabulka[hoste].bodyV += hb; tabulka[hoste].bodyP += db; tabulka[hoste].body += hbt;
             });
-            
+
             const tymy = Object.keys(tabulka);
             tymy.sort((a, b) => {
                 const tA = tabulka[a], tB = tabulka[b];
@@ -186,7 +300,7 @@
                 if (rsb !== rsa) return rsb - rsa;
                 return (tB.bodyV - tB.bodyP) - (tA.bodyV - tA.bodyP);
             });
-            
+
             const rows = tymy.map((tym, idx) => {
                 const t = tabulka[tym];
                 const rz = t.zapasyV - t.zapasyP, rs = t.setyV - t.setyP, rb = t.bodyV - t.bodyP;
@@ -204,7 +318,7 @@
                 const sb = rb > 0 ? '↗' : (rb < 0 ? '↘' : '→');
                 return '<tr class="border-b hover:bg-gray-50">' +
                     '<td class="p-2 text-center font-bold ' + pc + '">' + (idx + 1) + '.</td>' +
-                    '<td class="p-2 font-semibold ' + pc + '">' + tym + '</td>' +
+                    '<td class="p-2 font-semibold ' + pc + '">' + escapeHtml(tym) + '</td>' +
                     '<td class="p-2 text-center">' + t.utkani + '</td>' +
                     '<td class="p-2 text-center text-green-600 font-semibold">' + t.vyhry + '</td>' +
                     '<td class="p-2 text-center text-yellow-600 font-semibold">' + t.remizy + '</td>' +
@@ -214,7 +328,7 @@
                     '<td class="p-2 text-center text-xs">' + t.bodyV + ':' + t.bodyP + ' <span class="' + (rb >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sb + (rb >= 0 ? '+' : '') + rb + '</span></td>' +
                     '<td class="p-2 text-center font-bold text-lg text-blue-700">' + t.body + '</td></tr>';
             }).join('');
-            
+
             document.getElementById('tabulkaBody').innerHTML = rows;
             const legenda = jePrvniLiga
                 ? '<div class="flex flex-wrap gap-3 mb-2"><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> 1.–4. Play-off</span><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-50 border border-red-200"></span> 9. Kvalifikace o 1. ligu</span></div>'
@@ -223,6 +337,225 @@
                 ? '<strong>Bodování 1. ligy:</strong> Výhra = 3 body, Remíza = 2 body, Prohra = 1 bod'
                 : '<strong>Bodování extraligy:</strong> Výhra 7:0,6:1 = 3 body | Výhra 5:2,4:3 = 2 body | Prohra 3:4,2:5 = 1 bod | Prohra 1:6,0:7 = 0 bodů';
             document.getElementById('bodovaniInfo').innerHTML = legenda + bodovani;
+        }
+
+        function getPlayoffResults(soutez) {
+            const zap = zapasy[soutez] || [];
+            const results = {};
+            zap.forEach(z => {
+                if (!isPlayoffKolo(z.kolo)) return;
+                const kolo = z.kolo.replace(/\.$/, '').trim().toUpperCase();
+                const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
+                if (!results[klic]) {
+                    results[klic] = { kolo: kolo, tym1: z.tymDomaci, tym2: z.tymHoste, zapasy: [] };
+                }
+                results[klic].zapasy.push(z);
+            });
+            Object.values(results).forEach(r => {
+                let v1 = 0, v2 = 0;
+                r.zapasy.forEach(z => {
+                    const v = parseVysledek(z.vysledek);
+                    if (z.tymDomaci === r.tym1) {
+                        if (v.domaci > v.hoste) v1++; else v2++;
+                    } else {
+                        if (v.hoste > v.domaci) v1++; else v2++;
+                    }
+                });
+                r.skore1 = v1; r.skore2 = v2;
+                r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
+            });
+            return results;
+        }
+
+        function findResult(results, kolo, tym1, tym2) {
+            if (!tym1 || !tym2) return null;
+            return results[kolo + '-' + [tym1, tym2].sort().join('-')] || null;
+        }
+
+        function matchHtml(label, tym1, tym2, res) {
+            const t1Name = tym1 ? escapeHtml(tym1) : '?';
+            const t2Name = tym2 ? escapeHtml(tym2) : '?';
+            let s1 = '', s2 = '', w1 = '', w2 = '';
+            if (res) {
+                const je1 = res.tym1 === tym1;
+                s1 = je1 ? res.skore1 : res.skore2;
+                s2 = je1 ? res.skore2 : res.skore1;
+                if (res.vitez === tym1) { w1 = ' playoff-winner'; w2 = ' playoff-loser'; }
+                else if (res.vitez === tym2) { w2 = ' playoff-winner'; w1 = ' playoff-loser'; }
+            }
+            return '<div class="playoff-match">' +
+                '<div class="playoff-match-label">' + label + '</div>' +
+                '<div class="playoff-team-row">' +
+                    '<span class="playoff-team-name' + w1 + '">' + t1Name + '</span>' +
+                    '<span class="playoff-team-score' + w1 + '">' + s1 + '</span>' +
+                '</div>' +
+                '<div class="playoff-team-row">' +
+                    '<span class="playoff-team-name' + w2 + '">' + t2Name + '</span>' +
+                    '<span class="playoff-team-score' + w2 + '">' + s2 + '</span>' +
+                '</div>' +
+                '</div>';
+        }
+
+        function seraditTymy(soutez) {
+            const tabulka = {};
+            const utkani = {};
+            (zapasy[soutez] || []).forEach(zapas => {
+                if (isPlayoffKolo(zapas.kolo)) return;
+                const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
+                if (!utkani[klic]) utkani[klic] = { domaci: zapas.tymDomaci, hoste: zapas.tymHoste, zapasy: [] };
+                utkani[klic].zapasy.push(zapas);
+            });
+            Object.values(utkani).forEach(utk => {
+                const d = utk.domaci, h = utk.hoste;
+                if (!d || !h) return;
+                if (!tabulka[d]) tabulka[d] = { vyhry: 0, zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0 };
+                if (!tabulka[h]) tabulka[h] = { vyhry: 0, zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0 };
+                let dz = 0, hz = 0, ds = 0, hs = 0, db = 0, hb = 0;
+                utk.zapasy.forEach(z => {
+                    const v = parseVysledek(z.vysledek); const bd = parseSety(z.sety);
+                    if (v.domaci > v.hoste) dz++; else hz++;
+                    ds += v.domaci; hs += v.hoste; db += bd.domaciBody; hb += bd.hosteBody;
+                });
+                const jePL = soutez.includes('prvni-liga');
+                let dbt = 0, hbt = 0;
+                if (jePL) {
+                    if (dz === hz) { dbt = 2; hbt = 2; }
+                    else if (dz > hz) { dbt = 3; hbt = 1; tabulka[d].vyhry++; }
+                    else { hbt = 3; dbt = 1; tabulka[h].vyhry++; }
+                } else {
+                    if (dz > hz) { dbt = dz >= 6 ? 3 : 2; hbt = dz >= 6 ? 0 : 1; tabulka[d].vyhry++; }
+                    else { hbt = hz >= 6 ? 3 : 2; dbt = hz >= 6 ? 0 : 1; tabulka[h].vyhry++; }
+                }
+                tabulka[d].zapasyV += dz; tabulka[d].zapasyP += hz; tabulka[d].setyV += ds; tabulka[d].setyP += hs;
+                tabulka[d].bodyV += db; tabulka[d].bodyP += hb; tabulka[d].body += dbt;
+                tabulka[h].zapasyV += hz; tabulka[h].zapasyP += dz; tabulka[h].setyV += hs; tabulka[h].setyP += ds;
+                tabulka[h].bodyV += hb; tabulka[h].bodyP += db; tabulka[h].body += hbt;
+            });
+            return Object.keys(tabulka).sort((a, b) => {
+                const tA = tabulka[a], tB = tabulka[b];
+                if (tB.body !== tA.body) return tB.body - tA.body;
+                if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
+                return (tB.zapasyV - tB.zapasyP) - (tA.zapasyV - tA.zapasyP);
+            });
+        }
+
+        function zobrazitPlayoff() {
+            const container = document.getElementById('playoffView');
+            const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
+
+            if (jePrvniLiga) {
+                zobrazitPlayoffPrvniLiga(container);
+            } else {
+                zobrazitPlayoffExtraliga(container);
+            }
+        }
+
+        function zobrazitPlayoffExtraliga(container) {
+            const tymy = seraditTymy('extraliga');
+            const res = getPlayoffResults('extraliga');
+
+            if (tymy.length < 6) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">Nedostatek týmů pro zobrazení play-off.</p>';
+                return;
+            }
+
+            const t = (i) => tymy[i] || '?';
+
+            // QF
+            const qfRes1 = findResult(res, 'QF', t(2), t(5));
+            const qfRes2 = findResult(res, 'QF', t(3), t(4));
+            const qfV1 = qfRes1 ? qfRes1.vitez : null;
+            const qfV2 = qfRes2 ? qfRes2.vitez : null;
+
+            // SF
+            const sfRes1 = qfV1 ? findResult(res, 'SF', t(0), qfV1) : null;
+            const sfRes2 = qfV2 ? findResult(res, 'SF', t(1), qfV2) : null;
+            const sfV1 = sfRes1 ? sfRes1.vitez : null;
+            const sfV2 = sfRes2 ? sfRes2.vitez : null;
+
+            // Final
+            const fRes = (sfV1 && sfV2) ? findResult(res, 'F', sfV1, sfV2) : null;
+            const champion = fRes ? fRes.vitez : null;
+
+            let html = '<div class="grid grid-cols-1 md:grid-cols-3 gap-4">';
+
+            // QF column
+            html += '<div><h3 class="text-sm font-bold text-gray-600 mb-2 text-center">Čtvrtfinále</h3>';
+            html += matchHtml('ČF 1: 3. vs 6.', t(2), t(5), qfRes1);
+            html += matchHtml('ČF 2: 4. vs 5.', t(3), t(4), qfRes2);
+            html += '</div>';
+
+            // SF column
+            html += '<div><h3 class="text-sm font-bold text-gray-600 mb-2 text-center">Semifinále (Final Four)</h3>';
+            html += matchHtml('SF 1: 1. vs Vítěz ČF1', t(0), qfV1, sfRes1);
+            html += matchHtml('SF 2: 2. vs Vítěz ČF2', t(1), qfV2, sfRes2);
+            html += '</div>';
+
+            // Final column
+            html += '<div><h3 class="text-sm font-bold text-gray-600 mb-2 text-center">Finále</h3>';
+            html += matchHtml('Finále', sfV1, sfV2, fRes);
+            if (champion) {
+                html += '<div class="playoff-champion"><div class="text-xl">🏆</div><div class="font-bold text-yellow-800">' + escapeHtml(champion) + '</div></div>';
+            }
+            html += '</div>';
+
+            html += '</div>';
+            html += '<p class="text-xs text-gray-500 mt-3">* Pavouk na základě pořadí v základní části. Výsledky z dat play-off (QF/SF/F).</p>';
+            container.innerHTML = html;
+        }
+
+        function zobrazitPlayoffPrvniLiga(container) {
+            const tymyV = seraditTymy('prvni-liga-vychod');
+            const tymyZ = seraditTymy('prvni-liga-zapad');
+            const res = getPlayoffResults('prvni-liga-playoff');
+
+            if (tymyV.length < 4 || tymyZ.length < 4) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">Nedostatek týmů pro zobrazení play-off.</p>';
+                return;
+            }
+
+            // QF crossover
+            const qfPairs = [
+                { v: 0, z: 3, label: 'ČF 1: 1.V vs 4.Z' },
+                { v: 2, z: 1, label: 'ČF 2: 3.V vs 2.Z' },
+                { v: 1, z: 2, label: 'ČF 3: 2.V vs 3.Z' },
+                { v: 3, z: 0, label: 'ČF 4: 4.V vs 1.Z' }
+            ];
+
+            const qfViteze = [];
+            let qfHtml = '';
+            qfPairs.forEach(p => {
+                const tv = tymyV[p.v], tz = tymyZ[p.z];
+                const r = findResult(res, 'QF', tv, tz);
+                qfViteze.push(r ? r.vitez : null);
+                qfHtml += matchHtml(p.label, tv, tz, r);
+            });
+
+            // SF
+            const sfRes1 = (qfViteze[0] && qfViteze[1]) ? findResult(res, 'SF', qfViteze[0], qfViteze[1]) : null;
+            const sfRes2 = (qfViteze[2] && qfViteze[3]) ? findResult(res, 'SF', qfViteze[2], qfViteze[3]) : null;
+            const sfV1 = sfRes1 ? sfRes1.vitez : null;
+            const sfV2 = sfRes2 ? sfRes2.vitez : null;
+
+            // Final
+            const fRes = (sfV1 && sfV2) ? findResult(res, 'F', sfV1, sfV2) : null;
+            const champion = fRes ? fRes.vitez : null;
+
+            let html = '<div class="grid grid-cols-1 md:grid-cols-3 gap-4">';
+            html += '<div><h3 class="text-sm font-bold text-gray-600 mb-2 text-center">Čtvrtfinále</h3>' + qfHtml + '</div>';
+            html += '<div><h3 class="text-sm font-bold text-gray-600 mb-2 text-center">Semifinále</h3>';
+            html += matchHtml('SF 1: Vítěz ČF1 vs ČF2', qfViteze[0], qfViteze[1], sfRes1);
+            html += matchHtml('SF 2: Vítěz ČF3 vs ČF4', qfViteze[2], qfViteze[3], sfRes2);
+            html += '</div>';
+            html += '<div><h3 class="text-sm font-bold text-gray-600 mb-2 text-center">Finále</h3>';
+            html += matchHtml('Finále', sfV1, sfV2, fRes);
+            if (champion) {
+                html += '<div class="playoff-champion"><div class="text-xl">🏆</div><div class="font-bold text-yellow-800">' + escapeHtml(champion) + '</div></div>';
+            }
+            html += '</div>';
+            html += '</div>';
+            html += '<p class="text-xs text-gray-500 mt-3">* Křížové nasazení Východ vs Západ. Výsledky z dat prvni-liga-playoff (QF/SF/F).</p>';
+            container.innerHTML = html;
         }
 
         nacistData();
