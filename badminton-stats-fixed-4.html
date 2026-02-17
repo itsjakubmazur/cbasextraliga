@@ -61,6 +61,9 @@
                 <button onclick="zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700">
                     📍 1. liga - Západ
                 </button>
+                <button onclick="zmenitSoutez('prvni-liga-playoff')" id="tab-prvni-liga-playoff" class="soutez-tab px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700">
+                    🏅 1. liga - Play-off
+                </button>
             </div>
         </div>
 
@@ -109,7 +112,7 @@
             <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4 mb-4">
                 <h3 class="text-lg font-semibold text-green-800 mb-3">📅 Info o utkání (vyplňte jednou pro celé utkání)</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <input type="text" id="kolo" placeholder="Kolo (např. 1)" class="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
+                    <input type="text" id="kolo" placeholder="Kolo (např. 1) nebo QF/SF/F" class="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
                     <input type="date" id="datum" class="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
                     <select id="tymDomaci" class="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
                         <option value="">Tým domácích</option>
@@ -343,13 +346,15 @@
         let zapasy = {
             'extraliga': [],
             'prvni-liga-vychod': [],
-            'prvni-liga-zapad': []
+            'prvni-liga-zapad': [],
+            'prvni-liga-playoff': []
         };
         let hraci = [];
         let tymy = {
             'extraliga': [],
             'prvni-liga-vychod': [],
-            'prvni-liga-zapad': []
+            'prvni-liga-zapad': [],
+            'prvni-liga-playoff': []
         };
         let vybrana_kola = new Set();
         let aktualni_soutez = 'extraliga';
@@ -365,25 +370,34 @@
         const soutezNazvy = {
             'extraliga': 'Extraliga',
             'prvni-liga-vychod': '1. liga - Východ',
-            'prvni-liga-zapad': '1. liga - Západ'
+            'prvni-liga-zapad': '1. liga - Západ',
+            'prvni-liga-playoff': '1. liga - Play-off'
         };
 
         function zmenitSoutez(soutez) {
             aktualni_soutez = soutez;
-            
+
             document.querySelectorAll('.soutez-tab').forEach(tab => {
                 tab.classList.remove('active');
                 tab.classList.add('bg-gray-200', 'text-gray-700');
             });
-            
+
             const activeTab = document.getElementById('tab-' + soutez);
             activeTab.classList.add('active');
             activeTab.classList.remove('bg-gray-200', 'text-gray-700');
-            
+
             document.getElementById('formularSoutez').textContent = soutezNazvy[soutez];
             document.getElementById('tabulkaSoutez').textContent = soutezNazvy[soutez];
             document.getElementById('aktualniSoutezNazev').textContent = soutezNazvy[soutez];
-            
+
+            // Set kolo placeholder based on mode
+            const koloInput = document.getElementById('kolo');
+            if (soutez === 'prvni-liga-playoff' || soutez === 'extraliga') {
+                koloInput.placeholder = 'Kolo (číslo) nebo QF / SF / F (play-off)';
+            } else {
+                koloInput.placeholder = 'Kolo (např. 1)';
+            }
+
             vybrana_kola.clear();
             aktualizovatSelecty();
             zobrazitSpravuTymu();
@@ -394,26 +408,26 @@
             const ulozeneZapasy = localStorage.getItem('badmintonZapasy');
             const ulozeniHraci = localStorage.getItem('badmintonHraci');
             const ulozeneTymy = localStorage.getItem('badmintonTymy');
-            
+
             if (ulozeneZapasy) {
                 const parsed = JSON.parse(ulozeneZapasy);
                 if (parsed.extraliga) {
-                    zapasy = parsed;
+                    zapasy = { ...zapasy, ...parsed };
                 } else {
                     zapasy.extraliga = parsed;
                 }
             }
-            
+
             if (ulozeniHraci) hraci = JSON.parse(ulozeniHraci);
             if (ulozeneTymy) {
                 const parsed = JSON.parse(ulozeneTymy);
                 if (parsed.extraliga) {
-                    tymy = parsed;
+                    tymy = { ...tymy, ...parsed };
                 } else {
                     tymy.extraliga = parsed;
                 }
             }
-            
+
             zmenitSoutez('extraliga');
             zobrazitSpravuHracu();
         }
@@ -446,8 +460,13 @@
         }
 
         function prednastavitTymy() {
+            if (aktualni_soutez === 'prvni-liga-playoff') {
+                alert('Play-off používá týmy z obou skupin automaticky. Přidejte týmy do Východu a Západu.');
+                return;
+            }
+
             let noveTymy = [];
-            
+
             if (aktualni_soutez === 'extraliga') {
                 noveTymy = [
                     'BA Plzeň',
@@ -484,13 +503,13 @@
                     'TJ Sokol Litoměřice B'
                 ];
             }
-            
+
             noveTymy.forEach(tym => {
                 if (!tymy[aktualni_soutez].includes(tym)) {
                     tymy[aktualni_soutez].push(tym);
                 }
             });
-            
+
             tymy[aktualni_soutez].sort();
             ulozitData();
             aktualizovatSelecty();
@@ -562,11 +581,23 @@
 
         function zobrazitSpravuTymu() {
             const container = document.getElementById('seznamTymu');
+            if (aktualni_soutez === 'prvni-liga-playoff') {
+                const combined = getAktualniTymy();
+                if (combined.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500 text-sm">Žádné týmy - přidejte týmy do Východu a Západu</p>';
+                    return;
+                }
+                container.innerHTML = '<p class="text-sm text-blue-600 mb-2">Týmy z obou skupin (pouze pro čtení):</p>' +
+                    combined.map(t =>
+                        '<div class="py-1 border-b border-gray-100"><span class="text-sm">' + t + '</span></div>'
+                    ).join('');
+                return;
+            }
             if (tymy[aktualni_soutez].length === 0) {
                 container.innerHTML = '<p class="text-gray-500 text-sm">Žádné týmy</p>';
                 return;
             }
-            container.innerHTML = tymy[aktualni_soutez].map(t => 
+            container.innerHTML = tymy[aktualni_soutez].map(t =>
                 '<div class="flex justify-between items-center py-2 border-b border-gray-100">' +
                 '<span class="text-sm">' + t + '</span>' +
                 '<button onclick="smazatTym(\'' + t.replace(/'/g, "\\'") + '\')" class="text-red-600 hover:text-red-800 text-sm">🗑️</button>' +
@@ -574,25 +605,39 @@
             ).join('');
         }
 
+        function getAktualniTymy() {
+            if (aktualni_soutez === 'prvni-liga-playoff') {
+                // Combine teams from both East and West for playoff
+                const combined = [...new Set([
+                    ...tymy['prvni-liga-vychod'],
+                    ...tymy['prvni-liga-zapad'],
+                    ...tymy['prvni-liga-playoff']
+                ])].sort();
+                return combined;
+            }
+            return tymy[aktualni_soutez] || [];
+        }
+
         function aktualizovatSelecty() {
+            const aktualniTymy = getAktualniTymy();
             const selectyTymu = ['tymDomaci', 'tymHoste'];
             selectyTymu.forEach(id => {
                 const select = document.getElementById(id);
                 const currentValue = select.value;
                 const placeholder = id === 'tymDomaci' ? 'Tým domácích' : 'Tým hostů';
-                select.innerHTML = '<option value="">' + placeholder + '</option>' + 
-                    tymy[aktualni_soutez].map(t => '<option value="' + t + '">' + t + '</option>').join('');
-                if (tymy[aktualni_soutez].includes(currentValue)) {
+                select.innerHTML = '<option value="">' + placeholder + '</option>' +
+                    aktualniTymy.map(t => '<option value="' + t + '">' + t + '</option>').join('');
+                if (aktualniTymy.includes(currentValue)) {
                     select.value = currentValue;
                 }
             });
-            
+
             const filtrTym = document.getElementById('filtrTym');
             if (filtrTym) {
                 const currentFiltr = filtrTym.value;
-                filtrTym.innerHTML = '<option value="">Všechny týmy</option>' + 
-                    tymy[aktualni_soutez].map(t => '<option value="' + t + '">' + t + '</option>').join('');
-                if (tymy[aktualni_soutez].includes(currentFiltr)) {
+                filtrTym.innerHTML = '<option value="">Všechny týmy</option>' +
+                    aktualniTymy.map(t => '<option value="' + t + '">' + t + '</option>').join('');
+                if (aktualniTymy.includes(currentFiltr)) {
                     filtrTym.value = currentFiltr;
                 }
             }
@@ -962,13 +1007,21 @@
             return stats;
         }
 
+        function isPlayoffKolo(kolo) {
+            if (!kolo) return false;
+            const k = kolo.replace(/\.$/, '').trim();
+            return ['QF', 'SF', 'F'].includes(k.toUpperCase());
+        }
+
         function vypocitejTabulku() {
             const tabulka = {};
             const utkani = {};
-            
+
             const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
-            
+
             zapasy[aktualni_soutez].forEach(zapas => {
+                // Skip playoff matches in regular season table
+                if (isPlayoffKolo(zapas.kolo)) return;
                 const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
                 if (!utkani[klic]) {
                     utkani[klic] = {
@@ -1293,6 +1346,29 @@
             document.body.removeChild(link);
         }
 
+        function exportovatProWeb() {
+            const webData = {
+                zapasy: zapasy,
+                tymy: tymy,
+                datum: new Date().toISOString()
+            };
+
+            const json = JSON.stringify(webData, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'badminton-data.json');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            let celkem = 0;
+            Object.values(zapasy).forEach(arr => { celkem += arr.length; });
+            alert('✓ Soubor badminton-data.json byl stažen!\n\nZápasů celkem: ' + celkem);
+        }
+
         function zalohovatData() {
             const backup = {
                 zapasy: zapasy,
@@ -1337,29 +1413,29 @@
                         
                         let celkemZapasu = 0;
                         if (backup.zapasy.extraliga) {
-                            celkemZapasu = backup.zapasy.extraliga.length + 
-                                          backup.zapasy['prvni-liga-vychod'].length + 
-                                          backup.zapasy['prvni-liga-zapad'].length;
+                            Object.values(backup.zapasy).forEach(arr => {
+                                if (Array.isArray(arr)) celkemZapasu += arr.length;
+                            });
                         } else {
                             celkemZapasu = backup.zapasy.length;
                         }
-                        
+
                         if (celkemZapasu > 0 || backup.hraci.length > 0) {
                             if (!confirm('POZOR: Máte zde již data. Chcete je PŘEPSAT?')) {
                                 return;
                             }
                         }
-                        
+
                         if (backup.zapasy.extraliga) {
-                            zapasy = backup.zapasy;
+                            zapasy = { ...zapasy, ...backup.zapasy };
                         } else {
                             zapasy.extraliga = backup.zapasy;
                         }
-                        
+
                         hraci = backup.hraci;
-                        
+
                         if (backup.tymy.extraliga) {
-                            tymy = backup.tymy;
+                            tymy = { ...tymy, ...backup.tymy };
                         } else {
                             tymy.extraliga = backup.tymy;
                         }
