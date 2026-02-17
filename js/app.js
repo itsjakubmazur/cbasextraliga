@@ -151,10 +151,10 @@ const App = {
         );
         document.getElementById('prazdnyStav').style.display = 'none';
 
-        // Show champions section only for extraliga and when data exists
+        // Show champions section only for extraliga
         const vitezoveContainer = document.getElementById('vitezoveContainer');
         if (vitezoveContainer) {
-            if (this.aktualni_soutez === 'extraliga' && Data.vitezove && Data.vitezove.length > 0) {
+            if (this.aktualni_soutez === 'extraliga') {
                 vitezoveContainer.style.display = 'block';
                 Champions.render();
             } else {
