@@ -1,17 +1,24 @@
 const Modals = {
     zobrazitDetailHrace(hrac) {
-        const stats = Statistics.vypocitejStatistiky(App.aktualni_soutez, App.vybrana_kola);
-        const s = stats[hrac];
+        // For 1. liga, try the other conference if player not found in current one
+        let soutezProHrace = App.aktualni_soutez;
+        let stats = Statistics.vypocitejStatistiky(soutezProHrace, App.vybrana_kola);
+        let s = stats[hrac];
+        if (!s && App.aktualni_soutez.includes('prvni-liga')) {
+            soutezProHrace = App.aktualni_soutez === 'prvni-liga-vychod' ? 'prvni-liga-zapad' : 'prvni-liga-vychod';
+            stats = Statistics.vypocitejStatistiky(soutezProHrace, new Set());
+            s = stats[hrac];
+        }
         if (!s) return;
-        
+
         const modal = document.getElementById('hracModal');
         document.getElementById('modalHracJmeno').textContent = '👤 ' + hrac;
-        
+
         const winRate = ((s.vyhry / s.zapasy) * 100).toFixed(1);
         const nejTym = Object.keys(s.tymy).length > 0 ? Object.entries(s.tymy).sort((a, b) => b[1] - a[1])[0][0] : '-';
         document.getElementById('modalHracInfo').textContent = nejTym + ' • ' + s.zapasy + ' zápasů • ' + winRate + '% úspěšnost';
-        
-        const forma = Statistics.getForma(hrac, Data.zapasy[App.aktualni_soutez]);
+
+        const forma = Statistics.getForma(hrac, Data.zapasy[soutezProHrace]);
         const formaHtml = forma.split('').map(v => '<span class="inline-block w-6 h-6 md:w-8 md:h-8 leading-6 md:leading-8 text-center rounded font-bold text-xs md:text-sm ' + (v === 'V' ? 'bg-green-500 text-white' : 'bg-red-500 text-white') + '">' + v + '</span>').join('');
         
         const zapasyHrace = s.vsechnyZapasy.map(zapas => {
@@ -65,15 +72,33 @@ const Modals = {
     },
 
     zobrazitDetailTymu(tym) {
-        const tabulkaData = Statistics.vypocitejTabulku(App.aktualni_soutez);
-        const t = tabulkaData[tym];
+        // For 1. liga, try both conferences if team not found in current one
+        let soutezProTabulku = App.aktualni_soutez;
+        let tabulkaData = Statistics.vypocitejTabulku(soutezProTabulku);
+        let t = tabulkaData[tym];
+        if (!t && App.aktualni_soutez.includes('prvni-liga')) {
+            // Try the other conference
+            soutezProTabulku = App.aktualni_soutez === 'prvni-liga-vychod' ? 'prvni-liga-zapad' : 'prvni-liga-vychod';
+            tabulkaData = Statistics.vypocitejTabulku(soutezProTabulku);
+            t = tabulkaData[tym];
+        }
         if (!t) return;
-        
+
         const modal = document.getElementById('tymModal');
         document.getElementById('modalTymNazev').textContent = '🏆 ' + tym;
         document.getElementById('modalTymInfo').textContent = t.utkani + ' utkání • ' + t.vyhry + 'V / ' + t.remizy + 'R / ' + t.prohry + 'P • ' + t.body + ' bodů';
-        
-        const zapasyTymu = Data.zapasy[App.aktualni_soutez].filter(z => z.tymDomaci === tym || z.tymHoste === tym);
+
+        // For 1. liga, include matches from the team's conference + playoff pool
+        let zapasyTymu;
+        if (App.aktualni_soutez.includes('prvni-liga')) {
+            const vsechnyZapasy = [
+                ...(Data.zapasy[soutezProTabulku] || []),
+                ...(Data.zapasy['prvni-liga-playoff'] || [])
+            ];
+            zapasyTymu = vsechnyZapasy.filter(z => z.tymDomaci === tym || z.tymHoste === tym);
+        } else {
+            zapasyTymu = Data.zapasy[App.aktualni_soutez].filter(z => z.tymDomaci === tym || z.tymHoste === tym);
+        }
         const domaci = zapasyTymu.filter(z => z.tymDomaci === tym);
         const hoste = zapasyTymu.filter(z => z.tymHoste === tym);
         
