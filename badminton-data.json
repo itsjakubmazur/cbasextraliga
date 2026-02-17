@@ -9269,304 +9269,9 @@
         "tymDomaci": "BaC Kladno",
         "tymHoste": "TJ Astra Zahradní Město"
       }
-    ]
+    ],
+    "prvni-liga-playoff": []
   },
-  "hraci": [
-    "Almalalha Raiia",
-    "Andersen Irina",
-    "Antoška Andrej",
-    "Aubus Marek",
-    "Ausbergerová Berta",
-    "Axmanová Karolína",
-    "Benediktová Klára",
-    "Benišová Petra",
-    "Benírške Štěpán",
-    "Bergstein Iben",
-    "Beržanskis Danielius",
-    "Bielobrovchuk Sofiia",
-    "Bitman Jakub",
-    "Bruun Jepe",
-    "Brázda Tadeáš",
-    "Budzel Filip",
-    "Budzel Filip\tKrál Jiří",
-    "Burdová Veronika",
-    "Bureš Marek",
-    "Burget Adam",
-    "Bury Viktorie",
-    "Buček Jan",
-    "Bílková Eliška",
-    "Bízek Vojtěch",
-    "Běhounek Ondřej",
-    "Bříza Petr",
-    "Chumchal Martin",
-    "Cimosz Lukas",
-    "Cirók Josef",
-    "Coelho de Oliveira Ygor",
-    "Corvee Lucas",
-    "Coufal Kryštof",
-    "Cybulka Antonina",
-    "Cybulka Ruzana",
-    "Cybulski Robert",
-    "Czysz Tymoteusz",
-    "Danielak Maksymilian",
-    "Danielak Mateusz",
-    "Derka Jiří",
-    "Dinh Duc Trung",
-    "Diviš Jakub",
-    "Dobešová Markéta",
-    "Dobiášová Veronika",
-    "Dostál Tomáš",
-    "Drančák Pavel",
-    "Dvořák Daniel",
-    "Dvořáková Anna",
-    "Ehm Adam",
-    "Ehm Adam\tOvčačík Jan",
-    "Ehm Matěj",
-    "Eipe Joel Chacko Gamrath",
-    "Fadel Kopřiva Dominik",
-    "Fadel Louda Jan",
-    "Fiala Jan",
-    "Filimon Collins",
-    "Fišerová Eva",
-    "Fliglová Nela",
-    "Foukal Aleš",
-    "Foukalová Iva",
-    "Foukalová Iva\tKurzová Dominika",
-    "Frischová Kateřina",
-    "Frýdek Jan",
-    "Fuchsová Michaela",
-    "Gavnholt Kristína",
-    "Gilmour Kirsty",
-    "Golas Mateusz",
-    "Goldwasser Emilia",
-    "Grimley Christopher",
-    "Grimley Matthew",
-    "Grund Michal",
-    "Hamáček Michal",
-    "Hankiewicz Paulina",
-    "Havlíček Jaroslav",
-    "Havlíček Michael",
-    "Havlíček Vojtěch",
-    "Hede Jakob",
-    "Helešicová Barbora",
-    "Hnilica Petr",
-    "Hnilicová Jana",
-    "Holeček Jaroslav",
-    "Holub Lukáš",
-    "Horák Jakub",
-    "Horáček David",
-    "Hořínková Soňa",
-    "Hrazdíra Patrik",
-    "Hrubá Viola",
-    "Hubáček Jan",
-    "Hubáček Matěj",
-    "Hurtík Jonáš",
-    "Ickert Daniel",
-    "Ivana\tHankiewicz Paulina",
-    "Janoušek Petr",
-    "Janoštík Jan",
-    "Janáček Jaromír",
-    "Jarošová Veronika",
-    "Kadirun Farusdaq Abdul",
-    "Kadirun Farusdaq Abdul\tJanoušek Petr",
-    "Kadlec Sebastián",
-    "Kadlecová Olívia",
-    "Kaletka Wiktoria",
-    "Kalkušová Karolína",
-    "Kašša Marek",
-    "Kelnarová Eliška",
-    "Kerpl Dennis",
-    "Kerplová Sofia",
-    "Klapal Tomáš",
-    "Klapalová Adéla",
-    "Klausholm Anna",
-    "Klimeš Ondřej",
-    "Klimeš Vojtěch",
-    "Klíma Kryštof",
-    "Knotková Barbora",
-    "Kobyláková Andrea",
-    "Koliášová Kateřina",
-    "Kopřiva Dominik",
-    "Kordek Patryk",
-    "Kovář Milan",
-    "Kozempelová Kristina",
-    "Kozáková Kristýna",
-    "Koňas Jan",
-    "Krpatová Lucie",
-    "Krpatová Pavlína",
-    "Král Adam",
-    "Král Jiří",
-    "Král Ondřej",
-    "Král Ondřej\t Klausholm Anna",
-    "Král Ondřej\tKlausholm Anna",
-    "Kubečková Veronika",
-    "Kuchová Anna",
-    "Kurzová Dominika",
-    "Kwinta Dominik",
-    "Lachezarov Raška Jakub",
-    "Lachezarov Tvrdík Lukáš",
-    "Larsen Jonathan",
-    "Lassen Nielsen",
-    "Lassen Nielsen Sebastian",
-    "Lavrova Sofiia",
-    "Lee",
-    "Lee Bízek Vojtěch",
-    "Lee Macák Jan",
-    "Lotková Adéla",
-    "Louda Jan",
-    "Louda Jiří",
-    "Ludík Milan",
-    "Lundsgaard Calvin",
-    "Láznička Jakub",
-    "Líbal Štěpán",
-    "Líbalová Šárka",
-    "Macák Jan",
-    "Maixnerová Amélie",
-    "Maixnerová Petra",
-    "Makboul Romeo",
-    "Marczak Kornelie",
-    "Marek Filip",
-    "Matiska David",
-    "Maňásek Pavel",
-    "Melaniuk Jakub",
-    "Mendrek Adam",
-    "Mendrek Wojciech",
-    "Mikelová Kateřina",
-    "Mikešová Eliška",
-    "Moravec Michal",
-    "Morávek Michal",
-    "Muhammad Andi",
-    "Muhammad Andi Fadel",
-    "Nielsen Mathias",
-    "Nielsen Mathias Solgaard",
-    "Nielsen Mathias Solgaard\tBurget Adam",
-    "Nikolov Daniel",
-    "Nikolov Daniel Lachezarov",
-    "Nowak Oliver",
-    "Nowak Oliver Lee",
-    "Ociepa Maciej",
-    "Orzechowicz Jessica",
-    "Osičková Erika",
-    "Osladilová Kateřina",
-    "Oswald Michal",
-    "Otáhalová Barbora",
-    "Oubrechtová Kateřina",
-    "Ovčačík Jan",
-    "Palán Václav",
-    "Pargačová Anna",
-    "Patzák Lukáš",
-    "Pawliková Veronika",
-    "Petrovič Alex",
-    "Petrovič Viktor",
-    "Petrušková Klára",
-    "Pixová Aneta",
-    "Pleska Josef",
-    "Podivín Václav",
-    "Popovska Hristomira",
-    "Poříz Vojtěch",
-    "Pražák Dennis",
-    "Puffr Matyáš",
-    "Puńko Bartosz",
-    "Rajan Kwinta Dominik",
-    "Rajan Szymanowski Mikolaj",
-    "Rajarajan Karan",
-    "Rajarajan Karan Rajan",
-    "Rataj Vojtěch",
-    "Raška Jakub",
-    "Raška Libor",
-    "Reichman Jakub",
-    "Renoir Lucas",
-    "Rogalski Michal",
-    "Rue Rasmussen Niels Magnus",
-    "Ryba František",
-    "Rzeplinski Matěj",
-    "Rázl Jan",
-    "Sagáčik Jakub",
-    "Sandorhazi Vivien",
-    "Schumpeter Marek",
-    "Sebastian Poříz Vojtěch",
-    "Sedláčková Vanda",
-    "Sillassen Benedicte",
-    "Skrčená Malvína",
-    "Skála Tomáš",
-    "Skřivan Jakub",
-    "Slavík Matyáš",
-    "Slobodová Natália",
-    "Slosiariková Sofia",
-    "Slíva David",
-    "Slíva Martin",
-    "Smith Callum",
-    "Smutný David",
-    "Soby Hansen Jeppe",
-    "Solgaard Grund Michal",
-    "Solgaard Smith Callum",
-    "Srnec Adam",
-    "Stará Natálie",
-    "Stejskal David",
-    "Stokfisz Kinga",
-    "Stokfisz Szymon",
-    "Stoliarenko Mariia",
-    "Strejček Vojtěch",
-    "Suchý Andrej",
-    "Suchý Simeon",
-    "Svendsen Victor",
-    "Synovec Pavel",
-    "Szarzec Adam",
-    "Szczypka Michal",
-    "Szydlowski Przemyslaw",
-    "Szymanowski Mikolaj",
-    "Thor Lukáš",
-    "Titěra Filip",
-    "Tomalová Kateřina",
-    "Toman Václav",
-    "Tomešová Karolína",
-    "Torrance Ciara",
-    "Trecki Wiktor",
-    "Trecki Wiktor\tFilimon Collins",
-    "Treperová",
-    "Treperová Ivana",
-    "Trkan Gabriel",
-    "Turoňová Adéla",
-    "Tvrdík Lukáš",
-    "Tůma Dalibor",
-    "Urbanec Tomáš",
-    "Urbánková Veronika",
-    "Vajsejtl Jiří",
-    "Valentová Kateřina",
-    "Valášek Martin",
-    "Van Dalm Kajsa",
-    "Vavrečková Anna",
-    "Veght Laura",
-    "Viktora Jan",
-    "Vitman Andjela",
-    "Vitoš Michal",
-    "Vitvera Jakub",
-    "Vnoučková Karolína",
-    "Volf Matěj",
-    "Vorlík Jan",
-    "Voráč Přemysl",
-    "Vrbka Tomáš",
-    "Vrchotický František",
-    "Vícen Jarolím",
-    "Walder Jakub",
-    "Waliszewski Marek",
-    "Wojewodová Marie",
-    "Wsól Lukáš",
-    "Zelinková Michaela",
-    "Závodný Ondřej",
-    "scr",
-    "Čada Daniel",
-    "Čermák Filip",
-    "Černá Lucie",
-    "Šilhavá Klára",
-    "Šilhavá Radka",
-    "Šolar Ondřej",
-    "Šulc Adam",
-    "Švejda Tomáš",
-    "Šváb Matěj",
-    "Švábíková Tereza",
-    "Šída Mirko"
-  ],
   "tymy": {
     "extraliga": [
       "B.O. Chance Ostrava Sportclub",
@@ -9599,8 +9304,258 @@
       "TJ Astra Zahradní Město",
       "TJ Slovan Vesec",
       "TJ Sokol Radotín"
-    ]
+    ],
+    "prvni-liga-playoff": []
   },
-  "datum": "2026-02-16T12:43:32.072Z",
-  "verze": "2.0"
+  "vitezove": [
+    {
+      "sezona": "2024/25",
+      "tym": "SK Brno Slatina"
+    },
+    {
+      "sezona": "2023/24",
+      "tym": "SK Brno Slatina"
+    },
+    {
+      "sezona": "2022/23",
+      "tym": "SK Brno Slatina"
+    },
+    {
+      "sezona": "2021/22",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2020/21",
+      "tym": "nehráno (Covid-19)"
+    },
+    {
+      "sezona": "2019/20",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2018/19",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2017/18",
+      "tym": "Badminton FSpS MU Brno"
+    },
+    {
+      "sezona": "2016/17",
+      "tym": "Badminton FSpS MU Brno"
+    },
+    {
+      "sezona": "2015/16",
+      "tym": "Sokol Radotín Meteor Praha"
+    },
+    {
+      "sezona": "2014/15",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2013/14",
+      "tym": "TJ Sokol Brno-Jehnice"
+    },
+    {
+      "sezona": "2012/13",
+      "tym": "TJ Sokol Brno-Jehnice"
+    },
+    {
+      "sezona": "2011/12",
+      "tym": "TJ Sokol Brno-Jehnice"
+    },
+    {
+      "sezona": "2010/11",
+      "tym": "TJ Sokol Brno-Jehnice"
+    },
+    {
+      "sezona": "2009/10",
+      "tym": "TJ Sokol Brno-Jehnice"
+    },
+    {
+      "sezona": "2008/09",
+      "tym": "Sokol Radotín Meteor Praha"
+    },
+    {
+      "sezona": "2007/08",
+      "tym": "TJ Sokol Dobruška"
+    },
+    {
+      "sezona": "2006/07",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2005/06",
+      "tym": "Sokol Radotín Meteor Praha"
+    },
+    {
+      "sezona": "2004/05",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2003/04",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2002/03",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2001/02",
+      "tym": "BK 1973 Benátky nad Jizerou"
+    },
+    {
+      "sezona": "2000/01",
+      "tym": "Sokol Radotín Meteor Praha"
+    },
+    {
+      "sezona": "1999/2000",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1998/99",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1997/98",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1996/97",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1995/96",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1994/95",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1993/94",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1992/93",
+      "tym": "ČKD Kompresory Praha"
+    },
+    {
+      "sezona": "1991/92",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1990/91",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1989/90",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1988/99",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1987/88",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1986/87",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1985/86",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1984/85",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1983/84",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1982/83",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1981/82",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1980/81",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1979/80",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1978/79",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1977/78",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1976/77",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1975/76",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1974/75",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1973/74",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1972/73",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1971/72",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1970/71",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1969/70",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1968/69",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1967/68",
+      "tym": "Spoje Praha"
+    },
+    {
+      "sezona": "1966/67",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1965/66",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1964/65",
+      "tym": "Meteor Praha"
+    },
+    {
+      "sezona": "1963/64",
+      "tym": "Spoje Praha"
+    }
+  ],
+  "datum": "2026-02-17T16:57:45.464Z"
 }
