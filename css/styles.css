@@ -250,18 +250,19 @@ body.dark-mode .close:hover { color: #ef4444; }
 /* View toggle (Základní část / Play-off) */
 .view-toggle {
     display: inline-flex;
-    background: #f3f4f6;
-    border-radius: 8px;
+    background: linear-gradient(135deg, #fecaca, #fecdd3);
+    border: 2px solid #d93831;
+    border-radius: 10px;
     padding: 3px;
     gap: 2px;
 }
 
 .view-toggle-btn {
-    padding: 6px 16px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #6b7280;
+    padding: 8px 20px;
+    border-radius: 7px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #991b1b;
     cursor: pointer;
     transition: all 0.2s;
     border: none;
@@ -269,30 +270,34 @@ body.dark-mode .close:hover { color: #ef4444; }
 }
 
 .view-toggle-btn:hover {
-    color: #374151;
+    color: #7f1d1d;
+    background: rgba(255,255,255,0.4);
 }
 
 .view-toggle-btn.active {
     background: white;
-    color: #1d4ed8;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    color: #d93831;
+    box-shadow: 0 2px 6px rgba(217,56,49,0.3);
 }
 
 body.dark-mode .view-toggle {
-    background: #374151;
+    background: linear-gradient(135deg, #7f1d1d, #991b1b);
+    border-color: #ef4444;
 }
 
 body.dark-mode .view-toggle-btn {
-    color: #9ca3af;
+    color: #fca5a5;
 }
 
 body.dark-mode .view-toggle-btn:hover {
-    color: #e5e7eb;
+    color: #fecaca;
+    background: rgba(255,255,255,0.1);
 }
 
 body.dark-mode .view-toggle-btn.active {
     background: #1f2937;
-    color: #60a5fa;
+    color: #f87171;
+    box-shadow: 0 2px 6px rgba(239,68,68,0.3);
 }
 
 /* Playoff bracket - proper sports bracket layout */
