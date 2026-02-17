@@ -175,11 +175,49 @@ const Playoff = {
             qfRes2 ? qfRes2.skore1 + ':' + qfRes2.skore2 : null
         );
 
-        // SF results
+        // SF results - seeding based on regular season standings, not QF bracket position
+        // #1 plays against the lower-seeded QF winner (worse regular season standing)
+        // #2 plays against the higher-seeded QF winner (better regular season standing)
+        let sfTym1B = null; // opponent for #1 (lower-seeded QF winner)
+        let sfTym2B = null; // opponent for #2 (higher-seeded QF winner)
+
+        if (qfVitez1 && qfVitez2) {
+            // Both QF winners known - reseed based on regular season standings
+            const seed1 = tymy.indexOf(qfVitez1);
+            const seed2 = tymy.indexOf(qfVitez2);
+            // Higher index = lower in standings = plays against #1
+            if (seed1 > seed2) {
+                sfTym1B = qfVitez1; // lower-seeded goes to SF1 vs #1
+                sfTym2B = qfVitez2; // higher-seeded goes to SF2 vs #2
+            } else {
+                sfTym1B = qfVitez2;
+                sfTym2B = qfVitez1;
+            }
+        } else if (qfVitez1) {
+            // Only one QF winner known - can't reseed yet, try to find SF match
+            const sfCheck = this.findResult(res, 'SF', t(0), qfVitez1);
+            if (sfCheck) {
+                sfTym1B = qfVitez1;
+            } else {
+                const sfCheck2 = this.findResult(res, 'SF', t(1), qfVitez1);
+                if (sfCheck2) {
+                    sfTym2B = qfVitez1;
+                }
+            }
+        } else if (qfVitez2) {
+            const sfCheck = this.findResult(res, 'SF', t(0), qfVitez2);
+            if (sfCheck) {
+                sfTym1B = qfVitez2;
+            } else {
+                const sfCheck2 = this.findResult(res, 'SF', t(1), qfVitez2);
+                if (sfCheck2) {
+                    sfTym2B = qfVitez2;
+                }
+            }
+        }
+
         const sfTym1A = t(0); // 1st seed always in SF1
-        const sfTym1B = qfVitez1; // winner of QF1
         const sfTym2A = t(1); // 2nd seed always in SF2
-        const sfTym2B = qfVitez2; // winner of QF2
 
         const sfRes1 = sfTym1B ? this.findResult(res, 'SF', sfTym1A, sfTym1B) : null;
         const sfRes2 = sfTym2B ? this.findResult(res, 'SF', sfTym2A, sfTym2B) : null;
@@ -190,7 +228,7 @@ const Playoff = {
             this.teamCard(sfTym1A, '1.', sfVitez1 === sfTym1A ? 'playoff-team-green' : 'playoff-team-green', null, sfRes1 ? (sfRes1.tym1 === sfTym1A ? sfRes1.skore1 : sfRes1.skore2) : undefined),
             sfTym1B
                 ? this.teamCard(sfTym1B, 'QF', sfVitez1 === sfTym1B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1B ? sfRes1.skore1 : sfRes1.skore2) : undefined)
-                : this.pendingCard('Vítěz ČF 1'),
+                : this.pendingCard('Níže nasazený z ČF'),
             'Semifinále 1',
             sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null
         );
@@ -198,7 +236,7 @@ const Playoff = {
             this.teamCard(sfTym2A, '2.', sfVitez2 === sfTym2A ? 'playoff-team-green' : 'playoff-team-green', null, sfRes2 ? (sfRes2.tym1 === sfTym2A ? sfRes2.skore1 : sfRes2.skore2) : undefined),
             sfTym2B
                 ? this.teamCard(sfTym2B, 'QF', sfVitez2 === sfTym2B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2B ? sfRes2.skore1 : sfRes2.skore2) : undefined)
-                : this.pendingCard('Vítěz ČF 2'),
+                : this.pendingCard('Výše nasazený z ČF'),
             'Semifinále 2',
             sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null
         );
@@ -261,7 +299,7 @@ const Playoff = {
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> Přímý postup do Final Four (1.–2.)</span>' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm ml-4"><span class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></span> Čtvrtfinále (3.–6.)</span>' +
         '</div>' +
-        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulce základní části. Výsledky se doplňují automaticky z dat play-off (kolo: QF/SF/F).</p>';
+        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulce základní části. V semifinále hraje 1. tým proti níže nasazenému postupujícímu z ČF a 2. tým proti výše nasazenému. Výsledky se doplňují automaticky z dat play-off (kolo: QF/SF/F).</p>';
     },
 
     renderPrvniLigaBracket() {
