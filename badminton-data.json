@@ -2352,6 +2352,174 @@
         "sety": "11:8, 9:11, 11:7, 11:8",
         "tymDomaci": "BA Plzeň",
         "tymHoste": "SK Prosek Praha"
+      },
+      {
+        "id": 1774813387216.3025,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Szymanowski Mikolaj",
+        "hoste": "Rajarajan Karan Rajan",
+        "vysledek": "3:1",
+        "sety": "10:12, 11:9, 12:10, 11:5",
+        "tymDomaci": "BA Plzeň",
+        "tymHoste": "TJ Sokol Klimkovice"
+      },
+      {
+        "id": 1774813387216.5544,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Louda Jan",
+        "hoste": "Danielak Maksymilian",
+        "vysledek": "3:0",
+        "sety": "11:3, 11:5, 11:8",
+        "tymDomaci": "BA Plzeň",
+        "tymHoste": "TJ Sokol Klimkovice"
+      },
+      {
+        "id": 1774813387216.1902,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Dvouhra žen",
+        "domaci": "Šilhavá Klára",
+        "hoste": "Tomalová Kateřina",
+        "vysledek": "3:1",
+        "sety": "11:9, 4:11, 11:8, 13:11",
+        "tymDomaci": "BA Plzeň",
+        "tymHoste": "TJ Sokol Klimkovice"
+      },
+      {
+        "id": 1774813387216.932,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Čtyřhra mužů",
+        "domaci": "Král Jiří, Král Ondřej",
+        "hoste": "Rajarajan Karan Rajan, Budzel Filip",
+        "vysledek": "3:0",
+        "sety": "11:5, 11:9, 11:1",
+        "tymDomaci": "BA Plzeň",
+        "tymHoste": "TJ Sokol Klimkovice"
+      },
+      {
+        "id": 1774813387216.9392,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Čtyřhra mužů",
+        "domaci": "Švejda Tomáš, Trecki Wiktor",
+        "hoste": "",
+        "vysledek": "3:0",
+        "sety": "11:0, 11:0, 11:0",
+        "tymDomaci": "BA Plzeň",
+        "tymHoste": "TJ Sokol Klimkovice"
+      },
+      {
+        "id": 1774813387216.1724,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Čtyřhra žen",
+        "domaci": "Šilhavá Radka, Šilhavá Klára",
+        "hoste": "Petrušková Klára, Tomalová Kateřina",
+        "vysledek": "0:0",
+        "sety": "",
+        "tymDomaci": "BA Plzeň",
+        "tymHoste": "TJ Sokol Klimkovice"
+      },
+      {
+        "id": 1774813387216.1316,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Smíšená čtyřhra",
+        "domaci": "Švejda Tomáš, Vitman Andjela",
+        "hoste": "Danielak Maksymilian, Petrušková Klára",
+        "vysledek": "3:0",
+        "sety": "11:6, 11:5, 11:6",
+        "tymDomaci": "BA Plzeň",
+        "tymHoste": "TJ Sokol Klimkovice"
+      },
+      {
+        "id": 1774813477282.1833,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Kwinta Dominik",
+        "hoste": "Bruun Jepe",
+        "vysledek": "3:1",
+        "sety": "11:5, 8:11, 11:3, 11:9",
+        "tymDomaci": "BK Meteor Praha",
+        "tymHoste": "BK 1973 Benátky nad Jizerou"
+      },
+      {
+        "id": 1774813477282.6006,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Kopřiva Dominik",
+        "hoste": "Patzák Lukáš",
+        "vysledek": "3:0",
+        "sety": "11:5, 11:8, 13:11",
+        "tymDomaci": "BK Meteor Praha",
+        "tymHoste": "BK 1973 Benátky nad Jizerou"
+      },
+      {
+        "id": 1774813477282.9336,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Dvouhra žen",
+        "domaci": "Maixnerová Petra",
+        "hoste": "Andersen Irina",
+        "vysledek": "3:1",
+        "sety": "11:9, 7:11, 11:6, 11:7",
+        "tymDomaci": "BK Meteor Praha",
+        "tymHoste": "BK 1973 Benátky nad Jizerou"
+      },
+      {
+        "id": 1774813477282.7583,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Čtyřhra mužů",
+        "domaci": "Szydlowski Przemyslaw, Cybulski Robert",
+        "hoste": "Renoir Lucas, Lundsgaard Calvin",
+        "vysledek": "0:0",
+        "sety": "",
+        "tymDomaci": "BK Meteor Praha",
+        "tymHoste": "BK 1973 Benátky nad Jizerou"
+      },
+      {
+        "id": 1774813477282.9558,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Čtyřhra mužů",
+        "domaci": "Kopřiva Dominik, Corvee Lucas",
+        "hoste": "Havlíček Vojtěch, Soby Hansen Jeppe",
+        "vysledek": "0:0",
+        "sety": "",
+        "tymDomaci": "BK Meteor Praha",
+        "tymHoste": "BK 1973 Benátky nad Jizerou"
+      },
+      {
+        "id": 1774813477282.9316,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Čtyřhra žen",
+        "domaci": "Maixnerová Petra, Stoliarenko Mariia",
+        "hoste": "Torrance Ciara, Bergstein Iben",
+        "vysledek": "0:0",
+        "sety": "",
+        "tymDomaci": "BK Meteor Praha",
+        "tymHoste": "BK 1973 Benátky nad Jizerou"
+      },
+      {
+        "id": 1774813477282.378,
+        "kolo": "QF",
+        "datum": "2026-03-29",
+        "disciplina": "Smíšená čtyřhra",
+        "domaci": "Stoliarenko Mariia, Corvee Lucas",
+        "hoste": "Lundsgaard Calvin, Bergstein Iben",
+        "vysledek": "3:2",
+        "sety": "11:5, 7:11, 15:14, 7:11, 14:12",
+        "tymDomaci": "BK Meteor Praha",
+        "tymHoste": "BK 1973 Benátky nad Jizerou"
       }
     ],
     "prvni-liga-vychod": [
@@ -9557,5 +9725,5 @@
       "tym": "Spoje Praha"
     }
   ],
-  "datum": "2026-02-17T16:57:45.464Z"
+  "datum": "2026-03-29T19:44:43.666Z"
 }
