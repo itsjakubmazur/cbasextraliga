@@ -104,10 +104,12 @@ const Modals = {
         
         let dv = 0, dp = 0, hv = 0, hp = 0;
         domaci.forEach(z => {
+            if (Statistics.isNeodehrano(z)) return;
             const v = Statistics.parseVysledek(z.vysledek);
             if (v.domaci > v.hoste) dv++; else dp++;
         });
         hoste.forEach(z => {
+            if (Statistics.isNeodehrano(z)) return;
             const v = Statistics.parseVysledek(z.vysledek);
             if (v.hoste > v.domaci) hv++; else hp++;
         });
@@ -134,6 +136,7 @@ const Modals = {
         const utkaniHtml = Object.values(utkani).map(u => {
             let vyhraneZapasy = 0, prohraneZapasy = 0;
             u.zapasy.forEach(z => {
+                if (Statistics.isNeodehrano(z)) return;
                 const v = Statistics.parseVysledek(z.vysledek);
                 if (u.doma) {
                     if (v.domaci > v.hoste) vyhraneZapasy++; else prohraneZapasy++;
@@ -160,9 +163,11 @@ const Modals = {
         
         const hraci = {};
         zapasyTymu.forEach(z => {
+            if (Statistics.isNeodehrano(z)) return;
             const jeDom = z.tymDomaci === tym;
             const hraciT = jeDom ? Statistics.getHraciFromTeam(z.domaci) : Statistics.getHraciFromTeam(z.hoste);
             hraciT.forEach(h => {
+                if (h === 'SKREČ') return;
                 if (!hraci[h]) hraci[h] = { zapasy: 0, vyhry: 0, prohry: 0 };
                 hraci[h].zapasy++;
                 const v = Statistics.parseVysledek(z.vysledek);
@@ -199,20 +204,35 @@ const Modals = {
     zobrazitDetailUtkani(result) {
         const modal = document.getElementById('utkaniModal');
         const koloNazev = Statistics.playoffKoloNazev(result.kolo);
-        document.getElementById('modalUtkaniNazev').textContent = koloNazev + ': ' + result.tym1 + ' vs ' + result.tym2;
+        document.getElementById('modalUtkaniNazev').innerHTML =
+            koloNazev + ': ' +
+            '<span class="clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(result.tym1) + '\')">' + Statistics.escapeHtml(result.tym1) + '</span>' +
+            ' vs ' +
+            '<span class="clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(result.tym2) + '\')">' + Statistics.escapeHtml(result.tym2) + '</span>';
         document.getElementById('modalUtkaniSkore').textContent = result.skore1 + ' : ' + result.skore2;
+
+        const hracLink = (jmeno) =>
+            '<span class="clickable" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(jmeno) + '\')">' + Statistics.escapeHtml(jmeno) + '</span>';
+
+        const hracyHtml = (pole) => {
+            if (!pole || pole === 'SKREČ') return '<span class="text-amber-700 font-semibold">SKREČ</span>';
+            return Statistics.getHraciFromTeam(pole).map(h => hracLink(h)).join(', ');
+        };
 
         const radky = result.zapasy.map(z => {
             const v = Statistics.parseVysledek(z.vysledek);
-            const neodehrano = v.domaci === 0 && v.hoste === 0;
+            const neodehrano = Statistics.isNeodehrano(z);
+            const skrecZapas = Statistics.isSkrec(z);
             const vyhralDomaci = v.domaci > v.hoste;
-            const rowCls = neodehrano ? 'bg-gray-50 text-gray-400' : (vyhralDomaci ? 'bg-blue-50' : 'bg-purple-50');
+            const rowCls = neodehrano
+                ? 'bg-gray-50 text-gray-400'
+                : (skrecZapas ? 'bg-amber-50' : (vyhralDomaci ? 'bg-blue-50' : 'bg-purple-50'));
             return '<tr class="border-b text-xs ' + rowCls + '">' +
                 '<td class="p-2">' + Statistics.escapeHtml(z.disciplina || '') + '</td>' +
-                '<td class="p-2">' + Statistics.escapeHtml(z.domaci || '') + '</td>' +
-                '<td class="p-2">' + Statistics.escapeHtml(z.hoste || '') + '</td>' +
-                '<td class="p-2 text-center font-bold">' + z.vysledek + '</td>' +
-                '<td class="p-2 text-gray-600">' + (z.sety || '-') + '</td>' +
+                '<td class="p-2">' + hracyHtml(z.domaci) + '</td>' +
+                '<td class="p-2">' + hracyHtml(z.hoste) + '</td>' +
+                '<td class="p-2 text-center font-bold">' + (neodehrano ? '–' : z.vysledek) + '</td>' +
+                '<td class="p-2 text-gray-600">' + (z.sety || '–') + '</td>' +
                 '</tr>';
         }).join('');
 

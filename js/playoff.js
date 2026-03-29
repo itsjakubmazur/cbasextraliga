@@ -47,7 +47,7 @@ const Playoff = {
             let v1 = 0, v2 = 0;
             r.zapasy.forEach(z => {
                 const v = Statistics.parseVysledek(z.vysledek);
-                if (v.domaci === 0 && v.hoste === 0) return; // neodehraný zápas
+                if (Statistics.isNeodehrano(z)) return; // neodehraný zápas
                 const jeTym1Domaci = z.tymDomaci === r.tym1;
                 if (jeTym1Domaci) {
                     if (v.domaci > v.hoste) v1++; else v2++;
@@ -86,7 +86,7 @@ const Playoff = {
             let v1 = 0, v2 = 0;
             r.zapasy.forEach(z => {
                 const v = Statistics.parseVysledek(z.vysledek);
-                if (v.domaci === 0 && v.hoste === 0) return; // neodehraný zápas
+                if (Statistics.isNeodehrano(z)) return; // neodehraný zápas
                 const jeTym1Domaci = z.tymDomaci === r.tym1;
                 if (jeTym1Domaci) {
                     if (v.domaci > v.hoste) v1++; else v2++;

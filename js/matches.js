@@ -7,7 +7,7 @@ const Matches = {
             zapasyKZobrazeni = zapasyKZobrazeni.concat(Data.zapasy['prvni-liga-playoff']);
         }
 
-        document.getElementById('pocetZapasu').textContent = zapasyKZobrazeni.length;
+        document.getElementById('pocetZapasu').textContent = zapasyKZobrazeni.filter(z => !Statistics.isNeodehrano(z)).length;
 
         // Seskupit zápasy podle utkání (kolo + týmy)
         const utkani = {};
@@ -42,15 +42,19 @@ const Matches = {
             // Detail zápasů (defaultně skrytý)
             const detailZapasy = utk.zapasy.map(z => {
                 const v = Statistics.parseVysledek(z.vysledek);
-                const neodehrano = v.domaci === 0 && v.hoste === 0;
+                const neodehrano = Statistics.isNeodehrano(z);
+                const skrecZapas = Statistics.isSkrec(z);
                 const vyhralDomaci = v.domaci > v.hoste;
-                const rowCls = neodehrano ? 'bg-gray-50 text-gray-400' : (vyhralDomaci ? 'bg-blue-50' : 'bg-purple-50');
+                const rowCls = neodehrano
+                    ? 'bg-gray-50 text-gray-400'
+                    : (skrecZapas ? 'bg-amber-50' : (vyhralDomaci ? 'bg-blue-50' : 'bg-purple-50'));
+                const skrecBadge = skrecZapas ? ' <span class="text-xs font-semibold text-amber-700">(SKREČ)</span>' : '';
                 return '<tr class="text-xs ' + rowCls + '">' +
                     '<td class="p-2 pl-8">' + z.disciplina + '</td>' +
-                    '<td class="p-2">' + z.domaci + '</td>' +
+                    '<td class="p-2">' + z.domaci + skrecBadge + '</td>' +
                     '<td class="p-2">' + z.hoste + '</td>' +
-                    '<td class="p-2 text-center font-bold">' + z.vysledek + '</td>' +
-                    '<td class="p-2 text-xs text-gray-600">' + (z.sety || '-') + '</td>' +
+                    '<td class="p-2 text-center font-bold">' + (neodehrano ? '–' : z.vysledek) + '</td>' +
+                    '<td class="p-2 text-xs text-gray-600">' + (z.sety || '–') + '</td>' +
                     '</tr>';
             }).join('');
             
