@@ -196,6 +196,39 @@ const Modals = {
         modal.style.display = 'block';
     },
 
+    zobrazitDetailUtkani(result) {
+        const modal = document.getElementById('utkaniModal');
+        const koloNazev = Statistics.playoffKoloNazev(result.kolo);
+        document.getElementById('modalUtkaniNazev').textContent = koloNazev + ': ' + result.tym1 + ' vs ' + result.tym2;
+        document.getElementById('modalUtkaniSkore').textContent = result.skore1 + ' : ' + result.skore2;
+
+        const radky = result.zapasy.map(z => {
+            const v = Statistics.parseVysledek(z.vysledek);
+            const neodehrano = v.domaci === 0 && v.hoste === 0;
+            const vyhralDomaci = v.domaci > v.hoste;
+            const rowCls = neodehrano ? 'bg-gray-50 text-gray-400' : (vyhralDomaci ? 'bg-blue-50' : 'bg-purple-50');
+            return '<tr class="border-b text-xs ' + rowCls + '">' +
+                '<td class="p-2">' + Statistics.escapeHtml(z.disciplina || '') + '</td>' +
+                '<td class="p-2">' + Statistics.escapeHtml(z.domaci || '') + '</td>' +
+                '<td class="p-2">' + Statistics.escapeHtml(z.hoste || '') + '</td>' +
+                '<td class="p-2 text-center font-bold">' + z.vysledek + '</td>' +
+                '<td class="p-2 text-gray-600">' + (z.sety || '-') + '</td>' +
+                '</tr>';
+        }).join('');
+
+        document.getElementById('modalUtkaniObsah').innerHTML =
+            '<div class="overflow-x-auto"><table class="w-full">' +
+            '<thead><tr class="bg-gray-100 border-b-2 text-xs">' +
+            '<th class="text-left p-2">Disciplína</th>' +
+            '<th class="text-left p-2">Domácí</th>' +
+            '<th class="text-left p-2">Hosté</th>' +
+            '<th class="text-center p-2">Výsl.</th>' +
+            '<th class="text-left p-2">Skóre</th>' +
+            '</tr></thead><tbody>' + radky + '</tbody></table></div>';
+
+        modal.style.display = 'block';
+    },
+
     zavritModal(modalId) {
         document.getElementById(modalId).style.display = 'none';
     }

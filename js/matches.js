@@ -31,18 +31,21 @@ const Matches = {
             let domaciVyhry = 0, hosteVyhry = 0;
             utk.zapasy.forEach(z => {
                 const v = Statistics.parseVysledek(z.vysledek);
+                if (v.domaci === 0 && v.hoste === 0) return; // neodehraný zápas
                 if (v.domaci > v.hoste) domaciVyhry++;
                 else hosteVyhry++;
             });
-            
+
             const domaciVyhral = domaciVyhry > hosteVyhry;
             const vysledekClass = domaciVyhral ? 'text-blue-600' : 'text-purple-600';
-            
+
             // Detail zápasů (defaultně skrytý)
             const detailZapasy = utk.zapasy.map(z => {
                 const v = Statistics.parseVysledek(z.vysledek);
+                const neodehrano = v.domaci === 0 && v.hoste === 0;
                 const vyhralDomaci = v.domaci > v.hoste;
-                return '<tr class="text-xs ' + (vyhralDomaci ? 'bg-blue-50' : 'bg-purple-50') + '">' +
+                const rowCls = neodehrano ? 'bg-gray-50 text-gray-400' : (vyhralDomaci ? 'bg-blue-50' : 'bg-purple-50');
+                return '<tr class="text-xs ' + rowCls + '">' +
                     '<td class="p-2 pl-8">' + z.disciplina + '</td>' +
                     '<td class="p-2">' + z.domaci + '</td>' +
                     '<td class="p-2">' + z.hoste + '</td>' +
