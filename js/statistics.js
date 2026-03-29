@@ -90,12 +90,13 @@ const Statistics = {
             return domaciHraci.includes(hrac) || hosteHraci.includes(hrac);
         }).slice(-5);
         
-        return hracovaZapasy.map(zapas => {
+        return hracovaZapasy.flatMap(zapas => {
             const vysledek = this.parseVysledek(zapas.vysledek);
+            if (vysledek.domaci === 0 && vysledek.hoste === 0) return []; // neodehraný zápas
             const domaciHraci = this.getHraciFromTeam(zapas.domaci);
             const jeHracDomaci = domaciHraci.includes(hrac);
             const vyhral = jeHracDomaci ? (vysledek.domaci > vysledek.hoste) : (vysledek.hoste > vysledek.domaci);
-            return vyhral ? 'V' : 'P';
+            return [vyhral ? 'V' : 'P'];
         }).join('');
     },
 
@@ -106,7 +107,10 @@ const Statistics = {
         
         Data.zapasy[aktualni_soutez].forEach(zapas => {
             if (vybrana_kola.size > 0 && !vybrana_kola.has(zapas.kolo)) return;
-            
+
+            const _vysledekCheck = this.parseVysledek(zapas.vysledek);
+            if (_vysledekCheck.domaci === 0 && _vysledekCheck.hoste === 0) return; // neodehraný zápas
+
             if (filtrDisciplina) {
                 const jeDvouhra = zapas.disciplina?.toLowerCase().includes('dvouhra');
                 const jeCtyrhra = zapas.disciplina?.toLowerCase().includes('čtyřhra') || 
@@ -209,6 +213,7 @@ const Statistics = {
             utk.zapasy.forEach(zapas => {
                 const vysledek = this.parseVysledek(zapas.vysledek);
                 const bodyData = this.parseSety(zapas.sety);
+                if (vysledek.domaci === 0 && vysledek.hoste === 0) return; // neodehraný zápas
                 if (vysledek.domaci > vysledek.hoste) domaciZapasy++; else hosteZapasy++;
                 domaciSety += vysledek.domaci;
                 hosteSety += vysledek.hoste;
