@@ -92,6 +92,15 @@ const Statistics = {
         });
     },
 
+    // Returns all matches for a soutez, including playoff matches for 1. liga groups
+    getZapasyProSoutez(aktualni_soutez) {
+        const zapasy = [...(Data.zapasy[aktualni_soutez] || [])];
+        if (aktualni_soutez === 'prvni-liga-vychod' || aktualni_soutez === 'prvni-liga-zapad') {
+            return zapasy.concat(Data.zapasy['prvni-liga-playoff'] || []);
+        }
+        return zapasy;
+    },
+
     getForma(hrac, vsechnyZapasy) {
         const hracovaZapasy = vsechnyZapasy.filter(z => {
             const domaciHraci = this.getHraciFromTeam(z.domaci);
@@ -113,8 +122,8 @@ const Statistics = {
         const stats = {};
         const filtrTym = document.getElementById('filtrTym')?.value || '';
         const filtrDisciplina = document.getElementById('filtrDisciplina')?.value || '';
-        
-        Data.zapasy[aktualni_soutez].forEach(zapas => {
+
+        this.getZapasyProSoutez(aktualni_soutez).forEach(zapas => {
             if (vybrana_kola.size > 0 && !vybrana_kola.has(zapas.kolo)) return;
 
             if (this.isNeodehrano(zapas)) return; // neodehraný zápas

@@ -18,7 +18,7 @@ const Modals = {
         const nejTym = Object.keys(s.tymy).length > 0 ? Object.entries(s.tymy).sort((a, b) => b[1] - a[1])[0][0] : '-';
         document.getElementById('modalHracInfo').textContent = nejTym + ' • ' + s.zapasy + ' zápasů • ' + winRate + '% úspěšnost';
 
-        const forma = Statistics.getForma(hrac, Data.zapasy[soutezProHrace]);
+        const forma = Statistics.getForma(hrac, Statistics.getZapasyProSoutez(soutezProHrace));
         const formaHtml = forma.split('').map(v => '<span class="inline-block w-6 h-6 md:w-8 md:h-8 leading-6 md:leading-8 text-center rounded font-bold text-xs md:text-sm ' + (v === 'V' ? 'bg-green-500 text-white' : 'bg-red-500 text-white') + '">' + v + '</span>').join('');
         
         const zapasyHrace = s.vsechnyZapasy.map(zapas => {

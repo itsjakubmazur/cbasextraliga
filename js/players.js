@@ -136,7 +136,7 @@ const Players = {
             const winRatio = s.zapasy > 0 ? ((s.vyhry / s.zapasy) * 100).toFixed(1) : '0.0';
             const nejTym = Object.keys(s.tymy).length > 0 ? Object.entries(s.tymy).sort((a, b) => b[1] - a[1])[0][0] : '-';
             const winColor = parseFloat(winRatio) >= 50 ? 'text-green-600' : 'text-red-600';
-            const forma = Statistics.getForma(hrac, Data.zapasy[aktualni_soutez]);
+            const forma = Statistics.getForma(hrac, Statistics.getZapasyProSoutez(aktualni_soutez));
             const formaHtml = forma.split('').map(v => '<span class="inline-block w-5 h-5 leading-5 text-center rounded font-bold text-xs ' + (v === 'V' ? 'bg-green-500 text-white' : 'bg-red-500 text-white') + '">' + v + '</span>').join(' ');
             
             return '<tr class="border-b border-gray-200 hover:bg-blue-50"><td class="p-2 text-center font-bold text-gray-500">' + (idx + 1) + '</td><td class="p-2 font-semibold clickable" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(hrac) + '\')">' + Statistics.escapeHtml(hrac) + '</td><td class="p-2 text-blue-600 clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(nejTym) + '\')">' + Statistics.escapeHtml(nejTym) + '</td><td class="p-2 text-center">' + s.zapasy + '</td><td class="p-2 text-center text-green-600 font-semibold">' + s.vyhry + '</td><td class="p-2 text-center text-red-600 font-semibold">' + s.prohry + '</td><td class="p-2 text-center font-bold ' + winColor + '">' + winRatio + '%</td><td class="p-2 text-center">' + (formaHtml || '-') + '</td></tr>';
