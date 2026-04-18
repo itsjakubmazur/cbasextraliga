@@ -75,37 +75,22 @@ const Filters = {
         const container = document.getElementById('kolaCheckboxy');
         if (!container) return;
 
-        // Collect kola: main soutez + playoff pool for 1. liga
-        let kolaSet = new Set(Data.zapasy[aktualni_soutez].map(z => z.kolo));
-        if (aktualni_soutez === 'prvni-liga-vychod' || aktualni_soutez === 'prvni-liga-zapad') {
-            (Data.zapasy['prvni-liga-playoff'] || []).forEach(z => kolaSet.add(z.kolo));
-        }
-        const vsechnaKola = [...kolaSet];
+        // Only numeric (non-playoff) kola in checkboxes – playoff má vlastní tlačítko
+        const vsechnaKola = [...new Set(Data.zapasy[aktualni_soutez].map(z => z.kolo))]
+            .filter(k => !Statistics.isPlayoffKolo(k));
 
         if (vsechnaKola.length === 0) {
             container.innerHTML = '<span class="text-xs text-gray-500">Žádná kola</span>';
             return;
         }
 
-        const playoffOrder = ['QF', 'SF', 'F', 'P5'];
-        vsechnaKola.sort((a, b) => {
-            const aP = Statistics.isPlayoffKolo(a), bP = Statistics.isPlayoffKolo(b);
-            if (!aP && !bP) return parseInt(a) - parseInt(b);
-            if (!aP && bP) return -1;
-            if (aP && !bP) return 1;
-            return playoffOrder.indexOf(a.toUpperCase()) - playoffOrder.indexOf(b.toUpperCase());
-        });
-
-        const playoffNazvy = { 'QF': 'ČF', 'SF': 'SF', 'F': 'F', 'P5': 'O5' };
-        const koloLabel = k => Statistics.isPlayoffKolo(k)
-            ? (playoffNazvy[k.toUpperCase()] || k)
-            : 'K' + k;
+        vsechnaKola.sort((a, b) => parseInt(a) - parseInt(b));
 
         container.innerHTML = vsechnaKola.map(kolo =>
             `<label class="kolo-checkbox flex items-center gap-1 px-2 py-1 border border-gray-300 rounded bg-white text-xs">
                 <input type="checkbox" value="${kolo}" onchange="Filters.toggleKolo('${kolo}')"
                     ${vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? 'checked' : ''} class="w-3 h-3">
-                <span>${koloLabel(kolo)}</span>
+                <span>K${kolo}</span>
             </label>`
         ).join('');
     },
