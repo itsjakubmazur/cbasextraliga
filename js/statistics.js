@@ -123,6 +123,10 @@ const Statistics = {
         const filtrTym = document.getElementById('filtrTym')?.value || '';
         const filtrDisciplina = document.getElementById('filtrDisciplina')?.value || '';
 
+        // Pro 1. ligu: při play-off zápasech počítat jen hráče vlastní konference
+        const jeKonference = aktualni_soutez === 'prvni-liga-vychod' || aktualni_soutez === 'prvni-liga-zapad';
+        const tymyKonference = jeKonference ? new Set(Data.tymy[aktualni_soutez] || []) : null;
+
         this.getZapasyProSoutez(aktualni_soutez).forEach(zapas => {
             if (vybrana_kola.size > 0 && !vybrana_kola.has(zapas.kolo)) return;
 
@@ -153,6 +157,7 @@ const Statistics = {
 
             if (zapas.domaci !== 'SKREČ') {
                 domaciHraci.forEach(hrac => {
+                    if (tymyKonference && this.isPlayoffKolo(zapas.kolo) && !tymyKonference.has(zapas.tymDomaci)) return;
                     if (filtrTym && zapas.tymDomaci !== filtrTym) return;
                     if (!stats[hrac]) stats[hrac] = initHrac();
                     stats[hrac].zapasy++;
@@ -170,6 +175,7 @@ const Statistics = {
 
             if (zapas.hoste !== 'SKREČ') {
                 hosteHraci.forEach(hrac => {
+                    if (tymyKonference && this.isPlayoffKolo(zapas.kolo) && !tymyKonference.has(zapas.tymHoste)) return;
                     if (filtrTym && zapas.tymHoste !== filtrTym) return;
                     if (!stats[hrac]) stats[hrac] = initHrac();
                     stats[hrac].zapasy++;
