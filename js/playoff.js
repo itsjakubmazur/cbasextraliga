@@ -315,7 +315,7 @@ const Playoff = {
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> Přímý postup do Final Four (1.–2.)</span>' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm ml-4"><span class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></span> Čtvrtfinále (3.–6.)</span>' +
         '</div>' +
-        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulce základní části. V semifinále hraje 1. tým proti níže nasazenému postupujícímu z ČF a 2. tým proti výše nasazenému. Výsledky se doplňují automaticky z dat play-off (kolo: QF/SF/F).</p>';
+        '';
     },
 
     renderPrvniLigaBracket() {
@@ -465,7 +465,7 @@ const Playoff = {
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm"><span class="w-3 h-3 rounded-sm border" style="background:#fef3c7;border-color:#fbbf24;width:12px;height:12px"></span> Východ</span>' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm ml-3"><span class="w-3 h-3 rounded-sm border" style="background:#dbeafe;border-color:#60a5fa;width:12px;height:12px"></span> Západ</span>' +
         '</div>' +
-        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulkách základní části obou skupin. Výsledky play-off se zapisují do klíče "prvni-liga-playoff" v JSON s kolo: QF/SF/F/P5.</p>';
+        '';
     },
 
     // Render placement matches section (5th/7th place)
@@ -520,7 +520,6 @@ const Playoff = {
                 makeMatch(t1A, t1B, res1, 'O 5. místo – utkání 1') +
                 makeMatch(t2A, t2B, res2, 'O 5. místo – utkání 2') +
             '</div>' +
-            '<p class="text-xs text-gray-500 mt-2">Vítězové získávají dělené 5. místo, poražení dělené 7. místo. Výsledky zapisujte s kolo: <code>P5</code>.</p>' +
         '</div>';
     },
 
