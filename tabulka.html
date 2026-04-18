@@ -249,6 +249,66 @@
             flex-wrap: wrap;
             gap: 10px;
         }
+        .playoff-zz-badge {
+            display: inline-block;
+            margin-left: 5px;
+            padding: 1px 4px;
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 3px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: #92400e;
+            vertical-align: middle;
+        }
+        .playoff-placement-section {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 2px dashed #e5e7eb;
+        }
+        .playoff-placement-title {
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        .playoff-placement-matches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .playoff-match-placement {
+            min-width: 200px;
+            flex: 1;
+            max-width: 300px;
+        }
+        .playoff-team-placement-5 {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+        .playoff-team-placement-7 {
+            background: #fafafa;
+            border-color: #d1d5db;
+        }
+        .playoff-team-placement-5 .playoff-seed,
+        .playoff-team-placement-7 .playoff-seed {
+            background: #e5e7eb;
+            color: #374151;
+            font-size: 0.55rem;
+        }
+        .playoff-placement-result {
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px dashed #e5e7eb;
+            font-size: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .placement-5 { color: #16a34a; font-weight: 600; }
+        .placement-7 { color: #6b7280; }
 
         /* Responsive bracket */
         @media (max-width: 768px) {
@@ -405,8 +465,8 @@
 
         function isPlayoffKolo(kolo) {
             if (!kolo) return false;
-            const k = kolo.replace(/\.$/, '').trim();
-            return ['QF', 'SF', 'F'].includes(k.toUpperCase());
+            const k = kolo.replace(/\.$/, '').trim().toUpperCase();
+            return ['QF', 'SF', 'F', 'P5'].includes(k);
         }
 
         function escapeHtml(s) {
@@ -540,9 +600,11 @@
                 results[klic].zapasy.push(z);
             });
             Object.values(results).forEach(r => {
-                let v1 = 0, v2 = 0;
+                let v1 = 0, v2 = 0, odehranoHer = 0;
                 r.zapasy.forEach(z => {
                     const v = parseVysledek(z.vysledek);
+                    if (v.domaci === 0 && v.hoste === 0) return;
+                    odehranoHer++;
                     if (z.tymDomaci === r.tym1) {
                         if (v.domaci > v.hoste) v1++; else v2++;
                     } else {
@@ -550,7 +612,11 @@
                     }
                 });
                 r.skore1 = v1; r.skore2 = v2;
+                const remiza44 = v1 === 4 && v2 === 4 && odehranoHer >= 8;
+                const rozhodnutZZ = odehranoHer >= 9 && ((v1 === 5 && v2 === 4) || (v2 === 5 && v1 === 4));
+                r.zlatyZapas = remiza44 || rozhodnutZZ;
                 r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
+                r.porazeny = r.vitez ? (r.vitez === r.tym1 ? r.tym2 : r.tym1) : null;
             });
             return results;
         }
@@ -627,10 +693,14 @@
                 '</div>';
         }
 
-        function matchBox(team1Html, team2Html, label, seriesResult) {
-            const resultHtml = seriesResult
-                ? '<div class="playoff-series-result">' + seriesResult + '</div>'
-                : '';
+        function matchBox(team1Html, team2Html, label, seriesResult, result) {
+            let resultHtml = '';
+            if (seriesResult) {
+                const zzBadge = result && result.zlatyZapas
+                    ? '<span class="playoff-zz-badge" title="Zlatý zápas">ZZ</span>'
+                    : '';
+                resultHtml = '<div class="playoff-series-result">' + seriesResult + zzBadge + '</div>';
+            }
             return '<div class="playoff-match">' +
                 (label ? '<div class="playoff-match-label">' + label + '</div>' : '') +
                 '<div class="playoff-match-teams">' +
@@ -676,13 +746,15 @@
                 teamCard(t(2), '3.', qfVitez1 === t(2) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes1 ? (qfRes1.tym1 === t(2) ? qfRes1.skore1 : qfRes1.skore2) : undefined),
                 teamCard(t(5), '6.', qfVitez1 === t(5) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes1 ? (qfRes1.tym1 === t(5) ? qfRes1.skore1 : qfRes1.skore2) : undefined),
                 'Čtvrtfinále 1',
-                qfRes1 ? qfRes1.skore1 + ':' + qfRes1.skore2 : null
+                qfRes1 ? qfRes1.skore1 + ':' + qfRes1.skore2 : null,
+                qfRes1
             );
             const qf2 = matchBox(
                 teamCard(t(3), '4.', qfVitez2 === t(3) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes2 ? (qfRes2.tym1 === t(3) ? qfRes2.skore1 : qfRes2.skore2) : undefined),
                 teamCard(t(4), '5.', qfVitez2 === t(4) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes2 ? (qfRes2.tym1 === t(4) ? qfRes2.skore1 : qfRes2.skore2) : undefined),
                 'Čtvrtfinále 2',
-                qfRes2 ? qfRes2.skore1 + ':' + qfRes2.skore2 : null
+                qfRes2 ? qfRes2.skore1 + ':' + qfRes2.skore2 : null,
+                qfRes2
             );
 
             // SF - reseeding based on regular season standings
@@ -729,7 +801,8 @@
                     ? teamCard(sfTym1B, 'QF', sfVitez1 === sfTym1B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1B ? sfRes1.skore1 : sfRes1.skore2) : undefined)
                     : pendingCard('Níže nasazený z ČF'),
                 'Semifinále 1',
-                sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null
+                sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null,
+                sfRes1
             );
             const sf2 = matchBox(
                 teamCard(sfTym2A, '2.', sfVitez2 === sfTym2A ? 'playoff-team-green' : 'playoff-team-green', null, sfRes2 ? (sfRes2.tym1 === sfTym2A ? sfRes2.skore1 : sfRes2.skore2) : undefined),
@@ -737,7 +810,8 @@
                     ? teamCard(sfTym2B, 'QF', sfVitez2 === sfTym2B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2B ? sfRes2.skore1 : sfRes2.skore2) : undefined)
                     : pendingCard('Výše nasazený z ČF'),
                 'Semifinále 2',
-                sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null
+                sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null,
+                sfRes2
             );
 
             // Final
@@ -753,7 +827,8 @@
                     ? teamCard(fTym2, 'SF', fRes && fRes.vitez === fTym2 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym2 ? fRes.skore1 : fRes.skore2) : undefined)
                     : pendingCard('Vítěz SF 2'),
                 'Finále (Final Four)',
-                fRes ? fRes.skore1 + ':' + fRes.skore2 : null
+                fRes ? fRes.skore1 + ':' + fRes.skore2 : null,
+                fRes
             );
 
             const champion = fRes ? fRes.vitez : null;
@@ -823,7 +898,8 @@
                     teamCard(teamV, (pair.v + 1) + '.', vitez === teamV ? 'playoff-team-green' : 'playoff-team-east', 'V', qfRes ? (qfRes.tym1 === teamV ? qfRes.skore1 : qfRes.skore2) : undefined),
                     teamCard(teamZ, (pair.z + 1) + '.', vitez === teamZ ? 'playoff-team-green' : 'playoff-team-west', 'Z', qfRes ? (qfRes.tym1 === teamZ ? qfRes.skore1 : qfRes.skore2) : undefined),
                     pair.label,
-                    qfRes ? qfRes.skore1 + ':' + qfRes.skore2 : null
+                    qfRes ? qfRes.skore1 + ':' + qfRes.skore2 : null,
+                    qfRes
                 );
             });
 
@@ -844,7 +920,8 @@
                     ? teamCard(sfTym1B, 'QF', sfRes1 && sfRes1.vitez === sfTym1B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1B ? sfRes1.skore1 : sfRes1.skore2) : undefined)
                     : pendingCard('Vítěz ČF 2'),
                 'Semifinále 1',
-                sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null
+                sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null,
+                sfRes1
             );
             const sf2 = matchBox(
                 sfTym2A
@@ -854,7 +931,8 @@
                     ? teamCard(sfTym2B, 'QF', sfRes2 && sfRes2.vitez === sfTym2B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2B ? sfRes2.skore1 : sfRes2.skore2) : undefined)
                     : pendingCard('Vítěz ČF 4'),
                 'Semifinále 2',
-                sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null
+                sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null,
+                sfRes2
             );
 
             // Final
@@ -870,13 +948,23 @@
                     ? teamCard(fTym2, 'SF', fRes && fRes.vitez === fTym2 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym2 ? fRes.skore1 : fRes.skore2) : undefined)
                     : pendingCard('Vítěz SF 2'),
                 'Finále',
-                fRes ? fRes.skore1 + ':' + fRes.skore2 : null
+                fRes ? fRes.skore1 + ':' + fRes.skore2 : null,
+                fRes
             );
 
             const champion = fRes ? fRes.vitez : null;
             const championHtml = champion
                 ? '<div class="playoff-champion"><div class="text-xl">🏆</div><div class="font-bold text-yellow-800">' + escapeHtml(champion) + '</div></div>'
                 : '';
+
+            // Placement matches (O 5./7. místo) – kolo P5
+            const p5T1A = qfResults[0] ? qfResults[0].porazeny : null;
+            const p5T1B = qfResults[1] ? qfResults[1].porazeny : null;
+            const p5T2A = qfResults[2] ? qfResults[2].porazeny : null;
+            const p5T2B = qfResults[3] ? qfResults[3].porazeny : null;
+            const p5Res1 = (p5T1A && p5T1B) ? findResult(res, 'P5', p5T1A, p5T1B) : null;
+            const p5Res2 = (p5T2A && p5T2B) ? findResult(res, 'P5', p5T2A, p5T2B) : null;
+            const placementHtml = renderPlacementMatches(p5T1A, p5T1B, p5Res1, p5T2A, p5T2B, p5Res2);
 
             container.innerHTML =
                 '<div class="bracket-wrapper">' +
@@ -906,11 +994,57 @@
                     '</div>' +
                 '</div>' +
                 championHtml +
+                placementHtml +
                 '<div class="playoff-legend mt-3">' +
                     '<span class="inline-flex items-center gap-1 text-xs"><span class="w-3 h-3 rounded-sm border" style="background:#fef3c7;border-color:#fbbf24;width:12px;height:12px"></span> Východ</span>' +
                     '<span class="inline-flex items-center gap-1 text-xs ml-3"><span class="w-3 h-3 rounded-sm border" style="background:#dbeafe;border-color:#60a5fa;width:12px;height:12px"></span> Západ</span>' +
                 '</div>' +
                 '<p class="text-xs text-gray-500 mt-2">* Křížové nasazení Východ vs Západ.</p>';
+        }
+
+        function renderPlacementMatches(t1A, t1B, res1, t2A, t2B, res2) {
+            if (!t1A && !t1B && !t2A && !t2B) return '';
+
+            function makeCard(tym, result, isWinner) {
+                if (!tym) return pendingCard('Poražený z ČF');
+                const cls = isWinner ? 'playoff-team-placement-5' : 'playoff-team-placement-7';
+                return '<div class="playoff-team ' + cls + '">' +
+                    '<span class="playoff-seed">P</span>' +
+                    '<span class="playoff-team-name">' + escapeHtml(tym) + '</span>' +
+                    (result ? '<span class="playoff-series-score">' + (result.tym1 === tym ? result.skore1 : result.skore2) + '</span>' : '') +
+                    '</div>';
+            }
+
+            function makeMatch(tA, tB, res, label) {
+                const vitez = res ? res.vitez : null;
+                const porazeny = res ? res.porazeny : null;
+                const zzBadge = res && res.zlatyZapas ? '<span class="playoff-zz-badge">ZZ</span>' : '';
+                const resultHtml = res
+                    ? '<div class="playoff-series-result">' + res.skore1 + ':' + res.skore2 + zzBadge + '</div>'
+                    : '';
+                const placementResult = vitez
+                    ? '<div class="playoff-placement-result"><span class="placement-5">🥈 ' + escapeHtml(vitez) + ' – 5. místo</span><span class="placement-7">' + escapeHtml(porazeny) + ' – 7. místo</span></div>'
+                    : '';
+                return '<div class="playoff-match playoff-match-placement">' +
+                    '<div class="playoff-match-label">' + label + '</div>' +
+                    '<div class="playoff-match-teams">' +
+                    makeCard(tA, res, vitez === tA) +
+                    '<div class="playoff-vs">vs</div>' +
+                    makeCard(tB, res, vitez === tB) +
+                    '</div>' +
+                    resultHtml +
+                    placementResult +
+                    '</div>';
+            }
+
+            return '<div class="playoff-placement-section">' +
+                '<div class="playoff-placement-title">Zápasy o umístění</div>' +
+                '<div class="playoff-placement-matches">' +
+                    makeMatch(t1A, t1B, res1, 'O 5. místo – utkání 1') +
+                    makeMatch(t2A, t2B, res2, 'O 5. místo – utkání 2') +
+                '</div>' +
+                '<p style="font-size:0.7rem;color:#6b7280;margin-top:6px">Vítězové = dělené 5. místo, poražení = dělené 7. místo.</p>' +
+            '</div>';
         }
 
         // SVG connector lines between bracket rounds
