@@ -86,13 +86,33 @@ const Filters = {
 
         vsechnaKola.sort((a, b) => parseInt(a) - parseInt(b));
 
+        const playoffKola = ['QF', 'SF', 'F', 'P5'];
+        const playoffAktivni = playoffKola.some(k => vybrana_kola.has(k));
+        const playoffChecked = vybrana_kola.size === 0 || playoffAktivni;
+
         container.innerHTML = vsechnaKola.map(kolo =>
             `<label class="kolo-checkbox flex items-center gap-1 px-2 py-1 border border-gray-300 rounded bg-white text-xs">
                 <input type="checkbox" value="${kolo}" onchange="Filters.toggleKolo('${kolo}')"
                     ${vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? 'checked' : ''} class="w-3 h-3">
                 <span>K${kolo}</span>
             </label>`
-        ).join('');
+        ).join('') +
+        `<label class="kolo-checkbox flex items-center gap-1 px-2 py-1 border border-purple-300 rounded bg-white text-xs">
+            <input type="checkbox" onchange="Filters.togglePlayoff(this.checked)"
+                ${playoffChecked ? 'checked' : ''} class="w-3 h-3">
+            <span>Play-off</span>
+        </label>`;
+    },
+
+    togglePlayoff(checked) {
+        const playoffKola = ['QF', 'SF', 'F', 'P5'];
+        if (checked) {
+            playoffKola.forEach(k => App.vybrana_kola.add(k));
+        } else {
+            playoffKola.forEach(k => App.vybrana_kola.delete(k));
+        }
+        App.zobrazitData();
+        App.aktualizovatKolaCheckboxy();
     },
 
     toggleKolo(kolo) {
