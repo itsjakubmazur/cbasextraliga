@@ -188,7 +188,10 @@
             <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4 mb-4">
                 <h3 class="text-lg font-semibold text-green-800 mb-3">📅 Info o utkání (vyplňte jednou pro celé utkání)</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <input type="text" id="kolo" placeholder="Kolo (např. 1) nebo QF/SF/F" class="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
+                    <div>
+                        <input type="text" id="kolo" placeholder="Kolo (např. 1) nebo QF/SF/F" class="w-full border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
+                        <p class="text-xs text-gray-500 mt-1">Play-off: <code>QF</code> · <code>SF</code> · <code>F</code> · <code>P5</code> (o 5. místo)</p>
+                    </div>
                     <input type="date" id="datum" class="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
                     <select id="tymDomaci" class="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
                         <option value="">Tým domácích</option>
@@ -196,6 +199,12 @@
                     <select id="tymHoste" class="border border-green-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500">
                         <option value="">Tým hostů</option>
                     </select>
+                </div>
+                <div id="playoffHint" class="mt-3 hidden bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-xs text-amber-800">
+                    <strong>Play-off 1. ligy:</strong>
+                    Zlatý zápas (při 4:4) zadej jako 9. hru serie – disciplínu vyber dle licitace (DM/DŽ/SČ).
+                    Není nutno zadávat zbývající hry, pokud tým dosáhl 5 výher.
+                    Zápasy o 5. místo zapisuj s kolo <code>P5</code>.
                 </div>
             </div>
 
@@ -469,10 +478,16 @@
 
             // Set kolo placeholder based on mode
             const koloInput = document.getElementById('kolo');
-            if (soutez === 'prvni-liga-playoff' || soutez === 'extraliga') {
-                koloInput.placeholder = 'Kolo (číslo) nebo QF / SF / F (play-off)';
+            const playoffHint = document.getElementById('playoffHint');
+            if (soutez === 'prvni-liga-playoff') {
+                koloInput.placeholder = 'QF / SF / F / P5 (o 5. místo)';
+                if (playoffHint) playoffHint.classList.remove('hidden');
+            } else if (soutez === 'extraliga') {
+                koloInput.placeholder = 'Kolo (číslo) nebo QF / SF / F';
+                if (playoffHint) playoffHint.classList.add('hidden');
             } else {
                 koloInput.placeholder = 'Kolo (např. 1)';
+                if (playoffHint) playoffHint.classList.add('hidden');
             }
 
             vybrana_kola.clear();
@@ -1140,8 +1155,8 @@
 
         function isPlayoffKolo(kolo) {
             if (!kolo) return false;
-            const k = kolo.replace(/\.$/, '').trim();
-            return ['QF', 'SF', 'F'].includes(k.toUpperCase());
+            const k = kolo.replace(/\.$/, '').trim().toUpperCase();
+            return ['QF', 'SF', 'F', 'P5'].includes(k);
         }
 
         function vypocitejTabulku() {

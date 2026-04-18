@@ -624,6 +624,133 @@ body.dark-mode .playoff-series-result {
     border-color: #4b5563;
 }
 
+/* Zlatý zápas badge */
+.playoff-zz-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 5px;
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #92400e;
+    vertical-align: middle;
+    letter-spacing: 0.03em;
+}
+
+body.dark-mode .playoff-zz-badge {
+    background: #78350f;
+    border-color: #b45309;
+    color: #fde68a;
+}
+
+/* Placement matches section (O 5./7. místo) */
+.playoff-placement-section {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 2px dashed #e5e7eb;
+}
+
+body.dark-mode .playoff-placement-section {
+    border-color: #4b5563;
+}
+
+.playoff-placement-title {
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    margin-bottom: 14px;
+}
+
+body.dark-mode .playoff-placement-title {
+    color: #9ca3af;
+}
+
+.playoff-placement-matches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.playoff-match-placement {
+    min-width: 230px;
+    flex: 1;
+    max-width: 340px;
+}
+
+.playoff-team-placement-5 {
+    background: #f0fdf4;
+    border-color: #86efac;
+}
+
+body.dark-mode .playoff-team-placement-5 {
+    background: #14532d;
+    border-color: #166534;
+}
+
+.playoff-team-placement-7 {
+    background: #fafafa;
+    border-color: #d1d5db;
+}
+
+body.dark-mode .playoff-team-placement-7 {
+    background: #1f2937;
+    border-color: #4b5563;
+}
+
+.playoff-team-placement-5 .playoff-seed,
+.playoff-team-placement-7 .playoff-seed {
+    background: #e5e7eb;
+    color: #374151;
+    font-size: 0.55rem;
+}
+
+body.dark-mode .playoff-team-placement-5 .playoff-seed {
+    background: #166534;
+    color: #bbf7d0;
+}
+
+.playoff-placement-badge {
+    margin-left: auto;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #16a34a;
+}
+
+.playoff-placement-result {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #e5e7eb;
+    font-size: 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+body.dark-mode .playoff-placement-result {
+    border-color: #4b5563;
+}
+
+.placement-5 {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.placement-7 {
+    color: #6b7280;
+}
+
+body.dark-mode .placement-5 {
+    color: #4ade80;
+}
+
+body.dark-mode .placement-7 {
+    color: #9ca3af;
+}
+
 /* Champion banner dark mode */
 body.dark-mode .bg-yellow-50.border-yellow-400 {
     background-color: #713f12 !important;

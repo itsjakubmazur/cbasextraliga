@@ -22,6 +22,31 @@ const Playoff = {
         }
     },
 
+    // Shared helper: calculate series result from array of match records
+    _vypocitejSerii(r) {
+        let v1 = 0, v2 = 0, odehranoHer = 0;
+        r.zapasy.forEach(z => {
+            if (Statistics.isNeodehrano(z)) return;
+            const v = Statistics.parseVysledek(z.vysledek);
+            odehranoHer++;
+            const jeTym1Domaci = z.tymDomaci === r.tym1;
+            if (jeTym1Domaci) {
+                if (v.domaci > v.hoste) v1++; else v2++;
+            } else {
+                if (v.hoste > v.domaci) v1++; else v2++;
+            }
+        });
+        r.skore1 = v1;
+        r.skore2 = v2;
+        r.odehranoHer = odehranoHer;
+        // zlatyZapas = true pokud je stav 4:4 (čeká se) NEBO 5:4 po 9 hrách (rozhodl zlatý zápas)
+        const remiza44 = v1 === 4 && v2 === 4 && odehranoHer >= 8;
+        const rozhodnutZZ = odehranoHer >= 9 && ((v1 === 5 && v2 === 4) || (v2 === 5 && v1 === 4));
+        r.zlatyZapas = remiza44 || rozhodnutZZ;
+        r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
+        r.porazeny = r.vitez ? (r.vitez === r.tym1 ? r.tym2 : r.tym1) : null;
+    },
+
     // Extract playoff results from match data, grouped by round and matchup
     getPlayoffResults(soutez) {
         const zapasy = Data.zapasy[soutez] || [];
@@ -42,24 +67,7 @@ const Playoff = {
             results[klic].zapasy.push(z);
         });
 
-        // Calculate series scores for each matchup
-        Object.values(results).forEach(r => {
-            let v1 = 0, v2 = 0;
-            r.zapasy.forEach(z => {
-                const v = Statistics.parseVysledek(z.vysledek);
-                if (Statistics.isNeodehrano(z)) return; // neodehraný zápas
-                const jeTym1Domaci = z.tymDomaci === r.tym1;
-                if (jeTym1Domaci) {
-                    if (v.domaci > v.hoste) v1++; else v2++;
-                } else {
-                    if (v.hoste > v.domaci) v1++; else v2++;
-                }
-            });
-            r.skore1 = v1;
-            r.skore2 = v2;
-            r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
-        });
-
+        Object.values(results).forEach(r => this._vypocitejSerii(r));
         return results;
     },
 
@@ -82,23 +90,7 @@ const Playoff = {
             results[klic].zapasy.push(z);
         });
 
-        Object.values(results).forEach(r => {
-            let v1 = 0, v2 = 0;
-            r.zapasy.forEach(z => {
-                const v = Statistics.parseVysledek(z.vysledek);
-                if (Statistics.isNeodehrano(z)) return; // neodehraný zápas
-                const jeTym1Domaci = z.tymDomaci === r.tym1;
-                if (jeTym1Domaci) {
-                    if (v.domaci > v.hoste) v1++; else v2++;
-                } else {
-                    if (v.hoste > v.domaci) v1++; else v2++;
-                }
-            });
-            r.skore1 = v1;
-            r.skore2 = v2;
-            r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
-        });
-
+        Object.values(results).forEach(r => this._vypocitejSerii(r));
         return results;
     },
 
@@ -143,9 +135,13 @@ const Playoff = {
     },
 
     matchBox(team1Html, team2Html, label, seriesResult, result) {
-        const resultHtml = seriesResult
-            ? '<div class="playoff-series-result">' + seriesResult + '</div>'
-            : '';
+        let resultHtml = '';
+        if (seriesResult) {
+            const zzBadge = result?.zlatyZapas
+                ? '<span class="playoff-zz-badge" title="Zlatý zápas">ZZ</span>'
+                : '';
+            resultHtml = '<div class="playoff-series-result">' + seriesResult + zzBadge + '</div>';
+        }
         let onclickAttr = '';
         if (result && result.zapasy && result.zapasy.length > 0) {
             const key = result.kolo + '-' + [result.tym1, result.tym2].sort().join('-');
@@ -418,6 +414,21 @@ const Playoff = {
               '</div>'
             : '';
 
+        // Placement matches (O 5. místo / O 7. místo)
+        // QF1 loser vs QF2 loser, QF3 loser vs QF4 loser – kolo "P5"
+        const p5Porazeny1 = qfResults[0]?.porazeny || null;
+        const p5Porazeny2 = qfResults[1]?.porazeny || null;
+        const p5Porazeny3 = qfResults[2]?.porazeny || null;
+        const p5Porazeny4 = qfResults[3]?.porazeny || null;
+
+        const p5Res1 = (p5Porazeny1 && p5Porazeny2) ? this.findResult(res, 'P5', p5Porazeny1, p5Porazeny2) : null;
+        const p5Res2 = (p5Porazeny3 && p5Porazeny4) ? this.findResult(res, 'P5', p5Porazeny3, p5Porazeny4) : null;
+
+        const p5PlacementHtml = this._renderPlacementMatches(
+            p5Porazeny1, p5Porazeny2, p5Res1,
+            p5Porazeny3, p5Porazeny4, p5Res2
+        );
+
         return '<div class="bracket-wrapper">' +
             '<div class="bracket-round bracket-round-qf">' +
                 '<div class="bracket-round-title">Čtvrtfinále</div>' +
@@ -449,11 +460,68 @@ const Playoff = {
             '</div>' +
         '</div>' +
         championHtml +
+        p5PlacementHtml +
         '<div class="playoff-legend mt-4">' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm"><span class="w-3 h-3 rounded-sm border" style="background:#fef3c7;border-color:#fbbf24;width:12px;height:12px"></span> Východ</span>' +
             '<span class="inline-flex items-center gap-1 text-xs md:text-sm ml-3"><span class="w-3 h-3 rounded-sm border" style="background:#dbeafe;border-color:#60a5fa;width:12px;height:12px"></span> Západ</span>' +
         '</div>' +
-        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulkách základní části obou skupin. Výsledky play-off se zapisují do klíče "prvni-liga-playoff" v JSON s kolo: QF/SF/F.</p>';
+        '<p class="text-xs text-gray-500 mt-2">* Pavouk je vytvořen na základě aktuálního pořadí v tabulkách základní části obou skupin. Výsledky play-off se zapisují do klíče "prvni-liga-playoff" v JSON s kolo: QF/SF/F/P5.</p>';
+    },
+
+    // Render placement matches section (5th/7th place)
+    _renderPlacementMatches(t1A, t1B, res1, t2A, t2B, res2) {
+        if (!t1A && !t1B && !t2A && !t2B) return '';
+
+        const makeCard = (tym, place, result, isWinner) => {
+            if (!tym) return this.pendingCard('Poražený z ČF');
+            const cls = isWinner ? 'playoff-team-placement-5' : 'playoff-team-placement-7';
+            const placeBadge = result?.vitez
+                ? '<span class="playoff-placement-badge">' + place + '</span>'
+                : '';
+            return '<div class="playoff-team ' + cls + '">' +
+                '<span class="playoff-seed">P</span>' +
+                '<span class="playoff-team-name clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' + Statistics.escapeHtml(tym) + '</span>' +
+                (result ? '<span class="playoff-series-score">' + (result.tym1 === tym ? result.skore1 : result.skore2) + '</span>' : '') +
+                placeBadge +
+                '</div>';
+        };
+
+        const makeMatch = (tA, tB, res, label) => {
+            const vitez = res?.vitez || null;
+            const porazeny = res?.porazeny || null;
+            const zzBadge = res?.zlatyZapas ? '<span class="playoff-zz-badge" title="Zlatý zápas">ZZ</span>' : '';
+            const resultHtml = res
+                ? '<div class="playoff-series-result">' + res.skore1 + ':' + res.skore2 + zzBadge + '</div>'
+                : '';
+            let onclickAttr = '';
+            if (res && res.zapasy && res.zapasy.length > 0) {
+                const key = res.kolo + '-' + [res.tym1, res.tym2].sort().join('-');
+                this._matchDetails[key] = res;
+                onclickAttr = ' onclick="Playoff.zobrazitDetail(\'' + Statistics.escapeAttr(key) + '\')" style="cursor:pointer"';
+            }
+            return '<div class="playoff-match playoff-match-placement"' + onclickAttr + '>' +
+                '<div class="playoff-match-label">' + label + '</div>' +
+                '<div class="playoff-match-teams">' +
+                makeCard(tA, '5. místo', res, vitez === tA) +
+                '<div class="playoff-vs">vs</div>' +
+                makeCard(tB, '5. místo', res, vitez === tB) +
+                '</div>' +
+                resultHtml +
+                (vitez ? '<div class="playoff-placement-result"><span class="placement-5">🥈 ' + Statistics.escapeHtml(vitez) + ' – 5. místo</span><span class="placement-7">  ' + Statistics.escapeHtml(porazeny) + ' – 7. místo</span></div>' : '') +
+            '</div>';
+        };
+
+        const hasAny = t1A || t1B || t2A || t2B;
+        if (!hasAny) return '';
+
+        return '<div class="playoff-placement-section">' +
+            '<div class="playoff-placement-title">Zápasy o umístění</div>' +
+            '<div class="playoff-placement-matches">' +
+                makeMatch(t1A, t1B, res1, 'O 5. místo – utkání 1') +
+                makeMatch(t2A, t2B, res2, 'O 5. místo – utkání 2') +
+            '</div>' +
+            '<p class="text-xs text-gray-500 mt-2">Vítězové získávají dělené 5. místo, poražení dělené 7. místo. Výsledky zapisujte s kolo: <code>P5</code>.</p>' +
+        '</div>';
     },
 
     drawConnectors() {

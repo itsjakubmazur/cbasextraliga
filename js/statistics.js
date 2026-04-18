@@ -1,15 +1,15 @@
 const Statistics = {
-    // Playoff round detection - kolo values like "QF", "SF", "F" are playoff
+    // Playoff round detection - kolo values like "QF", "SF", "F", "P5" are playoff
     isPlayoffKolo(kolo) {
         if (!kolo) return false;
-        const k = kolo.replace(/\.$/, '').trim();
-        return ['QF', 'SF', 'F'].includes(k.toUpperCase());
+        const k = kolo.replace(/\.$/, '').trim().toUpperCase();
+        return ['QF', 'SF', 'F', 'P5'].includes(k);
     },
 
     // Map playoff kolo codes to display names
     playoffKoloNazev(kolo) {
         const k = kolo.replace(/\.$/, '').trim().toUpperCase();
-        const nazvy = { 'QF': 'Čtvrtfinále', 'SF': 'Semifinále', 'F': 'Finále' };
+        const nazvy = { 'QF': 'Čtvrtfinále', 'SF': 'Semifinále', 'F': 'Finále', 'P5': 'O 5. místo' };
         return nazvy[k] || kolo;
     },
 
