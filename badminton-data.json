@@ -10230,6 +10230,102 @@
         "sety": "",
         "tymDomaci": "SKB Český Krumlov",
         "tymHoste": "TJ Montas Hradec Králové"
+      },
+      {
+        "id": 1776633469087.4185,
+        "kolo": "F",
+        "datum": "2026-04-19",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Nielsen Mathias Solgaard",
+        "hoste": "Horáček David",
+        "vysledek": "2:0",
+        "sety": "21:5, 21:9",
+        "tymDomaci": "SK Kuklenská Brno",
+        "tymHoste": "TJ Sokol Dobruška"
+      },
+      {
+        "id": 1776633469087.2422,
+        "kolo": "F",
+        "datum": "2026-04-19",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Puńko Bartosz",
+        "hoste": "Šváb Matěj",
+        "vysledek": "2:0",
+        "sety": "21:16, 21:9",
+        "tymDomaci": "SK Kuklenská Brno",
+        "tymHoste": "TJ Sokol Dobruška"
+      },
+      {
+        "id": 1776633469087.9585,
+        "kolo": "F",
+        "datum": "2026-04-19",
+        "disciplina": "Dvouhra žen",
+        "domaci": "Klapalová Adéla",
+        "hoste": "Almalalha Raiia",
+        "vysledek": "0:0",
+        "sety": "",
+        "tymDomaci": "SK Kuklenská Brno",
+        "tymHoste": "TJ Sokol Dobruška"
+      },
+      {
+        "id": 1776633469087.2874,
+        "kolo": "F",
+        "datum": "2026-04-19",
+        "disciplina": "Čtyřhra mužů",
+        "domaci": "Ehm Adam, Nielsen Mathias Solgaard",
+        "hoste": "Horáček David, Šváb Matěj",
+        "vysledek": "2:0",
+        "sety": "21:13, 21:15",
+        "tymDomaci": "SK Kuklenská Brno",
+        "tymHoste": "TJ Sokol Dobruška"
+      },
+      {
+        "id": 1776633469087.2668,
+        "kolo": "F",
+        "datum": "2026-04-19",
+        "disciplina": "Čtyřhra mužů",
+        "domaci": "Ludík Milan, Cirók Josef",
+        "hoste": "Antoška Andrej, Horák Jakub",
+        "vysledek": "2:0",
+        "sety": "21:13, 21:16",
+        "tymDomaci": "SK Kuklenská Brno",
+        "tymHoste": "TJ Sokol Dobruška"
+      },
+      {
+        "id": 1776633469087.7195,
+        "kolo": "F",
+        "datum": "2026-04-19",
+        "disciplina": "Čtyřhra žen",
+        "domaci": "Fliglová Nela, Gavnholt Kristína",
+        "hoste": "Kubečková Veronika, Almalalha Raiia",
+        "vysledek": "2:0",
+        "sety": "21:14, 21:16",
+        "tymDomaci": "SK Kuklenská Brno",
+        "tymHoste": "TJ Sokol Dobruška"
+      },
+      {
+        "id": 1776633469087.3206,
+        "kolo": "F",
+        "datum": "2026-04-19",
+        "disciplina": "Smíšená čtyřhra",
+        "domaci": "Fliglová Nela, Ehm Adam",
+        "hoste": "Horák Jakub, Kubečková Veronika",
+        "vysledek": "0:0",
+        "sety": "",
+        "tymDomaci": "SK Kuklenská Brno",
+        "tymHoste": "TJ Sokol Dobruška"
+      },
+      {
+        "id": 1776633469087.9756,
+        "kolo": "F",
+        "datum": "2026-04-19",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Cirók Josef",
+        "hoste": "Antoška Andrej",
+        "vysledek": "0:2",
+        "sety": "9:21, 12:21",
+        "tymDomaci": "SK Kuklenská Brno",
+        "tymHoste": "TJ Sokol Dobruška"
       }
     ]
   },
@@ -10518,5 +10614,5 @@
       "tym": "Spoje Praha"
     }
   ],
-  "datum": "2026-04-18T18:24:51.355Z"
+  "datum": "2026-04-19T21:18:01.370Z"
 }
