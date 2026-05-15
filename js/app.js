@@ -41,7 +41,9 @@ const App = {
         const validPohledy = ['zakladni', 'playoff', 'baraze'];
 
         if (hash.includes('/')) {
-            const [cast1, cast2] = hash.split('/');
+            const lastSlash = hash.lastIndexOf('/');
+            const cast1 = hash.substring(0, lastSlash);
+            const cast2 = hash.substring(lastSlash + 1);
             const historicke = Data.getHistorickeRocniky();
 
             if (historicke.includes(cast1) && validHistPohled.includes(cast2)) {
