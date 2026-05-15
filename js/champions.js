@@ -45,14 +45,32 @@ const Champions = {
         // Set of seasons with historical data for deep-linking
         const historickeRocniky = new Set(Data.getHistorickeRocniky());
 
+        // Detect current season: the most recent vitezove entry that has no historical
+        // data but has live extraliga playoff matches → links to #extraliga
+        const maAktualniPlayoff = (Data.zapasy['extraliga'] || [])
+            .some(z => Statistics.isPlayoffKolo(z.kolo));
+
         // Timeline of champions
         const timelineHtml = sorted.map((v, i) => {
             const isFirst = i === 0;
             const highlightClass = isFirst ? 'champions-entry-current' : '';
+            // Try both dash and slash key formats (user may name season either way)
             const rocnikKlic = v.sezona.replace('/', '-');
-            const maData = historickeRocniky.has(rocnikKlic);
-            const seasonHtml = maData
-                ? '<a class="champions-season champions-season-link" href="#' + rocnikKlic + '/extraliga">' + Statistics.escapeHtml(v.sezona) + '</a>'
+            const rocnikKlicAlt = v.sezona.replace('-', '/');
+            const historickyKlic = historickeRocniky.has(rocnikKlic) ? rocnikKlic
+                : historickeRocniky.has(rocnikKlicAlt) ? rocnikKlicAlt
+                : null;
+
+            let onclick = null;
+            if (historickyKlic) {
+                onclick = 'App.zmenitRocnik(\'' + Statistics.escapeAttr(historickyKlic) + '\')';
+            } else if (isFirst && maAktualniPlayoff) {
+                // Current season with live playoff data – switch to extraliga playoff view
+                onclick = 'App.zmenitSoutez(\'extraliga\');App.prepnoutPohled(\'playoff\')';
+            }
+
+            const seasonHtml = onclick
+                ? '<span class="champions-season champions-season-link" onclick="' + onclick + '" style="cursor:pointer">' + Statistics.escapeHtml(v.sezona) + '</span>'
                 : '<div class="champions-season">' + Statistics.escapeHtml(v.sezona) + '</div>';
             return '<div class="champions-entry ' + highlightClass + '">' +
                 seasonHtml +
