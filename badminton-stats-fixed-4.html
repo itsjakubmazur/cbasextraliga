@@ -53,8 +53,54 @@
                 </div>
             </div>
             
+            <!-- Výběr ročníku -->
+            <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <div class="flex flex-wrap items-center gap-3">
+                    <span class="text-sm font-semibold text-gray-600">📅 Ročník:</span>
+                    <select id="rocnikSelect" onchange="prepnoutNaRocnik(this.value)" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-semibold bg-white">
+                        <option value="">Aktuální sezóna</option>
+                    </select>
+                    <button onclick="toggleNovyRocnikPanel()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-3 py-1.5 rounded-lg">+ Nový historický ročník</button>
+                    <button id="smazatRocnikBtn" onclick="smazatAktualniRocnik()" class="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-3 py-1.5 rounded-lg" style="display:none;">🗑️ Smazat ročník</button>
+                </div>
+                <div id="novyRocnikPanel" class="mt-3 flex flex-wrap gap-2 items-end" style="display:none;">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Označení ročníku (např. 2024-25)</label>
+                        <input type="text" id="novyRocnikNazev" placeholder="2024-25" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-36">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Extraliga play-off</label>
+                        <select id="konfExtraliga" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
+                            <option value="QF+SF+F">QF + SF + F (bez o 3. místo)</option>
+                            <option value="QF+SF+F+3rd">QF + SF + F + o 3. místo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">1. liga play-off</label>
+                        <select id="konfLiga" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
+                            <option value="combined-8">Společné (8 týmů, 4+4)</option>
+                            <option value="combined-4">Společné (4 týmy, 2+2)</option>
+                            <option value="separate-SF+F">Separátní E/W (SF + F)</option>
+                            <option value="separate-QF+SF+F+3rd">Separátní E/W (QF + SF + F + o 3. místo)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Baráž</label>
+                        <select id="konfBaraze" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
+                            <option value="single">Jedno utkání (od 2023/24)</option>
+                            <option value="round-robin-3">Round robin 3 týmy</option>
+                        </select>
+                    </div>
+                    <button onclick="vytvorNovyRocnik()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-1.5 rounded-lg">✓ Vytvořit</button>
+                    <button onclick="toggleNovyRocnikPanel()" class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-semibold px-3 py-1.5 rounded-lg">✕</button>
+                </div>
+                <div id="historickyRocnikInfo" class="mt-2 text-xs text-orange-600 font-semibold" style="display:none;">
+                    ⚠️ Pracujete v historickém ročníku. Data se ukládají odděleně od aktuální sezóny.
+                </div>
+            </div>
+
             <!-- Výběr soutěže -->
-            <div class="mt-6 flex flex-wrap gap-2">
+            <div class="mt-4 flex flex-wrap gap-2">
                 <button onclick="zmenitSoutez('extraliga')" id="tab-extraliga" class="soutez-tab px-6 py-3 rounded-lg font-semibold">
                     🏆 Extraliga
                 </button>
@@ -66,6 +112,9 @@
                 </button>
                 <button onclick="zmenitSoutez('prvni-liga-playoff')" id="tab-prvni-liga-playoff" class="soutez-tab px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700">
                     🏅 1. liga - Play-off
+                </button>
+                <button onclick="zmenitSoutez('baraze')" id="tab-baraze" class="soutez-tab px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700">
+                    ⚔️ Baráž
                 </button>
             </div>
         </div>
@@ -428,19 +477,31 @@
     </div>
 
     <script>
-        let zapasy = {
+        // Current season data
+        let currentZapasy = {
             'extraliga': [],
             'prvni-liga-vychod': [],
             'prvni-liga-zapad': [],
-            'prvni-liga-playoff': []
+            'prvni-liga-playoff': [],
+            'baraze': []
         };
+        let currentTymy = {
+            'extraliga': [],
+            'prvni-liga-vychod': [],
+            'prvni-liga-zapad': [],
+            'prvni-liga-playoff': [],
+            'baraze': []
+        };
+
+        // Historical seasons: { "2024-25": { konfigurace, zapasy, tymy }, ... }
+        let historickeRocniky = {};
+        let aktualniHistorickyRocnik = null; // null = current season
+
+        // Active pointers – all code uses these
+        let zapasy = currentZapasy;
+        let tymy = currentTymy;
+
         let hraci = [];
-        let tymy = {
-            'extraliga': [],
-            'prvni-liga-vychod': [],
-            'prvni-liga-zapad': [],
-            'prvni-liga-playoff': []
-        };
         let vitezove = [];
         let vybrana_kola = new Set();
         let aktualni_soutez = 'extraliga';
@@ -457,8 +518,87 @@
             'extraliga': 'Extraliga',
             'prvni-liga-vychod': '1. liga - Východ',
             'prvni-liga-zapad': '1. liga - Západ',
-            'prvni-liga-playoff': '1. liga - Play-off'
+            'prvni-liga-playoff': '1. liga - Play-off',
+            'baraze': 'Baráž'
         };
+
+        // ── Ročník management ───────────────────────────────────────────────
+
+        function toggleNovyRocnikPanel() {
+            const panel = document.getElementById('novyRocnikPanel');
+            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function vytvorNovyRocnik() {
+            const nazev = document.getElementById('novyRocnikNazev').value.trim();
+            if (!nazev) { alert('Zadejte označení ročníku (např. 2024-25)'); return; }
+            if (historickeRocniky[nazev]) { alert('Ročník ' + nazev + ' již existuje!'); return; }
+
+            historickeRocniky[nazev] = {
+                konfigurace: {
+                    extraliga_playoff: document.getElementById('konfExtraliga').value,
+                    prvni_liga_playoff: document.getElementById('konfLiga').value,
+                    baraze: document.getElementById('konfBaraze').value
+                },
+                zapasy: { 'extraliga': [], 'prvni-liga-vychod': [], 'prvni-liga-zapad': [], 'prvni-liga-playoff': [], 'baraze': [] },
+                tymy: { 'extraliga': [], 'prvni-liga-vychod': [], 'prvni-liga-zapad': [], 'prvni-liga-playoff': [], 'baraze': [] }
+            };
+
+            ulozitData();
+            obnovitRocnikSelect();
+            document.getElementById('rocnikSelect').value = nazev;
+            prepnoutNaRocnik(nazev);
+            toggleNovyRocnikPanel();
+            document.getElementById('novyRocnikNazev').value = '';
+            alert('✅ Ročník ' + nazev + ' vytvořen. Nyní zadávejte data pro tento ročník.');
+        }
+
+        function prepnoutNaRocnik(rocnik) {
+            aktualniHistorickyRocnik = rocnik || null;
+
+            if (!rocnik) {
+                zapasy = currentZapasy;
+                tymy = currentTymy;
+                document.getElementById('historickyRocnikInfo').style.display = 'none';
+                document.getElementById('smazatRocnikBtn').style.display = 'none';
+            } else {
+                if (!historickeRocniky[rocnik]) return;
+                zapasy = historickeRocniky[rocnik].zapasy;
+                tymy = historickeRocniky[rocnik].tymy;
+                document.getElementById('historickyRocnikInfo').style.display = 'block';
+                document.getElementById('smazatRocnikBtn').style.display = 'inline-flex';
+            }
+
+            vybrana_kola.clear();
+            aktualizovatSelecty();
+            zobrazitSpravuTymu();
+            zobrazitData();
+        }
+
+        function smazatAktualniRocnik() {
+            if (!aktualniHistorickyRocnik) return;
+            if (!confirm('Opravdu smazat ročník ' + aktualniHistorickyRocnik + ' a všechna jeho data?')) return;
+            delete historickeRocniky[aktualniHistorickyRocnik];
+            ulozitData();
+            obnovitRocnikSelect();
+            document.getElementById('rocnikSelect').value = '';
+            prepnoutNaRocnik('');
+        }
+
+        function obnovitRocnikSelect() {
+            const sel = document.getElementById('rocnikSelect');
+            const current = sel.value;
+            sel.innerHTML = '<option value="">Aktuální sezóna</option>';
+            Object.keys(historickeRocniky).sort((a, b) => b.localeCompare(a)).forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r;
+                opt.textContent = r.replace('-', '/');
+                sel.appendChild(opt);
+            });
+            if (current && historickeRocniky[current]) sel.value = current;
+        }
+
+        // ── Soutěž ──────────────────────────────────────────────────────────
 
         function zmenitSoutez(soutez) {
             aktualni_soutez = soutez;
@@ -469,21 +609,28 @@
             });
 
             const activeTab = document.getElementById('tab-' + soutez);
-            activeTab.classList.add('active');
-            activeTab.classList.remove('bg-gray-200', 'text-gray-700');
+            if (activeTab) {
+                activeTab.classList.add('active');
+                activeTab.classList.remove('bg-gray-200', 'text-gray-700');
+            }
 
             document.getElementById('formularSoutez').textContent = soutezNazvy[soutez];
             document.getElementById('tabulkaSoutez').textContent = soutezNazvy[soutez];
             document.getElementById('aktualniSoutezNazev').textContent = soutezNazvy[soutez];
 
-            // Set kolo placeholder based on mode
             const koloInput = document.getElementById('kolo');
             const playoffHint = document.getElementById('playoffHint');
             if (soutez === 'prvni-liga-playoff') {
                 koloInput.placeholder = 'QF / SF / F / P5 (o 5. místo)';
                 if (playoffHint) playoffHint.classList.remove('hidden');
             } else if (soutez === 'extraliga') {
-                koloInput.placeholder = 'Kolo (číslo) nebo QF / SF / F';
+                koloInput.placeholder = 'Kolo (číslo) nebo QF / SF / F / 3M';
+                if (playoffHint) playoffHint.classList.add('hidden');
+            } else if (soutez === 'baraze') {
+                koloInput.placeholder = 'F (finále) nebo RR (round robin)';
+                if (playoffHint) playoffHint.classList.add('hidden');
+            } else if (soutez === 'prvni-liga-vychod' || soutez === 'prvni-liga-zapad') {
+                koloInput.placeholder = 'Kolo (číslo) nebo QF / SF / F / 3M';
                 if (playoffHint) playoffHint.classList.add('hidden');
             } else {
                 koloInput.placeholder = 'Kolo (např. 1)';
@@ -500,13 +647,14 @@
             const ulozeneZapasy = localStorage.getItem('badmintonZapasy');
             const ulozeniHraci = localStorage.getItem('badmintonHraci');
             const ulozeneTymy = localStorage.getItem('badmintonTymy');
+            const ulozeneHistoricke = localStorage.getItem('badmintonHistorickeRocniky');
 
             if (ulozeneZapasy) {
                 const parsed = JSON.parse(ulozeneZapasy);
                 if (parsed.extraliga) {
-                    zapasy = { ...zapasy, ...parsed };
+                    currentZapasy = { ...currentZapasy, ...parsed };
                 } else {
-                    zapasy.extraliga = parsed;
+                    currentZapasy.extraliga = parsed;
                 }
             }
 
@@ -517,21 +665,29 @@
             if (ulozeneTymy) {
                 const parsed = JSON.parse(ulozeneTymy);
                 if (parsed.extraliga) {
-                    tymy = { ...tymy, ...parsed };
+                    currentTymy = { ...currentTymy, ...parsed };
                 } else {
-                    tymy.extraliga = parsed;
+                    currentTymy.extraliga = parsed;
                 }
             }
 
+            if (ulozeneHistoricke) historickeRocniky = JSON.parse(ulozeneHistoricke);
+
+            // Always start on current season
+            zapasy = currentZapasy;
+            tymy = currentTymy;
+
+            obnovitRocnikSelect();
             zmenitSoutez('extraliga');
             zobrazitSpravuHracu();
         }
 
         function ulozitData() {
-            localStorage.setItem('badmintonZapasy', JSON.stringify(zapasy));
+            localStorage.setItem('badmintonZapasy', JSON.stringify(currentZapasy));
             localStorage.setItem('badmintonHraci', JSON.stringify(hraci));
-            localStorage.setItem('badmintonTymy', JSON.stringify(tymy));
+            localStorage.setItem('badmintonTymy', JSON.stringify(currentTymy));
             localStorage.setItem('badmintonVitezove', JSON.stringify(vitezove));
+            localStorage.setItem('badmintonHistorickeRocniky', JSON.stringify(historickeRocniky));
         }
 
         function toggleSprava() {
@@ -559,6 +715,10 @@
         function prednastavitTymy() {
             if (aktualni_soutez === 'prvni-liga-playoff') {
                 alert('Play-off používá týmy z obou skupin automaticky. Přidejte týmy do Východu a Západu.');
+                return;
+            }
+            if (aktualni_soutez === 'baraze') {
+                alert('Pro baráž přidejte týmy ručně podle konkrétního ročníku.');
                 return;
             }
 
@@ -1494,10 +1654,11 @@
 
         function exportovatProWeb() {
             const webData = {
-                zapasy: zapasy,
-                tymy: tymy,
+                zapasy: currentZapasy,
+                tymy: currentTymy,
                 vitezove: vitezove,
-                datum: new Date().toISOString()
+                datum: new Date().toISOString(),
+                historicke_rocniky: historickeRocniky
             };
 
             const json = JSON.stringify(webData, null, 2);
@@ -1512,18 +1673,20 @@
             document.body.removeChild(link);
 
             let celkem = 0;
-            Object.values(zapasy).forEach(arr => { celkem += arr.length; });
-            alert('✓ Soubor badminton-data.json byl stažen!\n\nZápasů celkem: ' + celkem);
+            Object.values(currentZapasy).forEach(arr => { if (Array.isArray(arr)) celkem += arr.length; });
+            let historickych = Object.keys(historickeRocniky).length;
+            alert('✓ Soubor badminton-data.json byl stažen!\n\nZápasů (aktuální ročník): ' + celkem + '\nHistorické ročníky: ' + historickych);
         }
 
         function zalohovatData() {
             const backup = {
-                zapasy: zapasy,
+                zapasy: currentZapasy,
                 hraci: hraci,
-                tymy: tymy,
+                tymy: currentTymy,
                 vitezove: vitezove,
+                historickeRocniky: historickeRocniky,
                 datum: new Date().toISOString(),
-                verze: '3.0'
+                verze: '4.0'
             };
             
             const json = JSON.stringify(backup, null, 2);
@@ -1558,7 +1721,7 @@
                             alert('❌ Neplatný formát zálohy!');
                             return;
                         }
-                        
+
                         let celkemZapasu = 0;
                         if (backup.zapasy.extraliga) {
                             Object.values(backup.zapasy).forEach(arr => {
@@ -1575,28 +1738,35 @@
                         }
 
                         if (backup.zapasy.extraliga) {
-                            zapasy = { ...zapasy, ...backup.zapasy };
+                            currentZapasy = { ...currentZapasy, ...backup.zapasy };
                         } else {
-                            zapasy.extraliga = backup.zapasy;
+                            currentZapasy.extraliga = backup.zapasy;
                         }
 
                         hraci = backup.hraci;
 
-                        if (backup.tymy.extraliga) {
-                            tymy = { ...tymy, ...backup.tymy };
-                        } else {
-                            tymy.extraliga = backup.tymy;
+                        if (backup.tymy && backup.tymy.extraliga) {
+                            currentTymy = { ...currentTymy, ...backup.tymy };
+                        } else if (backup.tymy) {
+                            currentTymy.extraliga = backup.tymy;
                         }
 
                         if (backup.vitezove) vitezove = backup.vitezove;
+                        if (backup.historickeRocniky) historickeRocniky = backup.historickeRocniky;
+
+                        // Reset to current season pointers
+                        aktualniHistorickyRocnik = null;
+                        zapasy = currentZapasy;
+                        tymy = currentTymy;
 
                         ulozitData();
+                        obnovitRocnikSelect();
                         aktualizovatSelecty();
                         zobrazitSpravuHracu();
                         zobrazitSpravuTymu();
                         zobrazitData();
-                        
-                        alert('✓ Data byla úspěšně obnovena!\n\nZápasů celkem: ' + celkemZapasu + '\nHráčů: ' + hraci.length);
+
+                        alert('✓ Data byla úspěšně obnovena!\n\nZápasů celkem: ' + celkemZapasu + '\nHráčů: ' + hraci.length + '\nHistorické ročníky: ' + Object.keys(historickeRocniky).length);
                     } catch (err) {
                         alert('❌ Chyba při načítání: ' + err.message);
                     }

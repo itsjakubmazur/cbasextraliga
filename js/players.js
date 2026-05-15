@@ -196,5 +196,61 @@ const Players = {
                 el.setSelectionRange(kurzorPozice, kurzorPozice);
             }
         }
+    },
+
+    // Renders player statistics from an explicit array of matches (used for historical playoff stats).
+    renderStatistikyZapasy(zapasy) {
+        const stats = {};
+        zapasy.forEach(zapas => {
+            if (Statistics.isNeodehrano(zapas)) return;
+            const v = Statistics.parseVysledek(zapas.vysledek);
+            const domaciVyhral = v.domaci > v.hoste;
+            const domaciSkrecovali = zapas.domaci === 'SKREČ';
+            const hosteSkrecovali = zapas.hoste === 'SKREČ';
+
+            const pridatHrace = (jmena, vyhral, tym) => {
+                jmena.split(',').map(h => h.trim()).filter(h => h).forEach(hrac => {
+                    if (!stats[hrac]) stats[hrac] = { zapasy: 0, vyhry: 0, prohry: 0, tymy: {} };
+                    stats[hrac].zapasy++;
+                    if (vyhral) stats[hrac].vyhry++; else stats[hrac].prohry++;
+                    if (tym) stats[hrac].tymy[tym] = (stats[hrac].tymy[tym] || 0) + 1;
+                });
+            };
+
+            if (!domaciSkrecovali) pridatHrace(zapas.domaci, domaciVyhral, zapas.tymDomaci);
+            if (!hosteSkrecovali) pridatHrace(zapas.hoste, !domaciVyhral, zapas.tymHoste);
+        });
+
+        const hraciList = Object.keys(stats).filter(h => stats[h].zapasy >= 1);
+        Statistics.seraditHraceStandardne(hraciList, stats);
+
+        if (hraciList.length === 0) return '<p class="text-gray-500 text-sm">Žádná data.</p>';
+
+        const rows = hraciList.map((hrac, idx) => {
+            const s = stats[hrac];
+            const winRatio = s.zapasy > 0 ? ((s.vyhry / s.zapasy) * 100).toFixed(1) : '0.0';
+            const nejTym = Object.keys(s.tymy).length > 0 ? Object.entries(s.tymy).sort((a, b) => b[1] - a[1])[0][0] : '-';
+            const winColor = parseFloat(winRatio) >= 50 ? 'text-green-600' : 'text-red-600';
+            return '<tr class="border-b border-gray-200 hover:bg-blue-50">' +
+                '<td class="p-2 text-center font-bold text-gray-500">' + (idx + 1) + '</td>' +
+                '<td class="p-2 font-semibold">' + Statistics.escapeHtml(hrac) + '</td>' +
+                '<td class="p-2 text-blue-600">' + Statistics.escapeHtml(nejTym) + '</td>' +
+                '<td class="p-2 text-center">' + s.zapasy + '</td>' +
+                '<td class="p-2 text-center text-green-600 font-semibold">' + s.vyhry + '</td>' +
+                '<td class="p-2 text-center text-red-600 font-semibold">' + s.prohry + '</td>' +
+                '<td class="p-2 text-center font-bold ' + winColor + '">' + winRatio + '%</td>' +
+                '</tr>';
+        }).join('');
+
+        return '<div class="overflow-x-auto"><table class="w-full text-xs">' +
+            '<thead><tr class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">' +
+            '<th class="text-center p-2">#</th>' +
+            '<th class="text-left p-2">Hráč</th>' +
+            '<th class="text-left p-2">Tým</th>' +
+            '<th class="text-center p-2">Z</th>' +
+            '<th class="text-center p-2">V</th>' +
+            '<th class="text-center p-2">P</th>' +
+            '<th class="text-center p-2">Win%</th>' +
+            '</tr></thead><tbody>' + rows + '</tbody></table></div>';
     }
 };

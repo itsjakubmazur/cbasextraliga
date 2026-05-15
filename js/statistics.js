@@ -3,13 +3,13 @@ const Statistics = {
     isPlayoffKolo(kolo) {
         if (!kolo) return false;
         const k = kolo.replace(/\.$/, '').trim().toUpperCase();
-        return ['QF', 'SF', 'F', 'P5'].includes(k);
+        return ['QF', 'SF', 'F', 'P5', '3M', 'RR'].includes(k);
     },
 
     // Map playoff kolo codes to display names
     playoffKoloNazev(kolo) {
         const k = kolo.replace(/\.$/, '').trim().toUpperCase();
-        const nazvy = { 'QF': 'Čtvrtfinále', 'SF': 'Semifinále', 'F': 'Finále', 'P5': 'O 5. místo' };
+        const nazvy = { 'QF': 'Čtvrtfinále', 'SF': 'Semifinále', 'F': 'Finále', 'P5': 'O 5. místo', '3M': 'O 3. místo', 'RR': 'Baráž' };
         return nazvy[k] || kolo;
     },
 

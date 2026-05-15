@@ -965,3 +965,163 @@ body.dark-mode .champions-team {
         font-size: 0.75rem;
     }
 }
+
+/* ── Nové playoff-team barvy ─────────────────────────────────── */
+
+.playoff-team-red {
+    background: #fef2f2;
+    border-color: #fca5a5;
+}
+
+.playoff-team-red .playoff-seed {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+.playoff-team-orange {
+    background: #fff7ed;
+    border-color: #fdba74;
+}
+
+.playoff-team-orange .playoff-seed {
+    background: #fed7aa;
+    color: #9a3412;
+}
+
+body.dark-mode .playoff-team-red {
+    background: #3b1c1c;
+    border-color: #991b1b;
+}
+
+body.dark-mode .playoff-team-orange {
+    background: #3b2a1c;
+    border-color: #9a3412;
+}
+
+/* ── Baráž bracket ───────────────────────────────────────────── */
+
+.baraze-wrapper {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.baraze-match-box {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    background: #f9fafb;
+    margin-bottom: 16px;
+    transition: box-shadow 0.2s;
+}
+
+.baraze-match-box:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.baraze-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.baraze-teams {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.baraze-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.baraze-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    background: #e5e7eb;
+    color: #374151;
+    flex-shrink: 0;
+}
+
+.baraze-team-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    flex: 1;
+}
+
+.baraze-vs {
+    text-align: center;
+    font-size: 0.7rem;
+    color: #9ca3af;
+    font-weight: 600;
+    padding: 2px 0;
+}
+
+body.dark-mode .baraze-match-box {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+body.dark-mode .baraze-team {
+    border-color: #374151;
+}
+
+/* ── Separate group (1. liga E/W separate playoffs) ──────────── */
+
+.separate-group {
+    background: #fafafa;
+}
+
+body.dark-mode .separate-group {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+/* ── Ročník selector buttons ─────────────────────────────────── */
+
+.rocnik-btn {
+    cursor: pointer;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.rocnik-btn:hover {
+    background: #f3f4f6;
+}
+
+.rocnik-btn-active {
+    background: #d93831 !important;
+    color: white !important;
+    border-color: #d93831 !important;
+}
+
+body.dark-mode .rocnik-btn {
+    background: #374151;
+    color: #f9fafb;
+    border-color: #4b5563;
+}
+
+body.dark-mode .rocnik-btn-active {
+    background: #d93831 !important;
+    border-color: #d93831 !important;
+}
