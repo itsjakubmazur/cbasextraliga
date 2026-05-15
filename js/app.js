@@ -31,27 +31,44 @@ const App = {
         });
     },
 
-    // Parse hash and navigate: "2024-25/extraliga" → historical, "extraliga" → current
+    // Parse hash and navigate:
+    //   "2024-25/extraliga"  → historical season, extraliga view
+    //   "extraliga/playoff"  → current season, extraliga, playoff tab
+    //   "extraliga"          → current season, extraliga
     _navigovatZeHash(hash) {
         const validSouteze = ['extraliga', 'prvni-liga-vychod', 'prvni-liga-zapad'];
-        const validPohled = ['extraliga', 'liga', 'baraze'];
+        const validHistPohled = ['extraliga', 'liga', 'baraze'];
+        const validPohledy = ['zakladni', 'playoff', 'baraze'];
 
         if (hash.includes('/')) {
-            const [rocnik, pohled] = hash.split('/');
+            const [cast1, cast2] = hash.split('/');
             const historicke = Data.getHistorickeRocniky();
-            if (historicke.includes(rocnik) && validPohled.includes(pohled)) {
-                this.aktualni_rocnik = rocnik;
-                this.aktualni_historicky_pohled = pohled;
-                Data.aktivovatRocnik(rocnik);
+
+            if (historicke.includes(cast1) && validHistPohled.includes(cast2)) {
+                // Historical season
+                this.aktualni_rocnik = cast1;
+                this.aktualni_historicky_pohled = cast2;
+                Data.aktivovatRocnik(cast1);
                 this._updateRocnikButtons();
                 this._prepnoutHistorickyMode();
                 return;
             }
+
+            if (validSouteze.includes(cast1) && validPohledy.includes(cast2)) {
+                // Current season with specific view tab (e.g. extraliga/playoff)
+                if (this.jeHistoricky()) {
+                    this.aktualni_rocnik = null;
+                    Data.aktivovatRocnik(null);
+                    this._updateRocnikButtons();
+                }
+                this.zmenitSoutez(cast1);
+                this.prepnoutPohled(cast2);
+                return;
+            }
         }
 
-        // Current season hash or fallback
+        // Plain current-season hash or fallback
         if (this.jeHistoricky()) {
-            // Coming back to current season from historical URL
             this.aktualni_rocnik = null;
             Data.aktivovatRocnik(null);
             this._updateRocnikButtons();

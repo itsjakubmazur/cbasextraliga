@@ -61,7 +61,14 @@
             try {
                 const response = await fetch('badminton-data.json');
                 const data = await response.json();
-                render(data.vitezove || []);
+
+                // Determine linkable seasons
+                const historickeKlice = new Set(Object.keys(data.historicke_rocniky || {}));
+                const playoffKola = new Set(['QF', 'SF', 'F', '3M', 'RR']);
+                const maAktualniPlayoff = (data.zapasy?.extraliga || [])
+                    .some(z => playoffKola.has((z.kolo || '').replace(/\.$/, '').trim().toUpperCase()));
+
+                render(data.vitezove || [], historickeKlice, maAktualniPlayoff);
             } catch (e) {
                 console.error('Chyba načítání:', e);
                 document.getElementById('topTymy').innerHTML =
@@ -89,7 +96,7 @@
             return d.innerHTML;
         }
 
-        function render(vitezove) {
+        function render(vitezove, historickeKlice, maAktualniPlayoff) {
             const sorted = [...vitezove].sort((a, b) => {
                 const rokA = parseInt(a.sezona) || 0;
                 const rokB = parseInt(b.sezona) || 0;
@@ -130,19 +137,34 @@
                 '<div class="text-sm font-semibold text-gray-600 mb-2">Nejúspěšnější týmy:</div>' +
                 '<div class="flex flex-wrap gap-2">' + topHtml + '</div>';
 
-            document.getElementById('vitezoveCR').innerHTML = renderList(cr, true);
-            document.getElementById('vitezoveCSR').innerHTML = renderList(csr, false);
+            document.getElementById('vitezoveCR').innerHTML = renderList(cr, true, historickeKlice, maAktualniPlayoff);
+            document.getElementById('vitezoveCSR').innerHTML = renderList(csr, false, historickeKlice, false);
         }
 
-        function renderList(items, highlightFirst) {
+        function renderList(items, highlightFirst, historickeKlice, maAktualniPlayoff) {
             if (items.length === 0) {
                 return '<p class="text-gray-500 text-center py-4">Žádná data.</p>';
             }
 
             return items.map((v, i) => {
                 const isCurrent = highlightFirst && i === 0;
+                const klicDash = v.sezona.replace('/', '-');
+                const klicSlash = v.sezona.replace('-', '/');
+                const historickyKlic = historickeKlice.has(klicDash) ? klicDash
+                    : historickeKlice.has(klicSlash) ? klicSlash
+                    : null;
+
+                let seasonHtml;
+                if (historickyKlic) {
+                    seasonHtml = '<a class="champions-season champions-season-link" href="index.html#' + historickyKlic + '/extraliga">' + escapeHtml(v.sezona) + '</a>';
+                } else if (isCurrent && maAktualniPlayoff) {
+                    seasonHtml = '<a class="champions-season champions-season-link" href="index.html#extraliga/playoff">' + escapeHtml(v.sezona) + '</a>';
+                } else {
+                    seasonHtml = '<div class="champions-season">' + escapeHtml(v.sezona) + '</div>';
+                }
+
                 return '<div class="champions-entry ' + (isCurrent ? 'champions-entry-current' : '') + '">' +
-                    '<div class="champions-season">' + escapeHtml(v.sezona) + '</div>' +
+                    seasonHtml +
                     '<div class="champions-team">' + escapeHtml(v.tym) + '</div>' +
                 '</div>';
             }).join('');
