@@ -10704,7 +10704,7 @@
       "tym": "Spoje Praha"
     }
   ],
-  "datum": "2026-05-15T11:46:29.859Z",
+  "datum": "2026-05-15T11:58:17.050Z",
   "historicke_rocniky": {
     "2024/25": {
       "konfigurace": {
@@ -12335,8 +12335,8 @@
             "tymHoste": "Badminton FSpS MU"
           },
           {
-            "id": 1778842878672,
-            "kolo": "P3",
+            "id": 1778846146388,
+            "kolo": "F",
             "datum": "2023-05-06",
             "disciplina": "Dvouhra mužů",
             "domaci": "Dratva Milan",
@@ -12347,8 +12347,8 @@
             "tymHoste": "SK Brno Slatina"
           },
           {
-            "id": 1778842886143,
-            "kolo": "P3",
+            "id": 1778846157205,
+            "kolo": "F",
             "datum": "2023-05-06",
             "disciplina": "Dvouhra mužů",
             "domaci": "Savin Cristian",
@@ -12359,10 +12359,10 @@
             "tymHoste": "SK Brno Slatina"
           },
           {
-            "id": 1778842893539,
-            "kolo": "P3",
+            "id": 1778846166278,
+            "kolo": "F",
             "datum": "2023-05-06",
-            "disciplina": "Dvouhra mužů",
+            "disciplina": "Dvouhra žen",
             "domaci": "Körösi Agnes",
             "hoste": "Hart Jordan",
             "vysledek": "3:1",
@@ -12371,8 +12371,8 @@
             "tymHoste": "SK Brno Slatina"
           },
           {
-            "id": 1778842907789,
-            "kolo": "P3",
+            "id": 1778846187145,
+            "kolo": "F",
             "datum": "2023-05-06",
             "disciplina": "Čtyřhra žen",
             "domaci": "Hansen Rikke Soby, Zuzáková Kateřina",
@@ -12383,8 +12383,8 @@
             "tymHoste": "SK Brno Slatina"
           },
           {
-            "id": 1778842921410,
-            "kolo": "P3",
+            "id": 1778846202520,
+            "kolo": "F",
             "datum": "2023-05-06",
             "disciplina": "Čtyřhra mužů",
             "domaci": "Savin Cristian, Swierczynski Mateusz",
@@ -12395,8 +12395,8 @@
             "tymHoste": "SK Brno Slatina"
           },
           {
-            "id": 1778842941552,
-            "kolo": "P3",
+            "id": 1778846220863,
+            "kolo": "F",
             "datum": "2023-05-06",
             "disciplina": "Smíšená čtyřhra",
             "domaci": "Mikkelsen Mikkel, Hansen Rikke Soby",
@@ -13011,8 +13011,8 @@
             "tymHoste": "TJ Slovan Vesec"
           },
           {
-            "id": 1778842254746,
-            "kolo": "P3",
+            "id": 1778845901186,
+            "kolo": "F",
             "datum": "2023-03-19",
             "disciplina": "Dvouhra mužů",
             "domaci": "Synovec Pavel",
@@ -13023,8 +13023,8 @@
             "tymHoste": "SK Prosek Praha"
           },
           {
-            "id": 1778842263968,
-            "kolo": "P3",
+            "id": 1778845915315,
+            "kolo": "F",
             "datum": "2023-03-19",
             "disciplina": "Dvouhra žen",
             "domaci": "Koukalová Dominika",
@@ -13035,8 +13035,8 @@
             "tymHoste": "SK Prosek Praha"
           },
           {
-            "id": 1778842279036,
-            "kolo": "P3",
+            "id": 1778845930179,
+            "kolo": "F",
             "datum": "2023-03-19",
             "disciplina": "Čtyřhra mužů",
             "domaci": "Bízek Vojtěch, Hubáček Michal",
@@ -13047,8 +13047,8 @@
             "tymHoste": "SK Prosek Praha"
           },
           {
-            "id": 1778842294347,
-            "kolo": "P3",
+            "id": 1778845943650,
+            "kolo": "F",
             "datum": "2023-03-19",
             "disciplina": "Čtyřhra žen",
             "domaci": "Šolarová Tereza, Johnová Barbora",
@@ -13059,8 +13059,8 @@
             "tymHoste": "SK Prosek Praha"
           },
           {
-            "id": 1778842308266,
-            "kolo": "P3",
+            "id": 1778845960658,
+            "kolo": "F",
             "datum": "2023-03-19",
             "disciplina": "Čtyřhra mužů",
             "domaci": "Lapáček Vojtěch, Synovec Pavel",
@@ -13071,8 +13071,8 @@
             "tymHoste": "SK Prosek Praha"
           },
           {
-            "id": 1778842322335,
-            "kolo": "P3",
+            "id": 1778845976393,
+            "kolo": "F",
             "datum": "2023-03-19",
             "disciplina": "Smíšená čtyřhra",
             "domaci": "Bitman Jakub, Johnová Barbora",
