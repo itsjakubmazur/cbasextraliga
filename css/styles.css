@@ -863,6 +863,17 @@ body.dark-mode .clickable:focus-visible {
     text-overflow: ellipsis;
 }
 
+.champions-season-link {
+    text-decoration: none;
+    color: #d93831;
+    border-bottom: 1px dotted #d93831;
+    transition: color 0.15s, border-color 0.15s;
+}
+.champions-season-link:hover {
+    color: #b02020;
+    border-bottom-style: solid;
+}
+
 body.dark-mode .champions-entry {
     background: #374151;
     border-color: #4b5563;
@@ -879,6 +890,15 @@ body.dark-mode .champions-entry-current {
 
 body.dark-mode .champions-season {
     color: #9ca3af;
+}
+
+body.dark-mode .champions-season-link {
+    color: #f87171;
+    border-bottom-color: #f87171;
+}
+body.dark-mode .champions-season-link:hover {
+    color: #fca5a5;
+    border-bottom-color: #fca5a5;
 }
 
 body.dark-mode .champions-team {

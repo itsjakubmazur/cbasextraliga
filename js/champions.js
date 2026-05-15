@@ -42,12 +42,20 @@ const Champions = {
                 '</div>';
         }).join(' ');
 
+        // Set of seasons with historical data for deep-linking
+        const historickeRocniky = new Set(Data.getHistorickeRocniky());
+
         // Timeline of champions
         const timelineHtml = sorted.map((v, i) => {
             const isFirst = i === 0;
             const highlightClass = isFirst ? 'champions-entry-current' : '';
+            const rocnikKlic = v.sezona.replace('/', '-');
+            const maData = historickeRocniky.has(rocnikKlic);
+            const seasonHtml = maData
+                ? '<a class="champions-season champions-season-link" href="#' + rocnikKlic + '/extraliga">' + Statistics.escapeHtml(v.sezona) + '</a>'
+                : '<div class="champions-season">' + Statistics.escapeHtml(v.sezona) + '</div>';
             return '<div class="champions-entry ' + highlightClass + '">' +
-                '<div class="champions-season">' + Statistics.escapeHtml(v.sezona) + '</div>' +
+                seasonHtml +
                 '<div class="champions-team">' + Statistics.escapeHtml(v.tym) + '</div>' +
                 '</div>';
         }).join('');
