@@ -297,7 +297,7 @@ const Playoff = {
         const results = {};
         zapasy.forEach(z => {
             if (!Statistics.isPlayoffKolo(z.kolo)) return;
-            const kolo = z.kolo.replace(/\.$/, '').trim().toUpperCase();
+            const kolo = Statistics.normalizeKolo(z.kolo);
             const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
             if (!results[klic]) results[klic] = { kolo, tym1: z.tymDomaci, tym2: z.tymHoste, zapasy: [] };
             results[klic].zapasy.push(z);
@@ -384,7 +384,7 @@ const Playoff = {
 
         zapasy.forEach(z => {
             if (!Statistics.isPlayoffKolo(z.kolo)) return;
-            const kolo = z.kolo.replace(/\.$/, '').trim().toUpperCase();
+            const kolo = Statistics.normalizeKolo(z.kolo);
             const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
             if (!results[klic]) {
                 results[klic] = {
@@ -401,13 +401,12 @@ const Playoff = {
         return results;
     },
 
-    // Get playoff results for 1. liga from the shared playoff pool
     getPlayoffResultsPrvniLiga() {
         const zapasy = Data.zapasy['prvni-liga-playoff'] || [];
         const results = {};
 
         zapasy.forEach(z => {
-            const kolo = (z.kolo || 'QF').replace(/\.$/, '').trim().toUpperCase();
+            const kolo = Statistics.normalizeKolo(z.kolo || 'QF');
             const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
             if (!results[klic]) {
                 results[klic] = {
@@ -582,8 +581,16 @@ const Playoff = {
         const sfTym1A = t(0); // 1st seed always in SF1
         const sfTym2A = t(1); // 2nd seed always in SF2
 
-        const sfRes1 = sfTym1B ? this.findResult(res, 'SF', sfTym1A, sfTym1B) : null;
-        const sfRes2 = sfTym2B ? this.findResult(res, 'SF', sfTym2A, sfTym2B) : null;
+        // Primary lookup by reseeding; fallback to any SF match involving the bye team
+        // (needed in historical mode where team order is derived, not from standings)
+        let sfRes1 = sfTym1B ? this.findResult(res, 'SF', sfTym1A, sfTym1B) : null;
+        if (!sfRes1) sfRes1 = this.findWinnerFromRound(res, 'SF', sfTym1A) || null;
+        if (sfRes1) sfTym1B = sfRes1.tym1 === sfTym1A ? sfRes1.tym2 : sfRes1.tym1;
+
+        let sfRes2 = sfTym2B ? this.findResult(res, 'SF', sfTym2A, sfTym2B) : null;
+        if (!sfRes2) sfRes2 = this.findWinnerFromRound(res, 'SF', sfTym2A) || null;
+        if (sfRes2) sfTym2B = sfRes2.tym1 === sfTym2A ? sfRes2.tym2 : sfRes2.tym1;
+
         const sfVitez1 = sfRes1?.vitez || null;
         const sfVitez2 = sfRes2?.vitez || null;
 

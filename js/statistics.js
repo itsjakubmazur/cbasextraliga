@@ -3,12 +3,17 @@ const Statistics = {
     isPlayoffKolo(kolo) {
         if (!kolo) return false;
         const k = kolo.replace(/\.$/, '').trim().toUpperCase();
-        return ['QF', 'SF', 'F', 'P5', '3M', 'RR'].includes(k);
+        return ['QF', 'SF', 'F', 'P5', '3M', 'P3', 'RR'].includes(k);
     },
 
-    // Map playoff kolo codes to display names
-    playoffKoloNazev(kolo) {
+    // Normalize kolo code: P3 → 3M (user enters "P3" for 3rd place matches)
+    normalizeKolo(kolo) {
         const k = kolo.replace(/\.$/, '').trim().toUpperCase();
+        return k === 'P3' ? '3M' : k;
+    },
+
+    playoffKoloNazev(kolo) {
+        const k = this.normalizeKolo(kolo);
         const nazvy = { 'QF': 'Čtvrtfinále', 'SF': 'Semifinále', 'F': 'Finále', 'P5': 'O 5. místo', '3M': 'O 3. místo', 'RR': 'Baráž' };
         return nazvy[k] || kolo;
     },
