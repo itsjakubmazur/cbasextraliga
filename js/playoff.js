@@ -90,8 +90,7 @@ const Playoff = {
             resultHtml +
             '</div>' +
             (vitez ? '<div class="mt-4 p-4 bg-green-50 border-2 border-green-400 rounded-xl text-center">' +
-                '<div class="text-sm font-semibold text-green-700">✅ ' + Statistics.escapeHtml(vitez) + ' – hraje Extraligu</div>' +
-                (porazeny ? '<div class="text-sm text-red-600 mt-1">❌ ' + Statistics.escapeHtml(porazeny) + ' – sestupuje / zůstává v 1. lize</div>' : '') +
+                '<div class="text-sm font-semibold text-green-700">✅ ' + Statistics.escapeHtml(vitez) + ' si vybojoval extraligovou příslušnost</div>' +
                 '</div>' : '') +
             '</div>';
         return html;
@@ -203,30 +202,53 @@ const Playoff = {
     // 2 teams from East + 2 teams from West → SF crossover → F
 
     renderPrvniLigaCombined4() {
+        const res = this.getPlayoffResultsPrvniLiga();
+
+        // Derive SF pairs from results – no table seedings needed
+        const allSfMatches = Object.values(res).filter(r => r.kolo === 'SF')
+            .sort((a, b) => [a.tym1, a.tym2].sort().join('') < [b.tym1, b.tym2].sort().join('') ? -1 : 1);
+
+        // Try table-based seedings for E/W badges (works for current season, empty for historical)
         const tabulkaV = Statistics.vypocitejTabulku('prvni-liga-vychod');
         const tabulkaZ = Statistics.vypocitejTabulku('prvni-liga-zapad');
         const tymyV = this.seraditTymy(tabulkaV);
         const tymyZ = this.seraditTymy(tabulkaZ);
+        const eastTeams = new Set(tymyV);
+        const westTeams = new Set(tymyZ);
+        const getConf = (t) => eastTeams.has(t) ? 'V' : (westTeams.has(t) ? 'Z' : null);
 
-        const res = this.getPlayoffResultsPrvniLiga();
+        // Match SF results to sfRes1/sfRes2
+        let sfRes1, sfRes2;
+        if (tymyV.length >= 2 && tymyZ.length >= 2) {
+            // Current season – use table crossover
+            const sfTym1A = tymyV[0], sfTym1B = tymyZ[1];
+            const sfTym2A = tymyV[1], sfTym2B = tymyZ[0];
+            sfRes1 = this.findResult(res, 'SF', sfTym1A, sfTym1B);
+            sfRes2 = this.findResult(res, 'SF', sfTym2A, sfTym2B);
+        }
+        // Historical fallback – take SF matches directly from results
+        if (!sfRes1 && !sfRes2 && allSfMatches.length > 0) {
+            sfRes1 = allSfMatches[0] || null;
+            sfRes2 = allSfMatches[1] || null;
+        }
 
-        // SF: E1 vs Z2, E2 vs Z1 (crossover)
-        const sfTym1A = tymyV[0] || '?', sfTym1B = tymyZ[1] || '?';
-        const sfTym2A = tymyV[1] || '?', sfTym2B = tymyZ[0] || '?';
-
-        const sfRes1 = this.findResult(res, 'SF', sfTym1A, sfTym1B);
-        const sfRes2 = this.findResult(res, 'SF', sfTym2A, sfTym2B);
         const sfVitez1 = sfRes1?.vitez || null;
         const sfVitez2 = sfRes2?.vitez || null;
 
+        // Derive team names from sfRes objects (works for both current and historical mode)
+        const sf1t1 = sfRes1?.tym1 || null;
+        const sf1t2 = sfRes1?.tym2 || null;
+        const sf2t1 = sfRes2?.tym1 || null;
+        const sf2t2 = sfRes2?.tym2 || null;
+
         const sf1 = this.matchBox(
-            this.teamCard(sfTym1A, '1.', sfVitez1 === sfTym1A ? 'playoff-team-green' : 'playoff-team-east', 'V', sfRes1 ? (sfRes1.tym1 === sfTym1A ? sfRes1.skore1 : sfRes1.skore2) : undefined),
-            this.teamCard(sfTym1B, '2.', sfVitez1 === sfTym1B ? 'playoff-team-green' : 'playoff-team-west', 'Z', sfRes1 ? (sfRes1.tym1 === sfTym1B ? sfRes1.skore1 : sfRes1.skore2) : undefined),
+            sf1t1 ? this.teamCard(sf1t1, '1.', sfVitez1 === sf1t1 ? 'playoff-team-green' : 'playoff-team-east', getConf(sf1t1), sfRes1.tym1 === sf1t1 ? sfRes1.skore1 : sfRes1.skore2) : this.pendingCard('Tým SF'),
+            sf1t2 ? this.teamCard(sf1t2, '2.', sfVitez1 === sf1t2 ? 'playoff-team-green' : 'playoff-team-west', getConf(sf1t2), sfRes1.tym1 === sf1t2 ? sfRes1.skore1 : sfRes1.skore2) : this.pendingCard('Tým SF'),
             'Semifinále 1', sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null, sfRes1
         );
         const sf2 = this.matchBox(
-            this.teamCard(sfTym2A, '2.', sfVitez2 === sfTym2A ? 'playoff-team-green' : 'playoff-team-east', 'V', sfRes2 ? (sfRes2.tym1 === sfTym2A ? sfRes2.skore1 : sfRes2.skore2) : undefined),
-            this.teamCard(sfTym2B, '1.', sfVitez2 === sfTym2B ? 'playoff-team-green' : 'playoff-team-west', 'Z', sfRes2 ? (sfRes2.tym1 === sfTym2B ? sfRes2.skore1 : sfRes2.skore2) : undefined),
+            sf2t1 ? this.teamCard(sf2t1, '2.', sfVitez2 === sf2t1 ? 'playoff-team-green' : 'playoff-team-east', getConf(sf2t1), sfRes2.tym1 === sf2t1 ? sfRes2.skore1 : sfRes2.skore2) : this.pendingCard('Tým SF'),
+            sf2t2 ? this.teamCard(sf2t2, '1.', sfVitez2 === sf2t2 ? 'playoff-team-green' : 'playoff-team-west', getConf(sf2t2), sfRes2.tym1 === sf2t2 ? sfRes2.skore1 : sfRes2.skore2) : this.pendingCard('Tým SF'),
             'Semifinále 2', sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null, sfRes2
         );
 
@@ -465,6 +487,26 @@ const Playoff = {
             '</div>' +
             resultHtml +
             '</div>';
+    },
+
+    // Derive synthetic tymy array from playoff results when basic season table is unavailable
+    _deriveExtraligaTeamsFromResults(res) {
+        const qfMatches = Object.values(res).filter(r => r.kolo === 'QF');
+        const sfMatches = Object.values(res).filter(r => r.kolo === 'SF');
+
+        const qfTeams = new Set();
+        qfMatches.forEach(r => { qfTeams.add(r.tym1); qfTeams.add(r.tym2); });
+
+        const allSfTeams = new Set();
+        sfMatches.forEach(r => { allSfTeams.add(r.tym1); allSfTeams.add(r.tym2); });
+        const byeTeams = [...allSfTeams].filter(t => !qfTeams.has(t));
+
+        const tymy = ['?', '?', '?', '?', '?', '?'];
+        tymy[0] = byeTeams[0] || '?';
+        tymy[1] = byeTeams[1] || '?';
+        if (qfMatches[0]) { tymy[2] = qfMatches[0].tym1; tymy[5] = qfMatches[0].tym2; }
+        if (qfMatches[1]) { tymy[3] = qfMatches[1].tym1; tymy[4] = qfMatches[1].tym2; }
+        return tymy;
     },
 
     renderExtraligaBracket(tymy, data, playoffResults) {

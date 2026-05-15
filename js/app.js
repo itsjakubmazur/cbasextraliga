@@ -165,8 +165,12 @@ const App = {
         if (typ === 'extraliga') {
             const format = konfig.extraliga_playoff || 'QF+SF+F';
             const tabulkaData = Statistics.vypocitejTabulku('extraliga');
-            const tymy = Playoff.seraditTymy(tabulkaData);
+            let tymy = Playoff.seraditTymy(tabulkaData);
             const res = Playoff.getPlayoffResults('extraliga');
+            // Historical data has only playoff matches – derive teams from results if table is empty
+            if (tymy.length < 6) {
+                tymy = Playoff._deriveExtraligaTeamsFromResults(res);
+            }
             if (format === 'QF+SF+F+3rd') {
                 return Playoff.renderExtraligaBracketWithThirdPlace(tymy, tabulkaData, res);
             }
