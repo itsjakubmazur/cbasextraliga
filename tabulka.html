@@ -478,10 +478,14 @@
             return { domaciBody, hosteBody };
         }
 
+        function normalizeKolo(kolo) {
+            const k = (kolo || '').replace(/\.$/, '').trim().toUpperCase();
+            return k === 'P3' ? '3M' : k;
+        }
+
         function isPlayoffKolo(kolo) {
             if (!kolo) return false;
-            const k = kolo.replace(/\.$/, '').trim().toUpperCase();
-            return ['QF', 'SF', 'F', 'P5'].includes(k);
+            return ['QF', 'SF', 'F', 'P5', '3M', 'P3', 'RR'].includes(normalizeKolo(kolo));
         }
 
         function escapeHtml(s) {
@@ -607,7 +611,7 @@
             const results = {};
             zap.forEach(z => {
                 if (!isPlayoffKolo(z.kolo)) return;
-                const kolo = z.kolo.replace(/\.$/, '').trim().toUpperCase();
+                const kolo = normalizeKolo(z.kolo);
                 const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
                 if (!results[klic]) {
                     results[klic] = { kolo: kolo, tym1: z.tymDomaci, tym2: z.tymHoste, zapasy: [] };

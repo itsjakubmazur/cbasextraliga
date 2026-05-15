@@ -297,7 +297,7 @@ const Playoff = {
         const results = {};
         zapasy.forEach(z => {
             if (!Statistics.isPlayoffKolo(z.kolo)) return;
-            const kolo = z.kolo.replace(/\.$/, '').trim().toUpperCase();
+            const kolo = Statistics.normalizeKolo(z.kolo);
             const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
             if (!results[klic]) results[klic] = { kolo, tym1: z.tymDomaci, tym2: z.tymHoste, zapasy: [] };
             results[klic].zapasy.push(z);
@@ -384,7 +384,7 @@ const Playoff = {
 
         zapasy.forEach(z => {
             if (!Statistics.isPlayoffKolo(z.kolo)) return;
-            const kolo = z.kolo.replace(/\.$/, '').trim().toUpperCase();
+            const kolo = Statistics.normalizeKolo(z.kolo);
             const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
             if (!results[klic]) {
                 results[klic] = {
@@ -401,13 +401,12 @@ const Playoff = {
         return results;
     },
 
-    // Get playoff results for 1. liga from the shared playoff pool
     getPlayoffResultsPrvniLiga() {
         const zapasy = Data.zapasy['prvni-liga-playoff'] || [];
         const results = {};
 
         zapasy.forEach(z => {
-            const kolo = (z.kolo || 'QF').replace(/\.$/, '').trim().toUpperCase();
+            const kolo = Statistics.normalizeKolo(z.kolo || 'QF');
             const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
             if (!results[klic]) {
                 results[klic] = {
