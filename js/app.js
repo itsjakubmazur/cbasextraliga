@@ -9,11 +9,7 @@ const App = {
         const success = await Data.nacist();
         if (success) {
             this._buildRocnikSelector();
-
-            const hash = window.location.hash.replace('#', '');
-            const validSouteze = ['extraliga', 'prvni-liga-vychod', 'prvni-liga-zapad'];
-            const soutez = validSouteze.includes(hash) ? hash : 'extraliga';
-            this.zmenitSoutez(soutez);
+            this._navigovatZeHash(window.location.hash.replace('#', ''));
         }
 
         if (localStorage.getItem('darkMode') === 'true') {
@@ -31,12 +27,38 @@ const App = {
         });
 
         window.addEventListener('hashchange', () => {
-            const hash = window.location.hash.replace('#', '');
-            const validSouteze = ['extraliga', 'prvni-liga-vychod', 'prvni-liga-zapad'];
-            if (validSouteze.includes(hash) && hash !== this.aktualni_soutez && !this.jeHistoricky()) {
-                this.zmenitSoutez(hash);
-            }
+            this._navigovatZeHash(window.location.hash.replace('#', ''));
         });
+    },
+
+    // Parse hash and navigate: "2024-25/extraliga" → historical, "extraliga" → current
+    _navigovatZeHash(hash) {
+        const validSouteze = ['extraliga', 'prvni-liga-vychod', 'prvni-liga-zapad'];
+        const validPohled = ['extraliga', 'liga', 'baraze'];
+
+        if (hash.includes('/')) {
+            const [rocnik, pohled] = hash.split('/');
+            const historicke = Data.getHistorickeRocniky();
+            if (historicke.includes(rocnik) && validPohled.includes(pohled)) {
+                this.aktualni_rocnik = rocnik;
+                this.aktualni_historicky_pohled = pohled;
+                Data.aktivovatRocnik(rocnik);
+                this._updateRocnikButtons();
+                this._prepnoutHistorickyMode();
+                return;
+            }
+        }
+
+        // Current season hash or fallback
+        if (this.jeHistoricky()) {
+            // Coming back to current season from historical URL
+            this.aktualni_rocnik = null;
+            Data.aktivovatRocnik(null);
+            this._updateRocnikButtons();
+            this._prepnoutAktualniMode();
+        }
+        const soutez = validSouteze.includes(hash) ? hash : 'extraliga';
+        if (!this.jeHistoricky()) this.zmenitSoutez(soutez);
     },
 
     _buildRocnikSelector() {
@@ -99,6 +121,15 @@ const App = {
         }
     },
 
+    _aktualizovatHash() {
+        if (this.jeHistoricky()) {
+            const newHash = this.aktualni_rocnik + '/' + this.aktualni_historicky_pohled;
+            if (window.location.hash.replace('#', '') !== newHash) {
+                history.replaceState(null, '', '#' + newHash);
+            }
+        }
+    },
+
     _prepnoutHistorickyMode() {
         document.getElementById('soutezTabs').style.display = 'none';
         document.getElementById('historickyNav').style.display = 'flex';
@@ -124,6 +155,7 @@ const App = {
 
     zmenitHistorickyPohled(pohled) {
         this.aktualni_historicky_pohled = pohled;
+        this._aktualizovatHash();
 
         // Update nav buttons
         ['extraliga', 'liga', 'baraze'].forEach(p => {
