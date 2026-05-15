@@ -10327,6 +10327,92 @@
         "tymDomaci": "SK Kuklenská Brno",
         "tymHoste": "TJ Sokol Dobruška"
       }
+    ],
+    "baraze": [
+      {
+        "id": 1778834043462.554,
+        "kolo": "F",
+        "datum": "2026-05-09",
+        "disciplina": "Čtyřhra mužů",
+        "domaci": "Diviš Jakub, Palán Václav",
+        "hoste": "Nielsen Mathias Solgaard, Ehm Adam",
+        "vysledek": "1:3",
+        "sety": "9:11, 9:11, 11:9, 11:13",
+        "tymDomaci": "SK Prosek Praha",
+        "tymHoste": "SK Kuklenská Brno"
+      },
+      {
+        "id": 1778834043462.807,
+        "kolo": "F",
+        "datum": "2026-05-09",
+        "disciplina": "Čtyřhra žen",
+        "domaci": "Treperová Ivana, Kalkušová Karolína",
+        "hoste": "Gavnholt Kristína, Fliglová Nela",
+        "vysledek": "1:3",
+        "sety": "12:10, 12:14, 9:11, 12:14",
+        "tymDomaci": "SK Prosek Praha",
+        "tymHoste": "SK Kuklenská Brno"
+      },
+      {
+        "id": 1778834043462.5195,
+        "kolo": "F",
+        "datum": "2026-05-09",
+        "disciplina": "Dvouhra žen",
+        "domaci": "Maixnerová Amélie",
+        "hoste": "Klapalová Adéla",
+        "vysledek": "3:0",
+        "sety": "13:11, 11:7, 11:4",
+        "tymDomaci": "SK Prosek Praha",
+        "tymHoste": "SK Kuklenská Brno"
+      },
+      {
+        "id": 1778834043462.7449,
+        "kolo": "F",
+        "datum": "2026-05-09",
+        "disciplina": "Čtyřhra mužů",
+        "domaci": "Coufal Kryštof, Titěra Filip",
+        "hoste": "Cirók Josef, Ludík Milan",
+        "vysledek": "3:0",
+        "sety": "11:8, 11:8, 11:4",
+        "tymDomaci": "SK Prosek Praha",
+        "tymHoste": "SK Kuklenská Brno"
+      },
+      {
+        "id": 1778834043462.0835,
+        "kolo": "F",
+        "datum": "2026-05-09",
+        "disciplina": "Smíšená čtyřhra",
+        "domaci": "Treperová Ivana, Titěra Filip",
+        "hoste": "Ehm Adam, Fliglová Nela",
+        "vysledek": "3:1",
+        "sety": "9:11, 11:4, 11:6, 11:3",
+        "tymDomaci": "SK Prosek Praha",
+        "tymHoste": "SK Kuklenská Brno"
+      },
+      {
+        "id": 1778834043462.6987,
+        "kolo": "F",
+        "datum": "2026-05-09",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Diviš Jakub",
+        "hoste": "Ludík Milan",
+        "vysledek": "0:3",
+        "sety": "6:11, 8:11, 3:11",
+        "tymDomaci": "SK Prosek Praha",
+        "tymHoste": "SK Kuklenská Brno"
+      },
+      {
+        "id": 1778834043462.842,
+        "kolo": "F",
+        "datum": "2026-05-09",
+        "disciplina": "Dvouhra mužů",
+        "domaci": "Thor Lukáš",
+        "hoste": "Nielsen Mathias Solgaard",
+        "vysledek": "0:3",
+        "sety": "4:11, 8:11, 8:11",
+        "tymDomaci": "SK Prosek Praha",
+        "tymHoste": "SK Kuklenská Brno"
+      }
     ]
   },
   "tymy": {
@@ -10362,7 +10448,11 @@
       "TJ Slovan Vesec",
       "TJ Sokol Radotín"
     ],
-    "prvni-liga-playoff": []
+    "prvni-liga-playoff": [],
+    "baraze": [
+      "SK Kuklenská Brno",
+      "SK Prosek Praha"
+    ]
   },
   "vitezove": [
     {
@@ -10614,5 +10704,766 @@
       "tym": "Spoje Praha"
     }
   ],
-  "datum": "2026-04-19T21:18:01.370Z"
+  "datum": "2026-05-15T09:03:26.548Z",
+  "historicke_rocniky": {
+    "2024/25": {
+      "konfigurace": {
+        "extraliga_playoff": "QF+SF+F",
+        "prvni_liga_playoff": "combined-4",
+        "baraze": "single"
+      },
+      "zapasy": {
+        "extraliga": [
+          {
+            "id": 1778834471996,
+            "kolo": "QF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Kwinta Dominik",
+            "hoste": "Louda Jan",
+            "vysledek": "2:3",
+            "sety": "10:12, 11:9, 7:11, 14:12, 13:15",
+            "tymDomaci": "BK Meteor Praha",
+            "tymHoste": "BA Plzeň"
+          },
+          {
+            "id": 1778834486528,
+            "kolo": "QF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Golas Mateusz",
+            "hoste": "Szymanowski Mikolaj",
+            "vysledek": "1:3",
+            "sety": "13:11, 7:11, 7:11, 6:11",
+            "tymDomaci": "BK Meteor Praha",
+            "tymHoste": "BA Plzeň"
+          },
+          {
+            "id": 1778834523177,
+            "kolo": "QF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Maixnerová Petra",
+            "hoste": "SKREČ",
+            "vysledek": "3:0",
+            "sety": "11:0, 11:0, 11:0",
+            "tymDomaci": "BK Meteor Praha",
+            "tymHoste": "BA Plzeň"
+          },
+          {
+            "id": 1778834551794,
+            "kolo": "QF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Král Ondřej, Cybulski Robert",
+            "hoste": "Melaniuk Jakub, Trecki Wiktor",
+            "vysledek": "3:0",
+            "sety": "11:8, 11:5, 11:8",
+            "tymDomaci": "BK Meteor Praha",
+            "tymHoste": "BA Plzeň"
+          },
+          {
+            "id": 1778834568944,
+            "kolo": "QF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Szydlowski Przemyslaw, Rogalski Michal",
+            "hoste": "Louda Jan, Král Jiří",
+            "vysledek": "0:3",
+            "sety": "7:11, 6:11, 9:11",
+            "tymDomaci": "BK Meteor Praha",
+            "tymHoste": "BA Plzeň"
+          },
+          {
+            "id": 1778834588643,
+            "kolo": "QF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra žen",
+            "domaci": "Maixnerová Petra, Krulová Lucie",
+            "hoste": "SKREČ",
+            "vysledek": "3:0",
+            "sety": "11:0, 11:0, 11:0",
+            "tymDomaci": "BK Meteor Praha",
+            "tymHoste": "BA Plzeň"
+          },
+          {
+            "id": 1778834610961,
+            "kolo": "QF",
+            "datum": "2025-03-29",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Bášová Alžběta, Král Ondřej",
+            "hoste": "Krpatová Lucie, Melaniuk Jakub",
+            "vysledek": "3:1",
+            "sety": "14:15, 11:8, 11:5, 11:4",
+            "tymDomaci": "BK Meteor Praha",
+            "tymHoste": "BA Plzeň"
+          },
+          {
+            "id": 1778834676694,
+            "kolo": "QF",
+            "datum": "2025-03-30",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Andersen Irina",
+            "hoste": "Petrušková Klára",
+            "vysledek": "3:0",
+            "sety": "11:5, 11:3, 11:6",
+            "tymDomaci": "BK 1973 Benátky nad Jizerou",
+            "tymHoste": "TJ Sokol Klimkovice"
+          },
+          {
+            "id": 1778834697493,
+            "kolo": "QF",
+            "datum": "2025-03-30",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Russ Zach, Soby Hansen Jeppe",
+            "hoste": "Rajarajan Karan Rajan, Brázda Tadeáš",
+            "vysledek": "3:1",
+            "sety": "11:8, 11:7, 10:12, 13:11",
+            "tymDomaci": "BK 1973 Benátky nad Jizerou",
+            "tymHoste": "TJ Sokol Klimkovice"
+          },
+          {
+            "id": 1778834728610,
+            "kolo": "QF",
+            "datum": "2025-03-30",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Gysel Léo Van, Singer Valentin",
+            "hoste": "Kopřiva Dominik, Budzel Filip",
+            "vysledek": "3:1",
+            "sety": "11:6, 5:11, 13:11, 11:8",
+            "tymDomaci": "BK 1973 Benátky nad Jizerou",
+            "tymHoste": "TJ Sokol Klimkovice"
+          },
+          {
+            "id": 1778834747143,
+            "kolo": "QF",
+            "datum": "2025-03-30",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Soby Hansen Jeppe, Hansen Rikke Soby",
+            "hoste": "Brázda Tadeáš, Osladilová Kateřina",
+            "vysledek": "3:1",
+            "sety": "11:7, 11:9, 11:13, 11:3",
+            "tymDomaci": "BK 1973 Benátky nad Jizerou",
+            "tymHoste": "TJ Sokol Klimkovice"
+          },
+          {
+            "id": 1778834792860,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Švábíková Tereza",
+            "hoste": "Bayrak Özge",
+            "vysledek": "2:3",
+            "sety": "11:8, 11:6, 6:11, 8:11, 10:12",
+            "tymDomaci": "B.O. Chance Ostrava Sportclub",
+            "tymHoste": "BK 1973 Benátky nad Jizerou"
+          },
+          {
+            "id": 1778834809476,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Klausholm Anna, Eipe Joel Chacko Gamrath",
+            "hoste": "Hansen Rikke Soby, Claerbout Lucas",
+            "vysledek": "3:2",
+            "sety": "7:11, 11:6, 8:11, 11:8, 11:8",
+            "tymDomaci": "B.O. Chance Ostrava Sportclub",
+            "tymHoste": "BK 1973 Benátky nad Jizerou"
+          },
+          {
+            "id": 1778834819059,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Filimon Collins",
+            "hoste": "Gysel Léo Van",
+            "vysledek": "3:1",
+            "sety": "4:11, 11:8, 11:8, 11:7",
+            "tymDomaci": "B.O. Chance Ostrava Sportclub",
+            "tymHoste": "BK 1973 Benátky nad Jizerou"
+          },
+          {
+            "id": 1778834836993,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Čtyřhra žen",
+            "domaci": "Klausholm Anna, Švábíková Tereza",
+            "hoste": "Zuzáková Kateřina, Hansen Rikke Soby",
+            "vysledek": "3:0",
+            "sety": "11:6, 11:6, 11:3",
+            "tymDomaci": "B.O. Chance Ostrava Sportclub",
+            "tymHoste": "BK 1973 Benátky nad Jizerou"
+          },
+          {
+            "id": 1778834870326,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Koljonen Kalle, Lassen Nielsen Sebastian",
+            "hoste": "SKREČ",
+            "vysledek": "3:0",
+            "sety": "11:0, 11:0, 11:0",
+            "tymDomaci": "B.O. Chance Ostrava Sportclub",
+            "tymHoste": "BK 1973 Benátky nad Jizerou"
+          },
+          {
+            "id": 1778834909609,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Janoštík Jan, Svendsen Victor",
+            "hoste": "Hubáček Matěj, Szydlowski Przemyslaw",
+            "vysledek": "3:0",
+            "sety": "11:9, 11:5, 11:9",
+            "tymDomaci": "SK Brno Slatina",
+            "tymHoste": "BK Meteor Praha"
+          },
+          {
+            "id": 1778834920625,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Gilmour Kirsty",
+            "hoste": "Krulová Lucie",
+            "vysledek": "3:2",
+            "sety": "7:11, 11:6, 13:15, 11:6, 11:4",
+            "tymDomaci": "SK Brno Slatina",
+            "tymHoste": "BK Meteor Praha"
+          },
+          {
+            "id": 1778834940693,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Torrance Ciara, Ellis Marcus",
+            "hoste": "Bášová Alžběta, Král Ondřej",
+            "vysledek": "3:1",
+            "sety": "7:11, 11:5, 11:4, 13:11",
+            "tymDomaci": "SK Brno Slatina",
+            "tymHoste": "BK Meteor Praha"
+          },
+          {
+            "id": 1778834958742,
+            "kolo": "SF",
+            "datum": "2025-05-10",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Coelho de Oliveira Ygor",
+            "hoste": "Kwinta Dominik",
+            "vysledek": "3:1",
+            "sety": "10:12, 11:4, 13:11, 11:7",
+            "tymDomaci": "SK Brno Slatina",
+            "tymHoste": "BK Meteor Praha"
+          },
+          {
+            "id": 1778834993942,
+            "kolo": "F",
+            "datum": "2025-05-10",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Janoštík Jan, Svendsen Victor",
+            "hoste": "Koljonen Kalle, Lassen Nielsen Sebastian",
+            "vysledek": "3:0",
+            "sety": "11:6, 11:6, 11:5",
+            "tymDomaci": "SK Brno Slatina",
+            "tymHoste": "B.O. Chance Ostrava Sportclub"
+          },
+          {
+            "id": 1778835010225,
+            "kolo": "F",
+            "datum": "2025-05-10",
+            "disciplina": "Čtyřhra žen",
+            "domaci": "Marczak Kornelie, Torrance Ciara",
+            "hoste": "Popovska Hristomira, Klausholm Anna",
+            "vysledek": "3:0",
+            "sety": "12:10, 11:9, 11:9",
+            "tymDomaci": "SK Brno Slatina",
+            "tymHoste": "B.O. Chance Ostrava Sportclub"
+          },
+          {
+            "id": 1778835029942,
+            "kolo": "F",
+            "datum": "2025-05-10",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Ellis Marcus, Lundgaard Hansen Sara",
+            "hoste": "Švábíková Tereza, Eipe Joel Chacko Gamrath",
+            "vysledek": "3:1",
+            "sety": "5:11, 11:7, 11:9, 11:5",
+            "tymDomaci": "SK Brno Slatina",
+            "tymHoste": "B.O. Chance Ostrava Sportclub"
+          },
+          {
+            "id": 1778835045026,
+            "kolo": "F",
+            "datum": "2025-05-10",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Coelho de Oliveira Ygor",
+            "hoste": "Koljonen Kalle",
+            "vysledek": "3:2",
+            "sety": "11:7, 11:5, 7:11, 9:11, 11:9",
+            "tymDomaci": "SK Brno Slatina",
+            "tymHoste": "B.O. Chance Ostrava Sportclub"
+          }
+        ],
+        "prvni-liga-vychod": [],
+        "prvni-liga-zapad": [],
+        "prvni-liga-playoff": [
+          {
+            "id": 1778835331003,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Treperová Ivana, Titěra Filip",
+            "hoste": "Herout Martin, Fuchsová Michaela",
+            "vysledek": "2:0",
+            "sety": "21:11, 21:15",
+            "tymDomaci": "SK Prosek Praha",
+            "tymHoste": "TJ Montas Hradec Králové"
+          },
+          {
+            "id": 1778835344370,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Thor Lukáš",
+            "hoste": "Burget Adam",
+            "vysledek": "0:2",
+            "sety": "17:21, 15:21",
+            "tymDomaci": "SK Prosek Praha",
+            "tymHoste": "TJ Montas Hradec Králové"
+          },
+          {
+            "id": 1778835352905,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Poříz Vojtěch",
+            "hoste": "Holub Lukáš",
+            "vysledek": "1:2",
+            "sety": "21:13, 18:21, 17:21",
+            "tymDomaci": "SK Prosek Praha",
+            "tymHoste": "TJ Montas Hradec Králové"
+          },
+          {
+            "id": 1778835361536,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Chlubna Jaroslav",
+            "hoste": "Tvrdík Lukáš",
+            "vysledek": "2:1",
+            "sety": "21:13, 17:21, 21:18",
+            "tymDomaci": "SK Prosek Praha",
+            "tymHoste": "TJ Montas Hradec Králové"
+          },
+          {
+            "id": 1778835370653,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Maixnerová Amélie",
+            "hoste": "Kuchová Anna",
+            "vysledek": "2:0",
+            "sety": "21:12, 21:12",
+            "tymDomaci": "SK Prosek Praha",
+            "tymHoste": "TJ Montas Hradec Králové"
+          },
+          {
+            "id": 1778835385469,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Thor Lukáš, Titěra Filip",
+            "hoste": "Burget Adam, Šolar Ondřej",
+            "vysledek": "2:0",
+            "sety": "21:18, 26:24",
+            "tymDomaci": "SK Prosek Praha",
+            "tymHoste": "TJ Montas Hradec Králové"
+          },
+          {
+            "id": 1778835400202,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra žen",
+            "domaci": "Treperová Ivana, Kalkušová Karolína",
+            "hoste": "Fuchsová Michaela, Jarošová Veronika",
+            "vysledek": "0:2",
+            "sety": "19:21, 14:21",
+            "tymDomaci": "SK Prosek Praha",
+            "tymHoste": "TJ Montas Hradec Králové"
+          },
+          {
+            "id": 1778835416219,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Podivín Václav, Diviš Jakub",
+            "hoste": "Holub Lukáš, Herout Martin",
+            "vysledek": "2:0",
+            "sety": "21:15, 21:14",
+            "tymDomaci": "SK Prosek Praha",
+            "tymHoste": "TJ Montas Hradec Králové"
+          },
+          {
+            "id": 1778835446535,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Patzák Lukáš, Almalalha Raiia",
+            "hoste": "Hořínková Soňa, Morávek Michal",
+            "vysledek": "2:0",
+            "sety": "21:13, 21:12",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835461734,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Šváb Matěj, Horáček David",
+            "hoste": "Havlíček Michael, Kolumbajew Jacek",
+            "vysledek": "0:2",
+            "sety": "11:21, 10:21",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835482935,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Lavrova Sofiia",
+            "hoste": "Skrčená Malvína",
+            "vysledek": "2:0",
+            "sety": "21:6, 21:6",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835491134,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Horák Jakub",
+            "hoste": "Havlíček Michael",
+            "vysledek": "0:2",
+            "sety": "11:21, 15:21",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835504718,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra žen",
+            "domaci": "Lavrova Sofiia, Almalalha Raiia",
+            "hoste": "Hankiewicz Paulina, Hořínková Soňa",
+            "vysledek": "2:1",
+            "sety": "21:14, 12:21, 24:22",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835513934,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Patzák Lukáš",
+            "hoste": "Altera Jan",
+            "vysledek": "2:0",
+            "sety": "21:12, 21:11",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835528334,
+            "kolo": "SF",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Antoška Andrej, Horák Jakub",
+            "hoste": "Slepecki Szymon, Morávek Michal",
+            "vysledek": "0:2",
+            "sety": "12:21, 15:21",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835585050,
+            "kolo": "P3",
+            "datum": "2025-03-29",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Šolar Ondřej, Jarošová Veronika",
+            "hoste": "Slepecki Szymon, Hankiewicz Paulina",
+            "vysledek": "0:2",
+            "sety": "8:21, 15:21",
+            "tymDomaci": "TJ Montas Hradec Králové",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835597566,
+            "kolo": "P3",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Holub Lukáš",
+            "hoste": "Běhounek Ondřej",
+            "vysledek": "2:0",
+            "sety": "21:16, 21:18",
+            "tymDomaci": "TJ Montas Hradec Králové",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835610650,
+            "kolo": "P3",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Kuchová Anna",
+            "hoste": "Skrčená Malvína",
+            "vysledek": "2:0",
+            "sety": "21:13, 21:2",
+            "tymDomaci": "TJ Montas Hradec Králové",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835622250,
+            "kolo": "P3",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Burget Adam",
+            "hoste": "Altera Jan",
+            "vysledek": "2:1",
+            "sety": "21:11, 19:21, 21:13",
+            "tymDomaci": "TJ Montas Hradec Králové",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835634666,
+            "kolo": "P3",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Tvrdík Lukáš",
+            "hoste": "Havlíček Michael",
+            "vysledek": "1:2",
+            "sety": "21:8, 17:21, 19:21",
+            "tymDomaci": "TJ Montas Hradec Králové",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835650566,
+            "kolo": "P3",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra žen",
+            "domaci": "Jarošová Veronika, Fuchsová Michaela",
+            "hoste": "Hankiewicz Paulina, Hořínková Soňa",
+            "vysledek": "0:2",
+            "sety": "15:21, 13:21",
+            "tymDomaci": "TJ Montas Hradec Králové",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835673100,
+            "kolo": "P3",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Šolar Ondřej, Burget Adam",
+            "hoste": "Slepecki Szymon, Morávek Michal",
+            "vysledek": "0:2",
+            "sety": "15:21, 16:21",
+            "tymDomaci": "TJ Montas Hradec Králové",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835687100,
+            "kolo": "P3",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Tvrdík Lukáš, Holub Lukáš",
+            "hoste": "Havlíček Michael, Kolumbajew Jacek",
+            "vysledek": "0:2",
+            "sety": "12:21, 13:21",
+            "tymDomaci": "TJ Montas Hradec Králové",
+            "tymHoste": "BaC Kladno"
+          },
+          {
+            "id": 1778835726382,
+            "kolo": "F",
+            "datum": "2025-03-29",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Patzák Lukáš, Almalalha Raiia",
+            "hoste": "Titěra Filip, Treperová Ivana",
+            "vysledek": "2:0",
+            "sety": "21:15, 21:19",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835741232,
+            "kolo": "F",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Antoška Andrej",
+            "hoste": "Poříz Vojtěch",
+            "vysledek": "2:1",
+            "sety": "18:21, 23:21, 21:11",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835759715,
+            "kolo": "F",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Lavrova Sofiia",
+            "hoste": "Maixnerová Amélie",
+            "vysledek": "2:0",
+            "sety": "21:17, 21:8",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835776665,
+            "kolo": "F",
+            "datum": "2025-03-29",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Horáček David, Šváb Matěj",
+            "hoste": "Diviš Jakub, Podivín Václav",
+            "vysledek": "2:0",
+            "sety": "21:15, 21:14",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835785681,
+            "kolo": "F",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Horák Jakub",
+            "hoste": "Chlubna Jaroslav",
+            "vysledek": "2:0",
+            "sety": "22:20, 21:16",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835794432,
+            "kolo": "F",
+            "datum": "2025-03-29",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Patzák Lukáš",
+            "hoste": "Derka Jiří",
+            "vysledek": "2:0",
+            "sety": "21:11, 21:16",
+            "tymDomaci": "TJ Sokol Dobruška",
+            "tymHoste": "SK Prosek Praha"
+          }
+        ],
+        "baraze": [
+          {
+            "id": 1778835138641,
+            "kolo": "F",
+            "datum": "2025-05-17",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Maňásek Pavel",
+            "hoste": "Poříz Vojtěch",
+            "vysledek": "0:3",
+            "sety": "8:11, 6:11, 4:11",
+            "tymDomaci": "SKB Český Krumlov",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835153608,
+            "kolo": "F",
+            "datum": "2025-05-17",
+            "disciplina": "Dvouhra mužů",
+            "domaci": "Janáček Jaromír",
+            "hoste": "Chlubna Jaroslav",
+            "vysledek": "0:3",
+            "sety": "7:11, 6:11, 2:11",
+            "tymDomaci": "SKB Český Krumlov",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835166859,
+            "kolo": "F",
+            "datum": "2025-05-17",
+            "disciplina": "Dvouhra žen",
+            "domaci": "Fišerová Eva",
+            "hoste": "Maixnerová Amélie",
+            "vysledek": "1:3",
+            "sety": "3:11, 6:11, 13:11, 2:11",
+            "tymDomaci": "SKB Český Krumlov",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835184373,
+            "kolo": "F",
+            "datum": "2025-05-17",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Janáček Jaromír, Maňásek Pavel",
+            "hoste": "Diviš Jakub, Derka Jiří",
+            "vysledek": "3:0",
+            "sety": "11:8, 15:13, 11:5",
+            "tymDomaci": "SKB Český Krumlov",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835201722,
+            "kolo": "F",
+            "datum": "2025-05-17",
+            "disciplina": "Čtyřhra mužů",
+            "domaci": "Švejda Tomáš, Puffr Matyáš",
+            "hoste": "Titěra Filip, Thor Lukáš",
+            "vysledek": "3:2",
+            "sety": "9:11, 11:9, 11:9, 8:11, 11:9",
+            "tymDomaci": "SKB Český Krumlov",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835216088,
+            "kolo": "F",
+            "datum": "2025-05-17",
+            "disciplina": "Čtyřhra žen",
+            "domaci": "Kozáková Kristýna, Fišerová Eva",
+            "hoste": "Kalkušová Karolína, Treperová Ivana",
+            "vysledek": "0:3",
+            "sety": "3:11, 5:11, 3:11",
+            "tymDomaci": "SKB Český Krumlov",
+            "tymHoste": "SK Prosek Praha"
+          },
+          {
+            "id": 1778835236221,
+            "kolo": "F",
+            "datum": "2025-05-17",
+            "disciplina": "Smíšená čtyřhra",
+            "domaci": "Mikešová Eliška, Švejda Tomáš",
+            "hoste": "Titěra Filip, Treperová Ivana",
+            "vysledek": "0:3",
+            "sety": "8:11, 9:11, 6:11",
+            "tymDomaci": "SKB Český Krumlov",
+            "tymHoste": "SK Prosek Praha"
+          }
+        ]
+      },
+      "tymy": {
+        "extraliga": [
+          "B.O. Chance Ostrava Sportclub",
+          "BA Plzeň",
+          "BK 1973 Benátky nad Jizerou",
+          "BK Meteor Praha",
+          "SK Brno Slatina",
+          "TJ Sokol Klimkovice"
+        ],
+        "prvni-liga-vychod": [],
+        "prvni-liga-zapad": [],
+        "prvni-liga-playoff": [
+          "BaC Kladno",
+          "SK Prosek Praha",
+          "TJ Montas Hradec Králové",
+          "TJ Sokol Dobruška"
+        ],
+        "baraze": [
+          "SK Prosek Praha",
+          "SKB Český Krumlov"
+        ]
+      }
+    }
+  }
 }
