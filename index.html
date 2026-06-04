@@ -18,13 +18,19 @@
     <header class="app-topbar">
         <div class="app-logo">
             <div class="app-logo-icon app-logo-icon-svg">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 102 64" height="32" aria-hidden="true" style="display:block">
-                    <path d="M4,4 L72,4 L98,32 L72,60 L4,60 Z" fill="none" stroke="#D7141A" stroke-width="3.5" stroke-linejoin="miter"/>
-                    <line x1="36" y1="4"  x2="36" y2="60" stroke="#D7141A" stroke-width="3"/>
-                    <line x1="68" y1="4"  x2="68" y2="60" stroke="#D7141A" stroke-width="3"/>
-                    <text x="7"  y="45" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="37">B</text>
-                    <text x="39" y="45" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="37">A</text>
-                    <text x="69" y="43" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="27">D</text>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 280" height="38" aria-hidden="true" style="display:block">
+                    <defs>
+                        <clipPath id="bad-clip">
+                            <polygon points="0,36 80,36 178,140 80,244 0,244"/>
+                        </clipPath>
+                    </defs>
+                    <polygon points="0,0 90,0 210,140 90,280 0,280" fill="#D7141A"/>
+                    <polygon points="0,36 80,36 178,140 80,244 0,244" fill="white"/>
+                    <g clip-path="url(#bad-clip)">
+                        <text x="5" dominant-baseline="central" y="140" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="112">B</text>
+                        <text x="87" dominant-baseline="central" y="140" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="88">A</text>
+                        <text x="140" dominant-baseline="central" y="140" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="56">D</text>
+                    </g>
                 </svg>
             </div>
             <div>
