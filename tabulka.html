@@ -3,78 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabulka extraligy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Czech Badminton – Ligová tabulka</title>
     <link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
     <style>
+        /* ── DESIGN TOKENS ──────────────────────────────────────── */
+        :root {
+            --cba-red:    #D7141A;
+            --cba-red-dk: #b01015;
+
+            --bg:         #f0f2f6;
+            --surface:    #ffffff;
+            --surface2:   #f8fafc;
+            --border:     #e2e8f0;
+            --text:       #0f172a;
+            --text2:      #475569;
+            --muted:      #94a3b8;
+            --shadow:     0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
+            --red-bg:     rgba(215,20,26,0.08);
+            --red-border: rgba(215,20,26,0.22);
+
+            --win:        #16a34a;
+            --loss:       #dc2626;
+            --draw:       #ca8a04;
+
+            --zone-top:        #16a34a;
+            --zone-playoff:    #2563eb;
+            --zone-relegation: #dc2626;
+
+            --radius: 12px;
+        }
+
+        /* ── BASE ─────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; }
+
         body {
-            font-family: 'Telegraf', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Telegraf', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
-            padding: 10px;
-            background: white;
+            padding: 10px 12px 20px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
         }
+
+        /* ── WIDGET CONTAINER ─────────────────────────────────── */
+        .widget {
+            max-width: 820px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* ── HEADER ───────────────────────────────────────────── */
+        .w-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .w-logo {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex-shrink: 0;
+        }
+
+        /* ── COMPETITION TABS ─────────────────────────────────── */
+        .soutez-tabs {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
         .soutez-tab {
-            transition: all 0.2s;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
             cursor: pointer;
+            border: 1.5px solid var(--border);
+            background: var(--surface2);
+            color: var(--text2);
+            transition: all 0.18s;
+            white-space: nowrap;
         }
+
+        .soutez-tab:hover {
+            border-color: var(--cba-red);
+            color: var(--cba-red);
+            background: var(--red-bg);
+        }
+
         .soutez-tab.active {
-            background: #2563eb;
-            color: white;
+            background: var(--cba-red);
+            color: #fff;
+            border-color: var(--cba-red);
+            box-shadow: 0 2px 8px rgba(215,20,26,0.28);
         }
+
+        /* ── VIEW TOGGLE ──────────────────────────────────────── */
         .view-toggle {
             display: inline-flex;
-            background: linear-gradient(135deg, #fecaca, #fecdd3);
-            border: 2px solid #d93831;
+            background: var(--red-bg);
+            border: 2px solid var(--cba-red);
             border-radius: 10px;
             padding: 3px;
             gap: 2px;
         }
+
         .view-toggle-btn {
             padding: 6px 16px;
             border-radius: 7px;
             font-size: 0.8rem;
             font-weight: 700;
-            color: #991b1b;
+            color: var(--cba-red);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.18s;
             border: none;
             background: transparent;
-        }
-        .view-toggle-btn:hover {
-            color: #7f1d1d;
-            background: rgba(255,255,255,0.4);
-        }
-        .view-toggle-btn.active {
-            background: white;
-            color: #d93831;
-            box-shadow: 0 2px 6px rgba(217,56,49,0.3);
+            white-space: nowrap;
+            font-family: inherit;
         }
 
-        /* Bracket layout */
+        .view-toggle-btn:hover {
+            background: rgba(215,20,26,0.1);
+        }
+
+        .view-toggle-btn.active {
+            background: var(--surface);
+            color: var(--cba-red);
+            box-shadow: 0 2px 6px rgba(215,20,26,0.22);
+        }
+
+        .w-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ── CARD ─────────────────────────────────────────────── */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        /* ── STANDINGS TABLE ──────────────────────────────────── */
+        .standings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .standings-thead tr {
+            background: linear-gradient(90deg, var(--cba-red) 0%, #c0121a 100%);
+        }
+
+        .standings-thead th {
+            padding: 10px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .standings-thead th.th-name { text-align: left; }
+        .standings-thead th.th-pos,
+        .standings-thead th.th-num,
+        .standings-thead th.th-pts { text-align: center; }
+
+        .standings-row {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .standings-row:last-child { border-bottom: none; }
+
+        .standings-row:hover { background: var(--surface2); }
+
+        /* Zone left-border indicators */
+        .standings-row-top td:first-child        { border-left: 3px solid var(--zone-top); }
+        .standings-row-playoff td:first-child    { border-left: 3px solid var(--zone-playoff); }
+        .standings-row-relegation td:first-child { border-left: 3px solid var(--zone-relegation); }
+
+        .standings-pos-cell {
+            padding: 9px 6px 9px 10px;
+            text-align: center;
+            width: 38px;
+        }
+
+        .standings-pos-num {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text2);
+        }
+
+        .standings-pos-num.pos-gold   { color: #d97706; font-weight: 900; }
+        .standings-pos-num.pos-silver { color: #6b7280; font-weight: 900; }
+        .standings-pos-num.pos-bronze { color: #c2410c; font-weight: 900; }
+
+        .standings-name-cell {
+            padding: 9px 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+
+        .standings-num-cell {
+            padding: 9px 8px;
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .standings-num-cell.text-win  { color: var(--win); }
+        .standings-num-cell.text-loss { color: var(--loss); }
+        .standings-num-cell.text-muted { color: var(--muted); }
+
+        .standings-pts-cell {
+            padding: 9px 12px 9px 8px;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--cba-blue, #1a56db);
+            color: #2563eb;
+        }
+
+        .standings-divider td {
+            padding: 3px 10px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-align: left;
+            background: transparent;
+        }
+
+        .standings-divider-playoff td   { color: var(--zone-playoff); border-top: 1px dashed rgba(37,99,235,0.25); }
+        .standings-divider-relegation td { color: var(--zone-relegation); border-top: 1px dashed rgba(220,38,38,0.25); }
+
+        /* Zone dot */
+        .zone-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+
+        .zone-dot-top        { background: var(--zone-top); }
+        .zone-dot-final-four { background: var(--zone-top); }
+        .zone-dot-playoff    { background: var(--zone-playoff); }
+        .zone-dot-relegation { background: var(--zone-relegation); }
+        .zone-dot-none       { background: transparent; }
+
+        /* Form dots */
+        .form-dots { display: inline-flex; gap: 3px; align-items: center; }
+        .form-dot  {
+            width: 8px; height: 8px; border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .form-dot-w { background: var(--win); }
+        .form-dot-l { background: var(--loss); }
+        .form-dot-d { background: var(--muted); }
+
+        .standings-forma-cell {
+            padding: 9px 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* ── TABLE FOOTER ─────────────────────────────────────── */
+        .table-footer {
+            padding: 12px 14px;
+            background: var(--surface2);
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text2);
+        }
+
+        .standings-legenda {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            margin-bottom: 8px;
+        }
+
+        .legenda-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text2);
+        }
+
+        .legenda-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legenda-top        { background: var(--zone-top); }
+        .legenda-final-four { background: var(--zone-top); }
+        .legenda-playoff    { background: var(--zone-playoff); }
+        .legenda-relegation { background: var(--zone-relegation); }
+
+        /* ── BRACKET ──────────────────────────────────────────── */
         .bracket-wrapper {
             display: flex;
             align-items: stretch;
             overflow-x: auto;
-            padding: 16px 0;
+            padding: 16px;
             gap: 0;
         }
+
         .bracket-round {
             display: flex;
             flex-direction: column;
             min-width: 200px;
             flex-shrink: 0;
         }
+
         .bracket-round-title {
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: #6b7280;
+            color: var(--muted);
             text-align: center;
             padding-bottom: 8px;
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 2px solid var(--border);
             margin-bottom: 0;
         }
+
         .bracket-matches {
             display: flex;
             flex-direction: column;
@@ -82,18 +363,18 @@
             flex: 1;
             padding: 8px 0;
         }
+
         .bracket-match-slot {
             display: flex;
             align-items: center;
             flex: 1;
         }
-        .bracket-match-slot .playoff-match {
-            width: 100%;
-            margin: 4px 0;
-        }
+
+        .bracket-match-slot .playoff-match { width: 100%; margin: 4px 0; }
+
         .bracket-connector-col {
-            width: 32px;
-            min-width: 32px;
+            width: 36px;
+            min-width: 36px;
             position: relative;
             flex-shrink: 0;
             display: flex;
@@ -102,301 +383,305 @@
             align-items: center;
         }
 
-        /* Match cards */
+        /* ── PLAYOFF MATCH CARDS ──────────────────────────────── */
         .playoff-match {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 8px 10px;
-            transition: box-shadow 0.2s;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 11px;
+            transition: box-shadow 0.15s, transform 0.12s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
         }
+
         .playoff-match:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
         }
+
         .playoff-match-label {
-            font-size: 0.6rem;
+            font-size: 0.62rem;
             font-weight: 600;
-            color: #9ca3af;
+            color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
-        .playoff-match-teams {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
+
+        .playoff-match-teams { display: flex; flex-direction: column; gap: 3px; }
+
         .playoff-vs {
             text-align: center;
-            font-size: 0.6rem;
+            font-size: 0.62rem;
             font-weight: 700;
-            color: #9ca3af;
+            color: var(--muted);
             padding: 1px 0;
         }
+
         .playoff-team {
             display: flex;
             align-items: center;
             gap: 5px;
-            padding: 4px 6px;
-            border-radius: 5px;
-            background: white;
-            border: 1px solid #e5e7eb;
+            padding: 5px 7px;
+            border-radius: 7px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
         }
-        .playoff-team-green {
-            background: #f0fdf4;
-            border-color: #86efac;
-        }
-        .playoff-team-blue {
-            background: #eff6ff;
-            border-color: #93c5fd;
-        }
-        .playoff-team-east {
-            background: #fefce8;
-            border-color: #fbbf24;
-        }
-        .playoff-team-west {
-            background: #eff6ff;
-            border-color: #60a5fa;
-        }
-        .playoff-team-pending {
-            background: #f3f4f6;
-            border: 1px dashed #d1d5db;
-        }
+
+        .playoff-team-green   { background: rgba(22,163,74,0.07);  border-color: rgba(22,163,74,0.25); }
+        .playoff-team-blue    { background: rgba(37,99,235,0.07);  border-color: rgba(37,99,235,0.2); }
+        .playoff-team-east    { background: rgba(234,179,8,0.07);  border-color: rgba(234,179,8,0.28); }
+        .playoff-team-west    { background: rgba(37,99,235,0.07);  border-color: rgba(37,99,235,0.2); }
+        .playoff-team-pending { background: var(--surface2); border: 1px dashed var(--border); }
+
         .playoff-seed {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 20px;
-            height: 20px;
+            width: 20px; height: 20px;
             border-radius: 50%;
-            background: #e5e7eb;
+            background: var(--surface2);
             font-size: 0.6rem;
             font-weight: 700;
-            color: #374151;
+            color: var(--text2);
             flex-shrink: 0;
         }
-        .playoff-team-green .playoff-seed {
-            background: #bbf7d0;
-            color: #166534;
-        }
-        .playoff-team-blue .playoff-seed {
-            background: #bfdbfe;
-            color: #1e40af;
-        }
-        .playoff-team-east .playoff-seed {
-            background: #fde68a;
-            color: #92400e;
-        }
-        .playoff-team-west .playoff-seed {
-            background: #bfdbfe;
-            color: #1e40af;
-        }
+
+        .playoff-team-green .playoff-seed { background: rgba(22,163,74,0.16); color: #15803d; }
+        .playoff-team-blue  .playoff-seed { background: rgba(37,99,235,0.16); color: #1d4ed8; }
+        .playoff-team-east  .playoff-seed { background: rgba(234,179,8,0.16); color: #92400e; }
+        .playoff-team-west  .playoff-seed { background: rgba(37,99,235,0.16); color: #1d4ed8; }
+
         .playoff-conf-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 16px;
-            height: 16px;
+            width: 16px; height: 16px;
             border-radius: 3px;
             font-size: 0.55rem;
             font-weight: 700;
             flex-shrink: 0;
         }
-        .playoff-conf-V {
-            background: #fef3c7;
-            color: #92400e;
-            border: 1px solid #fbbf24;
-        }
-        .playoff-conf-Z {
-            background: #dbeafe;
-            color: #1e40af;
-            border: 1px solid #60a5fa;
-        }
+
+        .playoff-conf-V { background: rgba(234,179,8,0.1);  color: #92400e; border: 1px solid rgba(234,179,8,0.3); }
+        .playoff-conf-Z { background: rgba(37,99,235,0.09); color: #1d4ed8; border: 1px solid rgba(37,99,235,0.28); }
+
         .playoff-team-name {
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             font-weight: 600;
+            color: var(--text);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .playoff-series-score {
             margin-left: auto;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             font-weight: 700;
-            color: #374151;
+            color: var(--text);
             min-width: 16px;
             text-align: center;
         }
+
         .playoff-series-result {
             text-align: center;
-            font-size: 0.6rem;
+            font-size: 0.62rem;
             font-weight: 600;
-            color: #6b7280;
-            margin-top: 4px;
-            padding-top: 4px;
-            border-top: 1px dashed #e5e7eb;
+            color: var(--text2);
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px dashed var(--border);
         }
-        .playoff-champion {
-            background: linear-gradient(135deg, #fefce8, #fef9c3);
-            border: 2px solid #facc15;
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            margin-top: 8px;
-        }
-        .playoff-legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+
         .playoff-zz-badge {
             display: inline-block;
             margin-left: 5px;
             padding: 1px 4px;
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
+            background: rgba(234,179,8,0.12);
+            border: 1px solid rgba(234,179,8,0.35);
             border-radius: 3px;
             font-size: 0.55rem;
             font-weight: 700;
             color: #92400e;
             vertical-align: middle;
         }
+
         .playoff-placement-section {
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: 2px dashed #e5e7eb;
+            margin: 12px 16px 0;
+            padding-top: 14px;
+            border-top: 2px dashed var(--border);
         }
+
         .playoff-placement-title {
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #6b7280;
+            letter-spacing: 0.04em;
+            color: var(--muted);
             margin-bottom: 10px;
         }
-        .playoff-placement-matches {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .playoff-match-placement {
-            min-width: 200px;
-            flex: 1;
-            max-width: 300px;
-        }
-        .playoff-team-placement-5 {
-            background: #f0fdf4;
-            border-color: #86efac;
-        }
-        .playoff-team-placement-7 {
-            background: #fafafa;
-            border-color: #d1d5db;
-        }
-        .playoff-team-placement-5 .playoff-seed,
-        .playoff-team-placement-7 .playoff-seed {
-            background: #e5e7eb;
-            color: #374151;
-            font-size: 0.55rem;
-        }
-        .playoff-placement-result {
-            margin-top: 5px;
-            padding-top: 5px;
-            border-top: 1px dashed #e5e7eb;
-            font-size: 0.6rem;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .placement-5 { color: #16a34a; font-weight: 600; }
-        .placement-7 { color: #6b7280; }
 
-        /* Responsive bracket */
-        @media (max-width: 768px) {
-            .bracket-wrapper {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .bracket-round {
-                min-width: 0;
-            }
-            .bracket-matches {
-                gap: 8px;
-            }
+        .playoff-placement-matches { display: flex; flex-wrap: wrap; gap: 12px; }
+
+        .playoff-match-placement { min-width: 190px; flex: 1; max-width: 300px; }
+
+        .playoff-team-placement-5 { background: rgba(22,163,74,0.07); border-color: rgba(22,163,74,0.25); }
+        .playoff-team-placement-7 { background: var(--surface2); border-color: var(--border); }
+
+        .playoff-placement-result {
+            margin-top: 5px; padding-top: 5px;
+            border-top: 1px dashed var(--border);
+            font-size: 0.62rem;
+            display: flex; flex-direction: column; gap: 2px;
+        }
+
+        .placement-5 { color: var(--win); font-weight: 600; }
+        .placement-7 { color: var(--text2); }
+
+        .playoff-legend {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            padding: 10px 16px;
+            font-size: 0.72rem;
+            color: var(--text2);
+        }
+
+        /* ── BARÁŽ TABLE ──────────────────────────────────────── */
+        .baraze-standings {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .baraze-standings thead tr { background: var(--surface2); }
+
+        .baraze-standings thead th {
+            padding: 8px 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .baraze-standings tbody tr { border-bottom: 1px solid var(--border); }
+        .baraze-standings td { padding: 8px 10px; }
+
+        /* ── FOOTER ───────────────────────────────────────────── */
+        .w-footer {
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--muted);
+            padding: 4px 0 2px;
+        }
+
+        .w-footer a { color: var(--cba-red); text-decoration: none; font-weight: 600; }
+        .w-footer a:hover { text-decoration: underline; }
+
+        /* ── EMPTY STATE ──────────────────────────────────────── */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text2);
+            font-size: 0.85rem;
+        }
+
+        /* ── RESPONSIVE ───────────────────────────────────────── */
+        @media (max-width: 600px) {
+            body { padding: 8px 8px 16px; }
+
+            .w-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+            .bracket-wrapper { flex-direction: column; }
+            .bracket-round   { min-width: 0; }
+            .bracket-matches { gap: 8px; }
             .bracket-connector-col {
-                width: auto;
-                min-width: auto;
+                width: auto; min-width: auto;
+                min-height: 28px;
                 flex-direction: row;
-                padding: 4px 0;
                 justify-content: center;
-                min-height: 30px;
+                align-items: center;
             }
             .bracket-connector-col::after {
                 content: '↓';
-                font-size: 1.2rem;
-                color: #d1d5db;
+                font-size: 1.1rem;
+                color: var(--border);
                 font-weight: 700;
             }
-            .view-toggle-btn {
-                padding: 5px 12px;
-                font-size: 0.75rem;
-            }
+
+            .view-toggle-btn { padding: 5px 10px; font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
-    <div class="max-w-6xl mx-auto">
-        <!-- Výběr soutěže -->
-        <div class="mb-4 flex flex-wrap items-center gap-2">
-            <button onclick="zmenitSoutez('extraliga')" id="tab-extraliga" class="soutez-tab px-4 py-2 rounded-lg font-semibold text-sm bg-blue-600 text-white">
-                🏆 Extraliga
-            </button>
-            <button onclick="zmenitSoutez('prvni-liga-vychod')" id="tab-prvni-liga-vychod" class="soutez-tab px-4 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm">
-                🥈 1. liga - Východ
-            </button>
-            <button onclick="zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab px-4 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm">
-                🥈 1. liga - Západ
-            </button>
-            <div class="ml-auto">
+    <div class="widget">
+        <!-- ── HEADER ── -->
+        <div class="w-header">
+            <div class="w-logo">
+                <!-- Czech Badminton logo (inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 64" height="40" aria-label="Czech Badminton" role="img">
+                    <!-- Logo mark: right-pointing arrow shape divided into B / A / D sections -->
+                    <path d="M4,4 L72,4 L98,32 L72,60 L4,60 Z"
+                          fill="none" stroke="#D7141A" stroke-width="3.5" stroke-linejoin="miter"/>
+                    <line x1="36" y1="4"  x2="36" y2="60" stroke="#D7141A" stroke-width="3"/>
+                    <line x1="68" y1="4"  x2="68" y2="60" stroke="#D7141A" stroke-width="3"/>
+                    <!-- Letters -->
+                    <text x="7"  y="45" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="37">B</text>
+                    <text x="39" y="45" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="37">A</text>
+                    <text x="69" y="43" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="27">D</text>
+                    <!-- Czech Badminton text -->
+                    <text x="114" y="26" fill="#D7141A" font-family="Arial,sans-serif" font-weight="700" font-size="20">Czech</text>
+                    <text x="114" y="54" fill="#D7141A" font-family="Arial,sans-serif" font-weight="700" font-size="20">Badminton</text>
+                </svg>
+            </div>
+
+            <div class="w-controls">
+                <div class="soutez-tabs">
+                    <button onclick="zmenitSoutez('extraliga')"        id="tab-extraliga"        class="soutez-tab active">Extraliga</button>
+                    <button onclick="zmenitSoutez('prvni-liga-vychod')" id="tab-prvni-liga-vychod" class="soutez-tab">1. liga – Východ</button>
+                    <button onclick="zmenitSoutez('prvni-liga-zapad')"  id="tab-prvni-liga-zapad"  class="soutez-tab">1. liga – Západ</button>
+                </div>
+
                 <div class="view-toggle" id="viewToggle">
                     <button class="view-toggle-btn active" id="btnZakladni" onclick="prepnoutPohled('zakladni')">Základní část</button>
-                    <button class="view-toggle-btn" id="btnPlayoff" onclick="prepnoutPohled('playoff')">Play-off</button>
-                    <button class="view-toggle-btn" id="btnBaraze" onclick="prepnoutPohled('baraze')" style="display:none">Baráž</button>
+                    <button class="view-toggle-btn"        id="btnPlayoff"  onclick="prepnoutPohled('playoff')">Play-off</button>
+                    <button class="view-toggle-btn"        id="btnBaraze"   onclick="prepnoutPohled('baraze')" style="display:none">Baráž</button>
                 </div>
             </div>
         </div>
 
-        <!-- Tabulka (základní část) -->
-        <div id="tabulkaView" class="bg-white rounded-lg shadow overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="text-white" style="background-color:#ed1c24">
-                            <th class="text-center p-2 font-semibold">#</th>
-                            <th class="text-left p-2 font-semibold">Tým</th>
-                            <th class="text-center p-2 font-semibold">U</th>
-                            <th class="text-center p-2 font-semibold">V</th>
-                            <th class="text-center p-2 font-semibold">R</th>
-                            <th class="text-center p-2 font-semibold">P</th>
-                            <th class="text-center p-2 font-semibold">Zápasy</th>
-                            <th class="text-center p-2 font-semibold">Sety</th>
-                            <th class="text-center p-2 font-semibold">Body</th>
-                            <th class="text-center p-2 font-semibold font-bold">Bodů</th>
+        <!-- ── STANDINGS ── -->
+        <div id="tabulkaView" class="card">
+            <div class="overflow-x-wrap" style="overflow-x:auto">
+                <table class="standings-table">
+                    <thead class="standings-thead">
+                        <tr>
+                            <th class="th-pos">#</th>
+                            <th class="th-name" style="text-align:left">Tým</th>
+                            <th class="th-num" title="Utkání">U</th>
+                            <th class="th-num" title="Vítězství" style="color:rgba(255,255,255,0.95)">V</th>
+                            <th class="th-num" title="Remízy">R</th>
+                            <th class="th-num" title="Porážky">P</th>
+                            <th class="th-num" title="Zápasy (výhry:prohry)">Zápasy</th>
+                            <th class="th-num" title="Sety">Sety</th>
+                            <th class="th-pts" style="text-align:center">Body</th>
                         </tr>
                     </thead>
                     <tbody id="tabulkaBody"></tbody>
                 </table>
             </div>
-            <div class="p-3 text-xs text-gray-600 bg-gray-50" id="bodovaniInfo"></div>
+            <div class="table-footer" id="bodovaniInfo"></div>
         </div>
 
-        <!-- Play-off pohled -->
-        <div id="playoffView" style="display: none;"></div>
+        <!-- ── PLAYOFF ── -->
+        <div id="playoffView" class="card" style="display:none; overflow:hidden"></div>
 
-        <!-- Baráž pohled -->
-        <div id="barazeView" style="display: none;"></div>
+        <!-- ── BARÁŽ ── -->
+        <div id="barazeView" class="card" style="display:none; padding:16px"></div>
 
-        <div class="mt-3 text-xs text-gray-500 text-center">
-            <a href="https://itsjakubmazur.github.io/cbasextraliga/" target="_blank" class="text-blue-600 hover:underline">
+        <!-- ── FOOTER ── -->
+        <div class="w-footer">
+            <a href="https://itsjakubmazur.github.io/cbasextraliga/" target="_blank">
                 Zobrazit kompletní statistiky →
             </a>
         </div>
@@ -417,7 +702,7 @@
             } catch (error) {
                 console.error('Chyba načítání:', error);
                 document.getElementById('tabulkaBody').innerHTML =
-                    '<tr><td colspan="10" class="p-4 text-center text-red-600">Nepodařilo se načíst data</td></tr>';
+                    '<tr><td colspan="9" style="padding:20px;text-align:center;color:#dc2626">Nepodařilo se načíst data</td></tr>';
             }
         }
 
@@ -432,20 +717,12 @@
 
         function zmenitSoutez(soutez) {
             aktualni_soutez = soutez;
-            document.querySelectorAll('.soutez-tab').forEach(tab => {
-                tab.classList.remove('active', 'bg-blue-600', 'text-white');
-                tab.classList.add('bg-gray-200', 'text-gray-700');
-            });
-            document.getElementById('tab-' + soutez).classList.add('active', 'bg-blue-600', 'text-white');
-            document.getElementById('tab-' + soutez).classList.remove('bg-gray-200', 'text-gray-700');
+            document.querySelectorAll('.soutez-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + soutez).classList.add('active');
             aktualizujBarazeBtn();
-            if (aktualni_pohled === 'zakladni') {
-                zobrazitTabulku();
-            } else if (aktualni_pohled === 'playoff') {
-                zobrazitPlayoff();
-            } else {
-                zobrazitBaraze();
-            }
+            if      (aktualni_pohled === 'zakladni') zobrazitTabulku();
+            else if (aktualni_pohled === 'playoff')  zobrazitPlayoff();
+            else                                      zobrazitBaraze();
         }
 
         function prepnoutPohled(pohled) {
@@ -453,12 +730,12 @@
             document.getElementById('btnZakladni').classList.toggle('active', pohled === 'zakladni');
             document.getElementById('btnPlayoff').classList.toggle('active', pohled === 'playoff');
             document.getElementById('btnBaraze').classList.toggle('active', pohled === 'baraze');
-            document.getElementById('tabulkaView').style.display = pohled === 'zakladni' ? 'block' : 'none';
-            document.getElementById('playoffView').style.display = pohled === 'playoff' ? 'block' : 'none';
-            document.getElementById('barazeView').style.display = pohled === 'baraze' ? 'block' : 'none';
-            if (pohled === 'zakladni') zobrazitTabulku();
-            else if (pohled === 'playoff') zobrazitPlayoff();
-            else zobrazitBaraze();
+            document.getElementById('tabulkaView').style.display  = pohled === 'zakladni' ? '' : 'none';
+            document.getElementById('playoffView').style.display  = pohled === 'playoff'  ? '' : 'none';
+            document.getElementById('barazeView').style.display   = pohled === 'baraze'   ? '' : 'none';
+            if      (pohled === 'zakladni') zobrazitTabulku();
+            else if (pohled === 'playoff')  zobrazitPlayoff();
+            else                             zobrazitBaraze();
         }
 
         function parseVysledek(vysledek) {
@@ -468,12 +745,11 @@
 
         function parseSety(sety) {
             if (!sety) return { domaciBody: 0, hosteBody: 0 };
-            const setArr = sety.split(',').map(s => s.trim());
             let domaciBody = 0, hosteBody = 0;
-            setArr.forEach(set => {
-                const parts = set.split(':');
-                domaciBody += parseInt(parts[0]) || 0;
-                hosteBody += parseInt(parts[1]) || 0;
+            sety.split(',').map(s => s.trim()).forEach(set => {
+                const p = set.split(':');
+                domaciBody += parseInt(p[0]) || 0;
+                hosteBody  += parseInt(p[1]) || 0;
             });
             return { domaciBody, hosteBody };
         }
@@ -484,8 +760,7 @@
         }
 
         function isPlayoffKolo(kolo) {
-            if (!kolo) return false;
-            return ['QF', 'SF', 'F', 'P5', '3M', 'P3', 'RR'].includes(normalizeKolo(kolo));
+            return ['QF','SF','F','P5','3M','P3','RR'].includes(normalizeKolo(kolo));
         }
 
         function escapeHtml(s) {
@@ -494,148 +769,181 @@
             return d.innerHTML;
         }
 
+        /* ── Forma (posledních 5 utkání týmu) ── */
+        function vypocitejFormu(tym, soutez) {
+            const vse = (zapasy[soutez] || []).filter(z =>
+                !isPlayoffKolo(z.kolo) &&
+                (z.tymDomaci === tym || z.tymHoste === tym)
+            );
+            // Group into matchdays
+            const utkani = {};
+            vse.forEach(z => {
+                const k = z.kolo + '|' + [z.tymDomaci,z.tymHoste].sort().join('|');
+                if (!utkani[k]) utkani[k] = { kolo:z.kolo, domaci:z.tymDomaci, hoste:z.tymHoste, zapasy:[] };
+                utkani[k].zapasy.push(z);
+            });
+            const results = Object.values(utkani).map(u => {
+                let dz=0, hz=0;
+                u.zapasy.forEach(z => {
+                    const v = parseVysledek(z.vysledek);
+                    if(v.domaci>v.hoste) dz++; else hz++;
+                });
+                if (u.domaci === tym) return dz>hz?'w':(dz===hz?'d':'l');
+                return hz>dz?'w':(hz===dz?'d':'l');
+            }).slice(-5);
+            return results;
+        }
+
         function zobrazitTabulku() {
             const tabulka = {};
-            const utkani = {};
+            const utkani  = {};
             const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
 
             (zapasy[aktualni_soutez] || []).forEach(zapas => {
                 if (isPlayoffKolo(zapas.kolo)) return;
                 const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
-                if (!utkani[klic]) utkani[klic] = {
-                    kolo: zapas.kolo, domaci: zapas.tymDomaci, hoste: zapas.tymHoste, zapasy: []
-                };
+                if (!utkani[klic]) utkani[klic] = { kolo:zapas.kolo, domaci:zapas.tymDomaci, hoste:zapas.tymHoste, zapasy:[] };
                 utkani[klic].zapasy.push(zapas);
             });
 
             Object.values(utkani).forEach(utk => {
-                const domaci = utk.domaci;
-                const hoste = utk.hoste;
-                if (!domaci || !hoste) return;
+                const d = utk.domaci, h = utk.hoste;
+                if (!d || !h) return;
 
-                if (!tabulka[domaci]) tabulka[domaci] = {
-                    utkani: 0, vyhry: 0, remizy: 0, prohry: 0,
-                    zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0
-                };
-                if (!tabulka[hoste]) tabulka[hoste] = {
-                    utkani: 0, vyhry: 0, remizy: 0, prohry: 0,
-                    zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0
-                };
+                if (!tabulka[d]) tabulka[d] = { utkani:0, vyhry:0, remizy:0, prohry:0, zapasyV:0, zapasyP:0, setyV:0, setyP:0, bodyV:0, bodyP:0, body:0 };
+                if (!tabulka[h]) tabulka[h] = { utkani:0, vyhry:0, remizy:0, prohry:0, zapasyV:0, zapasyP:0, setyV:0, setyP:0, bodyV:0, bodyP:0, body:0 };
 
-                let dz = 0, hz = 0, ds = 0, hs = 0, db = 0, hb = 0;
+                let dz=0, hz=0, ds=0, hs=0, db=0, hb=0;
                 utk.zapasy.forEach(z => {
-                    const v = parseVysledek(z.vysledek);
+                    const v  = parseVysledek(z.vysledek);
                     const bd = parseSety(z.sety);
-                    if (v.domaci > v.hoste) dz++; else hz++;
-                    ds += v.domaci; hs += v.hoste;
-                    db += bd.domaciBody; hb += bd.hosteBody;
+                    if (v.domaci>v.hoste) dz++; else hz++;
+                    ds+=v.domaci; hs+=v.hoste;
+                    db+=bd.domaciBody; hb+=bd.hosteBody;
                 });
 
-                let dbt = 0, hbt = 0;
+                let dbt=0, hbt=0;
                 if (jePrvniLiga) {
-                    if (dz === hz) { dbt = 2; hbt = 2; tabulka[domaci].remizy++; tabulka[hoste].remizy++; }
-                    else if (dz > hz) { dbt = 3; hbt = 1; tabulka[domaci].vyhry++; tabulka[hoste].prohry++; }
-                    else { hbt = 3; dbt = 1; tabulka[hoste].vyhry++; tabulka[domaci].prohry++; }
+                    if (dz===hz)  { dbt=2; hbt=2; tabulka[d].remizy++; tabulka[h].remizy++; }
+                    else if(dz>hz){ dbt=3; hbt=1; tabulka[d].vyhry++; tabulka[h].prohry++; }
+                    else           { hbt=3; dbt=1; tabulka[h].vyhry++; tabulka[d].prohry++; }
                 } else {
-                    if (dz > hz) {
-                        if (dz >= 6) { dbt = 3; hbt = 0; }
-                        else if (dz >= 4) { dbt = 2; hbt = 1; }
-                        tabulka[domaci].vyhry++; tabulka[hoste].prohry++;
-                    } else {
-                        if (hz >= 6) { hbt = 3; dbt = 0; }
-                        else if (hz >= 4) { hbt = 2; dbt = 1; }
-                        tabulka[hoste].vyhry++; tabulka[domaci].prohry++;
-                    }
+                    if (dz>hz) { dbt=dz>=6?3:2; hbt=dz>=6?0:1; tabulka[d].vyhry++; tabulka[h].prohry++; }
+                    else        { hbt=hz>=6?3:2; dbt=hz>=6?0:1; tabulka[h].vyhry++; tabulka[d].prohry++; }
                 }
 
-                tabulka[domaci].utkani++; tabulka[domaci].zapasyV += dz; tabulka[domaci].zapasyP += hz;
-                tabulka[domaci].setyV += ds; tabulka[domaci].setyP += hs;
-                tabulka[domaci].bodyV += db; tabulka[domaci].bodyP += hb; tabulka[domaci].body += dbt;
-                tabulka[hoste].utkani++; tabulka[hoste].zapasyV += hz; tabulka[hoste].zapasyP += dz;
-                tabulka[hoste].setyV += hs; tabulka[hoste].setyP += ds;
-                tabulka[hoste].bodyV += hb; tabulka[hoste].bodyP += db; tabulka[hoste].body += hbt;
+                tabulka[d].utkani++; tabulka[d].zapasyV+=dz; tabulka[d].zapasyP+=hz;
+                tabulka[d].setyV+=ds; tabulka[d].setyP+=hs;
+                tabulka[d].bodyV+=db; tabulka[d].bodyP+=hb; tabulka[d].body+=dbt;
+
+                tabulka[h].utkani++; tabulka[h].zapasyV+=hz; tabulka[h].zapasyP+=dz;
+                tabulka[h].setyV+=hs; tabulka[h].setyP+=ds;
+                tabulka[h].bodyV+=hb; tabulka[h].bodyP+=db; tabulka[h].body+=hbt;
             });
 
-            const tymy = Object.keys(tabulka);
-            tymy.sort((a, b) => {
-                const tA = tabulka[a], tB = tabulka[b];
-                if (tB.body !== tA.body) return tB.body - tA.body;
-                if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
-                const rza = tA.zapasyV - tA.zapasyP, rzb = tB.zapasyV - tB.zapasyP;
-                if (rzb !== rza) return rzb - rza;
-                const rsa = tA.setyV - tA.setyP, rsb = tB.setyV - tB.setyP;
-                if (rsb !== rsa) return rsb - rsa;
-                return (tB.bodyV - tB.bodyP) - (tA.bodyV - tA.bodyP);
+            const tymy = Object.keys(tabulka).sort((a,b) => {
+                const tA=tabulka[a], tB=tabulka[b];
+                if (tB.body   !== tA.body)   return tB.body-tA.body;
+                if (tB.vyhry  !== tA.vyhry)  return tB.vyhry-tA.vyhry;
+                const rzA=tA.zapasyV-tA.zapasyP, rzB=tB.zapasyV-tB.zapasyP;
+                if (rzB !== rzA) return rzB-rzA;
+                const rsA=tA.setyV-tA.setyP, rsB=tB.setyV-tB.setyP;
+                if (rsB !== rsA) return rsB-rsA;
+                return (tB.bodyV-tB.bodyP)-(tA.bodyV-tA.bodyP);
             });
 
-            const rows = tymy.map((tym, idx) => {
+            const rows = [];
+            tymy.forEach((tym, idx) => {
                 const t = tabulka[tym];
-                const rz = t.zapasyV - t.zapasyP, rs = t.setyV - t.setyP, rb = t.bodyV - t.bodyP;
-                let pc = '';
-                if (jePrvniLiga) {
-                    if (idx <= 3) pc = 'bg-green-100 font-semibold';
-                    else if (idx === 8) pc = 'bg-red-50';
-                } else {
-                    if (idx <= 1) pc = 'bg-green-100 font-semibold';
-                    else if (idx >= 2 && idx <= 5) pc = 'bg-blue-100';
-                    else if (idx === 7) pc = 'bg-red-50';
-                }
-                const sz = rz > 0 ? '↗' : (rz < 0 ? '↘' : '→');
-                const ss = rs > 0 ? '↗' : (rs < 0 ? '↘' : '→');
-                const sb = rb > 0 ? '↗' : (rb < 0 ? '↘' : '→');
-                return '<tr class="border-b hover:bg-gray-50">' +
-                    '<td class="p-2 text-center font-bold ' + pc + '">' + (idx + 1) + '.</td>' +
-                    '<td class="p-2 font-semibold ' + pc + '">' + escapeHtml(tym) + '</td>' +
-                    '<td class="p-2 text-center">' + t.utkani + '</td>' +
-                    '<td class="p-2 text-center text-green-600 font-semibold">' + t.vyhry + '</td>' +
-                    '<td class="p-2 text-center text-yellow-600 font-semibold">' + t.remizy + '</td>' +
-                    '<td class="p-2 text-center text-red-600 font-semibold">' + t.prohry + '</td>' +
-                    '<td class="p-2 text-center text-xs">' + t.zapasyV + ':' + t.zapasyP + ' <span class="' + (rz >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sz + (rz >= 0 ? '+' : '') + rz + '</span></td>' +
-                    '<td class="p-2 text-center text-xs">' + t.setyV + ':' + t.setyP + ' <span class="' + (rs >= 0 ? 'text-green-600' : 'text-red-600') + '">' + ss + (rs >= 0 ? '+' : '') + rs + '</span></td>' +
-                    '<td class="p-2 text-center text-xs">' + t.bodyV + ':' + t.bodyP + ' <span class="' + (rb >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sb + (rb >= 0 ? '+' : '') + rb + '</span></td>' +
-                    '<td class="p-2 text-center font-bold text-lg text-blue-700">' + t.body + '</td></tr>';
-            }).join('');
 
-            document.getElementById('tabulkaBody').innerHTML = rows;
+                // Zone class
+                let zoneClass = '', zoneDot = 'none';
+                if (jePrvniLiga) {
+                    if (idx <= 3)                    { zoneClass = 'standings-row-playoff';    zoneDot = 'playoff'; }
+                    else if (idx === tymy.length - 1){ zoneClass = 'standings-row-relegation'; zoneDot = 'relegation'; }
+                } else {
+                    if (idx <= 1)     { zoneClass = 'standings-row-top';        zoneDot = 'final-four'; }
+                    else if (idx <= 5){ zoneClass = 'standings-row-playoff';    zoneDot = 'playoff'; }
+                    else if (idx === 7){ zoneClass = 'standings-row-relegation'; zoneDot = 'relegation'; }
+                }
+
+                // Position medal class
+                const posClass = ['pos-gold','pos-silver','pos-bronze'][idx] || '';
+
+                // Form dots
+                const forma = vypocitejFormu(tym, aktualni_soutez);
+                const formaDots = forma.map(r => '<span class="form-dot form-dot-' + r + '"></span>').join('');
+
+                rows.push(
+                    '<tr class="standings-row ' + zoneClass + '">' +
+                    '<td class="standings-pos-cell"><span class="standings-pos-num ' + posClass + '">' + (idx+1) + '</span></td>' +
+                    '<td class="standings-name-cell">' +
+                        '<span class="zone-dot zone-dot-' + zoneDot + '"></span>' +
+                        escapeHtml(tym) +
+                    '</td>' +
+                    '<td class="standings-num-cell text-muted">'  + t.utkani  + '</td>' +
+                    '<td class="standings-num-cell text-win">'    + t.vyhry   + '</td>' +
+                    '<td class="standings-num-cell text-muted">'  + t.remizy  + '</td>' +
+                    '<td class="standings-num-cell text-loss">'   + t.prohry  + '</td>' +
+                    '<td class="standings-num-cell text-muted" style="font-size:0.76rem">' + t.zapasyV + ':' + t.zapasyP + '</td>' +
+                    '<td class="standings-num-cell text-muted" style="font-size:0.76rem">' + t.setyV   + ':' + t.setyP   + '</td>' +
+                    '<td class="standings-pts-cell">' + t.body + '</td>' +
+                    '</tr>'
+                );
+
+                // Zone dividers
+                if (!jePrvniLiga && idx === 1) {
+                    rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="9">↓ Čtvrtfinále</td></tr>');
+                } else if (!jePrvniLiga && idx === 5) {
+                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="9">↓ Baráž</td></tr>');
+                } else if (jePrvniLiga && idx === 3) {
+                    rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="9" style="opacity:0.4"></td></tr>');
+                } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {
+                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="9">↓ Kvalifikace</td></tr>');
+                }
+            });
+
+            document.getElementById('tabulkaBody').innerHTML = rows.join('');
+
+            // Footer: legend + scoring info
             const legenda = jePrvniLiga
-                ? '<div class="flex flex-wrap gap-3 mb-2"><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> 1.–4. Play-off</span><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-50 border border-red-200"></span> 9. Kvalifikace o 1. ligu</span></div>'
-                : '<div class="flex flex-wrap gap-3 mb-2"><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> 1.–2. Přímý postup do Final Four</span><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></span> 3.–6. Čtvrtfinále</span><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-50 border border-red-200"></span> 8. Baráž</span></div>';
+                ? '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 1.–4. Play-off</span>' +
+                  '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> Posl. Kvalifikace o 1. ligu</span>'
+                : '<span class="legenda-item"><span class="legenda-dot legenda-final-four"></span> 1.–2. Přímý postup do Final Four</span>' +
+                  '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 3.–6. Čtvrtfinále</span>' +
+                  '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 8. Baráž</span>';
+
             const bodovani = jePrvniLiga
-                ? '<strong>Bodování 1. ligy:</strong> Výhra = 3 body, Remíza = 2 body, Prohra = 1 bod'
-                : '<strong>Bodování extraligy:</strong> Výhra 7:0,6:1 = 3 body | Výhra 5:2,4:3 = 2 body | Prohra 3:4,2:5 = 1 bod | Prohra 1:6,0:7 = 0 bodů';
-            document.getElementById('bodovaniInfo').innerHTML = legenda + bodovani;
+                ? '<strong>Bodování:</strong> Výhra = 3b · Remíza = 2b · Prohra = 1b'
+                : '<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b';
+
+            document.getElementById('bodovaniInfo').innerHTML =
+                '<div class="standings-legenda">' + legenda + '</div>' + bodovani;
         }
 
+        /* ── PLAYOFF HELPERS ─────────────────────────────────── */
         function getPlayoffResults(soutez) {
-            const zap = zapasy[soutez] || [];
             const results = {};
-            zap.forEach(z => {
+            (zapasy[soutez] || []).forEach(z => {
                 if (!isPlayoffKolo(z.kolo)) return;
                 const kolo = normalizeKolo(z.kolo);
                 const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
-                if (!results[klic]) {
-                    results[klic] = { kolo: kolo, tym1: z.tymDomaci, tym2: z.tymHoste, zapasy: [] };
-                }
+                if (!results[klic]) results[klic] = { kolo, tym1:z.tymDomaci, tym2:z.tymHoste, zapasy:[] };
                 results[klic].zapasy.push(z);
             });
             Object.values(results).forEach(r => {
-                let v1 = 0, v2 = 0, odehranoHer = 0;
+                let v1=0, v2=0, odb=0;
                 r.zapasy.forEach(z => {
                     const v = parseVysledek(z.vysledek);
-                    if (v.domaci === 0 && v.hoste === 0) return;
-                    odehranoHer++;
-                    if (z.tymDomaci === r.tym1) {
-                        if (v.domaci > v.hoste) v1++; else v2++;
-                    } else {
-                        if (v.hoste > v.domaci) v1++; else v2++;
-                    }
+                    if (v.domaci===0 && v.hoste===0) return;
+                    odb++;
+                    if (z.tymDomaci===r.tym1) { if(v.domaci>v.hoste) v1++; else v2++; }
+                    else                        { if(v.hoste>v.domaci)  v1++; else v2++; }
                 });
                 r.skore1 = v1; r.skore2 = v2;
-                const remiza44 = v1 === 4 && v2 === 4 && odehranoHer >= 8;
-                const rozhodnutZZ = odehranoHer >= 9 && ((v1 === 5 && v2 === 4) || (v2 === 5 && v1 === 4));
-                r.zlatyZapas = remiza44 || rozhodnutZZ;
-                r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
-                r.porazeny = r.vitez ? (r.vitez === r.tym1 ? r.tym2 : r.tym1) : null;
+                r.zlatyZapas = (odb >= 8 && v1===4 && v2===4) || (odb>=9 && ((v1===5&&v2===4)||(v2===5&&v1===4)));
+                r.vitez   = v1>v2 ? r.tym1 : (v2>v1 ? r.tym2 : null);
+                r.porazeny = r.vitez ? (r.vitez===r.tym1 ? r.tym2 : r.tym1) : null;
             });
             return results;
         }
@@ -646,58 +954,50 @@
         }
 
         function seraditTymy(soutez) {
-            const tabulka = {};
-            const utkani = {};
+            const tabulka = {}, utkani = {};
             (zapasy[soutez] || []).forEach(zapas => {
                 if (isPlayoffKolo(zapas.kolo)) return;
-                const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
-                if (!utkani[klic]) utkani[klic] = { domaci: zapas.tymDomaci, hoste: zapas.tymHoste, zapasy: [] };
-                utkani[klic].zapasy.push(zapas);
+                const k = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
+                if (!utkani[k]) utkani[k] = { domaci:zapas.tymDomaci, hoste:zapas.tymHoste, zapasy:[] };
+                utkani[k].zapasy.push(zapas);
             });
             Object.values(utkani).forEach(utk => {
-                const d = utk.domaci, h = utk.hoste;
-                if (!d || !h) return;
-                if (!tabulka[d]) tabulka[d] = { vyhry: 0, zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0 };
-                if (!tabulka[h]) tabulka[h] = { vyhry: 0, zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0, bodyV: 0, bodyP: 0, body: 0 };
-                let dz = 0, hz = 0, ds = 0, hs = 0, db = 0, hb = 0;
-                utk.zapasy.forEach(z => {
-                    const v = parseVysledek(z.vysledek); const bd = parseSety(z.sety);
-                    if (v.domaci > v.hoste) dz++; else hz++;
-                    ds += v.domaci; hs += v.hoste; db += bd.domaciBody; hb += bd.hosteBody;
+                const d=utk.domaci, h=utk.hoste;
+                if (!d||!h) return;
+                if (!tabulka[d]) tabulka[d]={vyhry:0,zapasyV:0,zapasyP:0,setyV:0,setyP:0,bodyV:0,bodyP:0,body:0};
+                if (!tabulka[h]) tabulka[h]={vyhry:0,zapasyV:0,zapasyP:0,setyV:0,setyP:0,bodyV:0,bodyP:0,body:0};
+                let dz=0,hz=0,ds=0,hs=0,db=0,hb=0;
+                utk.zapasy.forEach(z=>{
+                    const v=parseVysledek(z.vysledek), bd=parseSety(z.sety);
+                    if(v.domaci>v.hoste) dz++; else hz++;
+                    ds+=v.domaci; hs+=v.hoste; db+=bd.domaciBody; hb+=bd.hosteBody;
                 });
-                const jePL = soutez.includes('prvni-liga');
-                let dbt = 0, hbt = 0;
-                if (jePL) {
-                    if (dz === hz) { dbt = 2; hbt = 2; }
-                    else if (dz > hz) { dbt = 3; hbt = 1; tabulka[d].vyhry++; }
-                    else { hbt = 3; dbt = 1; tabulka[h].vyhry++; }
-                } else {
-                    if (dz > hz) { dbt = dz >= 6 ? 3 : 2; hbt = dz >= 6 ? 0 : 1; tabulka[d].vyhry++; }
-                    else { hbt = hz >= 6 ? 3 : 2; dbt = hz >= 6 ? 0 : 1; tabulka[h].vyhry++; }
-                }
-                tabulka[d].zapasyV += dz; tabulka[d].zapasyP += hz; tabulka[d].setyV += ds; tabulka[d].setyP += hs;
-                tabulka[d].bodyV += db; tabulka[d].bodyP += hb; tabulka[d].body += dbt;
-                tabulka[h].zapasyV += hz; tabulka[h].zapasyP += dz; tabulka[h].setyV += hs; tabulka[h].setyP += ds;
-                tabulka[h].bodyV += hb; tabulka[h].bodyP += db; tabulka[h].body += hbt;
+                const pl=soutez.includes('prvni-liga');
+                let dbt=0,hbt=0;
+                if(pl){ if(dz===hz){dbt=2;hbt=2;}else if(dz>hz){dbt=3;hbt=1;tabulka[d].vyhry++;}else{hbt=3;dbt=1;tabulka[h].vyhry++;} }
+                else  { if(dz>hz){dbt=dz>=6?3:2;hbt=dz>=6?0:1;tabulka[d].vyhry++;}else{hbt=hz>=6?3:2;dbt=hz>=6?0:1;tabulka[h].vyhry++;} }
+                tabulka[d].zapasyV+=dz;tabulka[d].zapasyP+=hz;tabulka[d].setyV+=ds;tabulka[d].setyP+=hs;
+                tabulka[d].bodyV+=db;tabulka[d].bodyP+=hb;tabulka[d].body+=dbt;
+                tabulka[h].zapasyV+=hz;tabulka[h].zapasyP+=dz;tabulka[h].setyV+=hs;tabulka[h].setyP+=ds;
+                tabulka[h].bodyV+=hb;tabulka[h].bodyP+=db;tabulka[h].body+=hbt;
             });
-            return Object.keys(tabulka).sort((a, b) => {
-                const tA = tabulka[a], tB = tabulka[b];
-                if (tB.body !== tA.body) return tB.body - tA.body;
-                if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
-                return (tB.zapasyV - tB.zapasyP) - (tA.zapasyV - tA.zapasyP);
+            return Object.keys(tabulka).sort((a,b)=>{
+                const tA=tabulka[a],tB=tabulka[b];
+                if(tB.body!==tA.body) return tB.body-tA.body;
+                if(tB.vyhry!==tA.vyhry) return tB.vyhry-tA.vyhry;
+                return (tB.zapasyV-tB.zapasyP)-(tA.zapasyV-tA.zapasyP);
             });
         }
 
-        // Bracket rendering helpers (matching the main page's playoff.js)
+        /* ── Card helpers ── */
         function teamCard(name, seed, highlight, conference, seriesScore) {
-            const cls = highlight || '';
             const confBadge = conference
-                ? '<span class="playoff-conf-badge playoff-conf-' + conference + '">' + (conference === 'V' ? 'V' : 'Z') + '</span>'
+                ? '<span class="playoff-conf-badge playoff-conf-' + conference + '">' + conference + '</span>'
                 : '';
             const scoreHtml = seriesScore !== undefined
                 ? '<span class="playoff-series-score">' + seriesScore + '</span>'
                 : '';
-            return '<div class="playoff-team ' + cls + '">' +
+            return '<div class="playoff-team ' + (highlight||'') + '">' +
                 '<span class="playoff-seed">' + seed + '</span>' +
                 confBadge +
                 '<span class="playoff-team-name">' + escapeHtml(name) + '</span>' +
@@ -712,539 +1012,351 @@
                 '</div>';
         }
 
-        function matchBox(team1Html, team2Html, label, seriesResult, result) {
-            let resultHtml = '';
-            if (seriesResult) {
-                const zzBadge = result && result.zlatyZapas
-                    ? '<span class="playoff-zz-badge" title="Zlatý zápas">ZZ</span>'
-                    : '';
-                resultHtml = '<div class="playoff-series-result">' + seriesResult + zzBadge + '</div>';
-            }
+        function matchBox(t1Html, t2Html, label, seriesResult, result) {
+            const zzBadge = result && result.zlatyZapas
+                ? '<span class="playoff-zz-badge" title="Zlatý zápas">ZZ</span>' : '';
+            const resultHtml = seriesResult
+                ? '<div class="playoff-series-result">' + seriesResult + zzBadge + '</div>' : '';
             return '<div class="playoff-match">' +
                 (label ? '<div class="playoff-match-label">' + label + '</div>' : '') +
-                '<div class="playoff-match-teams">' +
-                team1Html +
-                '<div class="playoff-vs">vs</div>' +
-                team2Html +
-                '</div>' +
+                '<div class="playoff-match-teams">' + t1Html + '<div class="playoff-vs">vs</div>' + t2Html + '</div>' +
                 resultHtml +
                 '</div>';
         }
 
+        /* ── PLAYOFF RENDER ── */
         function zobrazitPlayoff() {
             const container = document.getElementById('playoffView');
-            const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
-
-            if (jePrvniLiga) {
+            if (aktualni_soutez.includes('prvni-liga')) {
                 zobrazitPlayoffPrvniLiga(container);
             } else {
                 zobrazitPlayoffExtraliga(container);
             }
-
             drawConnectors();
         }
 
         function zobrazitPlayoffExtraliga(container) {
             const tymy = seraditTymy('extraliga');
-            const res = getPlayoffResults('extraliga');
+            const res  = getPlayoffResults('extraliga');
 
             if (tymy.length < 6) {
-                container.innerHTML = '<p class="text-gray-500 text-center py-8">Nedostatek týmů pro zobrazení play-off.</p>';
+                container.innerHTML = '<div class="empty-state">Nedostatek týmů pro zobrazení play-off.</div>';
                 return;
             }
 
-            const t = (i) => tymy[i] || '?';
+            const t = i => tymy[i] || '?';
 
-            // QF results
-            const qfRes1 = findResult(res, 'QF', t(2), t(5));
-            const qfRes2 = findResult(res, 'QF', t(3), t(4));
-            const qfVitez1 = qfRes1 ? qfRes1.vitez : null;
-            const qfVitez2 = qfRes2 ? qfRes2.vitez : null;
+            const qfRes1 = findResult(res,'QF',t(2),t(5));
+            const qfRes2 = findResult(res,'QF',t(3),t(4));
+            const qfV1   = qfRes1 ? qfRes1.vitez : null;
+            const qfV2   = qfRes2 ? qfRes2.vitez : null;
 
             const qf1 = matchBox(
-                teamCard(t(2), '3.', qfVitez1 === t(2) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes1 ? (qfRes1.tym1 === t(2) ? qfRes1.skore1 : qfRes1.skore2) : undefined),
-                teamCard(t(5), '6.', qfVitez1 === t(5) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes1 ? (qfRes1.tym1 === t(5) ? qfRes1.skore1 : qfRes1.skore2) : undefined),
-                'Čtvrtfinále 1',
-                qfRes1 ? qfRes1.skore1 + ':' + qfRes1.skore2 : null,
-                qfRes1
-            );
+                teamCard(t(2),'3.',qfV1===t(2)?'playoff-team-green':'playoff-team-blue',null,qfRes1?(qfRes1.tym1===t(2)?qfRes1.skore1:qfRes1.skore2):undefined),
+                teamCard(t(5),'6.',qfV1===t(5)?'playoff-team-green':'playoff-team-blue',null,qfRes1?(qfRes1.tym1===t(5)?qfRes1.skore1:qfRes1.skore2):undefined),
+                'Čtvrtfinále 1', qfRes1?qfRes1.skore1+':'+qfRes1.skore2:null, qfRes1);
             const qf2 = matchBox(
-                teamCard(t(3), '4.', qfVitez2 === t(3) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes2 ? (qfRes2.tym1 === t(3) ? qfRes2.skore1 : qfRes2.skore2) : undefined),
-                teamCard(t(4), '5.', qfVitez2 === t(4) ? 'playoff-team-green' : 'playoff-team-blue', null, qfRes2 ? (qfRes2.tym1 === t(4) ? qfRes2.skore1 : qfRes2.skore2) : undefined),
-                'Čtvrtfinále 2',
-                qfRes2 ? qfRes2.skore1 + ':' + qfRes2.skore2 : null,
-                qfRes2
-            );
+                teamCard(t(3),'4.',qfV2===t(3)?'playoff-team-green':'playoff-team-blue',null,qfRes2?(qfRes2.tym1===t(3)?qfRes2.skore1:qfRes2.skore2):undefined),
+                teamCard(t(4),'5.',qfV2===t(4)?'playoff-team-green':'playoff-team-blue',null,qfRes2?(qfRes2.tym1===t(4)?qfRes2.skore1:qfRes2.skore2):undefined),
+                'Čtvrtfinále 2', qfRes2?qfRes2.skore1+':'+qfRes2.skore2:null, qfRes2);
 
-            // SF - reseeding based on regular season standings
-            let sfTym1B = null;
-            let sfTym2B = null;
-
-            if (qfVitez1 && qfVitez2) {
-                const seed1 = tymy.indexOf(qfVitez1);
-                const seed2 = tymy.indexOf(qfVitez2);
-                if (seed1 > seed2) {
-                    sfTym1B = qfVitez1;
-                    sfTym2B = qfVitez2;
-                } else {
-                    sfTym1B = qfVitez2;
-                    sfTym2B = qfVitez1;
-                }
-            } else if (qfVitez1) {
-                const sfCheck = findResult(res, 'SF', t(0), qfVitez1);
-                if (sfCheck) { sfTym1B = qfVitez1; }
-                else {
-                    const sfCheck2 = findResult(res, 'SF', t(1), qfVitez1);
-                    if (sfCheck2) { sfTym2B = qfVitez1; }
-                }
-            } else if (qfVitez2) {
-                const sfCheck = findResult(res, 'SF', t(0), qfVitez2);
-                if (sfCheck) { sfTym1B = qfVitez2; }
-                else {
-                    const sfCheck2 = findResult(res, 'SF', t(1), qfVitez2);
-                    if (sfCheck2) { sfTym2B = qfVitez2; }
-                }
+            let sfT1B=null, sfT2B=null;
+            if (qfV1 && qfV2) {
+                const s1=tymy.indexOf(qfV1), s2=tymy.indexOf(qfV2);
+                sfT1B = s1>s2 ? qfV1:qfV2; sfT2B = s1>s2 ? qfV2:qfV1;
+            } else if (qfV1) {
+                if (findResult(res,'SF',t(0),qfV1)) sfT1B=qfV1;
+                else if (findResult(res,'SF',t(1),qfV1)) sfT2B=qfV1;
+            } else if (qfV2) {
+                if (findResult(res,'SF',t(0),qfV2)) sfT1B=qfV2;
+                else if (findResult(res,'SF',t(1),qfV2)) sfT2B=qfV2;
             }
 
-            const sfTym1A = t(0);
-            const sfTym2A = t(1);
-
-            const sfRes1 = sfTym1B ? findResult(res, 'SF', sfTym1A, sfTym1B) : null;
-            const sfRes2 = sfTym2B ? findResult(res, 'SF', sfTym2A, sfTym2B) : null;
-            const sfVitez1 = sfRes1 ? sfRes1.vitez : null;
-            const sfVitez2 = sfRes2 ? sfRes2.vitez : null;
+            const sfRes1 = sfT1B ? findResult(res,'SF',t(0),sfT1B) : null;
+            const sfRes2 = sfT2B ? findResult(res,'SF',t(1),sfT2B) : null;
+            const sfV1   = sfRes1 ? sfRes1.vitez : null;
+            const sfV2   = sfRes2 ? sfRes2.vitez : null;
 
             const sf1 = matchBox(
-                teamCard(sfTym1A, '1.', sfVitez1 === sfTym1A ? 'playoff-team-green' : 'playoff-team-green', null, sfRes1 ? (sfRes1.tym1 === sfTym1A ? sfRes1.skore1 : sfRes1.skore2) : undefined),
-                sfTym1B
-                    ? teamCard(sfTym1B, 'QF', sfVitez1 === sfTym1B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1B ? sfRes1.skore1 : sfRes1.skore2) : undefined)
-                    : pendingCard('Níže nasazený z ČF'),
-                'Semifinále 1',
-                sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null,
-                sfRes1
-            );
+                teamCard(t(0),'1.','playoff-team-green',null,sfRes1?(sfRes1.tym1===t(0)?sfRes1.skore1:sfRes1.skore2):undefined),
+                sfT1B ? teamCard(sfT1B,'QF',sfV1===sfT1B?'playoff-team-green':'playoff-team-blue',null,sfRes1?(sfRes1.tym1===sfT1B?sfRes1.skore1:sfRes1.skore2):undefined) : pendingCard('Níže nasazený z ČF'),
+                'Semifinále 1', sfRes1?sfRes1.skore1+':'+sfRes1.skore2:null, sfRes1);
             const sf2 = matchBox(
-                teamCard(sfTym2A, '2.', sfVitez2 === sfTym2A ? 'playoff-team-green' : 'playoff-team-green', null, sfRes2 ? (sfRes2.tym1 === sfTym2A ? sfRes2.skore1 : sfRes2.skore2) : undefined),
-                sfTym2B
-                    ? teamCard(sfTym2B, 'QF', sfVitez2 === sfTym2B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2B ? sfRes2.skore1 : sfRes2.skore2) : undefined)
-                    : pendingCard('Výše nasazený z ČF'),
-                'Semifinále 2',
-                sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null,
-                sfRes2
-            );
+                teamCard(t(1),'2.','playoff-team-green',null,sfRes2?(sfRes2.tym1===t(1)?sfRes2.skore1:sfRes2.skore2):undefined),
+                sfT2B ? teamCard(sfT2B,'QF',sfV2===sfT2B?'playoff-team-green':'playoff-team-blue',null,sfRes2?(sfRes2.tym1===sfT2B?sfRes2.skore1:sfRes2.skore2):undefined) : pendingCard('Výše nasazený z ČF'),
+                'Semifinále 2', sfRes2?sfRes2.skore1+':'+sfRes2.skore2:null, sfRes2);
 
-            // Final
-            const fTym1 = sfVitez1 || null;
-            const fTym2 = sfVitez2 || null;
-            const fRes = (fTym1 && fTym2) ? findResult(res, 'F', fTym1, fTym2) : null;
-
+            const fT1  = sfV1, fT2=sfV2;
+            const fRes = (fT1&&fT2) ? findResult(res,'F',fT1,fT2) : null;
             const final_ = matchBox(
-                fTym1
-                    ? teamCard(fTym1, 'SF', fRes && fRes.vitez === fTym1 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym1 ? fRes.skore1 : fRes.skore2) : undefined)
-                    : pendingCard('Vítěz SF 1'),
-                fTym2
-                    ? teamCard(fTym2, 'SF', fRes && fRes.vitez === fTym2 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym2 ? fRes.skore1 : fRes.skore2) : undefined)
-                    : pendingCard('Vítěz SF 2'),
-                'Finále (Final Four)',
-                fRes ? fRes.skore1 + ':' + fRes.skore2 : null,
-                fRes
-            );
-
-            const champion = fRes ? fRes.vitez : null;
-            const championHtml = champion
-                ? '<div class="playoff-champion"><div class="text-xl">🏆</div><div class="font-bold text-yellow-800">' + escapeHtml(champion) + '</div></div>'
-                : '';
+                fT1 ? teamCard(fT1,'SF',fRes&&fRes.vitez===fT1?'playoff-team-green':'playoff-team-blue',null,fRes?(fRes.tym1===fT1?fRes.skore1:fRes.skore2):undefined) : pendingCard('Vítěz SF 1'),
+                fT2 ? teamCard(fT2,'SF',fRes&&fRes.vitez===fT2?'playoff-team-green':'playoff-team-blue',null,fRes?(fRes.tym1===fT2?fRes.skore1:fRes.skore2):undefined) : pendingCard('Vítěz SF 2'),
+                'Finále (Final Four)', fRes?fRes.skore1+':'+fRes.skore2:null, fRes);
 
             container.innerHTML =
                 '<div class="bracket-wrapper">' +
-                    '<div class="bracket-round bracket-round-qf">' +
-                        '<div class="bracket-round-title">Čtvrtfinále</div>' +
-                        '<div class="bracket-matches">' +
-                            '<div class="bracket-match-slot">' + qf1 + '</div>' +
-                            '<div class="bracket-match-slot">' + qf2 + '</div>' +
-                        '</div>' +
-                    '</div>' +
+                    '<div class="bracket-round"><div class="bracket-round-title">Čtvrtfinále</div><div class="bracket-matches"><div class="bracket-match-slot">' + qf1 + '</div><div class="bracket-match-slot">' + qf2 + '</div></div></div>' +
                     '<div class="bracket-connector-col"></div>' +
-                    '<div class="bracket-round bracket-round-sf">' +
-                        '<div class="bracket-round-title">Semifinále (Final Four)</div>' +
-                        '<div class="bracket-matches">' +
-                            '<div class="bracket-match-slot">' + sf1 + '</div>' +
-                            '<div class="bracket-match-slot">' + sf2 + '</div>' +
-                        '</div>' +
-                    '</div>' +
+                    '<div class="bracket-round"><div class="bracket-round-title">Semifinále (Final Four)</div><div class="bracket-matches"><div class="bracket-match-slot">' + sf1 + '</div><div class="bracket-match-slot">' + sf2 + '</div></div></div>' +
                     '<div class="bracket-connector-col"></div>' +
-                    '<div class="bracket-round bracket-round-f">' +
-                        '<div class="bracket-round-title">Finále</div>' +
-                        '<div class="bracket-matches">' +
-                            '<div class="bracket-match-slot">' + final_ + '</div>' +
-                        '</div>' +
-                    '</div>' +
+                    '<div class="bracket-round"><div class="bracket-round-title">Finále</div><div class="bracket-matches"><div class="bracket-match-slot">' + final_ + '</div></div></div>' +
                 '</div>' +
-                championHtml +
-                '<div class="playoff-legend mt-3">' +
-                    '<span class="inline-flex items-center gap-1 text-xs"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> Přímý postup do Final Four (1.–2.)</span>' +
-                    '<span class="inline-flex items-center gap-1 text-xs ml-3"><span class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></span> Čtvrtfinále (3.–6.)</span>' +
-                '</div>' +
-                '';
+                '<div class="playoff-legend">' +
+                    '<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:rgba(22,163,74,0.3);border:1px solid rgba(22,163,74,0.5);display:inline-block"></span> Přímý postup do Final Four (1.–2.)</span>' +
+                    '<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.4);display:inline-block"></span> Čtvrtfinále (3.–6.)</span>' +
+                '</div>';
         }
 
         function zobrazitPlayoffPrvniLiga(container) {
             const tymyV = seraditTymy('prvni-liga-vychod');
             const tymyZ = seraditTymy('prvni-liga-zapad');
-            const res = getPlayoffResults('prvni-liga-playoff');
+            const res   = getPlayoffResults('prvni-liga-playoff');
 
             if (tymyV.length < 4 || tymyZ.length < 4) {
-                container.innerHTML = '<p class="text-gray-500 text-center py-8">Nedostatek týmů pro zobrazení play-off.</p>';
+                container.innerHTML = '<div class="empty-state">Nedostatek týmů pro zobrazení play-off.</div>';
                 return;
             }
 
             const qfPairs = [
-                { v: 0, z: 3, label: 'Čtvrtfinále 1' },
-                { v: 2, z: 1, label: 'Čtvrtfinále 2' },
-                { v: 1, z: 2, label: 'Čtvrtfinále 3' },
-                { v: 3, z: 0, label: 'Čtvrtfinále 4' }
+                {v:0,z:3,label:'Čtvrtfinále 1'},{v:2,z:1,label:'Čtvrtfinále 2'},
+                {v:1,z:2,label:'Čtvrtfinále 3'},{v:3,z:0,label:'Čtvrtfinále 4'}
             ];
 
             const qfResults = [];
-            const qfBoxes = qfPairs.map((pair) => {
-                const teamV = tymyV[pair.v];
-                const teamZ = tymyZ[pair.z];
-                const qfRes = findResult(res, 'QF', teamV, teamZ);
-                qfResults.push(qfRes);
-                const vitez = qfRes ? qfRes.vitez : null;
-
+            const qfBoxes = qfPairs.map(pair => {
+                const tV=tymyV[pair.v], tZ=tymyZ[pair.z];
+                const r=findResult(res,'QF',tV,tZ);
+                qfResults.push(r);
+                const v=r?r.vitez:null;
                 return matchBox(
-                    teamCard(teamV, (pair.v + 1) + '.', vitez === teamV ? 'playoff-team-green' : 'playoff-team-east', 'V', qfRes ? (qfRes.tym1 === teamV ? qfRes.skore1 : qfRes.skore2) : undefined),
-                    teamCard(teamZ, (pair.z + 1) + '.', vitez === teamZ ? 'playoff-team-green' : 'playoff-team-west', 'Z', qfRes ? (qfRes.tym1 === teamZ ? qfRes.skore1 : qfRes.skore2) : undefined),
-                    pair.label,
-                    qfRes ? qfRes.skore1 + ':' + qfRes.skore2 : null,
-                    qfRes
-                );
+                    teamCard(tV,(pair.v+1)+'.',v===tV?'playoff-team-green':'playoff-team-east','V',r?(r.tym1===tV?r.skore1:r.skore2):undefined),
+                    teamCard(tZ,(pair.z+1)+'.',v===tZ?'playoff-team-green':'playoff-team-west','Z',r?(r.tym1===tZ?r.skore1:r.skore2):undefined),
+                    pair.label, r?r.skore1+':'+r.skore2:null, r);
             });
 
-            // SF
-            const sfTym1A = qfResults[0] ? qfResults[0].vitez : null;
-            const sfTym1B = qfResults[1] ? qfResults[1].vitez : null;
-            const sfTym2A = qfResults[2] ? qfResults[2].vitez : null;
-            const sfTym2B = qfResults[3] ? qfResults[3].vitez : null;
-
-            const sfRes1 = (sfTym1A && sfTym1B) ? findResult(res, 'SF', sfTym1A, sfTym1B) : null;
-            const sfRes2 = (sfTym2A && sfTym2B) ? findResult(res, 'SF', sfTym2A, sfTym2B) : null;
+            const sfT1A=qfResults[0]?qfResults[0].vitez:null, sfT1B=qfResults[1]?qfResults[1].vitez:null;
+            const sfT2A=qfResults[2]?qfResults[2].vitez:null, sfT2B=qfResults[3]?qfResults[3].vitez:null;
+            const sfRes1=(sfT1A&&sfT1B)?findResult(res,'SF',sfT1A,sfT1B):null;
+            const sfRes2=(sfT2A&&sfT2B)?findResult(res,'SF',sfT2A,sfT2B):null;
 
             const sf1 = matchBox(
-                sfTym1A
-                    ? teamCard(sfTym1A, 'QF', sfRes1 && sfRes1.vitez === sfTym1A ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1A ? sfRes1.skore1 : sfRes1.skore2) : undefined)
-                    : pendingCard('Vítěz ČF 1'),
-                sfTym1B
-                    ? teamCard(sfTym1B, 'QF', sfRes1 && sfRes1.vitez === sfTym1B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes1 ? (sfRes1.tym1 === sfTym1B ? sfRes1.skore1 : sfRes1.skore2) : undefined)
-                    : pendingCard('Vítěz ČF 2'),
-                'Semifinále 1',
-                sfRes1 ? sfRes1.skore1 + ':' + sfRes1.skore2 : null,
-                sfRes1
-            );
+                sfT1A?teamCard(sfT1A,'QF',sfRes1&&sfRes1.vitez===sfT1A?'playoff-team-green':'playoff-team-blue',null,sfRes1?(sfRes1.tym1===sfT1A?sfRes1.skore1:sfRes1.skore2):undefined):pendingCard('Vítěz ČF 1'),
+                sfT1B?teamCard(sfT1B,'QF',sfRes1&&sfRes1.vitez===sfT1B?'playoff-team-green':'playoff-team-blue',null,sfRes1?(sfRes1.tym1===sfT1B?sfRes1.skore1:sfRes1.skore2):undefined):pendingCard('Vítěz ČF 2'),
+                'Semifinále 1',sfRes1?sfRes1.skore1+':'+sfRes1.skore2:null,sfRes1);
             const sf2 = matchBox(
-                sfTym2A
-                    ? teamCard(sfTym2A, 'QF', sfRes2 && sfRes2.vitez === sfTym2A ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2A ? sfRes2.skore1 : sfRes2.skore2) : undefined)
-                    : pendingCard('Vítěz ČF 3'),
-                sfTym2B
-                    ? teamCard(sfTym2B, 'QF', sfRes2 && sfRes2.vitez === sfTym2B ? 'playoff-team-green' : 'playoff-team-blue', null, sfRes2 ? (sfRes2.tym1 === sfTym2B ? sfRes2.skore1 : sfRes2.skore2) : undefined)
-                    : pendingCard('Vítěz ČF 4'),
-                'Semifinále 2',
-                sfRes2 ? sfRes2.skore1 + ':' + sfRes2.skore2 : null,
-                sfRes2
-            );
+                sfT2A?teamCard(sfT2A,'QF',sfRes2&&sfRes2.vitez===sfT2A?'playoff-team-green':'playoff-team-blue',null,sfRes2?(sfRes2.tym1===sfT2A?sfRes2.skore1:sfRes2.skore2):undefined):pendingCard('Vítěz ČF 3'),
+                sfT2B?teamCard(sfT2B,'QF',sfRes2&&sfRes2.vitez===sfT2B?'playoff-team-green':'playoff-team-blue',null,sfRes2?(sfRes2.tym1===sfT2B?sfRes2.skore1:sfRes2.skore2):undefined):pendingCard('Vítěz ČF 4'),
+                'Semifinále 2',sfRes2?sfRes2.skore1+':'+sfRes2.skore2:null,sfRes2);
 
-            // Final
-            const fTym1 = sfRes1 ? sfRes1.vitez : null;
-            const fTym2 = sfRes2 ? sfRes2.vitez : null;
-            const fRes = (fTym1 && fTym2) ? findResult(res, 'F', fTym1, fTym2) : null;
+            const fT1=sfRes1?sfRes1.vitez:null, fT2=sfRes2?sfRes2.vitez:null;
+            const fRes=(fT1&&fT2)?findResult(res,'F',fT1,fT2):null;
+            const final_=matchBox(
+                fT1?teamCard(fT1,'SF',fRes&&fRes.vitez===fT1?'playoff-team-green':'playoff-team-blue',null,fRes?(fRes.tym1===fT1?fRes.skore1:fRes.skore2):undefined):pendingCard('Vítěz SF 1'),
+                fT2?teamCard(fT2,'SF',fRes&&fRes.vitez===fT2?'playoff-team-green':'playoff-team-blue',null,fRes?(fRes.tym1===fT2?fRes.skore1:fRes.skore2):undefined):pendingCard('Vítěz SF 2'),
+                'Finále',fRes?fRes.skore1+':'+fRes.skore2:null,fRes);
 
-            const final_ = matchBox(
-                fTym1
-                    ? teamCard(fTym1, 'SF', fRes && fRes.vitez === fTym1 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym1 ? fRes.skore1 : fRes.skore2) : undefined)
-                    : pendingCard('Vítěz SF 1'),
-                fTym2
-                    ? teamCard(fTym2, 'SF', fRes && fRes.vitez === fTym2 ? 'playoff-team-green' : 'playoff-team-blue', null, fRes ? (fRes.tym1 === fTym2 ? fRes.skore1 : fRes.skore2) : undefined)
-                    : pendingCard('Vítěz SF 2'),
-                'Finále',
-                fRes ? fRes.skore1 + ':' + fRes.skore2 : null,
-                fRes
-            );
-
-            const champion = fRes ? fRes.vitez : null;
-            const championHtml = champion
-                ? '<div class="playoff-champion"><div class="text-xl">🏆</div><div class="font-bold text-yellow-800">' + escapeHtml(champion) + '</div></div>'
-                : '';
-
-            // Placement matches (O 5./7. místo) – kolo P5
-            const p5T1A = qfResults[0] ? qfResults[0].porazeny : null;
-            const p5T1B = qfResults[1] ? qfResults[1].porazeny : null;
-            const p5T2A = qfResults[2] ? qfResults[2].porazeny : null;
-            const p5T2B = qfResults[3] ? qfResults[3].porazeny : null;
-            const p5Res1 = (p5T1A && p5T1B) ? findResult(res, 'P5', p5T1A, p5T1B) : null;
-            const p5Res2 = (p5T2A && p5T2B) ? findResult(res, 'P5', p5T2A, p5T2B) : null;
-            const placementHtml = renderPlacementMatches(p5T1A, p5T1B, p5Res1, p5T2A, p5T2B, p5Res2);
+            // Placement
+            const p5T1A=qfResults[0]?qfResults[0].porazeny:null, p5T1B=qfResults[1]?qfResults[1].porazeny:null;
+            const p5T2A=qfResults[2]?qfResults[2].porazeny:null, p5T2B=qfResults[3]?qfResults[3].porazeny:null;
+            const p5Res1=(p5T1A&&p5T1B)?findResult(res,'P5',p5T1A,p5T1B):null;
+            const p5Res2=(p5T2A&&p5T2B)?findResult(res,'P5',p5T2A,p5T2B):null;
+            const placementHtml = renderPlacementMatches(p5T1A,p5T1B,p5Res1,p5T2A,p5T2B,p5Res2);
 
             container.innerHTML =
                 '<div class="bracket-wrapper">' +
-                    '<div class="bracket-round bracket-round-qf">' +
-                        '<div class="bracket-round-title">Čtvrtfinále</div>' +
-                        '<div class="bracket-matches">' +
-                            '<div class="bracket-match-slot">' + qfBoxes[0] + '</div>' +
-                            '<div class="bracket-match-slot">' + qfBoxes[1] + '</div>' +
-                            '<div class="bracket-match-slot">' + qfBoxes[2] + '</div>' +
-                            '<div class="bracket-match-slot">' + qfBoxes[3] + '</div>' +
-                        '</div>' +
-                    '</div>' +
+                    '<div class="bracket-round"><div class="bracket-round-title">Čtvrtfinále</div><div class="bracket-matches">' +
+                        qfBoxes.map(b=>'<div class="bracket-match-slot">'+b+'</div>').join('') +
+                    '</div></div>' +
                     '<div class="bracket-connector-col"></div>' +
-                    '<div class="bracket-round bracket-round-sf">' +
-                        '<div class="bracket-round-title">Semifinále</div>' +
-                        '<div class="bracket-matches">' +
-                            '<div class="bracket-match-slot">' + sf1 + '</div>' +
-                            '<div class="bracket-match-slot">' + sf2 + '</div>' +
-                        '</div>' +
-                    '</div>' +
+                    '<div class="bracket-round"><div class="bracket-round-title">Semifinále</div><div class="bracket-matches"><div class="bracket-match-slot">'+sf1+'</div><div class="bracket-match-slot">'+sf2+'</div></div></div>' +
                     '<div class="bracket-connector-col"></div>' +
-                    '<div class="bracket-round bracket-round-f">' +
-                        '<div class="bracket-round-title">Finále</div>' +
-                        '<div class="bracket-matches">' +
-                            '<div class="bracket-match-slot">' + final_ + '</div>' +
-                        '</div>' +
-                    '</div>' +
+                    '<div class="bracket-round"><div class="bracket-round-title">Finále</div><div class="bracket-matches"><div class="bracket-match-slot">'+final_+'</div></div></div>' +
                 '</div>' +
-                championHtml +
                 placementHtml +
-                '<div class="playoff-legend mt-3">' +
-                    '<span class="inline-flex items-center gap-1 text-xs"><span class="w-3 h-3 rounded-sm border" style="background:#fef3c7;border-color:#fbbf24;width:12px;height:12px"></span> Východ</span>' +
-                    '<span class="inline-flex items-center gap-1 text-xs ml-3"><span class="w-3 h-3 rounded-sm border" style="background:#dbeafe;border-color:#60a5fa;width:12px;height:12px"></span> Západ</span>' +
-                '</div>' +
-                '';
+                '<div class="playoff-legend">' +
+                    '<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(234,179,8,0.12);border:1px solid rgba(234,179,8,0.35);display:inline-block"></span> Východ</span>' +
+                    '<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.3);display:inline-block"></span> Západ</span>' +
+                '</div>';
         }
 
-        function renderPlacementMatches(t1A, t1B, res1, t2A, t2B, res2) {
+        function renderPlacementMatches(t1A,t1B,res1,t2A,t2B,res2) {
             if (!t1A && !t1B && !t2A && !t2B) return '';
 
-            function makeCard(tym, result, isWinner) {
+            function makeCard(tym, result, isWin) {
                 if (!tym) return pendingCard('Poražený z ČF');
-                const cls = isWinner ? 'playoff-team-placement-5' : 'playoff-team-placement-7';
-                return '<div class="playoff-team ' + cls + '">' +
+                const cls = isWin ? 'playoff-team-placement-5' : 'playoff-team-placement-7';
+                return '<div class="playoff-team '+cls+'">' +
                     '<span class="playoff-seed">P</span>' +
-                    '<span class="playoff-team-name">' + escapeHtml(tym) + '</span>' +
-                    (result ? '<span class="playoff-series-score">' + (result.tym1 === tym ? result.skore1 : result.skore2) + '</span>' : '') +
+                    '<span class="playoff-team-name">'+escapeHtml(tym)+'</span>' +
+                    (result?'<span class="playoff-series-score">'+(result.tym1===tym?result.skore1:result.skore2)+'</span>':'') +
                     '</div>';
             }
 
-            function makeMatch(tA, tB, res, label) {
-                const vitez = res ? res.vitez : null;
-                const porazeny = res ? res.porazeny : null;
-                const zzBadge = res && res.zlatyZapas ? '<span class="playoff-zz-badge">ZZ</span>' : '';
-                const resultHtml = res
-                    ? '<div class="playoff-series-result">' + res.skore1 + ':' + res.skore2 + zzBadge + '</div>'
-                    : '';
-                const placementResult = vitez
-                    ? '<div class="playoff-placement-result"><span class="placement-5">🥈 ' + escapeHtml(vitez) + ' – 5. místo</span><span class="placement-7">' + escapeHtml(porazeny) + ' – 7. místo</span></div>'
-                    : '';
+            function makeMatch(tA,tB,res,label) {
+                const v=res?res.vitez:null, p=res?res.porazeny:null;
+                const zzBadge=res&&res.zlatyZapas?'<span class="playoff-zz-badge">ZZ</span>':'';
+                const resultHtml=res?'<div class="playoff-series-result">'+res.skore1+':'+res.skore2+zzBadge+'</div>':'';
+                const plRes=v?'<div class="playoff-placement-result"><span class="placement-5">🥈 '+escapeHtml(v)+' – 5. místo</span><span class="placement-7">'+escapeHtml(p)+' – 7. místo</span></div>':'';
                 return '<div class="playoff-match playoff-match-placement">' +
-                    '<div class="playoff-match-label">' + label + '</div>' +
-                    '<div class="playoff-match-teams">' +
-                    makeCard(tA, res, vitez === tA) +
-                    '<div class="playoff-vs">vs</div>' +
-                    makeCard(tB, res, vitez === tB) +
-                    '</div>' +
-                    resultHtml +
-                    placementResult +
-                    '</div>';
+                    '<div class="playoff-match-label">'+label+'</div>' +
+                    '<div class="playoff-match-teams">'+makeCard(tA,res,v===tA)+'<div class="playoff-vs">vs</div>'+makeCard(tB,res,v===tB)+'</div>' +
+                    resultHtml + plRes + '</div>';
             }
 
             return '<div class="playoff-placement-section">' +
                 '<div class="playoff-placement-title">Zápasy o umístění</div>' +
                 '<div class="playoff-placement-matches">' +
-                    makeMatch(t1A, t1B, res1, 'O 5. místo – utkání 1') +
-                    makeMatch(t2A, t2B, res2, 'O 5. místo – utkání 2') +
-                '</div>' +
-                ''
-            '</div>';
+                    makeMatch(t1A,t1B,res1,'O 5. místo – utkání 1') +
+                    makeMatch(t2A,t2B,res2,'O 5. místo – utkání 2') +
+                '</div></div>';
         }
 
+        /* ── BARÁŽ RENDER ── */
         function zobrazitBaraze() {
             const container = document.getElementById('barazeView');
             const zap = zapasy['baraze'] || [];
             if (zap.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 text-center py-8">Žádná data baráže.</p>';
+                container.innerHTML = '<div class="empty-state">Žádná data baráže.</div>';
                 return;
             }
 
-            // Group all games into one series
             const res = {};
             zap.forEach(z => {
-                const klic = [z.tymDomaci, z.tymHoste].sort().join('|||');
-                if (!res[klic]) res[klic] = { tym1: z.tymDomaci, tym2: z.tymHoste, zapasy: [] };
-                res[klic].zapasy.push(z);
+                const k = [z.tymDomaci, z.tymHoste].sort().join('|||');
+                if (!res[k]) res[k] = { tym1:z.tymDomaci, tym2:z.tymHoste, zapasy:[] };
+                res[k].zapasy.push(z);
             });
 
             Object.values(res).forEach(r => {
-                let v1 = 0, v2 = 0, odehranoHer = 0;
+                let v1=0, v2=0, odb=0;
                 r.zapasy.forEach(z => {
-                    const v = parseVysledek(z.vysledek);
-                    if (v.domaci === 0 && v.hoste === 0) return;
-                    odehranoHer++;
-                    if (z.tymDomaci === r.tym1) {
-                        if (v.domaci > v.hoste) v1++; else v2++;
-                    } else {
-                        if (v.hoste > v.domaci) v1++; else v2++;
-                    }
+                    const v=parseVysledek(z.vysledek);
+                    if(v.domaci===0&&v.hoste===0) return;
+                    odb++;
+                    if(z.tymDomaci===r.tym1){if(v.domaci>v.hoste)v1++;else v2++;}
+                    else{if(v.hoste>v.domaci)v1++;else v2++;}
                 });
-                r.skore1 = v1; r.skore2 = v2;
-                r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
-                r.porazeny = r.vitez ? (r.vitez === r.tym1 ? r.tym2 : r.tym1) : null;
-                r.zlatyZapas = odehranoHer >= 9 && ((v1 === 5 && v2 === 4) || (v2 === 5 && v1 === 4));
+                r.skore1=v1; r.skore2=v2;
+                r.vitez=v1>v2?r.tym1:(v2>v1?r.tym2:null);
+                r.porazeny=r.vitez?(r.vitez===r.tym1?r.tym2:r.tym1):null;
+                r.zlatyZapas=odb>=9&&((v1===5&&v2===4)||(v2===5&&v1===4));
             });
 
             const series = Object.values(res);
 
-            // Single-match format (current)
             if (series.length === 1) {
-                const s = series[0];
-                const vitez = s.vitez;
-                const t1Cls = vitez === s.tym1 ? 'playoff-team-green' : (s.porazeny === s.tym1 ? 'playoff-team-blue' : 'playoff-team-blue');
-                const t2Cls = vitez === s.tym2 ? 'playoff-team-green' : (s.porazeny === s.tym2 ? 'playoff-team-blue' : 'playoff-team-blue');
-                const zzBadge = s.zlatyZapas ? '<span class="playoff-zz-badge">ZZ</span>' : '';
-                const resultHtml = s.skore1 !== undefined
-                    ? '<div class="playoff-series-result">' + s.skore1 + ':' + s.skore2 + zzBadge + '</div>' : '';
-
+                const s=series[0];
+                const t1Cls=s.vitez===s.tym1?'playoff-team-green':'playoff-team-blue';
+                const t2Cls=s.vitez===s.tym2?'playoff-team-green':'playoff-team-blue';
+                const zzBadge=s.zlatyZapas?'<span class="playoff-zz-badge">ZZ</span>':'';
+                const resultHtml=s.skore1!==undefined?'<div class="playoff-series-result">'+s.skore1+':'+s.skore2+zzBadge+'</div>':'';
                 container.innerHTML =
-                    '<div style="max-width:320px;margin:0 auto">' +
+                    '<div style="max-width:300px;margin:0 auto">' +
                     '<div class="playoff-match">' +
                     '<div class="playoff-match-label">Baráž o Extraligu</div>' +
                     '<div class="playoff-match-teams">' +
-                    '<div class="playoff-team ' + t1Cls + '"><span class="playoff-seed">1L</span><span class="playoff-team-name">' + escapeHtml(s.tym1) + '</span>' + (s.skore1 !== undefined ? '<span class="playoff-series-score">' + s.skore1 + '</span>' : '') + '</div>' +
+                    '<div class="playoff-team '+t1Cls+'"><span class="playoff-seed">1L</span><span class="playoff-team-name">'+escapeHtml(s.tym1)+'</span>'+(s.skore1!==undefined?'<span class="playoff-series-score">'+s.skore1+'</span>':'')+'</div>' +
                     '<div class="playoff-vs">vs</div>' +
-                    '<div class="playoff-team ' + t2Cls + '"><span class="playoff-seed">EL</span><span class="playoff-team-name">' + escapeHtml(s.tym2) + '</span>' + (s.skore2 !== undefined ? '<span class="playoff-series-score">' + s.skore2 + '</span>' : '') + '</div>' +
-                    '</div>' + resultHtml + '</div>' +
-                    (vitez ? '<div class="mt-3 p-3 text-sm font-semibold text-green-700 bg-green-50 border border-green-300 rounded-lg text-center">✅ ' + escapeHtml(vitez) + ' si vybojoval extraligovou příslušnost</div>' : '') +
+                    '<div class="playoff-team '+t2Cls+'"><span class="playoff-seed">EL</span><span class="playoff-team-name">'+escapeHtml(s.tym2)+'</span>'+(s.skore2!==undefined?'<span class="playoff-series-score">'+s.skore2+'</span>':'')+'</div>' +
+                    '</div>'+resultHtml+'</div>' +
+                    (s.vitez?'<div style="margin-top:10px;padding:10px 12px;font-size:0.82rem;font-weight:700;color:var(--win);background:rgba(22,163,74,0.07);border:1px solid rgba(22,163,74,0.25);border-radius:8px;text-align:center">✓ '+escapeHtml(s.vitez)+' si vybojoval extraligovou příslušnost</div>':'') +
                     '</div>';
                 return;
             }
 
-            // Round-robin format (3 teams)
-            const standings = {};
-            series.forEach(r => {
-                [r.tym1, r.tym2].forEach(t => { if (!standings[t]) standings[t] = { v: 0, p: 0, body: 0 }; });
-                if (r.vitez) { standings[r.vitez].v++; standings[r.vitez].body += 2; standings[r.porazeny].p++; }
+            // Round-robin
+            const standings={};
+            series.forEach(r=>{
+                [r.tym1,r.tym2].forEach(t=>{if(!standings[t])standings[t]={v:0,p:0,body:0};});
+                if(r.vitez){standings[r.vitez].v++;standings[r.vitez].body+=2;standings[r.porazeny].p++;}
             });
-            const tymy = Object.keys(standings).sort((a, b) => standings[b].body - standings[a].body);
-            const radky = tymy.map((t, i) =>
-                '<tr class="border-b ' + (i === 0 ? 'bg-green-50 font-semibold' : '') + '">' +
-                '<td class="p-2 text-center font-bold">' + (i + 1) + '</td>' +
-                '<td class="p-2">' + escapeHtml(t) + '</td>' +
-                '<td class="p-2 text-center text-green-600">' + standings[t].v + '</td>' +
-                '<td class="p-2 text-center text-red-600">' + standings[t].p + '</td>' +
-                '<td class="p-2 text-center font-bold">' + standings[t].body + '</td>' +
+            const tymy=Object.keys(standings).sort((a,b)=>standings[b].body-standings[a].body);
+
+            const radky=tymy.map((t,i)=>
+                '<tr style="border-bottom:1px solid var(--border);'+(i===0?'background:rgba(22,163,74,0.06);font-weight:700':'')+'">' +
+                '<td style="padding:8px 10px;text-align:center;font-weight:700">'+(i+1)+'</td>' +
+                '<td style="padding:8px 10px">' +escapeHtml(t)+'</td>' +
+                '<td style="padding:8px 10px;text-align:center;color:var(--win);font-weight:600">'+standings[t].v+'</td>' +
+                '<td style="padding:8px 10px;text-align:center;color:var(--loss);font-weight:600">'+standings[t].p+'</td>' +
+                '<td style="padding:8px 10px;text-align:center;font-weight:700">'+standings[t].body+'</td>' +
                 '</tr>'
             ).join('');
 
-            const matchBoxes = series.map(r => {
-                const zzBadge = r.zlatyZapas ? '<span class="playoff-zz-badge">ZZ</span>' : '';
+            const matchBoxes=series.map(r=>{
+                const zzBadge=r.zlatyZapas?'<span class="playoff-zz-badge">ZZ</span>':'';
                 return '<div class="playoff-match">' +
                     '<div class="playoff-match-teams">' +
-                    '<div class="playoff-team ' + (r.vitez === r.tym1 ? 'playoff-team-green' : 'playoff-team-blue') + '"><span class="playoff-seed"></span><span class="playoff-team-name">' + escapeHtml(r.tym1) + '</span>' + (r.skore1 !== undefined ? '<span class="playoff-series-score">' + r.skore1 + '</span>' : '') + '</div>' +
+                    '<div class="playoff-team '+(r.vitez===r.tym1?'playoff-team-green':'playoff-team-blue')+'"><span class="playoff-seed"></span><span class="playoff-team-name">'+escapeHtml(r.tym1)+'</span>'+(r.skore1!==undefined?'<span class="playoff-series-score">'+r.skore1+'</span>':'')+'</div>' +
                     '<div class="playoff-vs">vs</div>' +
-                    '<div class="playoff-team ' + (r.vitez === r.tym2 ? 'playoff-team-green' : 'playoff-team-blue') + '"><span class="playoff-seed"></span><span class="playoff-team-name">' + escapeHtml(r.tym2) + '</span>' + (r.skore2 !== undefined ? '<span class="playoff-series-score">' + r.skore2 + '</span>' : '') + '</div>' +
+                    '<div class="playoff-team '+(r.vitez===r.tym2?'playoff-team-green':'playoff-team-blue')+'"><span class="playoff-seed"></span><span class="playoff-team-name">'+escapeHtml(r.tym2)+'</span>'+(r.skore2!==undefined?'<span class="playoff-series-score">'+r.skore2+'</span>':'')+'</div>' +
                     '</div>' +
-                    (r.skore1 !== undefined ? '<div class="playoff-series-result">' + r.skore1 + ':' + r.skore2 + zzBadge + '</div>' : '') +
+                    (r.skore1!==undefined?'<div class="playoff-series-result">'+r.skore1+':'+r.skore2+zzBadge+'</div>':'') +
                     '</div>';
             }).join('');
 
             container.innerHTML =
-                '<div class="mb-4"><h3 class="text-sm font-semibold text-gray-700 mb-2">Tabulka baráže</h3>' +
-                '<table class="w-full text-sm"><thead><tr class="bg-gray-100"><th class="p-2 text-center">#</th><th class="p-2 text-left">Tým</th><th class="p-2 text-center text-green-600">V</th><th class="p-2 text-center text-red-600">P</th><th class="p-2 text-center">Body</th></tr></thead><tbody>' + radky + '</tbody></table>' +
-                (tymy[0] ? '<div class="mt-2 p-2 bg-green-50 border border-green-300 rounded-lg text-xs font-semibold text-green-700">✅ Vítěz: ' + escapeHtml(tymy[0]) + '</div>' : '') +
+                '<div style="margin-bottom:14px">' +
+                '<div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);margin-bottom:8px">Tabulka baráže</div>' +
+                '<table style="width:100%;border-collapse:collapse;font-size:0.82rem">' +
+                '<thead><tr style="background:var(--surface2);border-bottom:2px solid var(--border)">' +
+                '<th style="padding:7px 10px;text-align:center;font-size:0.7rem;font-weight:700;color:var(--text2)">#</th>' +
+                '<th style="padding:7px 10px;text-align:left;font-size:0.7rem;font-weight:700;color:var(--text2)">Tým</th>' +
+                '<th style="padding:7px 10px;text-align:center;font-size:0.7rem;font-weight:700;color:var(--win)">V</th>' +
+                '<th style="padding:7px 10px;text-align:center;font-size:0.7rem;font-weight:700;color:var(--loss)">P</th>' +
+                '<th style="padding:7px 10px;text-align:center;font-size:0.7rem;font-weight:700;color:var(--text2)">Body</th>' +
+                '</tr></thead><tbody>' + radky + '</tbody></table>' +
+                (tymy[0]?'<div style="margin-top:8px;padding:8px 12px;font-size:0.78rem;font-weight:700;color:var(--win);background:rgba(22,163,74,0.07);border:1px solid rgba(22,163,74,0.25);border-radius:8px">✓ Vítěz: '+escapeHtml(tymy[0])+'</div>':'') +
                 '</div>' +
-                '<h3 class="text-sm font-semibold text-gray-700 mb-2">Výsledky utkání</h3>' +
+                '<div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);margin-bottom:8px">Výsledky utkání</div>' +
                 '<div style="display:flex;flex-direction:column;gap:8px">' + matchBoxes + '</div>';
         }
 
-        // SVG connector lines between bracket rounds
+        /* ── SVG CONNECTORS ── */
         function drawConnectors() {
             const wrapper = document.querySelector('.bracket-wrapper');
             if (!wrapper) return;
-
-            requestAnimationFrame(function() {
-                const connectorCols = wrapper.querySelectorAll('.bracket-connector-col');
-                connectorCols.forEach(function(col) {
+            requestAnimationFrame(() => {
+                wrapper.querySelectorAll('.bracket-connector-col').forEach(col => {
                     col.innerHTML = '';
-
-                    const prevRound = col.previousElementSibling;
-                    const nextRound = col.nextElementSibling;
-                    if (!prevRound || !nextRound) return;
-
-                    const prevSlots = prevRound.querySelectorAll('.bracket-match-slot');
-                    const nextSlots = nextRound.querySelectorAll('.bracket-match-slot');
-                    if (prevSlots.length === 0 || nextSlots.length === 0) return;
-
+                    const prev = col.previousElementSibling;
+                    const next = col.nextElementSibling;
+                    if (!prev || !next) return;
+                    const prevSlots = prev.querySelectorAll('.bracket-match-slot');
+                    const nextSlots = next.querySelectorAll('.bracket-match-slot');
+                    if (!prevSlots.length || !nextSlots.length) return;
                     const colRect = col.getBoundingClientRect();
-                    const colW = colRect.width;
-                    const colH = colRect.height;
-
-                    if (colW === 0 || colH === 0) return;
-
-                    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                    svg.setAttribute('width', colW);
-                    svg.setAttribute('height', colH);
-                    svg.style.position = 'absolute';
-                    svg.style.top = '0';
-                    svg.style.left = '0';
-                    svg.style.width = '100%';
-                    svg.style.height = '100%';
-                    svg.style.overflow = 'visible';
-
-                    var strokeColor = '#d1d5db';
-
-                    for (var i = 0; i < nextSlots.length; i++) {
-                        var srcIdx1 = i * 2;
-                        var srcIdx2 = i * 2 + 1;
-                        if (srcIdx1 >= prevSlots.length) break;
-
-                        var nextMatch = nextSlots[i].querySelector('.playoff-match');
-                        var prevMatch1 = prevSlots[srcIdx1] ? prevSlots[srcIdx1].querySelector('.playoff-match') : null;
-                        var prevMatch2 = prevSlots[srcIdx2] ? prevSlots[srcIdx2].querySelector('.playoff-match') : null;
-
-                        if (!nextMatch || !prevMatch1) continue;
-
-                        var nextCenter = getVerticalCenter(nextMatch, colRect);
-                        var prev1Center = getVerticalCenter(prevMatch1, colRect);
-
-                        drawLine(svg, 0, prev1Center, colW / 2, prev1Center, strokeColor);
-                        drawLine(svg, colW / 2, prev1Center, colW / 2, nextCenter, strokeColor);
-                        drawLine(svg, colW / 2, nextCenter, colW, nextCenter, strokeColor);
-
-                        if (prevMatch2) {
-                            var prev2Center = getVerticalCenter(prevMatch2, colRect);
-                            drawLine(svg, 0, prev2Center, colW / 2, prev2Center, strokeColor);
-                            drawLine(svg, colW / 2, prev2Center, colW / 2, nextCenter, strokeColor);
-                        }
+                    const cW = colRect.width, cH = colRect.height;
+                    if (!cW || !cH) return;
+                    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+                    svg.setAttribute('width',cW); svg.setAttribute('height',cH);
+                    Object.assign(svg.style,{position:'absolute',top:'0',left:'0',width:'100%',height:'100%',overflow:'visible'});
+                    for (let i=0; i<nextSlots.length; i++) {
+                        const s1=prevSlots[i*2], s2=prevSlots[i*2+1];
+                        const nM=nextSlots[i].querySelector('.playoff-match');
+                        const pM1=s1?s1.querySelector('.playoff-match'):null;
+                        const pM2=s2?s2.querySelector('.playoff-match'):null;
+                        if (!nM||!pM1) continue;
+                        const nC=getVC(nM,colRect), p1C=getVC(pM1,colRect);
+                        drawL(svg,0,p1C,cW/2,p1C); drawL(svg,cW/2,p1C,cW/2,nC); drawL(svg,cW/2,nC,cW,nC);
+                        if (pM2) { const p2C=getVC(pM2,colRect); drawL(svg,0,p2C,cW/2,p2C); drawL(svg,cW/2,p2C,cW/2,nC); }
                     }
-
-                    col.style.position = 'relative';
+                    col.style.position='relative';
                     col.appendChild(svg);
                 });
             });
         }
 
-        function getVerticalCenter(el, refRect) {
-            var rect = el.getBoundingClientRect();
-            return (rect.top + rect.height / 2) - refRect.top;
+        function getVC(el,ref) {
+            const r=el.getBoundingClientRect();
+            return (r.top+r.height/2)-ref.top;
         }
 
-        function drawLine(svg, x1, y1, x2, y2, color) {
-            var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', x1);
-            line.setAttribute('y1', y1);
-            line.setAttribute('x2', x2);
-            line.setAttribute('y2', y2);
-            line.setAttribute('stroke', color);
-            line.setAttribute('stroke-width', '2');
-            svg.appendChild(line);
+        function drawL(svg,x1,y1,x2,y2) {
+            const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+            l.setAttribute('x1',x1); l.setAttribute('y1',y1);
+            l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+            l.setAttribute('stroke','#e2e8f0'); l.setAttribute('stroke-width','2');
+            svg.appendChild(l);
         }
 
         nacistData();

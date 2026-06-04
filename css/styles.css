@@ -1479,6 +1479,15 @@ body {
     flex-shrink: 0;
 }
 
+.app-logo-icon.app-logo-icon-svg {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    padding: 0;
+}
+
 .app-logo-text {
     display: block;
     font-weight: 800;
