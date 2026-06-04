@@ -32,7 +32,7 @@ const Playoff = {
         const zapasy = Data.zapasy['baraze'] || [];
 
         if (zapasy.length === 0) {
-            return '<p class="text-gray-500 text-center py-6">Žádná data baráže.</p>';
+            return '<p style="color:var(--muted);text-align:center;padding:20px 0;font-size:0.85rem">Žádná data baráže.</p>';
         }
 
         return format === 'round-robin-3'
@@ -51,7 +51,7 @@ const Playoff = {
         Object.values(res).forEach(r => this._vypocitejSerii(r));
 
         const serie = Object.values(res)[0];
-        if (!serie) return '<p class="text-gray-500 text-center py-6">Žádná data.</p>';
+        if (!serie) return '<p style="color:var(--muted);text-align:center;padding:20px 0;font-size:0.85rem">Žádná data.</p>';
 
         const vitez = serie.vitez;
         const porazeny = serie.porazeny;
@@ -89,11 +89,14 @@ const Playoff = {
             '</div>' +
             resultHtml +
             '</div>' +
-            (vitez ? '<div class="mt-4 p-4 bg-green-50 border-2 border-green-400 rounded-xl text-center">' +
-                '<div class="text-sm font-semibold text-green-700">✅ ' + Statistics.escapeHtml(vitez) + ' si vybojoval extraligovou příslušnost</div>' +
-                '</div>' : '') +
+            this._renderBarazeSingleMatchVitez(vitez) +
             '</div>';
         return html;
+    },
+
+    _renderBarazeSingleMatchVitez(vitez) {
+        if (!vitez) return '';
+        return '<div class="baraze-winner-banner">✓ ' + Statistics.escapeHtml(vitez) + ' si vybojoval extraligovou příslušnost</div>';
     },
 
     _renderBarazeRoundRobin(zapasy) {
@@ -124,25 +127,23 @@ const Playoff = {
         const tymy = Object.keys(body).sort((a, b) => body[b].body - body[a].body);
 
         const standingsRows = tymy.map((t, i) => {
-            const cls = i === 0 ? 'bg-green-50 font-semibold' : '';
-            return '<tr class="border-b ' + cls + '">' +
-                '<td class="p-2 text-center font-bold">' + (i + 1) + '</td>' +
-                '<td class="p-2">' + Statistics.escapeHtml(t) + '</td>' +
-                '<td class="p-2 text-center">' + (body[t].v + body[t].p) + '</td>' +
-                '<td class="p-2 text-center text-green-600">' + body[t].v + '</td>' +
-                '<td class="p-2 text-center text-red-600">' + body[t].p + '</td>' +
-                '<td class="p-2 text-center font-bold">' + body[t].body + '</td>' +
+            return '<tr class="' + (i === 0 ? 'rr-winner-row' : '') + '">' +
+                '<td>' + (i + 1) + '</td>' +
+                '<td>' + Statistics.escapeHtml(t) + '</td>' +
+                '<td style="text-align:center">' + (body[t].v + body[t].p) + '</td>' +
+                '<td class="rr-win" style="text-align:center">' + body[t].v + '</td>' +
+                '<td class="rr-loss" style="text-align:center">' + body[t].p + '</td>' +
+                '<td style="text-align:center;font-weight:700">' + body[t].body + '</td>' +
                 '</tr>';
         }).join('');
 
-        const standings = '<div class="mb-4">' +
-            '<h3 class="font-semibold text-gray-700 mb-2">Tabulka baráže</h3>' +
-            '<table class="w-full text-sm"><thead><tr class="bg-gray-100">' +
-            '<th class="p-2 text-center">#</th><th class="p-2 text-left">Tým</th>' +
-            '<th class="p-2 text-center">U</th><th class="p-2 text-center text-green-600">V</th>' +
-            '<th class="p-2 text-center text-red-600">P</th><th class="p-2 text-center">Body</th>' +
+        const standings = '<div class="rr-standings">' +
+            '<div class="rr-section-title">Tabulka baráže</div>' +
+            '<table class="rr-table"><thead><tr>' +
+            '<th>#</th><th style="text-align:left">Tým</th>' +
+            '<th>U</th><th>V</th><th>P</th><th>Body</th>' +
             '</tr></thead><tbody>' + standingsRows + '</tbody></table>' +
-            (tymy[0] ? '<div class="mt-3 p-3 bg-green-50 border border-green-300 rounded-lg text-sm font-semibold text-green-700">✅ Vítěz: ' + Statistics.escapeHtml(tymy[0]) + '</div>' : '') +
+            (tymy[0] ? '<div class="playoff-winner-small">✓ Vítěz: ' + Statistics.escapeHtml(tymy[0]) + '</div>' : '') +
             '</div>';
 
         const matchBoxes = Object.values(serie).map(r => {
@@ -162,8 +163,8 @@ const Playoff = {
         }).join('');
 
         return '<div class="baraze-wrapper">' + standings +
-            '<h3 class="font-semibold text-gray-700 mb-2">Výsledky utkání</h3>' +
-            '<div class="flex flex-col gap-3">' + matchBoxes + '</div></div>';
+            '<div class="rr-section-title">Výsledky utkání</div>' +
+            '<div style="display:flex;flex-direction:column;gap:10px">' + matchBoxes + '</div></div>';
     },
 
     // ── Extraliga s utkáním o 3. místo (2021/22 – 2023/24) ───────────────────
@@ -183,8 +184,8 @@ const Playoff = {
 
         if (!porazeny1 && !porazeny2 && !trzRes) return bracketHtml;
 
-        const trzHtml = '<div class="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-xl">' +
-            '<div class="text-sm font-semibold text-orange-700 mb-3">🥉 Utkání o 3. místo</div>' +
+        const trzHtml = '<div class="trzplace-section">' +
+            '<div class="trzplace-title">Utkání o 3. místo</div>' +
             this.matchBox(
                 porazeny1 ? this.teamCard(porazeny1, 'SF', trzRes?.vitez === porazeny1 ? 'playoff-team-orange' : 'playoff-team-blue', null, trzRes ? (trzRes.tym1 === porazeny1 ? trzRes.skore1 : trzRes.skore2) : undefined) : this.pendingCard('Poražený SF 1'),
                 porazeny2 ? this.teamCard(porazeny2, 'SF', trzRes?.vitez === porazeny2 ? 'playoff-team-orange' : 'playoff-team-blue', null, trzRes ? (trzRes.tym1 === porazeny2 ? trzRes.skore1 : trzRes.skore2) : undefined) : this.pendingCard('Poražený SF 2'),
@@ -192,7 +193,7 @@ const Playoff = {
                 trzRes ? trzRes.skore1 + ':' + trzRes.skore2 : null,
                 trzRes
             ) +
-            (trzRes?.vitez ? '<div class="mt-2 text-sm font-semibold text-orange-700">🥉 ' + Statistics.escapeHtml(trzRes.vitez) + ' – 3. místo</div>' : '') +
+            (trzRes?.vitez ? '<div class="trzplace-winner">' + Statistics.escapeHtml(trzRes.vitez) + ' – 3. místo</div>' : '') +
             '</div>';
 
         return bracketHtml + trzHtml;
@@ -261,7 +262,9 @@ const Playoff = {
         );
 
         const champion = fRes?.vitez || null;
-        const championHtml = champion ? '<div class="mt-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl text-center"><div class="text-2xl">🏆</div><div class="font-bold text-lg text-yellow-800">Mistr 1. ligy: ' + Statistics.escapeHtml(champion) + '</div></div>' : '';
+        const championHtml = champion
+            ? '<div class="playoff-champion-banner"><div class="playoff-champion-icon">🏆</div><div class="playoff-champion-name">Mistr 1. ligy: ' + Statistics.escapeHtml(champion) + '</div></div>'
+            : '';
 
         return '<div class="bracket-wrapper">' +
             '<div class="bracket-round bracket-round-sf"><div class="bracket-round-title">Semifinále</div>' +
@@ -273,9 +276,9 @@ const Playoff = {
             '<div class="bracket-round bracket-round-f"><div class="bracket-round-title">Finále</div>' +
             '<div class="bracket-matches bracket-matches-1"><div class="bracket-match-slot">' + final_ + '</div></div>' +
             '</div></div>' + championHtml +
-            '<div class="playoff-legend mt-4">' +
-            '<span class="inline-flex items-center gap-1 text-xs ml-0"><span class="w-3 h-3 rounded-sm border" style="background:#fef3c7;border-color:#fbbf24"></span> Východ</span>' +
-            '<span class="inline-flex items-center gap-1 text-xs ml-3"><span class="w-3 h-3 rounded-sm border" style="background:#dbeafe;border-color:#60a5fa"></span> Západ</span>' +
+            '<div class="playoff-legend" style="margin-top:12px">' +
+            '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-east"></span> Východ</span>' +
+            '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-west"></span> Západ</span>' +
             '</div>';
     },
 
@@ -289,7 +292,7 @@ const Playoff = {
         const htmlV = this._renderSeparateGroup(resV, 'Východ', firstKolo);
         const htmlZ = this._renderSeparateGroup(resZ, 'Západ', firstKolo);
 
-        return '<div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">' + htmlV + htmlZ + '</div>';
+        return '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">' + htmlV + htmlZ + '</div>';
     },
 
     _getPlayoffResultsFromSoutez(soutez) {
@@ -316,16 +319,16 @@ const Playoff = {
             byColo[r.kolo].push(r);
         });
 
-        let html = '<div class="separate-group border border-gray-200 rounded-xl p-4">';
-        html += '<h3 class="text-base font-bold text-gray-800 mb-4 text-center border-b pb-2">' + groupName + '</h3>';
+        let html = '<div class="separate-group">';
+        html += '<div class="separate-group-title">' + groupName + '</div>';
 
         let anyContent = false;
         roundOrder.forEach(kolo => {
             const matches = byColo[kolo] || [];
             if (matches.length === 0) return;
             anyContent = true;
-            html += '<div class="mb-4">';
-            html += '<div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">' + roundNames[kolo] + '</div>';
+            html += '<div style="margin-bottom:12px">';
+            html += '<div class="separate-round-label">' + roundNames[kolo] + '</div>';
             matches.forEach(r => {
                 html += this.matchBox(
                     this.teamCard(r.tym1, '', r.vitez === r.tym1 ? 'playoff-team-green' : 'playoff-team-blue', null, r.skore1),
@@ -339,13 +342,13 @@ const Playoff = {
         });
 
         if (!anyContent) {
-            html += '<p class="text-gray-400 text-sm text-center py-4">Žádná data.</p>';
+            html += '<p style="color:var(--muted);font-size:0.8rem;text-align:center;padding:12px 0">Žádná data.</p>';
         }
 
         // Group champion
         const final_ = (byColo['F'] || [])[0];
         if (final_?.vitez) {
-            html += '<div class="mt-2 p-3 bg-yellow-50 border border-yellow-300 rounded-lg text-center text-sm font-bold text-yellow-800">🏆 Vítěz ' + groupName + ': ' + Statistics.escapeHtml(final_.vitez) + '</div>';
+            html += '<div class="group-winner-banner">🏆 Vítěz ' + groupName + ': ' + Statistics.escapeHtml(final_.vitez) + '</div>';
         }
 
         html += '</div>';
@@ -510,7 +513,7 @@ const Playoff = {
 
     renderExtraligaBracket(tymy, data, playoffResults) {
         if (tymy.length < 6) {
-            return '<p class="text-gray-500 text-center py-4">Nedostatek týmů pro zobrazení pavouka.</p>';
+            return '<p style="color:var(--muted);text-align:center;padding:16px 0;font-size:0.85rem">Nedostatek týmů pro zobrazení pavouka.</p>';
         }
 
         const t = (i) => tymy[i] || '?';
@@ -633,10 +636,7 @@ const Playoff = {
         // Champion banner
         const champion = fRes?.vitez || null;
         const championHtml = champion
-            ? '<div class="mt-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl text-center">' +
-              '<div class="text-2xl">🏆</div>' +
-              '<div class="font-bold text-lg text-yellow-800">Mistr: ' + Statistics.escapeHtml(champion) + '</div>' +
-              '</div>'
+            ? '<div class="playoff-champion-banner"><div class="playoff-champion-icon">🏆</div><div class="playoff-champion-name">Mistr: ' + Statistics.escapeHtml(champion) + '</div></div>'
             : '';
 
         return '<div class="bracket-wrapper">' +
@@ -668,11 +668,10 @@ const Playoff = {
             '</div>' +
         '</div>' +
         championHtml +
-        '<div class="playoff-legend mt-4">' +
-            '<span class="inline-flex items-center gap-1 text-xs md:text-sm"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> Přímý postup do Final Four (1.–2.)</span>' +
-            '<span class="inline-flex items-center gap-1 text-xs md:text-sm ml-4"><span class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></span> Čtvrtfinále (3.–6.)</span>' +
-        '</div>' +
-        '';
+        '<div class="playoff-legend" style="margin-top:12px">' +
+            '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-green"></span> Přímý postup do Final Four (1.–2.)</span>' +
+            '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-blue"></span> Čtvrtfinále (3.–6.)</span>' +
+        '</div>';
     },
 
     renderPrvniLigaBracket() {
@@ -683,7 +682,7 @@ const Playoff = {
         const tymyZ = this.seraditTymy(tabulkaZapad);
 
         if (tymyV.length < 4 || tymyZ.length < 4) {
-            return '<p class="text-gray-500 text-center py-4">Nedostatek týmů pro zobrazení pavouka.</p>';
+            return '<p style="color:var(--muted);text-align:center;padding:16px 0;font-size:0.85rem">Nedostatek týmů pro zobrazení pavouka.</p>';
         }
 
         const res = this.getPlayoffResultsPrvniLiga();
@@ -765,10 +764,7 @@ const Playoff = {
         // Champion banner
         const champion = fRes?.vitez || null;
         const championHtml = champion
-            ? '<div class="mt-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl text-center">' +
-              '<div class="text-2xl">🏆</div>' +
-              '<div class="font-bold text-lg text-yellow-800">Mistr: ' + Statistics.escapeHtml(champion) + '</div>' +
-              '</div>'
+            ? '<div class="playoff-champion-banner"><div class="playoff-champion-icon">🏆</div><div class="playoff-champion-name">Mistr: ' + Statistics.escapeHtml(champion) + '</div></div>'
             : '';
 
         // Placement matches (O 5. místo / O 7. místo)
@@ -818,11 +814,10 @@ const Playoff = {
         '</div>' +
         championHtml +
         p5PlacementHtml +
-        '<div class="playoff-legend mt-4">' +
-            '<span class="inline-flex items-center gap-1 text-xs md:text-sm"><span class="w-3 h-3 rounded-sm border" style="background:#fef3c7;border-color:#fbbf24;width:12px;height:12px"></span> Východ</span>' +
-            '<span class="inline-flex items-center gap-1 text-xs md:text-sm ml-3"><span class="w-3 h-3 rounded-sm border" style="background:#dbeafe;border-color:#60a5fa;width:12px;height:12px"></span> Západ</span>' +
-        '</div>' +
-        '';
+        '<div class="playoff-legend" style="margin-top:12px">' +
+            '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-east"></span> Východ</span>' +
+            '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-west"></span> Západ</span>' +
+        '</div>';
     },
 
     // Render placement matches section (5th/7th place)
