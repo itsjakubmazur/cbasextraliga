@@ -15,7 +15,18 @@
 
     <header class="app-topbar">
         <div class="app-logo">
-            <div class="app-logo-icon">🏸</div>
+            <div class="app-logo-icon app-logo-icon-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 280" height="38" aria-hidden="true" style="display:block">
+                    <defs><clipPath id="bad-clip-v"><polygon points="0,36 80,36 178,140 80,244 0,244"/></clipPath></defs>
+                    <polygon points="0,0 90,0 210,140 90,280 0,280" fill="#D7141A"/>
+                    <polygon points="0,36 80,36 178,140 80,244 0,244" fill="white"/>
+                    <g clip-path="url(#bad-clip-v)">
+                        <text x="5" dominant-baseline="central" y="140" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="112">B</text>
+                        <text x="87" dominant-baseline="central" y="140" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="88">A</text>
+                        <text x="140" dominant-baseline="central" y="140" fill="#D7141A" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="56">D</text>
+                    </g>
+                </svg>
+            </div>
             <div>
                 <span class="app-logo-text">Czech Badminton</span>
                 <span class="app-logo-sub">Neoficiální ligové statistiky</span>
@@ -35,7 +46,7 @@
                 <div class="sidebar-section-label">Navigace</div>
                 <div class="sidebar-nav">
                     <a href="index.html" class="sidebar-nav-item sidebar-nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><circle cx="12" cy="20" r="2"/><path d="M12 18V9"/><path d="m8 5 4-3 4 3"/><path d="m6 8 6-2 6 2"/><path d="m7 11 5-1 5 1"/></svg> Ligové tabulky</a>
-                    <a href="tymy.html" class="sidebar-nav-item sidebar-nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Týmy</a>
+                    <a href="index.html#soupisky" class="sidebar-nav-item sidebar-nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Soupisky</a>
                     <span class="sidebar-nav-item active"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Historie vítězů</span>
                 </div>
             </div>

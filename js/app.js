@@ -76,6 +76,19 @@ const App = {
             }
         }
 
+        // Soupisky
+        if (hash === 'soupisky') {
+            if (this.jeHistoricky()) {
+                this.aktualni_rocnik = null;
+                Data.aktivovatRocnik(null);
+                this._updateRocnikButtons();
+                this._prepnoutAktualniMode();
+            }
+            this.zmenitSoutez(this.aktualni_soutez || 'extraliga');
+            this.zobrazitTymy();
+            return;
+        }
+
         // Plain current-season hash or fallback
         if (this.jeHistoricky()) {
             this.aktualni_rocnik = null;
@@ -523,9 +536,6 @@ const App = {
 
     tymyZmenitSoutez(soutez) {
         this.aktualni_tymy_soutez = soutez;
-        const tabMap = { 'extraliga': 'tymyViewTab-extraliga', 'prvni-liga-vychod': 'tymyViewTab-vychod', 'prvni-liga-zapad': 'tymyViewTab-zapad' };
-        Object.values(tabMap).forEach(id => document.getElementById(id)?.classList.remove('active'));
-        document.getElementById(tabMap[soutez])?.classList.add('active');
         this._renderTymyGrid();
     },
 
