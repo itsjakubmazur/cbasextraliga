@@ -951,33 +951,19 @@ body.dark-mode .champions-team {
         padding: 0.5rem 1rem;
     }
 
+    #playoffObsah,
+    #historickyPavoucek {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .bracket-wrapper {
-        flex-direction: column;
-        align-items: stretch;
+        min-width: max-content;
+        overflow-x: visible;
     }
 
     .bracket-round {
-        min-width: 0;
-    }
-
-    .bracket-matches {
-        gap: 8px;
-    }
-
-    .bracket-connector-col {
-        width: auto;
-        min-width: auto;
-        flex-direction: row;
-        padding: 4px 0;
-        justify-content: center;
-        min-height: 30px;
-    }
-
-    .bracket-connector-col::after {
-        content: '↓';
-        font-size: 1.2rem;
-        color: #d1d5db;
-        font-weight: 700;
+        min-width: 200px;
     }
 
     .view-toggle-btn {
