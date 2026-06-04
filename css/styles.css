@@ -1789,6 +1789,10 @@ body.dark-mode .hero-champion-name { color: #f59e0b; }
 
 /* ── MOBILE OVERRIDES ─────────────────────────────────────────── */
 @media (max-width: 900px) {
+    .app-layout {
+        flex-direction: column;
+    }
+
     .app-sidebar {
         width: 100%;
         height: auto;
