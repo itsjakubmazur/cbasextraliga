@@ -98,7 +98,7 @@ const App = {
 
         const makeBtn = (label, rocnik) => {
             const btn = document.createElement('button');
-            btn.className = 'rocnik-btn px-3 py-1 rounded-full text-xs font-semibold border transition-colors';
+            btn.className = 'rocnik-btn';
             btn.dataset.rocnik = rocnik || 'current';
             btn.textContent = label;
             btn.onclick = () => this.zmenitRocnik(rocnik || null);
@@ -120,13 +120,9 @@ const App = {
         document.querySelectorAll('.rocnik-btn').forEach(btn => {
             const isActive = btn.dataset.rocnik === activeKey;
             btn.classList.toggle('rocnik-btn-active', isActive);
-            if (isActive) {
-                btn.style.cssText = 'background:#d93831;color:white;border-color:#d93831;';
-            } else {
-                btn.style.cssText = 'background:white;color:#374151;border-color:#d1d5db;';
-                btn.onmouseover = () => { btn.style.background = '#f3f4f6'; };
-                btn.onmouseout = () => { btn.style.background = 'white'; };
-            }
+            btn.style.cssText = '';
+            btn.onmouseover = null;
+            btn.onmouseout = null;
         });
     },
 
@@ -164,6 +160,8 @@ const App = {
     },
 
     _prepnoutHistorickyMode() {
+        const hero = document.getElementById('heroContainer');
+        if (hero) hero.style.display = 'none';
         document.getElementById('soutezTabs').style.display = 'none';
         document.getElementById('historickyNav').style.display = 'flex';
         document.getElementById('rychleFiltry').style.display = 'none';
@@ -202,9 +200,7 @@ const App = {
         ['extraliga', 'liga', 'baraze'].forEach(p => {
             const btn = document.getElementById('hNav-' + p);
             if (!btn) return;
-            const isActive = p === pohled;
-            btn.className = 'soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base' +
-                (isActive ? ' active' : ' bg-gray-200 text-gray-700');
+            btn.className = 'soutez-tab sidebar-nav-item' + (p === pohled ? ' active' : '');
         });
 
         const container = document.getElementById('historickyContainer');
@@ -463,6 +459,7 @@ const App = {
         this.aktualizovatKolaCheckboxy();
         this.aktualizovatSelecty();
 
+        this._renderHero();
         Filters.render(this.aktualni_soutez, this.vybrana_kola);
         Players.renderTop3(this.aktualni_soutez, this.vybrana_kola);
         Table.render(this.aktualni_soutez);
@@ -492,6 +489,43 @@ const App = {
 
         Matches.render(this.aktualni_soutez);
         Players.renderStatistiky(this.aktualni_soutez, this.vybrana_kola);
+    },
+
+    _renderHero() {
+        const container = document.getElementById('heroContainer');
+        if (!container) return;
+
+        const soutez = this.aktualni_soutez;
+        if (soutez !== 'extraliga') { container.style.display = 'none'; return; }
+
+        // Find champion from final series
+        const zapasy = Data.zapasy['extraliga'] || [];
+        const finaloveZapasy = zapasy.filter(z => z.kolo === 'F' && (z.skore_domaciV + z.skore_hostV > 0));
+
+        if (finaloveZapasy.length === 0) { container.style.display = 'none'; return; }
+
+        // Count series wins
+        const wins = {};
+        finaloveZapasy.forEach(z => {
+            if (z.skore_domaciV > z.skore_hostV) wins[z.tym_domaci] = (wins[z.tym_domaci] || 0) + 1;
+            else if (z.skore_hostV > z.skore_domaciV) wins[z.tym_host] = (wins[z.tym_host] || 0) + 1;
+        });
+
+        const vitez = Object.entries(wins).find(([, w]) => w >= 2)?.[0];
+        if (!vitez) { container.style.display = 'none'; return; }
+
+        const sezóna = Data.rocnik || '';
+        container.innerHTML =
+            '<div class="hero-card">' +
+            '<div class="hero-eyebrow">Sezóna ' + Statistics.escapeHtml(sezóna) + ' · Extraliga</div>' +
+            '<div class="hero-title">🏆 Mistrem České republiky se stal</div>' +
+            '<div class="hero-champion-box">' +
+            '<div class="hero-trophy">🥇</div>' +
+            '<div><div class="hero-champion-name">' + Statistics.escapeHtml(vitez) + '</div>' +
+            '<div class="hero-champion-label">Mistr České republiky ' + Statistics.escapeHtml(sezóna) + '</div></div>' +
+            '</div>' +
+            '</div>';
+        container.style.display = 'block';
     }
 };
 
