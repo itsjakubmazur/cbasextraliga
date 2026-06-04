@@ -44,7 +44,7 @@ const Table = {
             // Zone dividers (inserted after current row)
             if (!jePrvniLiga && idx === 1) {
                 rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="6"><span>↓ Čtvrtfinále</span></td></tr>');
-            } else if (!jePrvniLiga && idx === 5) {
+            } else if (!jePrvniLiga && idx === 6) {
                 rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>↓ Baráž</span></td></tr>');
             } else if (jePrvniLiga && idx === 3) {
                 rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="6"></td></tr>');
