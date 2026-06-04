@@ -200,7 +200,34 @@ const Statistics = {
         return stats;
     },
 
-    vypocitejTabulku(aktualni_soutez) {
+    // Returns { tym: delta } where delta = positions gained since previous round
+    // positive = moved up, negative = moved down, 0 = no change
+    vypocitejZmenyPozic(aktualni_soutez) {
+        const kola = (Data.zapasy[aktualni_soutez] || [])
+            .map(z => parseInt(z.kolo))
+            .filter(k => !isNaN(k));
+        if (kola.length === 0) return {};
+        const maxKolo = Math.max(...kola);
+        if (maxKolo <= 1) return {};
+
+        const prevTabulka = this.vypocitejTabulku(aktualni_soutez, maxKolo - 1);
+        const prevOrder = this.seraditTymyPodleTabulky(prevTabulka);
+        const currTabulka = this.vypocitejTabulku(aktualni_soutez);
+        const currOrder = this.seraditTymyPodleTabulky(currTabulka);
+
+        const prevPozice = {};
+        prevOrder.forEach((tym, idx) => { prevPozice[tym] = idx + 1; });
+
+        const zmeny = {};
+        currOrder.forEach((tym, idx) => {
+            const curr = idx + 1;
+            const prev = prevPozice[tym];
+            zmeny[tym] = prev !== undefined ? prev - curr : 0;
+        });
+        return zmeny;
+    },
+
+    vypocitejTabulku(aktualni_soutez, doKola = null) {
         const tabulka = {};
         const utkani = {};
         const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
@@ -208,6 +235,10 @@ const Statistics = {
         Data.zapasy[aktualni_soutez].forEach(zapas => {
             // Skip playoff matches in regular season table
             if (this.isPlayoffKolo(zapas.kolo)) return;
+            if (doKola !== null) {
+                const k = parseInt(zapas.kolo);
+                if (isNaN(k) || k > doKola) return;
+            }
             const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
             if (!utkani[klic]) utkani[klic] = {
                 kolo: zapas.kolo,

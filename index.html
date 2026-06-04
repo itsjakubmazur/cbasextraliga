@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Neoficiální ligové tabulky Czech Badminton - přehled zápasů, tabulky, statistiky hráčů pro Extraligu a 1. ligu.">
-    <meta name="theme-color" content="#d93831">
+    <meta name="theme-color" content="#D7141A">
     <meta property="og:title" content="Czech Badminton - ligové statistiky">
     <meta property="og:description" content="Neoficiální ligové tabulky, výsledky zápasů a statistiky hráčů českého badmintonu.">
     <meta property="og:type" content="website">
@@ -13,7 +13,7 @@
     <link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="min-h-screen p-2 md:p-4" style="background: linear-gradient(to bottom right, #d93831, #a82820);">
+<body class="min-h-screen p-2 md:p-4">
     <div class="max-w-7xl mx-auto">
         <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -166,6 +166,25 @@
             </div>
         </div>
     </div>
+
+    <!-- Bottom navigation (mobile) -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="bottom-nav-btn active" id="bnav-zakladni" onclick="App.bottomNavClick('zakladni')">
+            <span class="nav-icon">📊</span>Tabulka
+        </button>
+        <button class="bottom-nav-btn" id="bnav-playoff" onclick="App.bottomNavClick('playoff')">
+            <span class="nav-icon">🏅</span>Play-off
+        </button>
+        <button class="bottom-nav-btn" id="bnav-vysledky" onclick="App.bottomNavClick('vysledky')">
+            <span class="nav-icon">📋</span>Výsledky
+        </button>
+        <button class="bottom-nav-btn" id="bnav-hrac" onclick="App.bottomNavClick('hrac')">
+            <span class="nav-icon">👤</span>Hráči
+        </button>
+        <button class="bottom-nav-btn" id="bnav-historie" onclick="window.location.href='vitezove.html'">
+            <span class="nav-icon">🕐</span>Historie
+        </button>
+    </nav>
 
     <!-- DŮLEŽITÉ: Skripty musí být v tomto pořadí! -->
     <script src="js/data.js"></script>

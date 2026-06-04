@@ -289,6 +289,37 @@ const App = {
         statObsah.innerHTML = Players.renderStatistikyZapasy(zapasyProStats);
     },
 
+    bottomNavClick(target) {
+        // Update active button
+        ['zakladni', 'playoff', 'vysledky', 'hrac'].forEach(id => {
+            const btn = document.getElementById('bnav-' + id);
+            if (btn) btn.classList.toggle('active', id === target);
+        });
+
+        if (target === 'zakladni') {
+            this.prepnoutPohled('zakladni');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (target === 'playoff') {
+            this.prepnoutPohled('playoff');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (target === 'vysledky') {
+            const el = document.getElementById('zapasyContainer');
+            if (el && el.style.display !== 'none') {
+                // Ensure expanded
+                const obsah = document.getElementById('zapasyObsah');
+                if (obsah && obsah.style.display === 'none') this.toggleSekce('zapasyObsah');
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        } else if (target === 'hrac') {
+            const el = document.getElementById('statistikyContainer');
+            if (el && el.style.display !== 'none') {
+                const obsah = document.getElementById('statistikyObsah');
+                if (obsah && obsah.style.display === 'none') this.toggleSekce('statistikyObsah');
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    },
+
     toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
