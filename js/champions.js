@@ -1,4 +1,12 @@
 const Champions = {
+    _deriveAktualniVitez() {
+        if (!Data.rocnik) return null;
+        const results = Playoff.getPlayoffResults('extraliga');
+        const finale = Object.values(results).find(r => r.kolo === 'F');
+        if (!finale || !finale.vitez) return null;
+        return { sezona: Data.rocnik, tym: finale.vitez };
+    },
+
     render() {
         const container = document.getElementById('vitezoveObsah');
         if (!container) return;
@@ -15,6 +23,12 @@ const Champions = {
             const rokB = parseInt(b.sezona) || 0;
             return rokB - rokA;
         });
+
+        // Prepend current season champion if final is played and not yet archived
+        const aktualni = this._deriveAktualniVitez();
+        if (aktualni && !sorted.some(v => v.sezona === aktualni.sezona)) {
+            sorted.unshift(aktualni);
+        }
 
         // Count titles per team
         const tituly = {};
