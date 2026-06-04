@@ -57,13 +57,47 @@
     </div>
 
     <script>
+        function deriveAktualniVitez(data) {
+            const rocnik = data.rocnik;
+            if (!rocnik) return null;
+            if ((data.vitezove || []).some(v => v.sezona === rocnik)) return null;
+
+            const zapasy = (data.zapasy && data.zapasy.extraliga) || [];
+            const finaloveZapasy = zapasy.filter(z => {
+                const k = (z.kolo || '').replace(/\.$/, '').trim().toUpperCase();
+                return k === 'F';
+            });
+            if (finaloveZapasy.length === 0) return null;
+
+            // Group into one series by team pair
+            const serii = {};
+            finaloveZapasy.forEach(z => {
+                const klic = [z.tymDomaci, z.tymHoste].sort().join('§');
+                if (!serii[klic]) serii[klic] = { tym1: z.tymDomaci, tym2: z.tymHoste, v1: 0, v2: 0 };
+                const parts = (z.vysledek || '').split(':').map(Number);
+                const dom = parts[0] || 0, host = parts[1] || 0;
+                if (dom === 0 && host === 0) return; // neodehráno
+                const s = serii[klic];
+                if (z.tymDomaci === s.tym1) { if (dom > host) s.v1++; else if (host > dom) s.v2++; }
+                else { if (host > dom) s.v1++; else if (dom > host) s.v2++; }
+            });
+
+            const serie = Object.values(serii)[0];
+            if (!serie) return null;
+            const vitez = serie.v1 > serie.v2 ? serie.tym1 : (serie.v2 > serie.v1 ? serie.tym2 : null);
+            return vitez ? { sezona: rocnik, tym: vitez } : null;
+        }
+
         async function init() {
             try {
                 const response = await fetch('badminton-data.json');
                 const data = await response.json();
 
                 const historickeKlice = new Set(Object.keys(data.historicke_rocniky || {}));
-                render(data.vitezove || [], historickeKlice);
+                const vitezove = [...(data.vitezove || [])];
+                const aktualni = deriveAktualniVitez(data);
+                if (aktualni) vitezove.unshift(aktualni);
+                render(vitezove, historickeKlice);
             } catch (e) {
                 console.error('Chyba načítání:', e);
                 document.getElementById('topTymy').innerHTML =
