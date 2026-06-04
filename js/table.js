@@ -43,13 +43,13 @@ const Table = {
 
             // Zone dividers (inserted after current row)
             if (!jePrvniLiga && idx === 1) {
-                rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="6"><span>&#x2193; Čtvrtfinále</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="6"><span>↓ Čtvrtfinále</span></td></tr>');
             } else if (!jePrvniLiga && idx === 5) {
-                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>&#x2193; Baráž</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>↓ Baráž</span></td></tr>');
             } else if (jePrvniLiga && idx === 3) {
                 rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="6"></td></tr>');
             } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {
-                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>&#x2193; Kvalifikace</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>↓ Kvalifikace</span></td></tr>');
             }
         });
 

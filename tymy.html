@@ -7,6 +7,7 @@
     <meta name="theme-color" content="#D7141A">
     <title>Týmy - Czech Badminton</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/icons.js"></script>
     <link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -23,7 +24,7 @@
         <div class="app-topbar-right">
             <span class="app-season-badge" id="sezónaBadge" style="display:none;"></span>
             <button onclick="TymyPage.toggleDarkMode()" class="app-icon-btn" id="darkModeBtn" title="Přepnout téma">
-                <span id="darkModeIcon">🌙</span>
+                <span id="darkModeIcon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
             </button>
         </div>
     </header>
@@ -34,9 +35,9 @@
             <div class="sidebar-section">
                 <div class="sidebar-section-label">Navigace</div>
                 <div class="sidebar-nav">
-                    <a href="index.html" class="sidebar-nav-item sidebar-nav-link">🏸 Ligové tabulky</a>
-                    <span class="sidebar-nav-item active">🏟️ Týmy</span>
-                    <a href="vitezove.html" class="sidebar-nav-item sidebar-nav-link">🏆 Historie vítězů</a>
+                    <a href="index.html" class="sidebar-nav-item sidebar-nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><circle cx="12" cy="20" r="2"/><path d="M12 18V9"/><path d="m8 5 4-3 4 3"/><path d="m6 8 6-2 6 2"/><path d="m7 11 5-1 5 1"/></svg> Ligové tabulky</a>
+                    <span class="sidebar-nav-item active"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Týmy</span>
+                    <a href="vitezove.html" class="sidebar-nav-item sidebar-nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Historie vítězů</a>
                 </div>
             </div>
         </aside>
@@ -44,12 +45,12 @@
         <main class="app-main">
             <div class="app-card" id="tymyCard" style="display:none;">
                 <div class="app-card-header">
-                    <h2 class="app-card-title" id="tymyNadpis">🏟️ Týmy</h2>
+                    <h2 class="app-card-title" id="tymyNadpis">Týmy</h2>
                 </div>
                 <div class="tymy-league-tabs">
-                    <button class="tymy-tab active" id="ttab-extraliga" onclick="TymyPage.switchSoutez('extraliga')">🏆 Extraliga</button>
-                    <button class="tymy-tab" id="ttab-prvni-liga-vychod" onclick="TymyPage.switchSoutez('prvni-liga-vychod')">🥈 1. liga – Východ</button>
-                    <button class="tymy-tab" id="ttab-prvni-liga-zapad" onclick="TymyPage.switchSoutez('prvni-liga-zapad')">🥈 1. liga – Západ</button>
+                    <button class="tymy-tab active" id="ttab-extraliga" onclick="TymyPage.switchSoutez('extraliga')">Extraliga</button>
+                    <button class="tymy-tab" id="ttab-prvni-liga-vychod" onclick="TymyPage.switchSoutez('prvni-liga-vychod')">1. liga – Východ</button>
+                    <button class="tymy-tab" id="ttab-prvni-liga-zapad" onclick="TymyPage.switchSoutez('prvni-liga-zapad')">1. liga – Západ</button>
                 </div>
                 <div id="tymyGrid" class="teams-grid"></div>
             </div>
@@ -138,7 +139,7 @@
                 });
                 if (localStorage.getItem('darkMode') === 'true') {
                     document.body.classList.add('dark-mode');
-                    document.getElementById('darkModeIcon').textContent = '☀️';
+                    document.getElementById('darkModeIcon').innerHTML = Icons.sun();
                 }
             },
 
@@ -146,7 +147,7 @@
                 document.body.classList.toggle('dark-mode');
                 const isDark = document.body.classList.contains('dark-mode');
                 localStorage.setItem('darkMode', isDark);
-                document.getElementById('darkModeIcon').textContent = isDark ? '☀️' : '🌙';
+                document.getElementById('darkModeIcon').innerHTML = isDark ? Icons.sun() : Icons.moon();
             },
 
             switchSoutez(soutez) {
@@ -168,11 +169,11 @@
                 const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
 
                 const soutezLabels = {
-                    'extraliga': '🏆 Extraliga',
-                    'prvni-liga-vychod': '🥈 1. liga – Východ',
-                    'prvni-liga-zapad': '🥈 1. liga – Západ'
+                    'extraliga': 'Extraliga',
+                    'prvni-liga-vychod': '1. liga – Východ',
+                    'prvni-liga-zapad': '1. liga – Západ'
                 };
-                document.getElementById('tymyNadpis').textContent = soutezLabels[soutez] || '🏟️ Týmy';
+                document.getElementById('tymyNadpis').textContent = soutezLabels[soutez] || 'Týmy';
 
                 if (tymy.length === 0) {
                     document.getElementById('tymyGrid').innerHTML =

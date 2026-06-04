@@ -16,7 +16,7 @@ const App = {
             document.body.classList.add('dark-mode');
             const icon = document.getElementById('darkModeIcon');
             const text = document.getElementById('darkModeText');
-            if (icon) icon.textContent = '☀️';
+            if (icon) icon.innerHTML = Icons.sun();
             if (text) text.textContent = 'Light Mode';
         }
 
@@ -213,16 +213,17 @@ const App = {
         container.style.display = 'block';
 
         if (pohled === 'baraze') {
-            nadpis.textContent = '⚔️ Baráž – ' + (this.aktualni_rocnik || '').replace('-', '/');
+            nadpis.textContent = 'Baráž – ' + (this.aktualni_rocnik || '').replace('-', '/');
             pavoucek.innerHTML = Playoff.renderBaraze();
             statContainer.style.display = 'none';
         } else if (pohled === 'extraliga') {
-            nadpis.textContent = '🏆 Extraliga play-off – ' + (this.aktualni_rocnik || '').replace('-', '/');
-            pavoucek.innerHTML = this._renderHistorickyPlayoff('extraliga');
+            nadpis.textContent = 'Extraliga play-off – ' + (this.aktualni_rocnik || '').replace('-', '/');
+            const heroHtml = this._renderHeroHTML();
+            pavoucek.innerHTML = (heroHtml ? '<div class="hist-hero-wrap">' + heroHtml + '</div>' : '') + this._renderHistorickyPlayoff('extraliga');
             Playoff.drawConnectors();
             this._renderHistorickyStatistiky('extraliga');
         } else {
-            nadpis.textContent = '🥈 1. liga play-off – ' + (this.aktualni_rocnik || '').replace('-', '/');
+            nadpis.textContent = '1. liga play-off – ' + (this.aktualni_rocnik || '').replace('-', '/');
             pavoucek.innerHTML = this._renderHistorickyPlayoff('liga');
             Playoff.drawConnectors();
             this._renderHistorickyStatistiky('liga');
@@ -324,7 +325,7 @@ const App = {
         localStorage.setItem('darkMode', isDark);
         const icon = document.getElementById('darkModeIcon');
         const text = document.getElementById('darkModeText');
-        if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+        if (icon) icon.innerHTML = isDark ? Icons.sun() : Icons.moon();
         if (text) text.textContent = isDark ? 'Light Mode' : 'Dark Mode';
     },
 
@@ -376,17 +377,14 @@ const App = {
 
         if (pohled === 'zakladni') {
             tabulkaObsah.style.display = 'block';
-            document.getElementById('tabulkaPlayoffIcon').textContent = '🏆';
             document.getElementById('tabulkaPlayoffTitle').textContent = 'Tabulka';
         } else if (pohled === 'playoff') {
             playoffObsah.style.display = 'block';
-            document.getElementById('tabulkaPlayoffIcon').textContent = '🏅';
             document.getElementById('tabulkaPlayoffTitle').textContent = 'Play-off pavouk';
             Playoff.render(this.aktualni_soutez);
             Playoff.drawConnectors();
         } else if (pohled === 'baraze') {
             barazeObsah.style.display = 'block';
-            document.getElementById('tabulkaPlayoffIcon').textContent = '⚔️';
             document.getElementById('tabulkaPlayoffTitle').textContent = 'Baráž';
             barazeObsah.innerHTML = Playoff.renderBaraze();
         }
@@ -468,7 +466,6 @@ const App = {
             document.getElementById('tabulkaObsah').style.display = 'none';
             document.getElementById('playoffObsah').style.display = 'block';
             document.getElementById('barazeObsah').style.display = 'none';
-            document.getElementById('tabulkaPlayoffIcon').textContent = '🏅';
             document.getElementById('tabulkaPlayoffTitle').textContent = 'Play-off pavouk';
             Playoff.render(this.aktualni_soutez);
             Playoff.drawConnectors();
@@ -476,14 +473,12 @@ const App = {
             document.getElementById('tabulkaObsah').style.display = 'none';
             document.getElementById('playoffObsah').style.display = 'none';
             document.getElementById('barazeObsah').style.display = 'block';
-            document.getElementById('tabulkaPlayoffIcon').textContent = '⚔️';
             document.getElementById('tabulkaPlayoffTitle').textContent = 'Baráž';
             document.getElementById('barazeObsah').innerHTML = Playoff.renderBaraze();
         } else {
             document.getElementById('tabulkaObsah').style.display = 'block';
             document.getElementById('playoffObsah').style.display = 'none';
             document.getElementById('barazeObsah').style.display = 'none';
-            document.getElementById('tabulkaPlayoffIcon').textContent = '🏆';
             document.getElementById('tabulkaPlayoffTitle').textContent = 'Tabulka';
         }
 
@@ -491,14 +486,8 @@ const App = {
         Players.renderStatistiky(this.aktualni_soutez, this.vybrana_kola);
     },
 
-    _renderHero() {
-        const container = document.getElementById('heroContainer');
-        if (!container) return;
-
-        if (this.aktualni_soutez !== 'extraliga') { container.style.display = 'none'; return; }
-
+    _renderHeroHTML() {
         const zapasy = Data.zapasy['extraliga'] || [];
-
         const seriesWins = (kolo) => {
             const wins = {};
             zapasy.filter(z => z.kolo === kolo).forEach(z => {
@@ -508,35 +497,37 @@ const App = {
             });
             return wins;
         };
-
         const finalWins = seriesWins('F');
-        if (Object.keys(finalWins).length === 0) { container.style.display = 'none'; return; }
-
+        if (Object.keys(finalWins).length === 0) return null;
         const finalist = Object.entries(finalWins).sort((a, b) => b[1] - a[1]);
         const vitez = finalist[0]?.[0];
         const druhy = finalist[1]?.[0];
-        if (!vitez) { container.style.display = 'none'; return; }
-
+        if (!vitez) return null;
         const sezóna = Data.rocnik || '';
-
         const sfWins = seriesWins('SF');
         const sfLosers = Object.keys(sfWins).filter(t => t !== vitez && t !== druhy);
-
         let pillsHtml = '';
-        if (druhy) pillsHtml += '<span class="hero-pill">🥈 <strong>' + Statistics.escapeHtml(druhy) + '</strong></span>';
-        sfLosers.forEach(t => { pillsHtml += '<span class="hero-pill">🥉 <strong>' + Statistics.escapeHtml(t) + '</strong></span>'; });
-
-        container.innerHTML =
-            '<div class="hero-card">' +
+        if (druhy) pillsHtml += '<span class="hero-pill"><span class="hero-pill-rank">2.</span> ' + Statistics.escapeHtml(druhy) + '</span>';
+        sfLosers.forEach(t => { pillsHtml += '<span class="hero-pill"><span class="hero-pill-rank">3.–4.</span> ' + Statistics.escapeHtml(t) + '</span>'; });
+        return '<div class="hero-card">' +
             '<div class="hero-eyebrow">Sezóna ' + Statistics.escapeHtml(sezóna) + ' · Extraliga · Finále</div>' +
             '<div class="hero-title">Mistr ČR<br>je znám</div>' +
             '<div class="hero-champion-box">' +
-            '<div class="hero-trophy">🏆</div>' +
+            '<div class="hero-trophy">' + Icons.trophy() + '</div>' +
             '<div><div class="hero-champion-name">' + Statistics.escapeHtml(vitez) + '</div>' +
             '<div class="hero-champion-label">Mistr České republiky ' + Statistics.escapeHtml(sezóna) + '</div></div>' +
             '</div>' +
             (pillsHtml ? '<div class="hero-pills">' + pillsHtml + '</div>' : '') +
             '</div>';
+    },
+
+    _renderHero() {
+        const container = document.getElementById('heroContainer');
+        if (!container) return;
+        if (this.aktualni_soutez !== 'extraliga') { container.style.display = 'none'; return; }
+        const html = this._renderHeroHTML();
+        if (!html) { container.style.display = 'none'; return; }
+        container.innerHTML = html;
         container.style.display = 'block';
     }
 };
