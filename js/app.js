@@ -495,35 +495,47 @@ const App = {
         const container = document.getElementById('heroContainer');
         if (!container) return;
 
-        const soutez = this.aktualni_soutez;
-        if (soutez !== 'extraliga') { container.style.display = 'none'; return; }
+        if (this.aktualni_soutez !== 'extraliga') { container.style.display = 'none'; return; }
 
-        // Find champion from final series
         const zapasy = Data.zapasy['extraliga'] || [];
-        const finaloveZapasy = zapasy.filter(z => z.kolo === 'F' && (z.skore_domaciV + z.skore_hostV > 0));
 
-        if (finaloveZapasy.length === 0) { container.style.display = 'none'; return; }
+        const seriesWins = (kolo) => {
+            const wins = {};
+            zapasy.filter(z => z.kolo === kolo).forEach(z => {
+                const v = Statistics.parseVysledek(z.vysledek);
+                if (v.domaci > v.hoste) wins[z.tymDomaci] = (wins[z.tymDomaci] || 0) + 1;
+                else if (v.hoste > v.domaci) wins[z.tymHoste] = (wins[z.tymHoste] || 0) + 1;
+            });
+            return wins;
+        };
 
-        // Count series wins
-        const wins = {};
-        finaloveZapasy.forEach(z => {
-            if (z.skore_domaciV > z.skore_hostV) wins[z.tym_domaci] = (wins[z.tym_domaci] || 0) + 1;
-            else if (z.skore_hostV > z.skore_domaciV) wins[z.tym_host] = (wins[z.tym_host] || 0) + 1;
-        });
+        const finalWins = seriesWins('F');
+        if (Object.keys(finalWins).length === 0) { container.style.display = 'none'; return; }
 
-        const vitez = Object.entries(wins).find(([, w]) => w >= 2)?.[0];
+        const finalist = Object.entries(finalWins).sort((a, b) => b[1] - a[1]);
+        const vitez = finalist[0]?.[0];
+        const druhy = finalist[1]?.[0];
         if (!vitez) { container.style.display = 'none'; return; }
 
         const sezóna = Data.rocnik || '';
+
+        const sfWins = seriesWins('SF');
+        const sfLosers = Object.keys(sfWins).filter(t => t !== vitez && t !== druhy);
+
+        let pillsHtml = '';
+        if (druhy) pillsHtml += '<span class="hero-pill">🥈 <strong>' + Statistics.escapeHtml(druhy) + '</strong></span>';
+        sfLosers.forEach(t => { pillsHtml += '<span class="hero-pill">🥉 <strong>' + Statistics.escapeHtml(t) + '</strong></span>'; });
+
         container.innerHTML =
             '<div class="hero-card">' +
-            '<div class="hero-eyebrow">Sezóna ' + Statistics.escapeHtml(sezóna) + ' · Extraliga</div>' +
-            '<div class="hero-title">🏆 Mistrem České republiky se stal</div>' +
+            '<div class="hero-eyebrow">Sezóna ' + Statistics.escapeHtml(sezóna) + ' · Extraliga · Finále</div>' +
+            '<div class="hero-title">Mistr ČR<br>je znám</div>' +
             '<div class="hero-champion-box">' +
-            '<div class="hero-trophy">🥇</div>' +
+            '<div class="hero-trophy">🏆</div>' +
             '<div><div class="hero-champion-name">' + Statistics.escapeHtml(vitez) + '</div>' +
             '<div class="hero-champion-label">Mistr České republiky ' + Statistics.escapeHtml(sezóna) + '</div></div>' +
             '</div>' +
+            (pillsHtml ? '<div class="hero-pills">' + pillsHtml + '</div>' : '') +
             '</div>';
         container.style.display = 'block';
     }

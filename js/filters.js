@@ -3,25 +3,14 @@ const Filters = {
         const container = document.getElementById('rychleFiltry');
         if (!container) return;
 
-        container.innerHTML = `
-            <div class="flex flex-wrap gap-2">
-                <button onclick="Filters.poslednichXKol(1)" class="px-3 md:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs md:text-sm">
-                    📅 Poslední kolo
-                </button>
-                <button onclick="Filters.poslednichXKol(3)" class="px-3 md:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs md:text-sm">
-                    📅 3 kola
-                </button>
-                <button onclick="Filters.aktualniKolo()" class="px-3 md:px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-xs md:text-sm">
-                    ⚡ Aktuální
-                </button>
-                <button onclick="Filters.vybrátPlayoff()" class="px-3 md:px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-xs md:text-sm">
-                    🏅 Play-off
-                </button>
-                <button onclick="Filters.vymazat()" class="px-3 md:px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors text-xs md:text-sm">
-                    ✕ Vše
-                </button>
-            </div>
-        `;
+        container.innerHTML =
+            '<div style="padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">' +
+            '<button onclick="Filters.poslednichXKol(1)" class="filter-pill">📅 Poslední kolo</button>' +
+            '<button onclick="Filters.poslednichXKol(3)" class="filter-pill">📅 3 kola</button>' +
+            '<button onclick="Filters.aktualniKolo()" class="filter-pill">⚡ Aktuální</button>' +
+            '<button onclick="Filters.vybrátPlayoff()" class="filter-pill">🏅 Play-off</button>' +
+            '<button onclick="Filters.vymazat()" class="filter-pill filter-pill-clear">✕ Vše</button>' +
+            '</div>';
     },
 
     _numerickaKola(aktualni_soutez) {

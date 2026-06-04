@@ -200,6 +200,30 @@ const Statistics = {
         return stats;
     },
 
+    // Returns last N match results for a team as array of 'w'/'l'/'d'
+    vypocitejFormuTymu(tym, aktualni_soutez, pocet = 5) {
+        const utkani = {};
+        (Data.zapasy[aktualni_soutez] || []).forEach(zapas => {
+            if (this.isPlayoffKolo(zapas.kolo)) return;
+            if (!zapas.tymDomaci || !zapas.tymHoste) return;
+            if (zapas.tymDomaci !== tym && zapas.tymHoste !== tym) return;
+            const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
+            if (!utkani[klic]) utkani[klic] = { kolo: parseInt(zapas.kolo) || 0, domaci: zapas.tymDomaci, d: 0, h: 0 };
+            const v = this.parseVysledek(zapas.vysledek);
+            utkani[klic].d += v.domaci;
+            utkani[klic].h += v.hoste;
+        });
+        return Object.values(utkani)
+            .filter(u => u.d + u.h > 0)
+            .sort((a, b) => a.kolo - b.kolo)
+            .slice(-pocet)
+            .map(u => {
+                const nase = u.domaci === tym ? u.d : u.h;
+                const soupere = u.domaci === tym ? u.h : u.d;
+                return nase > soupere ? 'w' : nase < soupere ? 'l' : 'd';
+            });
+    },
+
     // Returns { tym: delta } where delta = positions gained since previous round
     // positive = moved up, negative = moved down, 0 = no change
     vypocitejZmenyPozic(aktualni_soutez) {

@@ -34,30 +34,32 @@ const Players = {
 
         if (top3.length === 0) {
             document.getElementById('hracMesiceContainer').innerHTML =
-                '<div class="flex items-center justify-between mb-2"><h2 class="text-sm md:text-base font-bold text-gray-800">🔥 TOP 3 Hráči</h2></div>' +
-                filterHtml +
-                '<p class="text-gray-500 text-xs">Žádní hráči pro vybraná kola</p>';
+                '<div class="app-card-header"><h2 class="app-card-title">🔥 TOP 3 Hráči</h2></div>' +
+                '<div style="padding: 12px 16px;">' + filterHtml + '<p style="color:var(--text2);font-size:0.8rem;">Žádní hráči pro vybraná kola</p></div>';
             return;
         }
 
         const medals = ['🥇', '🥈', '🥉'];
-        const colors = ['border-yellow-400 bg-yellow-50', 'border-gray-300 bg-gray-50', 'border-orange-300 bg-orange-50'];
+        const rankLabels = ['1. místo', '2. místo', '3. místo'];
+        const statColors = ['player-stat-gold', 'player-stat-silver', 'player-stat-bronze'];
 
         const html = top3.map((hrac, idx) => {
             const s = stats[hrac];
             const winRate = ((s.vyhry / s.zapasy) * 100).toFixed(1);
-            return '<div class="border ' + colors[idx] + ' rounded-lg p-2 md:p-3 text-center cursor-pointer hover:shadow-md transition-all min-w-0" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(hrac) + '\')">' +
-                '<div class="text-lg md:text-xl leading-none">' + medals[idx] + '</div>' +
-                '<div class="font-bold text-xs md:text-sm text-gray-800 mt-1 truncate">' + Statistics.escapeHtml(hrac) + '</div>' +
-                '<div class="text-sm md:text-lg font-bold text-blue-600 leading-tight">' + winRate + '%</div>' +
-                '<div class="text-xs text-gray-500 leading-tight">' + s.vyhry + 'V/' + s.prohry + 'P · ' + s.zapasy + 'z</div>' +
+            const tymNazev = Object.keys(s.tymy).sort((a, b) => s.tymy[b] - s.tymy[a])[0] || '';
+            return '<div class="player-card" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(hrac) + '\')">' +
+                '<div class="player-rank">' + medals[idx] + ' ' + rankLabels[idx] + '</div>' +
+                '<div class="player-name">' + Statistics.escapeHtml(hrac) + '</div>' +
+                '<div class="player-team">' + Statistics.escapeHtml(tymNazev) + '</div>' +
+                '<div class="player-stat ' + statColors[idx] + '">' + winRate + '%</div>' +
+                '<div class="player-stat-label">' + s.vyhry + 'V / ' + s.prohry + 'P · ' + s.zapasy + ' zápasů</div>' +
                 '</div>';
         }).join('');
 
         document.getElementById('hracMesiceContainer').innerHTML =
-            '<div class="flex items-center justify-between mb-2"><h2 class="text-sm md:text-base font-bold text-gray-800">🔥 TOP 3 Hráči</h2></div>' +
-            filterHtml +
-            '<div class="grid grid-cols-3 gap-2 md:gap-3">' + html + '</div>';
+            '<div class="app-card-header"><h2 class="app-card-title">🔥 TOP 3 Hráči</h2></div>' +
+            '<div style="padding: 12px 16px 4px;">' + filterHtml + '</div>' +
+            '<div class="players-grid">' + html + '</div>';
     },
 
     toggleTop3Filtr() {
