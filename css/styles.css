@@ -2050,3 +2050,138 @@ body.dark-mode .player-stat-bronze { color: #fb923c; }
     .sidebar-prehledy { display: none; }
 }
 
+
+/* ══════════════════════════════════════════════════════════════════
+   MATCHES TABLE
+   ══════════════════════════════════════════════════════════════════ */
+.match-row {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    transition: background 0.1s;
+}
+.match-row:hover { background: var(--surface2); }
+.match-row-playoff { background: rgba(139,92,246,0.04); }
+body.dark-mode .match-row-playoff { background: rgba(139,92,246,0.08); }
+
+.match-kolo-cell  { font-weight: 700; font-size: 0.78rem; color: var(--text); white-space: nowrap; }
+.match-datum-cell { font-size: 0.75rem; color: var(--text2); white-space: nowrap; }
+.match-tym-cell   { font-weight: 600; font-size: 0.82rem; color: var(--text); }
+.match-tym-cell.clickable:hover { color: var(--cba-red); }
+
+.match-score {
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+}
+.match-score-home { color: var(--win); }
+.match-score-away { color: var(--loss); }
+
+.match-toggle { font-size: 0.8rem; color: var(--muted); }
+
+/* Detail rows */
+.match-detail-head {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text2);
+    background: var(--surface2);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.match-detail-home    { background: rgba(22,163,74,0.05); }
+.match-detail-away    { background: rgba(220,38,38,0.05); }
+.match-detail-pending { color: var(--muted); }
+.match-detail-screc   { background: rgba(245,158,11,0.06); }
+body.dark-mode .match-detail-home { background: rgba(34,197,94,0.08); }
+body.dark-mode .match-detail-away { background: rgba(239,68,68,0.08); }
+
+/* ══════════════════════════════════════════════════════════════════
+   TEAMS GRID (tymy.html)
+   ══════════════════════════════════════════════════════════════════ */
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+}
+
+.team-tile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: background 0.12s;
+}
+.team-tile:hover { background: var(--surface2); }
+
+.team-tile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+}
+
+.team-tile-info { flex: 1; min-width: 0; }
+
+.team-tile-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+.team-tile-stats {
+    font-size: 0.68rem;
+    color: var(--text2);
+}
+
+.team-tile-pos {
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--muted);
+    flex-shrink: 0;
+    min-width: 20px;
+    text-align: right;
+}
+
+/* League tab bar for tymy.html */
+.tymy-league-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.tymy-league-tabs::-webkit-scrollbar { display: none; }
+.tymy-tab {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.12s;
+}
+.tymy-tab:hover { border-color: var(--cba-red); color: var(--cba-red); }
+.tymy-tab.active {
+    background: var(--red-bg);
+    border-color: var(--cba-red);
+    color: var(--cba-red);
+    font-weight: 700;
+}

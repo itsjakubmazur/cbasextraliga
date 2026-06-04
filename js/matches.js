@@ -37,7 +37,7 @@ const Matches = {
             });
 
             const domaciVyhral = domaciVyhry > hosteVyhry;
-            const vysledekClass = domaciVyhral ? 'text-blue-600' : 'text-purple-600';
+            const vysledekClass = domaciVyhral ? 'match-score-home' : 'match-score-away';
 
             // Detail zápasů (defaultně skrytý)
             const detailZapasy = utk.zapasy.map(z => {
@@ -46,8 +46,8 @@ const Matches = {
                 const skrecZapas = Statistics.isSkrec(z);
                 const vyhralDomaci = v.domaci > v.hoste;
                 const rowCls = neodehrano
-                    ? 'bg-gray-50 text-gray-400'
-                    : (skrecZapas ? 'bg-amber-50' : (vyhralDomaci ? 'bg-blue-50' : 'bg-purple-50'));
+                    ? 'match-detail-pending'
+                    : (skrecZapas ? 'match-detail-screc' : (vyhralDomaci ? 'match-detail-home' : 'match-detail-away'));
                 const skrecBadge = skrecZapas ? ' <span class="text-xs font-semibold text-amber-700">(SKREČ)</span>' : '';
                 return '<tr class="text-xs ' + rowCls + '">' +
                     '<td class="p-2 pl-8">' + z.disciplina + '</td>' +
@@ -60,29 +60,29 @@ const Matches = {
             
             const jePlayoff = Statistics.isPlayoffKolo(utk.kolo);
             const koloLabel = jePlayoff ? Statistics.playoffKoloNazev(utk.kolo) : 'Kolo ' + utk.kolo;
-            const headerBg = jePlayoff ? 'bg-purple-100 hover:bg-purple-200' : 'bg-gray-100 hover:bg-gray-200';
+            const rowCls = jePlayoff ? 'match-row match-row-playoff' : 'match-row';
 
             return '<tbody>' +
-                '<tr class="' + headerBg + ' cursor-pointer border-t-2 border-gray-300" onclick="Matches.toggleDetail(\'detail-' + idx + '\')">' +
-                '<td class="p-3 font-bold">' + koloLabel + '</td>' +
-                '<td class="p-3">' + (utk.datum || '-') + '</td>' +
-                '<td class="p-3 font-semibold text-blue-600 clickable" onclick="event.stopPropagation(); Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(utk.tymDomaci) + '\')">' + Statistics.escapeHtml(utk.tymDomaci) + '</td>' +
-                '<td class="p-3 text-center text-2xl font-bold ' + vysledekClass + '">' + domaciVyhry + ' : ' + hosteVyhry + '</td>' +
-                '<td class="p-3 font-semibold text-purple-600 clickable" onclick="event.stopPropagation(); Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(utk.tymHoste) + '\')">' + Statistics.escapeHtml(utk.tymHoste) + '</td>' +
-                '<td class="p-3 text-right"><span id="toggle-' + idx + '" class="text-xl">▶</span></td>' +
+                '<tr class="' + rowCls + ' cursor-pointer" onclick="Matches.toggleDetail(\'detail-' + idx + '\')">' +
+                '<td class="p-3 match-kolo-cell">' + koloLabel + '</td>' +
+                '<td class="p-3 match-datum-cell">' + (utk.datum || '–') + '</td>' +
+                '<td class="p-3 match-tym-cell clickable" onclick="event.stopPropagation(); Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(utk.tymDomaci) + '\')">' + Statistics.escapeHtml(utk.tymDomaci) + '</td>' +
+                '<td class="p-3 text-center match-score ' + vysledekClass + '">' + domaciVyhry + ' : ' + hosteVyhry + '</td>' +
+                '<td class="p-3 match-tym-cell clickable" onclick="event.stopPropagation(); Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(utk.tymHoste) + '\')">' + Statistics.escapeHtml(utk.tymHoste) + '</td>' +
+                '<td class="p-3 text-right"><span id="toggle-' + idx + '" class="match-toggle">▶</span></td>' +
                 '</tr>' +
                 '<tr id="detail-' + idx + '" style="display: none;"><td colspan="6" class="p-0">' +
                 '<table class="w-full">' +
-                '<thead><tr class="bg-gray-50 text-xs"><th class="text-left p-2 pl-8">Disciplína</th><th class="text-left p-2">Domácí</th><th class="text-left p-2">Hosté</th><th class="text-center p-2">Výsl.</th><th class="text-left p-2">Skóre</th></tr></thead>' +
+                '<thead><tr class="match-detail-head"><th class="text-left p-2 pl-8">Disciplína</th><th class="text-left p-2">Domácí</th><th class="text-left p-2">Hosté</th><th class="text-center p-2">Výsl.</th><th class="text-left p-2">Skóre</th></tr></thead>' +
                 '<tbody>' + detailZapasy + '</tbody>' +
                 '</table></td></tr>' +
                 '</tbody>';
         }).join('');
         
-        document.getElementById('zapasyObsah').innerHTML = 
+        document.getElementById('zapasyObsah').innerHTML =
             '<div class="overflow-x-auto">' +
             '<table class="w-full text-sm">' +
-            '<thead><tr class="bg-gradient-to-r from-blue-600 to-purple-600 text-white">' +
+            '<thead><tr class="standings-thead">' +
             '<th class="text-left p-3 font-semibold">Kolo</th>' +
             '<th class="text-left p-3 font-semibold">Datum</th>' +
             '<th class="text-left p-3 font-semibold">Domácí</th>' +

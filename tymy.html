@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Přehled týmů české badmintonové ligy – Extraliga, 1. liga Východ a Západ.">
+    <meta name="theme-color" content="#D7141A">
+    <title>Týmy - Czech Badminton</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header class="app-topbar">
+        <div class="app-logo">
+            <div class="app-logo-icon">🏸</div>
+            <div>
+                <span class="app-logo-text">Czech Badminton</span>
+                <span class="app-logo-sub">Neoficiální ligové statistiky</span>
+            </div>
+        </div>
+        <div class="app-topbar-right">
+            <span class="app-season-badge" id="sezónaBadge" style="display:none;"></span>
+            <button onclick="TymyPage.toggleDarkMode()" class="app-icon-btn" id="darkModeBtn" title="Přepnout téma">
+                <span id="darkModeIcon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-layout">
+
+        <aside class="app-sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-section-label">Navigace</div>
+                <div class="sidebar-nav">
+                    <a href="index.html" class="sidebar-nav-item sidebar-nav-link">🏸 Ligové tabulky</a>
+                    <span class="sidebar-nav-item active">🏟️ Týmy</span>
+                    <a href="vitezove.html" class="sidebar-nav-item sidebar-nav-link">🏆 Historie vítězů</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="app-main">
+            <div class="app-card" id="tymyCard" style="display:none;">
+                <div class="app-card-header">
+                    <h2 class="app-card-title" id="tymyNadpis">🏟️ Týmy</h2>
+                </div>
+                <div class="tymy-league-tabs">
+                    <button class="tymy-tab active" id="ttab-extraliga" onclick="TymyPage.switchSoutez('extraliga')">🏆 Extraliga</button>
+                    <button class="tymy-tab" id="ttab-prvni-liga-vychod" onclick="TymyPage.switchSoutez('prvni-liga-vychod')">🥈 1. liga – Východ</button>
+                    <button class="tymy-tab" id="ttab-prvni-liga-zapad" onclick="TymyPage.switchSoutez('prvni-liga-zapad')">🥈 1. liga – Západ</button>
+                </div>
+                <div id="tymyGrid" class="teams-grid"></div>
+            </div>
+
+            <div id="tymyLoading" class="app-card" style="text-align:center; padding: 48px 24px;">
+                <div style="font-size: 2.5rem; margin-bottom: 12px;">🏸</div>
+                <p style="color: var(--text2); font-size: 0.9rem;">Načítání dat...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Team modal -->
+    <div id="tymModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="Modals.zavritModal('tymModal')">&times;</span>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalTymNazev"></h2>
+                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalTymInfo"></p>
+            </div>
+            <div class="p-4 md:p-6">
+                <div id="modalTymObsah"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Player modal (opened from team modal) -->
+    <div id="hracModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="Modals.zavritModal('hracModal')">&times;</span>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalHracJmeno"></h2>
+                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalHracInfo"></p>
+            </div>
+            <div class="p-4 md:p-6">
+                <div id="modalHracObsah"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Match modal -->
+    <div id="utkaniModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="Modals.zavritModal('utkaniModal')">&times;</span>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalUtkaniNazev"></h2>
+                <p class="text-2xl font-bold text-center mt-2" id="modalUtkaniSkore"></p>
+            </div>
+            <div class="p-4 md:p-6">
+                <div id="modalUtkaniObsah"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/statistics.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/matches.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/players.js"></script>
+
+    <script>
+        // Stub required by modals/players
+        const App = {
+            aktualni_soutez: 'extraliga',
+            vybrana_kola: new Set(),
+            jeHistoricky() { return false; }
+        };
+
+        const TymyPage = {
+            aktualni_soutez: 'extraliga',
+
+            // Avatar colors (one per position in the grid)
+            avatarColors: [
+                '#D7141A','#2563eb','#16a34a','#d97706','#8b5cf6',
+                '#ec4899','#06b6d4','#0891b2','#7c3aed','#db2777',
+                '#059669','#b45309','#dc2626','#1d4ed8','#047857'
+            ],
+
+            async init() {
+                const success = await Data.nacist();
+                if (success) {
+                    const badge = document.getElementById('sezónaBadge');
+                    if (Data.rocnik) { badge.textContent = Data.rocnik; badge.style.display = ''; }
+                    this.render();
+                }
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') document.querySelectorAll('.modal').forEach(m => { if (m.style.display === 'block') m.style.display = 'none'; });
+                });
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.body.classList.add('dark-mode');
+                    document.getElementById('darkModeIcon').textContent = '☀️';
+                }
+            },
+
+            toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDark);
+                document.getElementById('darkModeIcon').textContent = isDark ? '☀️' : '🌙';
+            },
+
+            switchSoutez(soutez) {
+                this.aktualni_soutez = soutez;
+                App.aktualni_soutez = soutez;
+                document.querySelectorAll('.tymy-tab').forEach(t => t.classList.remove('active'));
+                const tab = document.getElementById('ttab-' + soutez);
+                if (tab) tab.classList.add('active');
+                this.render();
+            },
+
+            render() {
+                document.getElementById('tymyLoading').style.display = 'none';
+                const card = document.getElementById('tymyCard');
+                card.style.display = '';
+
+                const soutez = this.aktualni_soutez;
+                const tabulkaData = Statistics.vypocitejTabulku(soutez);
+                const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
+
+                const soutezLabels = {
+                    'extraliga': '🏆 Extraliga',
+                    'prvni-liga-vychod': '🥈 1. liga – Východ',
+                    'prvni-liga-zapad': '🥈 1. liga – Západ'
+                };
+                document.getElementById('tymyNadpis').textContent = soutezLabels[soutez] || '🏟️ Týmy';
+
+                if (tymy.length === 0) {
+                    document.getElementById('tymyGrid').innerHTML =
+                        '<div style="padding:32px;text-align:center;color:var(--text2);font-size:0.85rem;">Pro tuto soutěž nejsou data.</div>';
+                    return;
+                }
+
+                document.getElementById('tymyGrid').innerHTML = tymy.map((tym, idx) => {
+                    const t = tabulkaData[tym] || {};
+                    const color = this.avatarColors[idx % this.avatarColors.length];
+                    // Abbreviation: first letters of meaningful words
+                    const abbr = tym.split(/\s+/)
+                        .filter(w => !['sk', 'bk', 'tj', 'ba', 'ac', 'sc', 'tk'].includes(w.toLowerCase()))
+                        .slice(0, 2)
+                        .map(w => w.charAt(0).toUpperCase())
+                        .join('') || tym.charAt(0).toUpperCase();
+
+                    const statsText = t.utkani
+                        ? t.vyhry + 'V / ' + t.prohry + 'P · ' + t.body + ' bodů'
+                        : '';
+
+                    return '<div class="team-tile" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' +
+                        '<div class="team-tile-avatar" style="background:' + color + ';">' + abbr + '</div>' +
+                        '<div class="team-tile-info">' +
+                        '<div class="team-tile-name">' + Statistics.escapeHtml(tym) + '</div>' +
+                        (statsText ? '<div class="team-tile-stats">' + statsText + '</div>' : '') +
+                        '</div>' +
+                        '<div class="team-tile-pos">' + (idx + 1) + '.</div>' +
+                        '</div>';
+                }).join('');
+            }
+        };
+
+        TymyPage.init();
+    </script>
+</body>
+</html>
