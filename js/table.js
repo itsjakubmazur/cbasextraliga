@@ -12,7 +12,7 @@ const Table = {
             } else {
                 if (idx <= 1) return 'final-four';
                 if (idx <= 5) return 'playoff';
-                if (idx === 7) return 'relegation';
+                if (idx >= 6) return 'relegation';
                 return '';
             }
         };
@@ -58,7 +58,7 @@ const Table = {
               '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> Posl. Kvalifikace o 1. ligu</span>'
             : '<span class="legenda-item"><span class="legenda-dot legenda-final-four"></span> 1.–2. Přímý postup do Final Four</span>' +
               '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 3.–6. Čtvrtfinále</span>' +
-              '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 8. Baráž</span>';
+              '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 7.–8. Baráž</span>';
 
         const bodovaniInfo = jePrvniLiga
             ? '<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b'

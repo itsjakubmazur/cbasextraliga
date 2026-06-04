@@ -650,7 +650,7 @@ const App = {
         if (!vitez) return null;
 
         const druhy = [...finalTeams].find(t => t !== vitez) || null;
-        const sezóna = Data.rocnik || '';
+        const sezóna = this.aktualni_rocnik || Data.rocnik || '';
 
         // SF losers = SF participants who aren't in the final
         const sfTeams = seriesTeams('SF');
@@ -678,12 +678,11 @@ const App = {
         }
 
         return '<div class="hero-card">' +
-            '<div class="hero-eyebrow">Sezóna ' + Statistics.escapeHtml(sezóna) + ' · Extraliga · Finále</div>' +
-            '<div class="hero-title">Mistr ČR<br>je znám</div>' +
+            '<div class="hero-eyebrow">Sezóna ' + Statistics.escapeHtml(sezóna) + ' · Extraliga</div>' +
             '<div class="hero-champion-box">' +
             '<div class="hero-trophy">' + Icons.trophy() + '</div>' +
             '<div><div class="hero-champion-name">' + Statistics.escapeHtml(vitez) + '</div>' +
-            '<div class="hero-champion-label">Mistr České republiky ' + Statistics.escapeHtml(sezóna) + '</div></div>' +
+            '<div class="hero-champion-label">Mistr Extraligy ' + Statistics.escapeHtml(sezóna) + '</div></div>' +
             '</div>' +
             (pillsHtml ? '<div class="hero-pills">' + pillsHtml + '</div>' : '') +
             '</div>';

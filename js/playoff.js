@@ -261,11 +261,6 @@ const Playoff = {
             'Finále', fRes ? fRes.skore1 + ':' + fRes.skore2 : null, fRes
         );
 
-        const champion = fRes?.vitez || null;
-        const championHtml = champion
-            ? '<div class="playoff-champion-banner"><div class="playoff-champion-icon">🏆</div><div class="playoff-champion-name">Mistr 1. ligy: ' + Statistics.escapeHtml(champion) + '</div></div>'
-            : '';
-
         return '<div class="bracket-wrapper">' +
             '<div class="bracket-round bracket-round-sf"><div class="bracket-round-title">Semifinále</div>' +
             '<div class="bracket-matches bracket-matches-2">' +
@@ -275,7 +270,7 @@ const Playoff = {
             '<div class="bracket-connector-col"><svg class="bracket-lines" preserveAspectRatio="none"></svg></div>' +
             '<div class="bracket-round bracket-round-f"><div class="bracket-round-title">Finále</div>' +
             '<div class="bracket-matches bracket-matches-1"><div class="bracket-match-slot">' + final_ + '</div></div>' +
-            '</div></div>' + championHtml +
+            '</div></div>' +
             '<div class="playoff-legend" style="margin-top:12px">' +
             '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-east"></span> Východ</span>' +
             '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-west"></span> Západ</span>' +
@@ -633,12 +628,6 @@ const Playoff = {
             fRes
         );
 
-        // Champion banner
-        const champion = fRes?.vitez || null;
-        const championHtml = champion
-            ? '<div class="playoff-champion-banner"><div class="playoff-champion-icon">🏆</div><div class="playoff-champion-name">Mistr: ' + Statistics.escapeHtml(champion) + '</div></div>'
-            : '';
-
         return '<div class="bracket-wrapper">' +
             '<div class="bracket-round bracket-round-qf">' +
                 '<div class="bracket-round-title">Čtvrtfinále</div>' +
@@ -667,7 +656,6 @@ const Playoff = {
                 '</div>' +
             '</div>' +
         '</div>' +
-        championHtml +
         '<div class="playoff-legend" style="margin-top:12px">' +
             '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-green"></span> Přímý postup do Final Four (1.–2.)</span>' +
             '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-blue"></span> Čtvrtfinále (3.–6.)</span>' +
@@ -762,11 +750,6 @@ const Playoff = {
         );
 
         // Champion banner
-        const champion = fRes?.vitez || null;
-        const championHtml = champion
-            ? '<div class="playoff-champion-banner"><div class="playoff-champion-icon">🏆</div><div class="playoff-champion-name">Mistr: ' + Statistics.escapeHtml(champion) + '</div></div>'
-            : '';
-
         // Placement matches (O 5. místo / O 7. místo)
         // QF1 loser vs QF2 loser, QF3 loser vs QF4 loser – kolo "P5"
         const p5Porazeny1 = qfResults[0]?.porazeny || null;
@@ -812,7 +795,6 @@ const Playoff = {
                 '</div>' +
             '</div>' +
         '</div>' +
-        championHtml +
         p5PlacementHtml +
         '<div class="playoff-legend" style="margin-top:12px">' +
             '<span class="playoff-legend-item"><span class="playoff-legend-dot playoff-legend-dot-east"></span> Východ</span>' +
