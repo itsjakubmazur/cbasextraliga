@@ -165,8 +165,8 @@ const Modals = {
 
         const teamMatchRows = this._sortKola(Object.keys(kolaMap)).flatMap(kolo => {
             const utk = kolaMap[kolo];
-            const sepRow = '<tr class="stats-round-sep"><td colspan="5">' + this._koloLabel(kolo) + '</td></tr>';
-            const rows = utk.map(u => {
+            const koloLabel = this._koloLabel(kolo);
+            return utk.map((u, i) => {
                 let vyhrane = 0, prohrane = 0;
                 u.zapasy.forEach(z => {
                     if (!Statistics.isNeodehrano(z)) {
@@ -178,14 +178,13 @@ const Modals = {
                 const vyhrano = vyhrane > prohrane;
                 const rc = remiza ? '' : (vyhrano ? 'stats-win' : 'stats-loss');
                 return '<tr class="stats-row">' +
-                    '<td class="stats-cell" style="color:var(--muted);font-size:0.72rem">' + (u.datum || '–') + '</td>' +
-                    '<td class="stats-cell" style="color:var(--muted);font-size:0.72rem">' + (u.doma ? 'Doma' : 'Venku') + '</td>' +
+                    '<td class="stats-cell" style="color:var(--muted);font-size:0.68rem;white-space:nowrap">' + (i === 0 ? koloLabel : '') + '</td>' +
                     '<td class="stats-cell stats-name clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.souper) + '\')">' + Statistics.escapeHtml(u.souper) + '</td>' +
+                    '<td class="stats-cell stats-num" style="color:var(--muted);font-size:0.68rem">' + (u.doma ? 'D' : 'V') + '</td>' +
                     '<td class="stats-cell stats-num" style="font-weight:700">' + vyhrane + ':' + prohrane + '</td>' +
                     '<td class="stats-cell stats-num ' + rc + '" style="font-weight:700">' + (remiza ? 'R' : (vyhrano ? 'V' : 'P')) + '</td>' +
                     '</tr>';
             });
-            return [sepRow, ...rows];
         }).join('');
 
         // Players
@@ -205,7 +204,7 @@ const Modals = {
         });
 
         const hraciHtml = Object.entries(hraci)
-            .sort((a, b) => b[1].zapasy - a[1].zapasy)
+            .sort((a, b) => b[1].vyhry - a[1].vyhry || b[1].zapasy - a[1].zapasy)
             .map(([h, st], idx) => {
                 const wr = ((st.vyhry / st.zapasy) * 100).toFixed(1);
                 return '<tr class="stats-row">' +
@@ -227,8 +226,8 @@ const Modals = {
             '</div>' +
             '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:10px 14px 4px">Výsledky dle kola</div>' +
             '<table class="standings-table"><thead><tr class="standings-thead">' +
-            '<th class="th-name" style="width:80px">Datum</th><th class="th-num" style="width:55px">Místo</th>' +
-            '<th class="th-name">Soupeř</th><th class="th-num">Výsl.</th><th class="th-num">Stav</th>' +
+            '<th class="th-name" style="width:60px">Kolo</th><th class="th-name">Soupeř</th>' +
+            '<th class="th-num" style="width:28px"></th><th class="th-num">Výsl.</th><th class="th-num">Stav</th>' +
             '</tr></thead><tbody>' + teamMatchRows + '</tbody></table></div>' +
             '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:10px 14px 6px">Hráči sezóny (' + Object.keys(hraci).length + ')</div>' +
             '<table class="standings-table"><thead><tr class="standings-thead">' +

@@ -302,6 +302,12 @@ const App = {
             if (btn) btn.classList.toggle('active', id === target);
         });
 
+        // Dismiss teams view if active
+        const tymyView = document.getElementById('tymyViewContainer');
+        if (tymyView && tymyView.style.display !== 'none') {
+            this.zobrazitData();
+        }
+
         if (target === 'zakladni') {
             this.prepnoutPohled('zakladni');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -523,7 +529,7 @@ const App = {
         const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
         const soutezLabels = { 'extraliga': 'Extraliga', 'prvni-liga-vychod': '1. liga – Východ', 'prvni-liga-zapad': '1. liga – Západ' };
         const nadpis = document.getElementById('tymyViewNadpis');
-        if (nadpis) nadpis.innerHTML = Icons.users() + ' ' + (soutezLabels[soutez] || 'Týmy');
+        if (nadpis) nadpis.innerHTML = Icons.users() + ' ' + (soutezLabels[soutez] || 'Soupisky');
         const avatarColors = ['#D7141A','#2563eb','#16a34a','#d97706','#8b5cf6','#ec4899','#06b6d4','#0891b2','#7c3aed','#db2777','#059669','#b45309','#dc2626','#1d4ed8','#047857'];
         if (tymy.length === 0) {
             document.getElementById('tymyViewGrid').innerHTML = '<div style="padding:32px;text-align:center;color:var(--text2);font-size:0.85rem;">Pro tuto soutěž nejsou data.</div>';
@@ -569,21 +575,16 @@ const App = {
 
         const avatarColors = ['#D7141A','#2563eb','#16a34a','#d97706','#8b5cf6','#ec4899','#06b6d4','#0891b2','#7c3aed','#db2777'];
         const cardsHtml = Object.entries(hraci)
-            .sort((a, b) => b[1].zapasy - a[1].zapasy)
+            .sort((a, b) => b[1].vyhry - a[1].vyhry || b[1].zapasy - a[1].zapasy)
             .map(([h, st], idx) => {
                 const wr = st.zapasy > 0 ? ((st.vyhry / st.zapasy) * 100).toFixed(0) : '0';
                 const isGood = parseFloat(wr) >= 50;
-                const photoData = localStorage.getItem('photo_' + h);
                 const color = avatarColors[idx % avatarColors.length];
                 const abbr = h.split(/\s+/).pop()?.charAt(0).toUpperCase() || h.charAt(0).toUpperCase();
-                const imgStyle = photoData
-                    ? 'background-image:url(' + photoData + ');background-size:cover;background-position:center top'
-                    : 'background:' + color;
                 const safeH = Statistics.escapeAttr(h);
                 return '<div class="roster-card" onclick="Modals.zobrazitDetailHrace(\'' + safeH + '\')">' +
                     '<div class="roster-photo">' +
-                    '<div class="roster-photo-img" id="rphoto-' + idx + '" style="' + imgStyle + '">' + (photoData ? '' : abbr) + '</div>' +
-                    '<button class="roster-photo-btn" onclick="event.stopPropagation();App.nahratFotku(\'' + safeH + '\',' + idx + ')" title="Nahrát foto">+</button>' +
+                    '<div class="roster-photo-img" style="background:' + color + '">' + abbr + '</div>' +
                     '</div>' +
                     '<div class="roster-winrate ' + (isGood ? 'good' : 'bad') + '">' + wr + '%</div>' +
                     '<div class="roster-name">' + Statistics.escapeHtml(h) + '</div>' +
