@@ -14,8 +14,10 @@ const App = {
 
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark-mode');
-            document.getElementById('darkModeIcon').textContent = '☀️';
-            document.getElementById('darkModeText').textContent = 'Light Mode';
+            const icon = document.getElementById('darkModeIcon');
+            const text = document.getElementById('darkModeText');
+            if (icon) icon.textContent = '☀️';
+            if (text) text.textContent = 'Light Mode';
         }
 
         document.addEventListener('keydown', (e) => {
@@ -324,8 +326,10 @@ const App = {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDark);
-        document.getElementById('darkModeIcon').textContent = isDark ? '☀️' : '🌙';
-        document.getElementById('darkModeText').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+        const icon = document.getElementById('darkModeIcon');
+        const text = document.getElementById('darkModeText');
+        if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+        if (text) text.textContent = isDark ? 'Light Mode' : 'Dark Mode';
     },
 
     _maPlayoffData(soutez) {
@@ -344,13 +348,11 @@ const App = {
 
         document.querySelectorAll('.soutez-tab').forEach(tab => {
             tab.classList.remove('active');
-            tab.classList.add('bg-gray-200', 'text-gray-700');
         });
 
         const activeTab = document.getElementById('tab-' + soutez);
         if (activeTab) {
             activeTab.classList.add('active');
-            activeTab.classList.remove('bg-gray-200', 'text-gray-700');
         }
 
         document.getElementById('tabulkaSoutez').textContent = Data.soutezNazvy[soutez];

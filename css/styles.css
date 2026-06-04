@@ -1410,3 +1410,460 @@ body.dark-mode .modal-content  { background-color: var(--surface) !important; }
 body.dark-mode .modal-header   { background-color: var(--surface) !important; border-color: var(--border) !important; }
 body.dark-mode table           { color: var(--text); }
 
+/* ══════════════════════════════════════════════════════════════════
+   APP LAYOUT 2025 – full redesign
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Reset body for new layout */
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh;
+}
+
+/* ── TOP BAR ──────────────────────────────────────────────────── */
+.app-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 58px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+}
+
+.app-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.app-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--cba-red);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 12px rgba(215,20,26,0.3);
+    flex-shrink: 0;
+}
+
+.app-logo-text {
+    display: block;
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--text);
+}
+
+.app-logo-sub {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text2);
+    font-weight: 400;
+}
+
+.app-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.app-season-badge {
+    background: var(--red-bg);
+    color: var(--cba-red);
+    border: 1px solid var(--red-border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.app-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.15s;
+}
+.app-icon-btn:hover { background: var(--border); }
+
+/* ── LAYOUT ───────────────────────────────────────────────────── */
+.app-layout {
+    display: flex;
+    max-width: 1280px;
+    margin: 0 auto;
+    min-height: calc(100vh - 58px);
+}
+
+/* ── SIDEBAR ──────────────────────────────────────────────────── */
+.app-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    padding: 16px 12px;
+    position: sticky;
+    top: 58px;
+    height: calc(100vh - 58px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    scrollbar-width: none;
+}
+.app-sidebar::-webkit-scrollbar { display: none; }
+
+.sidebar-section {
+    margin-bottom: 6px;
+}
+
+.sidebar-section-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 4px 10px 6px;
+    display: block;
+}
+
+.sidebar-rocnik-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 2px;
+}
+
+/* Override rocnik-btn for sidebar context */
+.sidebar-rocnik-btns .rocnik-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border-radius: 8px;
+    padding: 7px 10px;
+    border: none;
+    background: transparent;
+    color: var(--text2);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.12s;
+}
+.sidebar-rocnik-btns .rocnik-btn:hover { background: var(--surface2); }
+.sidebar-rocnik-btns .rocnik-btn.rocnik-btn-active,
+.sidebar-rocnik-btns .rocnik-btn[style*="d93831"] {
+    background: var(--red-bg) !important;
+    color: var(--cba-red) !important;
+    border: none !important;
+    font-weight: 700;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 2px;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    text-align: left;
+    width: 100%;
+    transition: all 0.12s;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.sidebar-nav-item:hover {
+    background: var(--surface2);
+    color: var(--text);
+}
+.sidebar-nav-item.active {
+    background: var(--red-bg);
+    color: var(--cba-red) !important;
+    font-weight: 700;
+}
+
+/* ── MAIN CONTENT ─────────────────────────────────────────────── */
+.app-main {
+    flex: 1;
+    min-width: 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--bg);
+}
+
+/* ── SECTION CARDS ────────────────────────────────────────────── */
+.app-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+/* Override the old white card classes to work with app-card */
+.app-card.bg-white {
+    background: var(--surface) !important;
+}
+
+.app-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.app-card-header.collapsible { cursor: pointer; user-select: none; }
+.app-card-header.collapsible:hover { background: var(--surface2); }
+
+.app-card-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.app-toggle-icon {
+    font-size: 0.72rem;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+
+/* ── HERO SECTION ─────────────────────────────────────────────── */
+.hero-card {
+    background: linear-gradient(135deg, rgba(215,20,26,0.06) 0%, var(--surface) 55%, rgba(17,69,126,0.04) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+body.dark-mode .hero-card {
+    background: linear-gradient(135deg, rgba(215,20,26,0.12) 0%, var(--surface) 55%, rgba(17,69,126,0.08) 100%);
+}
+.hero-card::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(215,20,26,0.18) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-eyebrow {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--cba-red);
+    margin-bottom: 4px;
+}
+
+.hero-title {
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.2;
+}
+
+.hero-champion-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(215,158,11,0.08);
+    border: 1px solid rgba(215,158,11,0.22);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+}
+body.dark-mode .hero-champion-box {
+    background: rgba(245,158,11,0.08);
+    border-color: rgba(245,158,11,0.2);
+}
+
+.hero-trophy { font-size: 1.75rem; line-height: 1; flex-shrink: 0; }
+
+.hero-champion-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #b45309;
+    line-height: 1.2;
+}
+body.dark-mode .hero-champion-name { color: #f59e0b; }
+
+.hero-champion-label {
+    font-size: 0.65rem;
+    color: var(--text2);
+    margin-top: 2px;
+}
+
+.hero-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.hero-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.68rem;
+    color: var(--text2);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.hero-pill strong { color: var(--text); font-weight: 600; }
+
+/* ── MOBILE OVERRIDES ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .app-sidebar {
+        width: 100%;
+        height: auto;
+        position: sticky;
+        top: 58px;
+        z-index: 50;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 6px 10px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: visible;
+        gap: 6px;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .sidebar-section {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    .sidebar-section-label { display: none; }
+
+    .sidebar-rocnik-btns {
+        flex-direction: row;
+        gap: 4px;
+    }
+    .sidebar-rocnik-btns .rocnik-btn {
+        width: auto;
+        padding: 4px 10px;
+        border-radius: 20px;
+        border: 1px solid var(--border) !important;
+        font-size: 0.72rem;
+        white-space: nowrap;
+        background: var(--surface2) !important;
+        color: var(--text2) !important;
+    }
+    .sidebar-rocnik-btns .rocnik-btn.rocnik-btn-active,
+    .sidebar-rocnik-btns .rocnik-btn[style*="d93831"] {
+        background: var(--red-bg) !important;
+        color: var(--cba-red) !important;
+        border-color: var(--cba-red) !important;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        gap: 4px;
+        flex-wrap: nowrap;
+    }
+
+    .sidebar-nav-item {
+        padding: 5px 12px;
+        white-space: nowrap;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        width: auto;
+        font-size: 0.75rem;
+        background: var(--surface2);
+    }
+    .sidebar-nav-item.active {
+        border-color: var(--cba-red);
+        background: var(--red-bg);
+    }
+    .sidebar-nav-item:hover {
+        background: var(--surface2);
+    }
+
+    .app-main {
+        padding: 10px;
+        gap: 8px;
+        padding-bottom: 72px;
+    }
+
+    .app-logo-sub { display: none; }
+
+    .app-season-badge {
+        font-size: 0.65rem;
+        padding: 2px 8px;
+        max-width: 140px;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-season-badge { display: none; }
+    .app-topbar { padding: 0 12px; }
+    .app-logo-icon { width: 30px; height: 30px; font-size: 15px; }
+    .app-logo-text { font-size: 0.85rem; }
+}
+
+/* ── DARK MODE tweaks for new layout ─────────────────────────── */
+body.dark-mode .app-topbar {
+    box-shadow: 0 1px 8px rgba(0,0,0,0.3);
+}
+body.dark-mode .app-sidebar {
+    background: var(--surface);
+}
+body.dark-mode .standings-thead tr {
+    background: var(--cba-red);
+}
+
+/* Ensure the app-main bg shows through between cards */
+body.dark-mode .app-main {
+    background: var(--bg);
+}
+
+/* ── REMOVE OLD body padding that conflicts ───────────────────── */
+@media (max-width: 768px) {
+    body { padding-bottom: 0 !important; }
+}
+
