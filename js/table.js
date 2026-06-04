@@ -19,6 +19,9 @@ const Table = {
 
         const posClass = (idx) => ['pos-gold', 'pos-silver', 'pos-bronze'][idx] || '';
 
+        // Number of columns depends on whether draws are possible (1. liga)
+        const colspan = jePrvniLiga ? 11 : 10;
+
         const rows = [];
         tymy.forEach((tym, idx) => {
             const t = tabulkaData[tym];
@@ -28,6 +31,10 @@ const Table = {
             const forma = Statistics.vypocitejFormuTymu(tym, aktualni_soutez);
             const formaDots = forma.map(r => '<span class="form-dot form-dot-' + r + '"></span>').join('');
 
+            const remizaCol = jePrvniLiga
+                ? '<td class="standings-num-cell">' + t.remizy + '</td>'
+                : '';
+
             rows.push(
                 '<tr class="standings-row" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' +
                 '<td class="standings-pos-cell"><span class="standings-pos-num ' + pc + '">' + (idx + 1) + '</span></td>' +
@@ -35,7 +42,11 @@ const Table = {
                 '<span class="zone-dot zone-dot-' + (zone || 'none') + '"></span>' +
                 Statistics.escapeHtml(tym) + '</td>' +
                 '<td class="standings-num-cell text-win">' + t.vyhry + '</td>' +
+                remizaCol +
                 '<td class="standings-num-cell text-loss">' + t.prohry + '</td>' +
+                '<td class="standings-ratio-cell">' + t.zapasyV + ':' + t.zapasyP + '</td>' +
+                '<td class="standings-ratio-cell">' + t.setyV + ':' + t.setyP + '</td>' +
+                '<td class="standings-ratio-cell">' + t.bodyV + ':' + t.bodyP + '</td>' +
                 '<td class="standings-forma-cell"><span class="form-dots">' + formaDots + '</span></td>' +
                 '<td class="standings-pts-cell">' + t.body + '</td>' +
                 '</tr>'
@@ -43,13 +54,13 @@ const Table = {
 
             // Zone dividers (inserted after current row)
             if (!jePrvniLiga && idx === 1) {
-                rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="6"><span>↓ Čtvrtfinále</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="' + colspan + '"><span>↓ Čtvrtfinále</span></td></tr>');
             } else if (!jePrvniLiga && idx === 6) {
-                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>↓ Baráž</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="' + colspan + '"><span>↓ Baráž</span></td></tr>');
             } else if (jePrvniLiga && idx === 3) {
-                rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="6"></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="' + colspan + '"></td></tr>');
             } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {
-                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>↓ Kvalifikace</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="' + colspan + '"><span>↓ Kvalifikace</span></td></tr>');
             }
         });
 
@@ -64,6 +75,8 @@ const Table = {
             ? '<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b'
             : '<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b';
 
+        const remizaTh = jePrvniLiga ? '<th class="th-num" title="Remízy">R</th>' : '';
+
         document.getElementById('tabulkaObsah').innerHTML =
             '<div class="overflow-x-auto">' +
             '<table class="standings-table">' +
@@ -71,7 +84,11 @@ const Table = {
             '<th class="th-pos">#</th>' +
             '<th class="th-name">Tým</th>' +
             '<th class="th-num" title="Vítězství">V</th>' +
+            remizaTh +
             '<th class="th-num" title="Porážky">P</th>' +
+            '<th class="th-ratio" title="Poměr dílčích zápasů">Záp.</th>' +
+            '<th class="th-ratio" title="Poměr setů">Sety</th>' +
+            '<th class="th-ratio" title="Poměr míčů">Míče</th>' +
             '<th class="th-forma" title="Posledních 5 zápasů">Forma</th>' +
             '<th class="th-pts">Body</th>' +
             '</tr></thead>' +
