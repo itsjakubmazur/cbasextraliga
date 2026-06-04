@@ -427,6 +427,12 @@ const App = {
         btnZakladni.classList.toggle('active', this.aktualni_pohled === 'zakladni');
         btnPlayoff.classList.toggle('active', this.aktualni_pohled === 'playoff');
         if (btnBaraze) btnBaraze.classList.toggle('active', this.aktualni_pohled === 'baraze');
+
+        // Keep bottom nav in sync with the active view
+        const bnavZakladni = document.getElementById('bnav-zakladni');
+        const bnavPlayoff  = document.getElementById('bnav-playoff');
+        if (bnavZakladni) bnavZakladni.classList.toggle('active', this.aktualni_pohled !== 'playoff');
+        if (bnavPlayoff)  bnavPlayoff.classList.toggle('active', this.aktualni_pohled === 'playoff');
     },
 
     toggleSekce(id) {
