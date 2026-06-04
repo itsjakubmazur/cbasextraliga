@@ -22,6 +22,7 @@ const Data = {
     },
     vitezove: [],
     historickeRocniky: {},
+    rocnik: null,
     _dataBackup: null,
 
     async nacist() {
@@ -33,6 +34,7 @@ const Data = {
             this.tymy = { ...this.tymy, ...data.tymy };
             if (data.vitezove) this.vitezove = data.vitezove;
             if (data.historicke_rocniky) this.historickeRocniky = data.historicke_rocniky;
+            if (data.rocnik) this.rocnik = data.rocnik;
             const datumAktualizace = data.datum ? new Date(data.datum).toLocaleString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'neznámé';
             document.getElementById('aktualizaceInfo').textContent = '✓ Aktualizace: ' + datumAktualizace;
             return true;

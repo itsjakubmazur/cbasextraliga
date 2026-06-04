@@ -277,6 +277,13 @@ const App = {
         document.getElementById('darkModeText').textContent = isDark ? 'Light Mode' : 'Dark Mode';
     },
 
+    _maPlayoffData(soutez) {
+        if ((Data.zapasy[soutez] || []).some(z => Statistics.isPlayoffKolo(z.kolo))) return true;
+        if ((soutez === 'prvni-liga-vychod' || soutez === 'prvni-liga-zapad') &&
+            (Data.zapasy['prvni-liga-playoff'] || []).length > 0) return true;
+        return false;
+    },
+
     zmenitSoutez(soutez) {
         this.aktualni_soutez = soutez;
 
@@ -300,7 +307,7 @@ const App = {
         this.vybrana_kola.clear();
         this.aktualizovatSelecty();
 
-        this.aktualni_pohled = 'zakladni';
+        this.aktualni_pohled = this._maPlayoffData(soutez) ? 'playoff' : 'zakladni';
         this.aktualizovatPohledToggle();
 
         this.zobrazitData();
