@@ -46,16 +46,15 @@ const Modals = {
             kolaMap[z.kolo].push(z);
         });
 
-        const roundsHtml = this._sortKola(Object.keys(kolaMap)).map(kolo => {
+        const matchTableRows = this._sortKola(Object.keys(kolaMap)).flatMap(kolo => {
             const zapasy = kolaMap[kolo];
-            let kW = 0, kL = 0;
-            const rowsHtml = zapasy.map(z => {
+            const sepRow = '<tr class="stats-round-sep"><td colspan="8">' + this._koloLabel(kolo) + '</td></tr>';
+            const rows = zapasy.map(z => {
                 const v = Statistics.parseVysledek(z.vysledek);
                 const dh = Statistics.getHraciFromTeam(z.domaci);
                 const hh = Statistics.getHraciFromTeam(z.hoste);
                 const jeDom = dh.includes(hrac);
                 const vyhral = jeDom ? (v.domaci > v.hoste) : (v.hoste > v.domaci);
-                if (vyhral) kW++; else kL++;
                 const partneri = jeDom ? dh.filter(h => h !== hrac) : hh.filter(h => h !== hrac);
                 const souperi = (jeDom ? hh : dh).join(', ');
                 const souperiTym = jeDom ? z.tymHoste : z.tymDomaci;
@@ -70,21 +69,8 @@ const Modals = {
                     '<td class="stats-cell stats-num">' + (z.vysledek || '–') + '</td>' +
                     '<td class="stats-cell stats-num" style="color:var(--muted)">' + (z.sety || '–') + '</td>' +
                     '</tr>';
-            }).join('');
-            const n = zapasy.length;
-            const summary = kW + 'V ' + kL + 'P · ' + n + ' ' + (n === 1 ? 'zápas' : n < 5 ? 'zápasy' : 'zápasů');
-            return '<div class="modal-round-header" onclick="Modals.toggleRound(this)">' +
-                '<span class="round-label">' + this._koloLabel(kolo) + '</span>' +
-                '<span class="round-summary">' + summary + '</span>' +
-                '<span class="round-arrow">' + Icons.chevronRight() + '</span>' +
-                '</div>' +
-                '<div class="modal-round-body" style="display:none">' +
-                '<div class="overflow-x-auto"><table class="standings-table"><thead><tr class="standings-thead">' +
-                '<th class="th-name">Datum</th><th class="th-name">Disciplína</th>' +
-                '<th class="th-name">Tým soupeře</th><th class="th-name">Soupeři</th>' +
-                '<th class="th-name">Partner</th><th class="th-num">Výsl.</th>' +
-                '<th class="th-num">Sety</th><th class="th-num">Skóre</th>' +
-                '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div></div>';
+            });
+            return [sepRow, ...rows];
         }).join('');
 
         // Forma
@@ -118,8 +104,14 @@ const Modals = {
             (forma ? '<div class="modal-section"><div class="modal-section-title">Forma</div><div class="form-dots">' + formaHtml + '</div></div>' : '') +
             (nejSouperi ? '<div class="modal-section"><div class="modal-section-title">Nejčastější soupeři</div><div class="opponent-pills">' + nejSouperi + '</div></div>' : '') +
             '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:10px 14px 4px">Zápasy dle kola</div>' +
-            '<div class="modal-rounds">' + roundsHtml + '</div></div>';
+            '<div class="overflow-x-auto"><table class="standings-table"><thead><tr class="standings-thead">' +
+            '<th class="th-name">Datum</th><th class="th-name">Disciplína</th>' +
+            '<th class="th-name">Tým soupeře</th><th class="th-name">Soupeři</th>' +
+            '<th class="th-name">Partner</th><th class="th-num">Výsl.</th>' +
+            '<th class="th-num">Sety</th><th class="th-num">Skóre</th>' +
+            '</tr></thead><tbody>' + matchTableRows + '</tbody></table></div></div>';
 
+        document.body.classList.add('modal-open');
         modal.style.display = 'block';
     },
 
@@ -171,10 +163,10 @@ const Modals = {
             kolaMap[u.kolo].push(u);
         });
 
-        const roundsHtml = this._sortKola(Object.keys(kolaMap)).map(kolo => {
+        const teamMatchRows = this._sortKola(Object.keys(kolaMap)).flatMap(kolo => {
             const utk = kolaMap[kolo];
-            let koloW = 0, koloL = 0;
-            const rowsHtml = utk.map(u => {
+            const sepRow = '<tr class="stats-round-sep"><td colspan="5">' + this._koloLabel(kolo) + '</td></tr>';
+            const rows = utk.map(u => {
                 let vyhrane = 0, prohrane = 0;
                 u.zapasy.forEach(z => {
                     if (!Statistics.isNeodehrano(z)) {
@@ -184,7 +176,6 @@ const Modals = {
                 });
                 const remiza = vyhrane === prohrane && vyhrane > 0;
                 const vyhrano = vyhrane > prohrane;
-                if (vyhrano) koloW++; else if (!remiza) koloL++;
                 const rc = remiza ? '' : (vyhrano ? 'stats-win' : 'stats-loss');
                 return '<tr class="stats-row">' +
                     '<td class="stats-cell" style="color:var(--muted);font-size:0.72rem">' + (u.datum || '–') + '</td>' +
@@ -193,19 +184,8 @@ const Modals = {
                     '<td class="stats-cell stats-num" style="font-weight:700">' + vyhrane + ':' + prohrane + '</td>' +
                     '<td class="stats-cell stats-num ' + rc + '" style="font-weight:700">' + (remiza ? 'R' : (vyhrano ? 'V' : 'P')) + '</td>' +
                     '</tr>';
-            }).join('');
-            const n = utk.length;
-            const summary = koloW + 'V ' + koloL + 'P · ' + n + ' ' + (n === 1 ? 'utkání' : 'utkání');
-            return '<div class="modal-round-header" onclick="Modals.toggleRound(this)">' +
-                '<span class="round-label">' + this._koloLabel(kolo) + '</span>' +
-                '<span class="round-summary">' + summary + '</span>' +
-                '<span class="round-arrow">' + Icons.chevronRight() + '</span>' +
-                '</div>' +
-                '<div class="modal-round-body" style="display:none">' +
-                '<table class="standings-table"><thead><tr class="standings-thead">' +
-                '<th class="th-name" style="width:80px">Datum</th><th class="th-num" style="width:55px">Místo</th>' +
-                '<th class="th-name">Soupeř</th><th class="th-num">Výsl.</th><th class="th-num">Stav</th>' +
-                '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div>';
+            });
+            return [sepRow, ...rows];
         }).join('');
 
         // Players
@@ -246,13 +226,17 @@ const Modals = {
             '<div class="modal-stat-item"><div class="modal-stat-value">' + hv + '/' + hp + '</div><div class="modal-stat-label">Venku V/P</div></div>' +
             '</div>' +
             '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:10px 14px 4px">Výsledky dle kola</div>' +
-            '<div class="modal-rounds">' + roundsHtml + '</div></div>' +
+            '<table class="standings-table"><thead><tr class="standings-thead">' +
+            '<th class="th-name" style="width:80px">Datum</th><th class="th-num" style="width:55px">Místo</th>' +
+            '<th class="th-name">Soupeř</th><th class="th-num">Výsl.</th><th class="th-num">Stav</th>' +
+            '</tr></thead><tbody>' + teamMatchRows + '</tbody></table></div>' +
             '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:10px 14px 6px">Hráči sezóny (' + Object.keys(hraci).length + ')</div>' +
             '<table class="standings-table"><thead><tr class="standings-thead">' +
             '<th class="th-pos">#</th><th class="th-name">Hráč</th>' +
             '<th class="th-num">Z</th><th class="th-num">V</th><th class="th-num">P</th><th class="th-num">Win%</th>' +
             '</tr></thead><tbody>' + hraciHtml + '</tbody></table></div>';
 
+        document.body.classList.add('modal-open');
         modal.style.display = 'block';
     },
 
@@ -296,14 +280,23 @@ const Modals = {
             '<th class="th-name">Hosté</th><th class="th-num">Výsl.</th><th class="th-num">Skóre</th>' +
             '</tr></thead><tbody>' + radky + '</tbody></table></div>';
 
+        document.body.classList.add('modal-open');
         modal.style.display = 'block';
     },
 
     zavritModal(modalId) {
         document.getElementById(modalId).style.display = 'none';
+        if (!document.querySelector('.modal[style*="display: block"], .modal[style*="display:block"]')) {
+            document.body.classList.remove('modal-open');
+        }
     }
 };
 
 window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) event.target.style.display = 'none';
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+        if (!document.querySelector('.modal[style*="display: block"], .modal[style*="display:block"]')) {
+            document.body.classList.remove('modal-open');
+        }
+    }
 };
