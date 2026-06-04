@@ -52,7 +52,11 @@ const App = {
                 this.aktualni_historicky_pohled = cast2;
                 Data.aktivovatRocnik(cast1);
                 this._updateRocnikButtons();
-                this._prepnoutHistorickyMode();
+                if (this._maZakladniCast()) {
+                    this._prepnoutPlnyHistorickyMode();
+                } else {
+                    this._prepnoutHistorickyMode();
+                }
                 return;
             }
 
@@ -128,13 +132,21 @@ const App = {
         return !!this.aktualni_rocnik;
     },
 
+    _maZakladniCast() {
+        return (Data.zapasy['extraliga'] || []).some(z => !Statistics.isPlayoffKolo(z.kolo));
+    },
+
     zmenitRocnik(rocnik) {
         this.aktualni_rocnik = rocnik;
         Data.aktivovatRocnik(rocnik);
         this._updateRocnikButtons();
 
         if (this.jeHistoricky()) {
-            this._prepnoutHistorickyMode();
+            if (this._maZakladniCast()) {
+                this._prepnoutPlnyHistorickyMode();
+            } else {
+                this._prepnoutHistorickyMode();
+            }
         } else {
             this._prepnoutAktualniMode();
         }
@@ -170,6 +182,14 @@ const App = {
 
         this.aktualni_pohled = 'zakladni';
         this.zmenitSoutez(this.aktualni_soutez);
+    },
+
+    _prepnoutPlnyHistorickyMode() {
+        document.getElementById('soutezTabs').style.display = 'flex';
+        document.getElementById('historickyNav').style.display = 'none';
+        document.getElementById('historickyContainer').style.display = 'none';
+        document.getElementById('historickyStatContainer').style.display = 'none';
+        this.zmenitSoutez('extraliga');
     },
 
     zmenitHistorickyPohled(pohled) {
@@ -287,7 +307,7 @@ const App = {
     zmenitSoutez(soutez) {
         this.aktualni_soutez = soutez;
 
-        if (window.location.hash.replace('#', '') !== soutez) {
+        if (!this.jeHistoricky() && window.location.hash.replace('#', '') !== soutez) {
             history.replaceState(null, '', '#' + soutez);
         }
 
