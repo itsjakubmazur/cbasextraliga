@@ -7,10 +7,10 @@ const Table = {
         const getZone = (idx) => {
             if (jePrvniLiga) {
                 if (idx <= 3) return 'playoff';
-                if (idx === 8) return 'relegation';
+                if (idx === tymy.length - 1) return 'relegation';
                 return '';
             } else {
-                if (idx <= 1) return 'top';
+                if (idx <= 1) return 'final-four';
                 if (idx <= 5) return 'playoff';
                 if (idx === 7) return 'relegation';
                 return '';
@@ -41,19 +41,24 @@ const Table = {
                 '</tr>'
             );
 
-            // Zone divider rows
+            // Zone dividers (inserted after current row)
             if (!jePrvniLiga && idx === 1) {
-                rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="6"><span>↓ Čtvrtfinále</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="6"><span>&#x2193; Čtvrtfinále</span></td></tr>');
             } else if (!jePrvniLiga && idx === 5) {
-                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>↓ Baráž / Sestup</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>&#x2193; Baráž</span></td></tr>');
             } else if (jePrvniLiga && idx === 3) {
-                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>↓ Kvalifikace</span></td></tr>');
+                rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="6"></td></tr>');
+            } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {
+                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="6"><span>&#x2193; Kvalifikace</span></td></tr>');
             }
         });
 
         const legendaInfo = jePrvniLiga
-            ? '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 1.–4. Play-off</span><span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 9. Kvalifikace o 1. ligu</span>'
-            : '<span class="legenda-item"><span class="legenda-dot legenda-top"></span> 1.–2. Přímý postup Final Four</span><span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 3.–6. Čtvrtfinále</span><span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 8. Baráž</span>';
+            ? '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 1.–4. Play-off</span>' +
+              '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> Posl. Kvalifikace o 1. ligu</span>'
+            : '<span class="legenda-item"><span class="legenda-dot legenda-final-four"></span> 1.–2. Přímý postup do Final Four</span>' +
+              '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 3.–6. Čtvrtfinále</span>' +
+              '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 8. Baráž</span>';
 
         const bodovaniInfo = jePrvniLiga
             ? '<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b'
