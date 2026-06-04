@@ -4,6 +4,7 @@ const App = {
     aktualni_pohled: 'zakladni',
     aktualni_rocnik: null,          // null = current season, string = historical
     aktualni_historicky_pohled: 'extraliga',  // 'extraliga' | 'liga' | 'baraze'
+    aktualni_tymy_soutez: 'extraliga',
 
     async init() {
         const success = await Data.nacist();
@@ -160,6 +161,9 @@ const App = {
     },
 
     _prepnoutHistorickyMode() {
+        const tymyView = document.getElementById('tymyViewContainer');
+        if (tymyView) tymyView.style.display = 'none';
+        document.getElementById('nav-tymy')?.classList.remove('active');
         const hero = document.getElementById('heroContainer');
         if (hero) hero.style.display = 'none';
         document.getElementById('soutezTabs').style.display = 'none';
@@ -175,6 +179,9 @@ const App = {
     },
 
     _prepnoutAktualniMode() {
+        const tymyView = document.getElementById('tymyViewContainer');
+        if (tymyView) tymyView.style.display = 'none';
+        document.getElementById('nav-tymy')?.classList.remove('active');
         document.getElementById('soutezTabs').style.display = 'flex';
         document.getElementById('historickyNav').style.display = 'none';
         document.getElementById('historickyContainer').style.display = 'none';
@@ -433,6 +440,9 @@ const App = {
     },
 
     zobrazitData() {
+        const tymyView = document.getElementById('tymyViewContainer');
+        if (tymyView) tymyView.style.display = 'none';
+        document.getElementById('nav-tymy')?.classList.remove('active');
         const hasData = Data.zapasy[this.aktualni_soutez] && Data.zapasy[this.aktualni_soutez].length > 0;
 
         if (!hasData) {
@@ -484,6 +494,52 @@ const App = {
 
         Matches.render(this.aktualni_soutez);
         Players.renderStatistiky(this.aktualni_soutez, this.vybrana_kola);
+    },
+
+    zobrazitTymy() {
+        ['heroContainer', 'rychleFiltry', 'hracMesiceContainer', 'tabulkaPlayoffContainer',
+         'zapasyContainer', 'statistikyContainer', 'prazdnyStav',
+         'historickyContainer', 'historickyStatContainer'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+        document.getElementById('tymyViewContainer').style.display = 'block';
+        document.getElementById('nav-tymy')?.classList.add('active');
+        this.aktualni_tymy_soutez = this.aktualni_soutez;
+        this.tymyZmenitSoutez(this.aktualni_tymy_soutez);
+    },
+
+    tymyZmenitSoutez(soutez) {
+        this.aktualni_tymy_soutez = soutez;
+        const tabMap = { 'extraliga': 'tymyViewTab-extraliga', 'prvni-liga-vychod': 'tymyViewTab-vychod', 'prvni-liga-zapad': 'tymyViewTab-zapad' };
+        Object.values(tabMap).forEach(id => document.getElementById(id)?.classList.remove('active'));
+        document.getElementById(tabMap[soutez])?.classList.add('active');
+        this._renderTymyGrid();
+    },
+
+    _renderTymyGrid() {
+        const soutez = this.aktualni_tymy_soutez;
+        const tabulkaData = Statistics.vypocitejTabulku(soutez);
+        const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
+        const soutezLabels = { 'extraliga': 'Extraliga', 'prvni-liga-vychod': '1. liga – Východ', 'prvni-liga-zapad': '1. liga – Západ' };
+        const nadpis = document.getElementById('tymyViewNadpis');
+        if (nadpis) nadpis.innerHTML = Icons.users() + ' ' + (soutezLabels[soutez] || 'Týmy');
+        const avatarColors = ['#D7141A','#2563eb','#16a34a','#d97706','#8b5cf6','#ec4899','#06b6d4','#0891b2','#7c3aed','#db2777','#059669','#b45309','#dc2626','#1d4ed8','#047857'];
+        if (tymy.length === 0) {
+            document.getElementById('tymyViewGrid').innerHTML = '<div style="padding:32px;text-align:center;color:var(--text2);font-size:0.85rem;">Pro tuto soutěž nejsou data.</div>';
+            return;
+        }
+        document.getElementById('tymyViewGrid').innerHTML = tymy.map((tym, idx) => {
+            const t = tabulkaData[tym] || {};
+            const color = avatarColors[idx % avatarColors.length];
+            const abbr = tym.split(/\s+/).filter(w => !['sk','bk','tj','ba','ac','sc','tk'].includes(w.toLowerCase())).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('') || tym.charAt(0).toUpperCase();
+            const statsText = t.utkani ? t.vyhry + 'V / ' + t.prohry + 'P · ' + t.body + ' bodů' : '';
+            return '<div class="team-tile" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' +
+                '<div class="team-tile-avatar" style="background:' + color + ';">' + abbr + '</div>' +
+                '<div class="team-tile-info"><div class="team-tile-name">' + Statistics.escapeHtml(tym) + '</div>' +
+                (statsText ? '<div class="team-tile-stats">' + statsText + '</div>' : '') +
+                '</div><div class="team-tile-pos">' + (idx + 1) + '.</div></div>';
+        }).join('');
     },
 
     _renderHeroHTML() {

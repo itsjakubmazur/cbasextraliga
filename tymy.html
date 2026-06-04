@@ -67,12 +67,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('tymModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalTymNazev"></h2>
-                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalTymInfo"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalTymNazev"></h2>
+                    <p class="modal-subtitle" id="modalTymInfo"></p>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalTymObsah"></div>
-            </div>
+            <div id="modalTymObsah"></div>
         </div>
     </div>
     <!-- Player modal (opened from team modal) -->
@@ -80,12 +80,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('hracModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalHracJmeno"></h2>
-                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalHracInfo"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalHracJmeno"></h2>
+                    <p class="modal-subtitle" id="modalHracInfo"></p>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalHracObsah"></div>
-            </div>
+            <div id="modalHracObsah"></div>
         </div>
     </div>
     <!-- Match modal -->
@@ -93,12 +93,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('utkaniModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalUtkaniNazev"></h2>
-                <p class="text-2xl font-bold text-center mt-2" id="modalUtkaniSkore"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalUtkaniNazev"></h2>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalUtkaniObsah"></div>
-            </div>
+            <div id="modalUtkaniSkore" class="modal-score"></div>
+            <div id="modalUtkaniObsah"></div>
         </div>
     </div>
 

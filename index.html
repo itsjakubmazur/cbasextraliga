@@ -51,12 +51,6 @@
                 <button onclick="App.zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab sidebar-nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2"/><path d="m13 12 5.88-9.8"/><path d="M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></svg> 1. liga – Západ
                 </button>
-                <a href="tymy.html" class="sidebar-nav-item sidebar-nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Týmy
-                </a>
-                <a href="vitezove.html" class="sidebar-nav-item sidebar-nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Historie vítězů
-                </a>
             </div>
 
             <div id="historickyNav" class="sidebar-section sidebar-nav" style="display: none;">
@@ -70,20 +64,28 @@
                 <button onclick="App.zmenitHistorickyPohled('baraze')" id="hNav-baraze" class="soutez-tab sidebar-nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/></svg> Baráž
                 </button>
-                <a href="tymy.html" class="sidebar-nav-item sidebar-nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Týmy
-                </a>
-                <a href="vitezove.html" class="sidebar-nav-item sidebar-nav-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Historie vítězů
-                </a>
             </div>
 
             <!-- Přehledy shortcuts (desktop only) -->
             <div class="sidebar-section sidebar-prehledy">
                 <div class="sidebar-section-label">Přehledy</div>
                 <div class="sidebar-nav">
-                    <button onclick="App.bottomNavClick('vysledky')" class="sidebar-nav-item"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg> Výsledky</button>
-                    <button onclick="App.bottomNavClick('hrac')" class="sidebar-nav-item"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Hráči</button>
+                    <button onclick="App.zobrazitTymy()" class="sidebar-nav-item" id="nav-tymy">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        Týmy
+                    </button>
+                    <button onclick="App.bottomNavClick('vysledky')" class="sidebar-nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+                        Výsledky
+                    </button>
+                    <button onclick="App.bottomNavClick('hrac')" class="sidebar-nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Hráči
+                    </button>
+                    <a href="vitezove.html" class="sidebar-nav-item sidebar-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+                        Historie vítězů
+                    </a>
                 </div>
             </div>
 
@@ -92,6 +94,20 @@
         <main class="app-main">
 
             <div id="heroContainer" style="display: none;"></div>
+
+            <div id="tymyViewContainer" style="display:none;">
+                <div class="app-card">
+                    <div class="app-card-header">
+                        <h2 class="app-card-title" id="tymyViewNadpis">Týmy</h2>
+                        <div class="view-toggle">
+                            <button class="view-toggle-btn active" id="tymyViewTab-extraliga" onclick="App.tymyZmenitSoutez('extraliga')">Extraliga</button>
+                            <button class="view-toggle-btn" id="tymyViewTab-vychod" onclick="App.tymyZmenitSoutez('prvni-liga-vychod')">1. liga – Východ</button>
+                            <button class="view-toggle-btn" id="tymyViewTab-zapad" onclick="App.tymyZmenitSoutez('prvni-liga-zapad')">1. liga – Západ</button>
+                        </div>
+                    </div>
+                    <div id="tymyViewGrid" class="teams-grid" style="padding: 12px 16px;"></div>
+                </div>
+            </div>
 
             <div id="historickyContainer" class="app-card" style="display: none;">
                 <div class="app-card-header">
@@ -158,12 +174,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('hracModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalHracJmeno"></h2>
-                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalHracInfo"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalHracJmeno"></h2>
+                    <p class="modal-subtitle" id="modalHracInfo"></p>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalHracObsah"></div>
-            </div>
+            <div id="modalHracObsah"></div>
         </div>
     </div>
 
@@ -171,12 +187,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('tymModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalTymNazev"></h2>
-                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalTymInfo"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalTymNazev"></h2>
+                    <p class="modal-subtitle" id="modalTymInfo"></p>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalTymObsah"></div>
-            </div>
+            <div id="modalTymObsah"></div>
         </div>
     </div>
 
@@ -184,12 +200,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('utkaniModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalUtkaniNazev"></h2>
-                <p class="text-2xl font-bold text-center mt-2" id="modalUtkaniSkore"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalUtkaniNazev"></h2>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalUtkaniObsah"></div>
-            </div>
+            <div id="modalUtkaniSkore" class="modal-score"></div>
+            <div id="modalUtkaniObsah"></div>
         </div>
     </div>
 
