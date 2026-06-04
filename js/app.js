@@ -164,6 +164,7 @@ const App = {
         const tymyView = document.getElementById('tymyViewContainer');
         if (tymyView) tymyView.style.display = 'none';
         document.getElementById('nav-tymy')?.classList.remove('active');
+        document.getElementById('bnav-tymy')?.classList.remove('active');
         const hero = document.getElementById('heroContainer');
         if (hero) hero.style.display = 'none';
         document.getElementById('soutezTabs').style.display = 'none';
@@ -182,6 +183,7 @@ const App = {
         const tymyView = document.getElementById('tymyViewContainer');
         if (tymyView) tymyView.style.display = 'none';
         document.getElementById('nav-tymy')?.classList.remove('active');
+        document.getElementById('bnav-tymy')?.classList.remove('active');
         document.getElementById('soutezTabs').style.display = 'flex';
         document.getElementById('historickyNav').style.display = 'none';
         document.getElementById('historickyContainer').style.display = 'none';
@@ -297,14 +299,14 @@ const App = {
 
     bottomNavClick(target) {
         // Update active button
-        ['zakladni', 'playoff', 'vysledky', 'hrac'].forEach(id => {
+        ['zakladni', 'playoff', 'vysledky', 'hrac', 'tymy'].forEach(id => {
             const btn = document.getElementById('bnav-' + id);
             if (btn) btn.classList.toggle('active', id === target);
         });
 
-        // Dismiss teams view if active
+        // Dismiss teams view if active (and not navigating to it)
         const tymyView = document.getElementById('tymyViewContainer');
-        if (tymyView && tymyView.style.display !== 'none') {
+        if (tymyView && tymyView.style.display !== 'none' && target !== 'tymy') {
             this.zobrazitData();
         }
 
@@ -511,6 +513,10 @@ const App = {
         });
         document.getElementById('tymyViewContainer').style.display = 'block';
         document.getElementById('nav-tymy')?.classList.add('active');
+        ['zakladni', 'playoff', 'vysledky', 'hrac'].forEach(id => {
+            document.getElementById('bnav-' + id)?.classList.remove('active');
+        });
+        document.getElementById('bnav-tymy')?.classList.add('active');
         this.aktualni_tymy_soutez = this.aktualni_soutez;
         this.tymyZmenitSoutez(this.aktualni_tymy_soutez);
     },

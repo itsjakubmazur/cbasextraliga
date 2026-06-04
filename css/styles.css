@@ -1398,16 +1398,16 @@ body.dark-mode .standings-pts-cell { color: #60a5fa; }
     align-items: center;
     justify-content: center;
     gap: 3px;
-    font-size: 0.58rem;
+    font-size: 0.53rem;
     font-weight: 600;
     color: var(--muted);
     cursor: pointer;
     border: none;
     background: transparent;
     transition: color 0.15s;
-    padding: 6px 2px;
+    padding: 6px 1px;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
 }
 .bottom-nav-btn .nav-icon { font-size: 18px; line-height: 1; }
 .bottom-nav-btn.active { color: var(--cba-red); }
@@ -1801,18 +1801,31 @@ body.dark-mode .hero-champion-name { color: #f59e0b; }
         z-index: 50;
         border-right: none;
         border-bottom: 1px solid var(--border);
-        padding: 6px 10px;
-        flex-direction: row;
-        overflow-x: auto;
+        padding: 0;
+        flex-direction: column;
+        overflow-x: hidden;
         overflow-y: visible;
-        gap: 6px;
-        align-items: center;
+        gap: 0;
+        align-items: stretch;
         box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
+    /* Each section = its own horizontal-scroll row */
     .sidebar-section {
         margin: 0;
         flex-shrink: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+        overflow-y: hidden;
+        width: 100%;
+        padding: 5px 10px;
+        scrollbar-width: none;
+    }
+    .sidebar-section::-webkit-scrollbar { display: none; }
+    .sidebar-section + .sidebar-section {
+        border-top: 1px solid var(--border);
     }
 
     .sidebar-section-label { display: none; }
