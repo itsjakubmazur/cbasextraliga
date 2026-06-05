@@ -247,12 +247,20 @@
         }
 
         .standings-divider td {
-            padding: 3px 10px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
+            padding: 3px 8px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
             text-align: left;
             background: transparent;
+            border-bottom: none !important;
+        }
+
+        .standings-divider td span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .standings-divider-playoff td   { color: var(--zone-playoff); border-top: 1px dashed rgba(37,99,235,0.25); }
@@ -600,28 +608,21 @@
             font-size: 0.85rem;
         }
 
+        /* ── PLAYOFF SCROLL ───────────────────────────────────── */
+        #playoffView {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         /* ── RESPONSIVE ───────────────────────────────────────── */
         @media (max-width: 600px) {
             body { padding: 8px 8px 16px; }
 
             .w-header { flex-direction: column; align-items: flex-start; gap: 10px; }
 
-            .bracket-wrapper { flex-direction: column; }
-            .bracket-round   { min-width: 0; }
+            .bracket-wrapper { min-width: max-content; }
+            .bracket-round   { min-width: 170px; }
             .bracket-matches { gap: 8px; }
-            .bracket-connector-col {
-                width: auto; min-width: auto;
-                min-height: 28px;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-            }
-            .bracket-connector-col::after {
-                content: '↓';
-                font-size: 1.1rem;
-                color: var(--border);
-                font-weight: 700;
-            }
 
             .view-toggle-btn { padding: 5px 10px; font-size: 0.75rem; }
         }
@@ -676,7 +677,7 @@
         </div>
 
         <!-- ── PLAYOFF ── -->
-        <div id="playoffView" class="card" style="display:none; overflow:hidden"></div>
+        <div id="playoffView" class="card" style="display:none;"></div>
 
         <!-- ── BARÁŽ ── -->
         <div id="barazeView" class="card" style="display:none; padding:16px"></div>
