@@ -681,7 +681,7 @@ body.dark-mode .playoff-placement-title {
 body.dark-mode .playoff-team-placement-5 .playoff-seed { color: #4ade80; }
 
 .playoff-placement-badge {
-    margin-left: auto;
+    margin-left: 6px;
     font-size: 0.6rem;
     font-weight: 700;
     color: #16a34a;
