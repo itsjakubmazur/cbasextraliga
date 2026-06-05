@@ -449,7 +449,7 @@ const Playoff = {
         return '<div class="playoff-team ' + cls + '">' +
             '<span class="playoff-seed">' + seed + '</span>' +
             confBadge +
-            '<span class="playoff-team-name clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(name) + '\')">' + Statistics.escapeHtml(name) + '</span>' +
+            '<span class="playoff-team-name clickable" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(name) + '\')">' + Statistics.escapeHtml(name) + '</span>' +
             scoreHtml +
             '</div>';
     },

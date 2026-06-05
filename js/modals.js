@@ -48,7 +48,7 @@ const Modals = {
 
         const matchTableRows = this._sortKola(Object.keys(kolaMap)).flatMap(kolo => {
             const zapasy = kolaMap[kolo];
-            const sepRow = '<tr class="stats-round-sep"><td colspan="8">' + this._koloLabel(kolo) + '</td></tr>';
+            const sepRow = '<tr class="stats-round-sep"><td colspan="4">' + this._koloLabel(kolo) + '</td></tr>';
             const rows = zapasy.map(z => {
                 const v = Statistics.parseVysledek(z.vysledek);
                 const dh = Statistics.getHraciFromTeam(z.domaci);
@@ -58,16 +58,18 @@ const Modals = {
                 const partneri = jeDom ? dh.filter(h => h !== hrac) : hh.filter(h => h !== hrac);
                 const souperi = (jeDom ? hh : dh).join(', ');
                 const souperiTym = jeDom ? z.tymHoste : z.tymDomaci;
-                const partnerStr = partneri.length > 0 ? partneri.join(', ') : '–';
+                const partnerStr = partneri.length > 0 ? '· s ' + partneri.join(', ') : '';
                 return '<tr class="stats-row">' +
-                    '<td class="stats-cell">' + (z.datum || '–') + '</td>' +
-                    '<td class="stats-cell">' + (z.disciplina || '–') + '</td>' +
-                    '<td class="stats-cell stats-name">' + Statistics.escapeHtml(souperiTym) + '</td>' +
-                    '<td class="stats-cell">' + Statistics.escapeHtml(souperi) + '</td>' +
-                    '<td class="stats-cell" style="color:var(--text2)">' + Statistics.escapeHtml(partnerStr) + '</td>' +
+                    '<td class="stats-cell" style="white-space:nowrap;color:var(--text2);font-size:0.72rem">' + (z.disciplina || '–') + '</td>' +
+                    '<td class="stats-cell">' +
+                        '<div style="font-size:0.8rem;font-weight:600;color:var(--text)">' + Statistics.escapeHtml(souperi) + '</div>' +
+                        '<div style="font-size:0.68rem;color:var(--text2);margin-top:1px">' +
+                            '<span class="clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(souperiTym) + '\')">' + Statistics.escapeHtml(souperiTym) + '</span>' +
+                            (partnerStr ? ' <span style="color:var(--muted)">' + Statistics.escapeHtml(partnerStr) + '</span>' : '') +
+                        '</div>' +
+                    '</td>' +
                     '<td class="stats-cell stats-num ' + (vyhral ? 'stats-win' : 'stats-loss') + '" style="font-weight:700">' + (vyhral ? 'V' : 'P') + '</td>' +
-                    '<td class="stats-cell stats-num">' + (z.vysledek || '–') + '</td>' +
-                    '<td class="stats-cell stats-num" style="color:var(--muted)">' + (z.sety || '–') + '</td>' +
+                    '<td class="stats-cell stats-num" style="font-size:0.72rem;color:var(--text2)">' + (z.vysledek || '–') + '</td>' +
                     '</tr>';
             });
             return [sepRow, ...rows];
@@ -101,15 +103,17 @@ const Modals = {
             '<div class="modal-stat-item loss"><div class="modal-stat-value">' + s.prohry + '</div><div class="modal-stat-label">Prohry</div></div>' +
             '<div class="modal-stat-item rate"><div class="modal-stat-value">' + winRate + '%</div><div class="modal-stat-label">Úspěšnost</div></div>' +
             '</div>' +
-            (forma ? '<div class="modal-section"><div class="modal-section-title">Forma</div><div class="form-dots">' + formaHtml + '</div></div>' : '') +
-            (nejSouperi ? '<div class="modal-section"><div class="modal-section-title">Nejčastější soupeři</div><div class="opponent-pills">' + nejSouperi + '</div></div>' : '') +
-            '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:10px 14px 4px">Zápasy dle kola</div>' +
-            '<div class="overflow-x-auto"><table class="standings-table"><thead><tr class="standings-thead">' +
-            '<th class="th-name">Datum</th><th class="th-name">Disciplína</th>' +
-            '<th class="th-name">Tým soupeře</th><th class="th-name">Soupeři</th>' +
-            '<th class="th-name">Partner</th><th class="th-num">Výsl.</th>' +
-            '<th class="th-num">Sety</th><th class="th-num">Skóre</th>' +
-            '</tr></thead><tbody>' + matchTableRows + '</tbody></table></div></div>';
+            ((forma || nejSouperi) ?
+                '<div class="modal-section" style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;padding:10px 14px">' +
+                (forma ? '<div><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);margin-bottom:5px">Forma</div><div class="form-dots" style="gap:4px">' + formaHtml + '</div></div>' : '') +
+                (nejSouperi ? '<div style="flex:1;min-width:180px"><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);margin-bottom:5px">Nejčastější soupeři</div><div class="opponent-pills" style="gap:4px">' + nejSouperi + '</div></div>' : '') +
+                '</div>'
+            : '') +
+            '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:8px 14px 4px">Zápasy</div>' +
+            '<table class="standings-table"><thead><tr class="standings-thead">' +
+            '<th class="th-name" style="width:60px">Disciplína</th><th class="th-name">Soupeř / Tým</th>' +
+            '<th class="th-num" style="width:28px">V/P</th><th class="th-num">Skóre</th>' +
+            '</tr></thead><tbody>' + matchTableRows + '</tbody></table></div>';
 
         document.body.classList.add('modal-open');
         modal.style.display = 'block';
