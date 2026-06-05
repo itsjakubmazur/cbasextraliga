@@ -1002,7 +1002,6 @@ body.dark-mode .champions-team {
 
     .bracket-wrapper {
         min-width: max-content;
-        overflow-x: visible;
     }
 
     .bracket-round {
@@ -1662,6 +1661,12 @@ body {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
+}
+
+/* Playoff/standings card needs horizontal scroll for bracket */
+#tabulkaPlayoffContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Override the old white card classes to work with app-card */
