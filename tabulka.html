@@ -286,11 +286,25 @@
         .form-dot-l { background: var(--loss); }
         .form-dot-d { background: var(--muted); }
 
+        .standings-ratio-cell {
+            padding: 9px 6px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text2);
+            white-space: nowrap;
+        }
+
         .standings-forma-cell {
             padding: 9px 8px;
             text-align: center;
             white-space: nowrap;
         }
+
+        .th-ratio { width: 58px; text-align: center; }
+        .th-forma { width: 80px; text-align: center; }
+
+        .standings-divider-mid td { border-top: 1px dashed var(--border); }
 
         /* ── TABLE FOOTER ─────────────────────────────────────── */
         .table-footer {
@@ -644,6 +658,7 @@
                         <tr>
                             <th class="th-pos">#</th>
                             <th class="th-name" style="text-align:left">Tým</th>
+                            <th class="th-num" title="Utkání">U</th>
                             <th class="th-num" title="Vítězství">V</th>
                             <th class="th-num" title="Remízy">R</th>
                             <th class="th-num" title="Porážky">P</th>
@@ -868,6 +883,7 @@
                         '<span class="zone-dot zone-dot-' + zoneDot + '"></span>' +
                         escapeHtml(tym) +
                     '</td>' +
+                    '<td class="standings-num-cell">'             + t.utkani  + '</td>' +
                     '<td class="standings-num-cell text-win">'    + t.vyhry   + '</td>' +
                     '<td class="standings-num-cell">'             + t.remizy  + '</td>' +
                     '<td class="standings-num-cell text-loss">'   + t.prohry  + '</td>' +
@@ -881,9 +897,9 @@
 
                 // Zone dividers
                 if (!jePrvniLiga && idx === 1) {
-                    rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="10"><span>↓ Čtvrtfinále</span></td></tr>');
+                    rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="11"><span>↓ Čtvrtfinále</span></td></tr>');
                 } else if (!jePrvniLiga && idx === 6) {
-                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="10"><span>↓ Baráž</span></td></tr>');
+                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="11"><span>↓ Baráž</span></td></tr>');
                 } else if (jePrvniLiga && idx === 3) {
                     rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="11"></td></tr>');
                 } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {

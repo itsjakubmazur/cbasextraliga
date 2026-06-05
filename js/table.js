@@ -19,8 +19,8 @@ const Table = {
 
         const posClass = (idx) => ['pos-gold', 'pos-silver', 'pos-bronze'][idx] || '';
 
-        // Number of columns depends on whether draws are possible (1. liga)
-        const colspan = jePrvniLiga ? 11 : 10;
+        // Number of columns: base 11 (extraliga) or 12 (1. liga with R)
+        const colspan = jePrvniLiga ? 12 : 11;
 
         const rows = [];
         tymy.forEach((tym, idx) => {
@@ -43,6 +43,7 @@ const Table = {
                 '<span class="team-name-full">' + Statistics.escapeHtml(tym) + '</span>' +
                 '<span class="team-name-short">' + Statistics.escapeHtml(Statistics.zkracenyNazev(tym)) + '</span>' +
                 '</td>' +
+                '<td class="standings-num-cell">' + t.utkani + '</td>' +
                 '<td class="standings-num-cell text-win">' + t.vyhry + '</td>' +
                 remizaCol +
                 '<td class="standings-num-cell text-loss">' + t.prohry + '</td>' +
@@ -85,6 +86,7 @@ const Table = {
             '<thead><tr class="standings-thead">' +
             '<th class="th-pos">#</th>' +
             '<th class="th-name">Tým</th>' +
+            '<th class="th-num" title="Utkání">U</th>' +
             '<th class="th-num" title="Vítězství">V</th>' +
             remizaTh +
             '<th class="th-num" title="Porážky">P</th>' +
