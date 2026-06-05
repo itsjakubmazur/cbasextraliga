@@ -56,8 +56,34 @@ body.dark-mode {
 body {
     font-family: 'Telegraf', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     transition: background-color 0.3s, color 0.3s;
-    background: var(--bg);
+    background: linear-gradient(145deg, #eaecf4 0%, #e8ecf5 40%, #eceef6 100%);
+    background-attachment: fixed;
     color: var(--text);
+}
+
+/* Soft brand-color blobs — give glass cards something to blur through */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        radial-gradient(ellipse at 12% 18%, rgba(215,20,26,0.07) 0%, transparent 48%),
+        radial-gradient(ellipse at 88% 78%, rgba(17,69,126,0.08) 0%, transparent 48%),
+        radial-gradient(ellipse at 65% 12%, rgba(37,99,235,0.05) 0%, transparent 38%);
+    pointer-events: none;
+}
+
+body.dark-mode {
+    background: linear-gradient(145deg, #0b0d14 0%, #0d0f18 50%, #0c0e15 100%);
+    background-attachment: fixed;
+}
+
+body.dark-mode::before {
+    background:
+        radial-gradient(ellipse at 12% 18%, rgba(215,20,26,0.13) 0%, transparent 48%),
+        radial-gradient(ellipse at 88% 78%, rgba(17,69,126,0.16) 0%, transparent 48%),
+        radial-gradient(ellipse at 65% 12%, rgba(37,99,235,0.08) 0%, transparent 38%);
 }
 
 .kolo-checkbox {
@@ -1455,9 +1481,11 @@ body {
     justify-content: space-between;
     padding: 0 20px;
     height: 58px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 1px 12px rgba(0,0,0,0.07);
 }
 
 .app-logo {
@@ -1551,8 +1579,10 @@ body {
 .app-sidebar {
     width: 220px;
     flex-shrink: 0;
-    border-right: 1px solid var(--border);
-    background: var(--surface);
+    border-right: 1px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.62);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     padding: 16px 12px;
     position: sticky;
     top: 58px;
@@ -1657,8 +1687,11 @@ body {
 
 /* ── SECTION CARDS ────────────────────────────────────────────── */
 .app-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.62);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
     border-radius: var(--radius);
     overflow: hidden;
 }
@@ -1802,6 +1835,9 @@ body.dark-mode .hero-champion-name { color: #f59e0b; }
     .app-sidebar {
         width: 100%;
         height: auto;
+        background: rgba(255,255,255,0.82);
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.5);
         position: sticky;
         top: 58px;
         z-index: 50;
@@ -1904,10 +1940,18 @@ body.dark-mode .hero-champion-name { color: #f59e0b; }
 
 /* ── DARK MODE tweaks for new layout ─────────────────────────── */
 body.dark-mode .app-topbar {
-    box-shadow: 0 1px 8px rgba(0,0,0,0.3);
+    background: rgba(11,13,20,0.88);
+    border-bottom-color: rgba(255,255,255,0.07);
+    box-shadow: 0 1px 12px rgba(0,0,0,0.4);
 }
 body.dark-mode .app-sidebar {
-    background: var(--surface);
+    background: rgba(14,16,24,0.78);
+    border-right-color: rgba(255,255,255,0.06);
+}
+body.dark-mode .app-card {
+    background: rgba(22,24,33,0.78);
+    border-color: rgba(255,255,255,0.07);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 body.dark-mode .standings-thead tr {
     background: var(--cba-red);
