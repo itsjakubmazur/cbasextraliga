@@ -2,38 +2,105 @@ const Table = {
     render(aktualni_soutez) {
         const tabulkaData = Statistics.vypocitejTabulku(aktualni_soutez);
         const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
-        
         const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
-        const legendaInfo = jePrvniLiga
-            ? '<div class="flex flex-wrap gap-3 mt-2 text-xs md:text-sm"><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> 1.–4. Play-off</span><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-50 border border-red-200"></span> 9. Kvalifikace o 1. ligu</span></div>'
-            : '<div class="flex flex-wrap gap-3 mt-2 text-xs md:text-sm"><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-100 border border-green-300"></span> 1.–2. Přímý postup do Final Four</span><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></span> 3.–6. Čtvrtfinále</span><span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-50 border border-red-200"></span> 8. Baráž</span></div>';
-        const bodovaniInfo = jePrvniLiga
-            ? '<p class="font-semibold mb-2">Bodování 1. ligy:</p><ul class="list-disc list-inside space-y-1 text-xs md:text-sm"><li>Výhra (8:0, 7:1, 6:2, 5:3) = 3 body</li><li>Remíza (4:4) = 2 body pro oba týmy</li><li>Prohra (3:5, 2:6, 1:7, 0:8) = 1 bod</li></ul>'
-            : '<p class="font-semibold mb-2">Bodování extraligy:</p><ul class="list-disc list-inside space-y-1 text-xs md:text-sm"><li>Výhra 7:0, 6:1 = 3 body</li><li>Výhra 5:2, 4:3 = 2 body</li><li>Prohra 3:4, 2:5 = 1 bod</li><li>Prohra 1:6, 0:7 = 0 bodů</li></ul>';
-        
-        const rows = tymy.map((tym, idx) => {
-            const t = tabulkaData[tym];
-            const rozdilZapasy = t.zapasyV - t.zapasyP;
-            const rozdilSety = t.setyV - t.setyP;
-            const rozdilBody = t.bodyV - t.bodyP;
-            
-            let poziceClass = '';
+
+        const getZone = (idx) => {
             if (jePrvniLiga) {
-                if (idx <= 3) poziceClass = 'bg-green-100 font-semibold';
-                else if (idx === 8) poziceClass = 'bg-red-50';
+                if (idx <= 3) return 'playoff';
+                if (idx === tymy.length - 1) return 'relegation';
+                return '';
             } else {
-                if (idx <= 1) poziceClass = 'bg-green-100 font-semibold';
-                else if (idx >= 2 && idx <= 5) poziceClass = 'bg-blue-100';
-                else if (idx === 7) poziceClass = 'bg-red-50';
+                if (idx <= 1) return 'final-four';
+                if (idx <= 5) return 'playoff';
+                if (idx === 7) return 'relegation';
+                return '';
             }
-            
-            const sipkaZapasy = rozdilZapasy > 0 ? '↗' : (rozdilZapasy < 0 ? '↘' : '→');
-            const sipkaSety = rozdilSety > 0 ? '↗' : (rozdilSety < 0 ? '↘' : '→');
-            const sipkaBody = rozdilBody > 0 ? '↗' : (rozdilBody < 0 ? '↘' : '→');
-            
-            return '<tr class="border-b border-gray-200 hover:bg-green-50"><td class="p-2 text-center font-bold ' + poziceClass + '">' + (idx + 1) + '.</td><td class="p-2 font-semibold ' + poziceClass + ' clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' + Statistics.escapeHtml(tym) + '</td><td class="p-2 text-center">' + t.utkani + '</td><td class="p-2 text-center text-green-600 font-semibold">' + t.vyhry + '</td><td class="p-2 text-center text-yellow-600 font-semibold">' + t.remizy + '</td><td class="p-2 text-center text-red-600 font-semibold">' + t.prohry + '</td><td class="p-2 text-center"><span class="font-semibold">' + t.zapasyV + ':' + t.zapasyP + '</span> <span class="text-xs ' + (rozdilZapasy >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaZapasy + (rozdilZapasy >= 0 ? '+' : '') + rozdilZapasy + '</span></td><td class="p-2 text-center"><span class="font-semibold">' + t.setyV + ':' + t.setyP + '</span> <span class="text-xs ' + (rozdilSety >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaSety + (rozdilSety >= 0 ? '+' : '') + rozdilSety + '</span></td><td class="p-2 text-center"><span class="font-semibold">' + t.bodyV + ':' + t.bodyP + '</span> <span class="text-xs ' + (rozdilBody >= 0 ? 'text-green-600' : 'text-red-600') + '">' + sipkaBody + (rozdilBody >= 0 ? '+' : '') + rozdilBody + '</span></td><td class="p-2 text-center font-bold text-base md:text-lg text-blue-700">' + t.body + '</td></tr>';
-        }).join('');
-        
-        document.getElementById('tabulkaObsah').innerHTML = '<div class="overflow-x-auto"><table class="w-full text-xs md:text-sm"><thead><tr class="text-white" style="background-color:#ed1c24"><th class="text-center p-2 md:p-3 font-semibold">#</th><th class="text-left p-2 md:p-3 font-semibold">Tým</th><th class="text-center p-2 md:p-3 font-semibold">U</th><th class="text-center p-2 md:p-3 font-semibold">V</th><th class="text-center p-2 md:p-3 font-semibold">R</th><th class="text-center p-2 md:p-3 font-semibold">P</th><th class="text-center p-2 md:p-3 font-semibold">Zápasy</th><th class="text-center p-2 md:p-3 font-semibold">Sety</th><th class="text-center p-2 md:p-3 font-semibold">Body</th><th class="text-center p-2 md:p-3 font-semibold font-bold">Bodů</th></tr></thead><tbody>' + rows + '</tbody></table></div><div class="mt-4 text-xs md:text-sm text-gray-600">' + legendaInfo + '<div class="mt-3">' + bodovaniInfo + '</div></div>';
+        };
+
+        const posClass = (idx) => ['pos-gold', 'pos-silver', 'pos-bronze'][idx] || '';
+
+        // Number of columns: base 11 (extraliga) or 12 (1. liga with R)
+        const colspan = jePrvniLiga ? 12 : 11;
+
+        const rows = [];
+        tymy.forEach((tym, idx) => {
+            const t = tabulkaData[tym];
+            const zone = getZone(idx);
+            const pc = posClass(idx);
+
+            const forma = Statistics.vypocitejFormuTymu(tym, aktualni_soutez);
+            const formaDots = forma.map(r => '<span class="form-dot form-dot-' + r + '"></span>').join('');
+
+            const remizaCol = jePrvniLiga
+                ? '<td class="standings-num-cell">' + t.remizy + '</td>'
+                : '';
+
+            rows.push(
+                '<tr class="standings-row" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' +
+                '<td class="standings-pos-cell"><span class="standings-pos-num ' + pc + '">' + (idx + 1) + '</span></td>' +
+                '<td class="standings-name-cell">' +
+                '<span class="zone-dot zone-dot-' + (zone || 'none') + '"></span>' +
+                '<span class="team-name-full">' + Statistics.escapeHtml(tym) + '</span>' +
+                '<span class="team-name-short">' + Statistics.escapeHtml(Statistics.zkracenyNazev(tym)) + '</span>' +
+                '</td>' +
+                '<td class="standings-num-cell">' + t.utkani + '</td>' +
+                '<td class="standings-num-cell text-win">' + t.vyhry + '</td>' +
+                remizaCol +
+                '<td class="standings-num-cell text-loss">' + t.prohry + '</td>' +
+                '<td class="standings-ratio-cell">' + t.zapasyV + ':' + t.zapasyP + '</td>' +
+                '<td class="standings-ratio-cell standings-col-sety">' + t.setyV + ':' + t.setyP + '</td>' +
+                '<td class="standings-ratio-cell standings-col-mice">' + t.bodyV + ':' + t.bodyP + '</td>' +
+                '<td class="standings-forma-cell"><span class="form-dots">' + formaDots + '</span></td>' +
+                '<td class="standings-pts-cell">' + t.body + '</td>' +
+                '</tr>'
+            );
+
+            // Zone dividers (inserted after current row)
+            if (!jePrvniLiga && idx === 1) {
+                rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="' + colspan + '"><span>↓ Čtvrtfinále</span></td></tr>');
+            } else if (!jePrvniLiga && idx === 6) {
+                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="' + colspan + '"><span>↓ Baráž</span></td></tr>');
+            } else if (jePrvniLiga && idx === 3) {
+                rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="' + colspan + '"></td></tr>');
+            } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {
+                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="' + colspan + '"><span>↓ Kvalifikace</span></td></tr>');
+            }
+        });
+
+        const legendaInfo = jePrvniLiga
+            ? '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 1.–4. Play-off</span>' +
+              '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> Posl. Kvalifikace o 1. ligu</span>'
+            : '<span class="legenda-item"><span class="legenda-dot legenda-final-four"></span> 1.–2. Přímý postup do Final Four</span>' +
+              '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 3.–6. Čtvrtfinále</span>' +
+              '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 8. Baráž</span>';
+
+        const bodovaniInfo = jePrvniLiga
+            ? '<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b'
+            : '<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b';
+
+        const remizaTh = jePrvniLiga ? '<th class="th-num" title="Remízy">R</th>' : '';
+
+        document.getElementById('tabulkaObsah').innerHTML =
+            '<div class="overflow-x-auto">' +
+            '<table class="standings-table">' +
+            '<thead><tr class="standings-thead">' +
+            '<th class="th-pos">#</th>' +
+            '<th class="th-name">Tým</th>' +
+            '<th class="th-num" title="Utkání">U</th>' +
+            '<th class="th-num" title="Vítězství">V</th>' +
+            remizaTh +
+            '<th class="th-num" title="Porážky">P</th>' +
+            '<th class="th-ratio" title="Poměr dílčích zápasů">Záp.</th>' +
+            '<th class="th-ratio standings-col-sety" title="Poměr setů">Sety</th>' +
+            '<th class="th-ratio standings-col-mice" title="Poměr míčů">Míče</th>' +
+            '<th class="th-forma" title="Posledních 5 zápasů">Forma</th>' +
+            '<th class="th-pts">Body</th>' +
+            '</tr></thead>' +
+            '<tbody>' + rows.join('') + '</tbody>' +
+            '</table></div>' +
+            '<div class="table-footer">' +
+            '<div class="standings-legenda">' + legendaInfo + '</div>' +
+            '<div class="table-bodovani">' + bodovaniInfo + '</div>' +
+            '</div>';
     }
 };

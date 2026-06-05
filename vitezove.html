@@ -4,59 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Historie vítězů nejvyšší badmintonové ligy - Česká republika a Československo.">
-    <meta name="theme-color" content="#d93831">
-    <title>Historie vítězů nejvyšší ligy - Czech Badminton</title>
+    <meta name="theme-color" content="#D7141A">
+    <title>Historie vítězů - Czech Badminton</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/icons.js"></script>
     <link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="min-h-screen p-2 md:p-4" style="background: linear-gradient(to bottom right, #d93831, #a82820);">
-    <div class="max-w-7xl mx-auto">
-        <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">🏸 Neoficiální ligové tabulky Czech Badminton</h1>
-                    <p class="text-sm md:text-base text-gray-600">Přehled zápasů, tabulky a statistiky hráčů</p>
-                </div>
-                <button onclick="toggleDarkMode()" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
-                    <span id="darkModeIcon">🌙</span> <span id="darkModeText">Dark Mode</span>
-                </button>
+<body>
+
+    <header class="app-topbar">
+        <div class="app-logo">
+            <div class="app-logo-icon app-logo-icon-svg">
+                <img src="css/BAD extraliga official.png" alt="Czech Badminton" style="display:block;height:38px;width:auto;max-height:38px">
             </div>
-
-            <div class="mt-4 md:mt-6 flex flex-wrap gap-2">
-                <a href="index.html" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base hover:bg-gray-300 transition-colors">
-                    🏸 Ligové tabulky
-                </a>
-                <span class="soutez-tab active px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base">
-                    🏆 Historie vítězů
-                </span>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
-            <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4">🏆 Historie vítězů nejvyšší ligy</h2>
-
-            <div class="mb-6" id="topTymy">
-                <p class="text-gray-500 text-center py-4">Načítání dat...</p>
-            </div>
-
-            <div class="mb-6">
-                <h3 class="text-base md:text-lg font-bold text-gray-700 mb-3 pb-2 border-b-2 border-gray-200">
-                    Česká republika (od sezóny 1992/93)
-                </h3>
-                <div id="vitezoveCR" class="vitezove-list"></div>
-            </div>
-
             <div>
-                <h3 class="text-base md:text-lg font-bold text-gray-700 mb-3 pb-2 border-b-2 border-gray-200">
-                    Československo (do sezóny 1991/92)
-                </h3>
-                <div id="vitezoveCSR" class="vitezove-list"></div>
+                <span class="app-logo-text">Czech Badminton</span>
+                <span class="app-logo-sub">Neoficiální ligové statistiky</span>
             </div>
         </div>
+        <div class="app-topbar-right">
+            <button onclick="toggleDarkMode()" class="app-icon-btn" id="darkModeBtn" title="Přepnout téma">
+                <span id="darkModeIcon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-layout">
+
+        <aside class="app-sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-section-label">Navigace</div>
+                <div class="sidebar-nav">
+                    <a href="index.html" class="sidebar-nav-item sidebar-nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><circle cx="12" cy="20" r="2"/><path d="M12 18V9"/><path d="m8 5 4-3 4 3"/><path d="m6 8 6-2 6 2"/><path d="m7 11 5-1 5 1"/></svg> Ligové tabulky</a>
+                    <a href="index.html#soupisky" class="sidebar-nav-item sidebar-nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Soupisky</a>
+                    <span class="sidebar-nav-item active"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Historie vítězů</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="app-main">
+
+            <!-- Top teams summary card -->
+            <div class="app-card">
+                <div class="app-card-header">
+                    <h2 class="app-card-title"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Historie vítězů nejvyšší ligy</h2>
+                </div>
+                <div style="padding: 14px 16px; border-bottom: 1px solid var(--border);">
+                    <div style="font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px;">Nejúspěšnější týmy</div>
+                    <div id="topTymy" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                        <span style="color: var(--text2); font-size: 0.8rem;">Načítání...</span>
+                    </div>
+                </div>
+                <div style="padding: 14px 16px; border-bottom: 1px solid var(--border);">
+                    <div style="font-size: 0.75rem; font-weight: 700; color: var(--text2); margin-bottom: 10px;">🇨🇿 Česká republika <span style="font-weight: 400; color: var(--muted);">(od sezóny 1992/93)</span></div>
+                    <div id="vitezoveCR" class="vitezove-list"></div>
+                </div>
+                <div style="padding: 14px 16px;">
+                    <div style="font-size: 0.75rem; font-weight: 700; color: var(--text2); margin-bottom: 10px;">🇨🇸 Československo <span style="font-weight: 400; color: var(--muted);">(do sezóny 1991/92)</span></div>
+                    <div id="vitezoveCSR" class="vitezove-list"></div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
     <script>
+        function escapeHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
         function deriveAktualniVitez(data) {
             const rocnik = data.rocnik;
             if (!rocnik) return null;
@@ -92,22 +111,18 @@
             try {
                 const response = await fetch('badminton-data.json');
                 const data = await response.json();
-
                 const historickeKlice = new Set(Object.keys(data.historicke_rocniky || {}));
                 const vitezove = [...(data.vitezove || [])];
                 const aktualni = deriveAktualniVitez(data);
                 if (aktualni) vitezove.unshift(aktualni);
                 render(vitezove, historickeKlice);
             } catch (e) {
-                console.error('Chyba načítání:', e);
-                document.getElementById('topTymy').innerHTML =
-                    '<p class="text-red-500 text-center py-4">Nepodařilo se načíst data.</p>';
+                document.getElementById('topTymy').innerHTML = '<span style="color:var(--loss)">Nepodařilo se načíst data.</span>';
             }
 
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
-                document.getElementById('darkModeIcon').textContent = '☀️';
-                document.getElementById('darkModeText').textContent = 'Light Mode';
+                document.getElementById('darkModeIcon').innerHTML = Icons.sun();
             }
         }
 
@@ -115,82 +130,51 @@
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
             localStorage.setItem('darkMode', isDark);
-            document.getElementById('darkModeIcon').textContent = isDark ? '☀️' : '🌙';
-            document.getElementById('darkModeText').textContent = isDark ? 'Light Mode' : 'Dark Mode';
-        }
-
-        function escapeHtml(s) {
-            const d = document.createElement('div');
-            d.textContent = s;
-            return d.innerHTML;
+            document.getElementById('darkModeIcon').innerHTML = isDark ? Icons.sun() : Icons.moon();
         }
 
         function render(vitezove, historickeKlice) {
-            const sorted = [...vitezove].sort((a, b) => {
-                const rokA = parseInt(a.sezona) || 0;
-                const rokB = parseInt(b.sezona) || 0;
-                return rokB - rokA;
-            });
-
-            // Split: ČR = 1992/93+, ČSR = 1991/92 and earlier
+            const sorted = [...vitezove].sort((a, b) => (parseInt(b.sezona) || 0) - (parseInt(a.sezona) || 0));
             const cr = sorted.filter(v => parseInt(v.sezona) >= 1992);
             const csr = sorted.filter(v => parseInt(v.sezona) < 1992);
 
-            // Count titles per team (exclude non-played seasons)
             const tituly = {};
             sorted.forEach(v => {
                 if (v.tym.toLowerCase().includes('nehráno')) return;
                 tituly[v.tym] = (tituly[v.tym] || 0) + 1;
             });
 
-            const topTymy = Object.entries(tituly)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5);
+            const topTymy = Object.entries(tituly).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const pillColors = ['var(--gold)', 'var(--text2)', '#c2410c', 'var(--zone-playoff)', 'var(--zone-playoff)'];
 
-            const medalColors = [
-                'bg-yellow-100 border-yellow-400 text-yellow-800',
-                'bg-gray-100 border-gray-400 text-gray-700',
-                'bg-orange-100 border-orange-400 text-orange-800',
-                'bg-blue-50 border-blue-300 text-blue-700',
-                'bg-blue-50 border-blue-300 text-blue-700'
-            ];
-
-            const topHtml = topTymy.map((t, i) =>
-                '<div class="inline-flex items-center gap-2 px-3 py-1.5 border rounded-full text-xs md:text-sm font-semibold ' + medalColors[i] + '">' +
-                    '<span>' + escapeHtml(t[0]) + '</span>' +
-                    '<span class="font-bold">' + t[1] + 'x</span>' +
-                '</div>'
-            ).join(' ');
-
-            document.getElementById('topTymy').innerHTML =
-                '<div class="text-sm font-semibold text-gray-600 mb-2">Nejúspěšnější týmy:</div>' +
-                '<div class="flex flex-wrap gap-2">' + topHtml + '</div>';
+            document.getElementById('topTymy').innerHTML = topTymy.map((t, i) =>
+                '<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);font-size:0.75rem;font-weight:600;">' +
+                '<span style="color:' + pillColors[i] + ';font-weight:800;">' + t[1] + 'x</span>' +
+                escapeHtml(t[0]) +
+                '</span>'
+            ).join('');
 
             document.getElementById('vitezoveCR').innerHTML = renderList(cr, historickeKlice);
             document.getElementById('vitezoveCSR').innerHTML = renderList(csr, historickeKlice);
         }
 
         function renderList(items, historickeKlice) {
-            if (items.length === 0) {
-                return '<p class="text-gray-500 text-center py-4">Žádná data.</p>';
-            }
-
+            if (items.length === 0) return '<p style="color:var(--text2);font-size:0.8rem;padding:8px 0;">Žádná data.</p>';
             return items.map((v, i) => {
-                const isCurrent = i === 0;
+                const isCurrent = i === 0 && parseInt(v.sezona) >= 1992;
                 const klicDash = v.sezona.replace('/', '-');
                 const klicSlash = v.sezona.replace('-', '/');
                 const historickyKlic = historickeKlice.has(klicDash) ? klicDash
-                    : historickeKlice.has(klicSlash) ? klicSlash
-                    : null;
+                    : historickeKlice.has(klicSlash) ? klicSlash : null;
 
                 const seasonHtml = historickyKlic
                     ? '<a class="champions-season champions-season-link" href="index.html#' + historickyKlic + '/extraliga">' + escapeHtml(v.sezona) + '</a>'
-                    : '<div class="champions-season">' + escapeHtml(v.sezona) + '</div>';
+                    : '<span class="champions-season">' + escapeHtml(v.sezona) + '</span>';
 
                 return '<div class="champions-entry ' + (isCurrent ? 'champions-entry-current' : '') + '">' +
                     seasonHtml +
                     '<div class="champions-team">' + escapeHtml(v.tym) + '</div>' +
-                '</div>';
+                    '</div>';
             }).join('');
         }
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Neoficiální ligové tabulky Czech Badminton - přehled zápasů, tabulky, statistiky hráčů pro Extraligu a 1. ligu.">
-    <meta name="theme-color" content="#d93831">
+    <meta name="theme-color" content="#D7141A">
     <meta property="og:title" content="Czech Badminton - ligové statistiky">
     <meta property="og:description" content="Neoficiální ligové tabulky, výsledky zápasů a statistiky hráčů českého badmintonu.">
     <meta property="og:type" content="website">
@@ -13,131 +13,170 @@
     <link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="min-h-screen p-2 md:p-4" style="background: linear-gradient(to bottom right, #d93831, #a82820);">
-    <div class="max-w-7xl mx-auto">
-        <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">🏸 Neoficiální ligové tabulky Czech Badminton</h1>
-                    <p class="text-sm md:text-base text-gray-600">Přehled zápasů, tabulky a statistiky hráčů</p>
-                    <p class="text-xs md:text-sm text-blue-600 mt-2" id="aktualizaceInfo">Načítání dat...</p>
-                </div>
-                <button onclick="App.toggleDarkMode()" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
-                    <span id="darkModeIcon">🌙</span> <span id="darkModeText">Dark Mode</span>
-                </button>
-            </div>
+<body>
 
-            <!-- Season selector – shown only when historical data is available -->
-            <div id="rocnikSelector" class="mt-3 pt-3 border-t border-gray-100" style="display: none;">
-                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide mr-2">Ročník:</span>
-                <div id="rocnikButtons" class="inline-flex flex-wrap gap-1.5 mt-1"></div>
+    <header class="app-topbar">
+        <div class="app-logo">
+            <div class="app-logo-icon app-logo-icon-svg">
+                <img src="css/BAD extraliga official.png" alt="Czech Badminton" style="display:block;height:38px;width:auto;max-height:38px">
             </div>
-
-            <!-- League tabs – hidden in historical mode -->
-            <div id="soutezTabs" class="mt-4 md:mt-6 flex flex-wrap gap-2">
-                <button onclick="App.zmenitSoutez('extraliga')" id="tab-extraliga" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base">
-                    🏆 Extraliga
-                </button>
-                <button onclick="App.zmenitSoutez('prvni-liga-vychod')" id="tab-prvni-liga-vychod" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base">
-                    🥈 1. liga - Východ
-                </button>
-                <button onclick="App.zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base">
-                    🥈 1. liga - Západ
-                </button>
-                <a href="vitezove.html" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base hover:bg-gray-300 transition-colors">
-                    🏆 Historie vítězů
-                </a>
-            </div>
-
-            <!-- Historical navigation – shown instead of league tabs in historical mode -->
-            <div id="historickyNav" class="mt-4 md:mt-6 flex flex-wrap gap-2" style="display: none;">
-                <button onclick="App.zmenitHistorickyPohled('extraliga')" id="hNav-extraliga" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base">
-                    🏆 Extraliga play-off
-                </button>
-                <button onclick="App.zmenitHistorickyPohled('liga')" id="hNav-liga" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base">
-                    🥈 1. liga play-off
-                </button>
-                <button onclick="App.zmenitHistorickyPohled('baraze')" id="hNav-baraze" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base">
-                    ⚔️ Baráž
-                </button>
-                <a href="vitezove.html" class="soutez-tab px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 text-sm md:text-base hover:bg-gray-300 transition-colors">
-                    🏆 Historie vítězů
-                </a>
+            <div>
+                <span class="app-logo-text">Czech Badminton</span>
+                <span class="app-logo-sub">Neoficiální ligové statistiky</span>
             </div>
         </div>
+        <div class="app-topbar-right">
+            <span class="app-season-badge" id="aktualizaceInfo">Načítání...</span>
+            <button onclick="App.toggleDarkMode()" class="app-icon-btn" id="darkModeBtn" title="Přepnout téma">
+                <span id="darkModeIcon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+            </button>
+        </div>
+    </header>
 
-        <!-- Historical season content (bracket + optional playoff stats) -->
-        <div id="historickyContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                <h2 class="text-lg md:text-xl font-bold text-gray-800" id="historickyNadpis">Play-off</h2>
+    <div class="app-layout">
+
+        <aside class="app-sidebar">
+
+            <div id="rocnikSelector" class="sidebar-section" style="display: none;">
+                <div class="sidebar-section-label">Ročník</div>
+                <div id="rocnikButtons" class="sidebar-rocnik-btns"></div>
             </div>
-            <div id="historickyPavoucek"></div>
-        </div>
 
-        <!-- Historical season: playoff player statistics -->
-        <div id="historickyStatContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
-            <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="App.toggleSekce('historickyStatObsah')">
-                <h2 class="text-lg md:text-xl font-bold text-gray-800">📊 Statistiky play-off</h2>
-                <span id="historickyStatObsahToggle" class="text-xl md:text-2xl">▼</span>
+            <div id="soutezTabs" class="sidebar-section sidebar-nav">
+                <div class="sidebar-section-label">Soutěže</div>
+                <button onclick="App.zmenitSoutez('extraliga')" id="tab-extraliga" class="soutez-tab sidebar-nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Extraliga
+                </button>
+                <button onclick="App.zmenitSoutez('prvni-liga-vychod')" id="tab-prvni-liga-vychod" class="soutez-tab sidebar-nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2"/><path d="m13 12 5.88-9.8"/><path d="M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></svg> 1. liga – Východ
+                </button>
+                <button onclick="App.zmenitSoutez('prvni-liga-zapad')" id="tab-prvni-liga-zapad" class="soutez-tab sidebar-nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2"/><path d="m13 12 5.88-9.8"/><path d="M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></svg> 1. liga – Západ
+                </button>
             </div>
-            <div id="historickyStatObsah"></div>
-        </div>
 
-        <!-- Current season: quick filters -->
-        <div id="rychleFiltry" class="bg-white rounded-xl shadow-lg p-3 md:p-4 mb-4 md:mb-6" style="display: none;"></div>
+            <div id="historickyNav" class="sidebar-section sidebar-nav" style="display: none;">
+                <div class="sidebar-section-label">Historický ročník</div>
+                <button onclick="App.zmenitHistorickyPohled('extraliga')" id="hNav-extraliga" class="soutez-tab sidebar-nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Extraliga play-off
+                </button>
+                <button onclick="App.zmenitHistorickyPohled('liga')" id="hNav-liga" class="soutez-tab sidebar-nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2"/><path d="m13 12 5.88-9.8"/><path d="M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></svg> 1. liga play-off
+                </button>
+                <button onclick="App.zmenitHistorickyPohled('baraze')" id="hNav-baraze" class="soutez-tab sidebar-nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/></svg> Baráž
+                </button>
+            </div>
 
-        <!-- Current season: top 3 players -->
-        <div id="hracMesiceContainer" class="bg-white rounded-xl shadow-lg p-3 md:p-4 mb-4 md:mb-6" style="display: none;">
-        </div>
-
-        <!-- Current season: table + playoff + baraze -->
-        <div id="tabulkaPlayoffContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                <h2 class="text-lg md:text-xl font-bold text-gray-800"><span id="tabulkaPlayoffIcon">🏆</span> <span id="tabulkaPlayoffTitle">Tabulka</span> - <span id="tabulkaSoutez"></span></h2>
-                <div class="view-toggle" id="viewToggle">
-                    <button class="view-toggle-btn active" id="viewToggleZakladni" onclick="App.prepnoutPohled('zakladni')">Základní část</button>
-                    <button class="view-toggle-btn" id="viewTogglePlayoff" onclick="App.prepnoutPohled('playoff')">Play-off</button>
-                    <button class="view-toggle-btn" id="viewToggleBaraze" onclick="App.prepnoutPohled('baraze')" style="display: none;">Baráž</button>
+            <!-- Přehledy shortcuts (desktop only) -->
+            <div class="sidebar-section sidebar-prehledy">
+                <div class="sidebar-section-label">Přehledy</div>
+                <div class="sidebar-nav">
+                    <button onclick="App.zobrazitTymy()" class="sidebar-nav-item" id="nav-tymy">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        Soupisky
+                    </button>
+                    <button onclick="App.bottomNavClick('vysledky')" class="sidebar-nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+                        Výsledky
+                    </button>
+                    <button onclick="App.bottomNavClick('hrac')" class="sidebar-nav-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Hráčské statistiky
+                    </button>
+                    <a href="vitezove.html" class="sidebar-nav-item sidebar-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+                        Historie vítězů
+                    </a>
                 </div>
             </div>
-            <div id="tabulkaObsah"></div>
-            <div id="playoffObsah" style="display: none;"></div>
-            <div id="barazeObsah" style="display: none;"></div>
-        </div>
 
-        <div id="zapasyContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
-            <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="App.toggleSekce('zapasyObsah')">
-                <h2 class="text-lg md:text-xl font-bold text-gray-800">📋 Výsledky (<span id="pocetZapasu">0</span>)</h2>
-                <span id="zapasyToggle" class="text-xl md:text-2xl">▶</span>
+        </aside>
+
+        <main class="app-main">
+
+            <div id="heroContainer" style="display: none;"></div>
+
+            <div id="tymyViewContainer" style="display:none;">
+                <div class="app-card">
+                    <div class="app-card-header">
+                        <h2 class="app-card-title" id="tymyViewNadpis">Soupisky</h2>
+                    </div>
+                    <div id="tymyViewGrid" class="teams-grid" style="padding: 12px 16px;"></div>
+                </div>
             </div>
-            <div id="zapasyObsah" style="display: none;"></div>
-        </div>
 
-        <div id="statistikyContainer" class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-6" style="display: none;">
-            <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="App.toggleSekce('statistikyObsah')">
-                <h2 class="text-lg md:text-xl font-bold text-gray-800">📊 Statistiky hráčů</h2>
-                <span id="statistikyToggle" class="text-xl md:text-2xl">▼</span>
+            <div id="historickyContainer" class="app-card" style="display: none;">
+                <div class="app-card-header">
+                    <h2 class="app-card-title" id="historickyNadpis">Play-off</h2>
+                </div>
+                <div style="padding: 16px;" id="historickyPavoucek"></div>
             </div>
-            <div id="statistikyObsah"></div>
-        </div>
 
-        <div id="prazdnyStav" class="bg-white rounded-xl shadow-lg p-8 md:p-12 text-center">
-            <div class="text-5xl md:text-6xl mb-4">🏸</div>
-            <h3 class="text-lg md:text-xl font-semibold text-gray-700 mb-2">Zatím žádné zápasy</h3>
-            <p class="text-sm md:text-base text-gray-500">Data se načítají...</p>
-        </div>
+            <div id="historickyStatContainer" class="app-card" style="display: none;">
+                <div class="app-card-header collapsible" onclick="App.toggleSekce('historickyStatObsah')">
+                    <h2 class="app-card-title">Statistiky play-off</h2>
+                    <span id="historickyStatObsahToggle" class="app-toggle-icon">▼</span>
+                </div>
+                <div id="historickyStatObsah" style="padding: 16px;"></div>
+            </div>
+
+            <div id="tabulkaPlayoffContainer" class="app-card" style="display: none;">
+                <div class="app-card-header">
+                    <h2 class="app-card-title">
+                        <span id="tabulkaPlayoffTitle">Tabulka</span>
+                        — <span id="tabulkaSoutez"></span>
+                    </h2>
+                    <div class="view-toggle" id="viewToggle">
+                        <button class="view-toggle-btn active" id="viewToggleZakladni" onclick="App.prepnoutPohled('zakladni')">Základní část</button>
+                        <button class="view-toggle-btn" id="viewTogglePlayoff" onclick="App.prepnoutPohled('playoff')">Play-off</button>
+                        <button class="view-toggle-btn" id="viewToggleBaraze" onclick="App.prepnoutPohled('baraze')" style="display: none;">Baráž</button>
+                    </div>
+                </div>
+                <div id="tabulkaObsah" style="padding: 0;"></div>
+                <div id="playoffObsah" style="display: none; padding: 16px;"></div>
+                <div id="barazeObsah" style="display: none; padding: 16px;"></div>
+            </div>
+
+            <div id="zapasyContainer" class="app-card" style="display: none;">
+                <div class="app-card-header collapsible" onclick="App.toggleSekce('zapasyObsah')">
+                    <h2 class="app-card-title">Výsledky (<span id="pocetZapasu">0</span>)</h2>
+                    <span id="zapasyToggle" class="app-toggle-icon">▶</span>
+                </div>
+                <div id="zapasyObsah" style="display: none; padding: 16px;"></div>
+            </div>
+
+            <div id="rychleFiltry" class="app-card" style="display: none;"></div>
+
+            <div id="hracMesiceContainer" class="app-card" style="display: none;"></div>
+
+            <div id="statistikyContainer" class="app-card" style="display: none;">
+                <div class="app-card-header collapsible" onclick="App.toggleSekce('statistikyObsah')">
+                    <h2 class="app-card-title">Statistiky hráčů</h2>
+                    <span id="statistikyToggle" class="app-toggle-icon">▼</span>
+                </div>
+                <div id="statistikyObsah" style="padding: 16px;"></div>
+            </div>
+
+            <div id="prazdnyStav" class="app-card" style="text-align: center; padding: 48px 24px;">
+                <div style="font-size: 3rem; margin-bottom: 12px;">🏸</div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--text);">Zatím žádné zápasy</h3>
+                <p style="color: var(--text2); font-size: 0.9rem;">Data se načítají...</p>
+            </div>
+
+        </main>
     </div>
 
     <div id="hracModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('hracModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalHracJmeno"></h2>
-                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalHracInfo"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalHracJmeno"></h2>
+                    <p class="modal-subtitle" id="modalHracInfo"></p>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalHracObsah"></div>
-            </div>
+            <div id="modalHracObsah"></div>
         </div>
     </div>
 
@@ -145,12 +184,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('tymModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalTymNazev"></h2>
-                <p class="text-sm md:text-base text-gray-600 mt-1" id="modalTymInfo"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalTymNazev"></h2>
+                    <p class="modal-subtitle" id="modalTymInfo"></p>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalTymObsah"></div>
-            </div>
+            <div id="modalTymObsah"></div>
         </div>
     </div>
 
@@ -158,16 +197,37 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="Modals.zavritModal('utkaniModal')">&times;</span>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800" id="modalUtkaniNazev"></h2>
-                <p class="text-2xl font-bold text-center mt-2" id="modalUtkaniSkore"></p>
+                <div class="modal-header-text">
+                    <h2 class="modal-title" id="modalUtkaniNazev"></h2>
+                </div>
             </div>
-            <div class="p-4 md:p-6">
-                <div id="modalUtkaniObsah"></div>
-            </div>
+            <div id="modalUtkaniSkore" class="modal-score"></div>
+            <div id="modalUtkaniObsah"></div>
         </div>
     </div>
 
-    <!-- DŮLEŽITÉ: Skripty musí být v tomto pořadí! -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="bottom-nav-btn active" id="bnav-zakladni" onclick="App.bottomNavClick('zakladni')">
+            <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></span>Tabulka
+        </button>
+        <button class="bottom-nav-btn" id="bnav-playoff" onclick="App.bottomNavClick('playoff')">
+            <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></span>Play-off
+        </button>
+        <button class="bottom-nav-btn" id="bnav-vysledky" onclick="App.bottomNavClick('vysledky')">
+            <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg></span>Výsledky
+        </button>
+        <button class="bottom-nav-btn" id="bnav-tymy" onclick="App.zobrazitTymy()">
+            <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Soupisky
+        </button>
+        <button class="bottom-nav-btn" id="bnav-hrac" onclick="App.bottomNavClick('hrac')">
+            <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Statistiky
+        </button>
+        <button class="bottom-nav-btn" id="bnav-historie" onclick="window.location.href='vitezove.html'">
+            <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg></span>Vítězové
+        </button>
+    </nav>
+
+    <script src="js/icons.js"></script>
     <script src="js/data.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/table.js"></script>

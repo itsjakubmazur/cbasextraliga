@@ -3,25 +3,14 @@ const Filters = {
         const container = document.getElementById('rychleFiltry');
         if (!container) return;
 
-        container.innerHTML = `
-            <div class="flex flex-wrap gap-2">
-                <button onclick="Filters.poslednichXKol(1)" class="px-3 md:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs md:text-sm">
-                    📅 Poslední kolo
-                </button>
-                <button onclick="Filters.poslednichXKol(3)" class="px-3 md:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs md:text-sm">
-                    📅 3 kola
-                </button>
-                <button onclick="Filters.aktualniKolo()" class="px-3 md:px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-xs md:text-sm">
-                    ⚡ Aktuální
-                </button>
-                <button onclick="Filters.vybrátPlayoff()" class="px-3 md:px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-xs md:text-sm">
-                    🏅 Play-off
-                </button>
-                <button onclick="Filters.vymazat()" class="px-3 md:px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors text-xs md:text-sm">
-                    ✕ Vše
-                </button>
-            </div>
-        `;
+        container.innerHTML =
+            '<div style="padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">' +
+            '<button onclick="Filters.poslednichXKol(1)" class="filter-pill">Poslední kolo</button>' +
+            '<button onclick="Filters.poslednichXKol(3)" class="filter-pill">3 kola</button>' +
+            '<button onclick="Filters.aktualniKolo()" class="filter-pill">Aktuální</button>' +
+            '<button onclick="Filters.vybrátPlayoff()" class="filter-pill">Play-off</button>' +
+            '<button onclick="Filters.vymazat()" class="filter-pill filter-pill-clear">Vše</button>' +
+            '</div>';
     },
 
     _numerickaKola(aktualni_soutez) {
@@ -91,17 +80,17 @@ const Filters = {
         const playoffChecked = vybrana_kola.size === 0 || playoffAktivni;
 
         container.innerHTML = vsechnaKola.map(kolo =>
-            `<label class="kolo-checkbox flex items-center gap-1 px-2 py-1 border border-gray-300 rounded bg-white text-xs">
-                <input type="checkbox" value="${kolo}" onchange="Filters.toggleKolo('${kolo}')"
-                    ${vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? 'checked' : ''} class="w-3 h-3">
-                <span>K${kolo}</span>
-            </label>`
+            '<label class="kolo-tag' + (vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? ' kolo-tag-active' : '') + '">' +
+            '<input type="checkbox" value="' + kolo + '" onchange="Filters.toggleKolo(\'' + kolo + '\')"' +
+            (vybrana_kola.size === 0 || vybrana_kola.has(kolo) ? ' checked' : '') + ' style="display:none">' +
+            '<span>K' + kolo + '</span>' +
+            '</label>'
         ).join('') +
-        `<label class="kolo-checkbox flex items-center gap-1 px-2 py-1 border border-purple-300 rounded bg-white text-xs">
-            <input type="checkbox" onchange="Filters.togglePlayoff(this.checked)"
-                ${playoffChecked ? 'checked' : ''} class="w-3 h-3">
-            <span>Play-off</span>
-        </label>`;
+        '<label class="kolo-tag' + (playoffChecked ? ' kolo-tag-active' : '') + '">' +
+        '<input type="checkbox" onchange="Filters.togglePlayoff(this.checked)"' +
+        (playoffChecked ? ' checked' : '') + ' style="display:none">' +
+        '<span>Play-off</span>' +
+        '</label>';
     },
 
     togglePlayoff(checked) {

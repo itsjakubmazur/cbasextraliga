@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Czech Badminton – Design Preview</title>
+<link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0d0f14;
+  --surface:  #161821;
+  --surface2: #1e2130;
+  --border:   rgba(255,255,255,0.07);
+  --red:      #e8352e;
+  --red-dim:  rgba(232,53,46,0.15);
+  --red-glow: rgba(232,53,46,0.35);
+  --gold:     #f59e0b;
+  --green:    #22c55e;
+  --text:     #f1f5f9;
+  --muted:    #64748b;
+  --subtle:   #1e2130;
+  --radius:   14px;
+}
+
+body {
+  font-family: 'Telegraf', 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LAYOUT ────────────────────────────────── */
+.app {
+  max-width: 420px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+@media (min-width: 900px) {
+  body { background: #080a0f; }
+  .app {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 0;
+  }
+  .top-bar { grid-column: 1 / -1; }
+  .sidebar { display: flex !important; }
+  .bottom-nav { display: none !important; }
+  .main { padding: 24px 32px; }
+}
+
+/* ── TOP BAR ───────────────────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: var(--red);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 0 16px var(--red-glow);
+}
+.logo-text {
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+.logo-sub {
+  font-size: 0.7rem;
+  color: var(--muted);
+  display: block;
+  font-weight: 400;
+}
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.season-badge {
+  background: var(--red-dim);
+  color: var(--red);
+  border: 1px solid rgba(232,53,46,0.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* ── SIDEBAR ───────────────────────────────── */
+.sidebar {
+  display: none;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 24px 16px;
+  gap: 4px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-item.active {
+  background: var(--red-dim);
+  color: var(--red);
+  font-weight: 700;
+}
+.nav-item:hover:not(.active) {
+  background: var(--surface2);
+  color: var(--text);
+}
+.nav-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 0;
+}
+.nav-section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  padding: 0 14px;
+  margin: 8px 0 4px;
+}
+
+/* ── MAIN ──────────────────────────────────── */
+.main {
+  padding: 20px 16px 100px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ── HERO ──────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #1a0a09 0%, var(--surface2) 60%, #0a1520 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, var(--red-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+.hero-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 4px;
+}
+.hero-sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.hero-champion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+.hero-trophy {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 8px rgba(245,158,11,0.5));
+}
+.hero-champion-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--gold);
+}
+.hero-champion-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.hero-runner {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+.hero-pill {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero-pill strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ── SECTION ───────────────────────────────── */
+.section { margin-bottom: 24px; }
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.section-link {
+  font-size: 0.75rem;
+  color: var(--red);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* ── TABS ──────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab {
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: transparent;
+  transition: all 0.15s;
+}
+.tab.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: white;
+  box-shadow: 0 2px 12px var(--red-glow);
+}
+
+/* ── STANDINGS ─────────────────────────────── */
+.standings-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.standings-header {
+  display: grid;
+  grid-template-columns: 28px 1fr 36px 36px 36px 48px;
+  gap: 0;
+  padding: 10px 16px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.standings-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 36px 36px 36px 48px;
+  gap: 0;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  transition: background 0.1s;
+  cursor: pointer;
+}
+.standings-row:last-child { border-bottom: none; }
+.standings-row:hover { background: var(--surface2); }
+.standings-row.champion { background: rgba(245,158,11,0.06); }
+.standings-row.champion:hover { background: rgba(245,158,11,0.1); }
+.standings-pos {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+}
+.standings-pos.pos-1 { color: var(--gold); }
+.standings-pos.pos-2 { color: #94a3b8; }
+.standings-pos.pos-3 { color: #cd7c3c; }
+.standings-team {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.team-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.team-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.standings-num {
+  font-size: 0.78rem;
+  text-align: center;
+  color: var(--muted);
+}
+.standings-pts {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-align: right;
+  color: var(--text);
+}
+.form-dots {
+  display: flex;
+  gap: 3px;
+  justify-content: flex-end;
+}
+.form-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.form-dot.w { background: var(--green); }
+.form-dot.l { background: #ef4444; }
+.form-dot.d { background: var(--muted); }
+.promo-bar {
+  height: 3px;
+  background: linear-gradient(to right, var(--red), transparent);
+}
+.playoff-bar {
+  height: 3px;
+  background: linear-gradient(to right, #3b82f6, transparent);
+}
+.relegation-bar {
+  height: 3px;
+  background: linear-gradient(to right, #ef4444, transparent);
+}
+
+/* ── BRACKET PREVIEW ───────────────────────── */
+.bracket-preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.bracket-phase {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.bracket-phase:last-child { border-bottom: none; }
+.phase-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.matchup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.matchup + .matchup { margin-top: 8px; }
+.matchup-team {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+.matchup-team.winner {
+  background: rgba(34,197,94,0.1);
+  border-color: rgba(34,197,94,0.25);
+}
+.matchup-team.champion {
+  background: rgba(245,158,11,0.12);
+  border-color: rgba(245,158,11,0.3);
+}
+.matchup-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.matchup-name.winner { color: var(--green); }
+.matchup-name.champion { color: var(--gold); }
+.matchup-score {
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+.matchup-score.winner { color: var(--green); }
+.matchup-score.champion { color: var(--gold); }
+
+/* ── TOP PLAYERS ───────────────────────────── */
+.players-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.player-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.player-card:hover {
+  border-color: var(--red);
+  box-shadow: 0 0 20px var(--red-dim);
+}
+.player-rank {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.player-name {
+  font-size: 0.88rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+.player-team {
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.player-stat {
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--red);
+  line-height: 1;
+}
+.player-stat-label {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.player-card.gold .player-stat { color: var(--gold); }
+
+/* ── BOTTOM NAV ────────────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 420px;
+  background: rgba(22,24,33,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 50;
+}
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 0;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+.nav-btn.active { color: var(--red); }
+.nav-btn-icon { font-size: 20px; }
+
+/* ── MISC ──────────────────────────────────── */
+.chip-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chip-row::-webkit-scrollbar { display: none; }
+.chip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.chip.active {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-dim);
+}
+
+.divider-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 0;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.qual-line {
+  width: 8px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* ── ANNOTATION BADGE ──────────────────────── */
+.preview-badge {
+  position: fixed;
+  top: 80px; right: 16px;
+  background: var(--gold);
+  color: #000;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(245,158,11,0.4);
+}
+@media (min-width: 900px) {
+  .preview-badge { top: 80px; right: 32px; }
+}
+</style>
+</head>
+<body>
+
+<div class="preview-badge">🎨 Design Preview</div>
+
+<div class="app">
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="logo">
+      <div class="logo-icon">🏸</div>
+      <div>
+        <div class="logo-text">Czech Badminton</div>
+        <span class="logo-sub">Neoficiální ligové tabulky</span>
+      </div>
+    </div>
+    <div class="top-bar-right">
+      <div class="season-badge">2025/26</div>
+      <div class="icon-btn">🔍</div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR (desktop only) -->
+  <nav class="sidebar">
+    <div class="nav-section-label">Soutěže</div>
+    <div class="nav-item active">🏆 Extraliga</div>
+    <div class="nav-item">🥈 1. liga – Východ</div>
+    <div class="nav-item">🥈 1. liga – Západ</div>
+    <div class="nav-item">⚔️ Baráž</div>
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Přehledy</div>
+    <div class="nav-item">👤 Hráči</div>
+    <div class="nav-item">📊 Statistiky</div>
+    <div class="nav-item">🏅 Historie vítězů</div>
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Ročníky</div>
+    <div class="nav-item">2024/25</div>
+    <div class="nav-item">2023/24</div>
+    <div class="nav-item">2022/23</div>
+    <div class="nav-item">2021/22</div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO: Season Complete -->
+    <div class="hero">
+      <div class="hero-label">🏁 Sezóna 2025/26 skončena</div>
+      <div class="hero-title">Mistr ČR<br>je znám</div>
+      <div class="hero-sub">Extraliga · Finále</div>
+      <div class="hero-champion">
+        <div class="hero-trophy">🏆</div>
+        <div>
+          <div class="hero-champion-name">SK Brno Slatina</div>
+          <div class="hero-champion-label">Mistr České republiky 2025/26</div>
+        </div>
+      </div>
+      <div class="hero-runner">
+        <div class="hero-pill">🥈 <strong>B.O. Chance Ostrava</strong></div>
+        <div class="hero-pill">🥉 <strong>BA Plzeň &amp; BK Meteor</strong></div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-bar">
+      <div class="tab active">Přehled</div>
+      <div class="tab">Základní část</div>
+      <div class="tab">Play-off</div>
+      <div class="tab">Výsledky</div>
+      <div class="tab">Hráči</div>
+    </div>
+
+    <!-- STANDINGS -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">Tabulka · Extraliga</div>
+        <a class="section-link">Celá tabulka →</a>
+      </div>
+
+      <div class="chip-row">
+        <div class="chip active">Extraliga</div>
+        <div class="chip">1. liga – Východ</div>
+        <div class="chip">1. liga – Západ</div>
+      </div>
+
+      <div class="standings-card">
+        <div class="standings-header">
+          <div>#</div>
+          <div>Tým</div>
+          <div style="text-align:center">V</div>
+          <div style="text-align:center">P</div>
+          <div style="text-align:center">Forma</div>
+          <div style="text-align:right">Body</div>
+        </div>
+
+        <!-- playoff zone bar -->
+        <div class="promo-bar"></div>
+
+        <div class="standings-row champion">
+          <div class="standings-pos pos-1">1</div>
+          <div class="standings-team">
+            <div class="team-dot" style="background:#f59e0b"></div>
+            <div class="team-name">SK Brno Slatina</div>
+          </div>
+          <div class="standings-num">36</div>
+          <div class="standings-num">13</div>
+          <div>
+            <div class="form-dots">
+              <div class="form-dot w"></div><div class="form-dot w"></div>
+              <div class="form-dot w"></div><div class="form-dot l"></div>
+              <div class="form-dot w"></div>
+            </div>
+          </div>
+          <div class="standings-pts">85</div>
+        </div>
+
+        <div class="standings-row">
+          <div class="standings-pos pos-2">2</div>
+          <div class="standings-team">
+            <div class="team-dot" style="background:#3b82f6"></div>
+            <div class="team-name">BA Plzeň</div>
+          </div>
+          <div class="standings-num">35</div>
+          <div class="standings-num">14</div>
+          <div>
+            <div class="form-dots">
+              <div class="form-dot w"></div><div class="form-dot l"></div>
+              <div class="form-dot w"></div><div class="form-dot w"></div>
+              <div class="form-dot w"></div>
+            </div>
+          </div>
+          <div class="standings-pts">84</div>
+        </div>
+
+        <div class="standings-row">
+          <div class="standings-pos pos-3">3</div>
+          <div class="standings-team">
+            <div class="team-dot" style="background:#8b5cf6"></div>
+            <div class="team-name">B.O. Chance Ostrava</div>
+          </div>
+          <div class="standings-num">35</div>
+          <div class="standings-num">14</div>
+          <div>
+            <div class="form-dots">
+              <div class="form-dot w"></div><div class="form-dot w"></div>
+              <div class="form-dot l"></div><div class="form-dot w"></div>
+              <div class="form-dot l"></div>
+            </div>
+          </div>
+          <div class="standings-pts">84</div>
+        </div>
+
+        <div class="standings-row">
+          <div class="standings-pos">4</div>
+          <div class="standings-team">
+            <div class="team-dot" style="background:#10b981"></div>
+            <div class="team-name">BK Meteor Praha</div>
+          </div>
+          <div class="standings-num">31</div>
+          <div class="standings-num">18</div>
+          <div>
+            <div class="form-dots">
+              <div class="form-dot w"></div><div class="form-dot l"></div>
+              <div class="form-dot l"></div><div class="form-dot w"></div>
+              <div class="form-dot w"></div>
+            </div>
+          </div>
+          <div class="standings-pts">80</div>
+        </div>
+
+        <div class="standings-row">
+          <div class="standings-pos">5</div>
+          <div class="standings-team">
+            <div class="team-dot" style="background:#f97316"></div>
+            <div class="team-name">BK 1973 Benátky</div>
+          </div>
+          <div class="standings-num">30</div>
+          <div class="standings-num">19</div>
+          <div>
+            <div class="form-dots">
+              <div class="form-dot w"></div><div class="form-dot w"></div>
+              <div class="form-dot l"></div><div class="form-dot l"></div>
+              <div class="form-dot w"></div>
+            </div>
+          </div>
+          <div class="standings-pts">79</div>
+        </div>
+
+        <!-- relegation zone bar -->
+        <div style="display:flex; align-items:center; gap:8px; padding:6px 16px; background: rgba(239,68,68,0.05);">
+          <div class="qual-line" style="background:#ef4444"></div>
+          <span style="font-size:0.62rem; color:#ef4444; font-weight:700; letter-spacing:0.06em; text-transform:uppercase">Baráž / sestup</span>
+        </div>
+
+        <div class="standings-row" style="background: rgba(239,68,68,0.04)">
+          <div class="standings-pos">6</div>
+          <div class="standings-team">
+            <div class="team-dot" style="background:#64748b"></div>
+            <div class="team-name">TJ Sokol Klimkovice</div>
+          </div>
+          <div class="standings-num">17</div>
+          <div class="standings-num">32</div>
+          <div>
+            <div class="form-dots">
+              <div class="form-dot l"></div><div class="form-dot l"></div>
+              <div class="form-dot w"></div><div class="form-dot l"></div>
+              <div class="form-dot l"></div>
+            </div>
+          </div>
+          <div class="standings-pts">66</div>
+        </div>
+
+        <div class="standings-row" style="background: rgba(239,68,68,0.04)">
+          <div class="standings-pos">7</div>
+          <div class="standings-team">
+            <div class="team-dot" style="background:#334155"></div>
+            <div class="team-name">Badminton FSpS MU</div>
+          </div>
+          <div class="standings-num">8</div>
+          <div class="standings-num">41</div>
+          <div>
+            <div class="form-dots">
+              <div class="form-dot l"></div><div class="form-dot l"></div>
+              <div class="form-dot l"></div><div class="form-dot l"></div>
+              <div class="form-dot l"></div>
+            </div>
+          </div>
+          <div class="standings-pts">57</div>
+        </div>
+
+        <div class="standings-row" style="background: rgba(239,68,68,0.04)">
+          <div class="standings-pos">8</div>
+          <div class="standings-team">
+            <div class="team-dot" style="background:#1e293b"></div>
+            <div class="team-name">SK Prosek Praha</div>
+          </div>
+          <div class="standings-num">4</div>
+          <div class="standings-num">45</div>
+          <div>
+            <div class="form-dots">
+              <div class="form-dot l"></div><div class="form-dot l"></div>
+              <div class="form-dot l"></div><div class="form-dot l"></div>
+              <div class="form-dot l"></div>
+            </div>
+          </div>
+          <div class="standings-pts">53</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PLAYOFF PREVIEW -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">Play-off · Extraliga</div>
+        <a class="section-link">Pavouk →</a>
+      </div>
+
+      <div class="bracket-preview">
+        <div class="bracket-phase">
+          <div class="phase-label">Čtvrtfinále</div>
+          <div class="matchup">
+            <div class="matchup-team winner">
+              <span class="matchup-name winner">BA Plzeň <span style="color:var(--muted);font-weight:400;font-size:0.7rem">(3.)</span></span>
+              <span class="matchup-score winner">6</span>
+            </div>
+            <div class="matchup-team">
+              <span class="matchup-name" style="color:var(--muted)">TJ Sokol Klimkovice</span>
+              <span class="matchup-score" style="color:var(--muted)">0</span>
+            </div>
+          </div>
+          <div class="matchup" style="margin-top:8px">
+            <div class="matchup-team winner">
+              <span class="matchup-name winner">BK Meteor Praha <span style="color:var(--muted);font-weight:400;font-size:0.7rem">(4.)</span></span>
+              <span class="matchup-score winner">4</span>
+            </div>
+            <div class="matchup-team">
+              <span class="matchup-name" style="color:var(--muted)">BK 1973 Benátky</span>
+              <span class="matchup-score" style="color:var(--muted)">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bracket-phase">
+          <div class="phase-label">Semifinále · Final Four</div>
+          <div class="matchup">
+            <div class="matchup-team winner">
+              <span class="matchup-name winner">SK Brno Slatina <span style="color:var(--muted);font-weight:400;font-size:0.7rem">(1.)</span></span>
+              <span class="matchup-score winner">4</span>
+            </div>
+            <div class="matchup-team">
+              <span class="matchup-name" style="color:var(--muted)">BK Meteor Praha</span>
+              <span class="matchup-score" style="color:var(--muted)">2</span>
+            </div>
+          </div>
+          <div class="matchup" style="margin-top:8px">
+            <div class="matchup-team winner">
+              <span class="matchup-name winner">B.O. Chance Ostrava <span style="color:var(--muted);font-weight:400;font-size:0.7rem">(2.)</span></span>
+              <span class="matchup-score winner">4</span>
+            </div>
+            <div class="matchup-team">
+              <span class="matchup-name" style="color:var(--muted)">BA Plzeň</span>
+              <span class="matchup-score" style="color:var(--muted)">3</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bracket-phase">
+          <div class="phase-label">🏆 Finále</div>
+          <div class="matchup">
+            <div class="matchup-team champion">
+              <span class="matchup-name champion">SK Brno Slatina 🏆</span>
+              <span class="matchup-score champion">4</span>
+            </div>
+            <div class="matchup-team">
+              <span class="matchup-name" style="color:var(--muted)">B.O. Chance Ostrava</span>
+              <span class="matchup-score" style="color:var(--muted)">1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP PLAYERS -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">Top hráči sezóny</div>
+        <a class="section-link">Všichni →</a>
+      </div>
+      <div class="players-grid">
+        <div class="player-card gold">
+          <div class="player-rank">🥇 Nejvíc výher</div>
+          <div class="player-name">Collins Filimon</div>
+          <div class="player-team">B.O. Chance Ostrava</div>
+          <div class="player-stat">94%</div>
+          <div class="player-stat-label">úspěšnost · 48/51 zápasů</div>
+        </div>
+        <div class="player-card">
+          <div class="player-rank">🏸 Nejvíc zápasů</div>
+          <div class="player-name">Matthew Grimley</div>
+          <div class="player-team">SK Brno Slatina</div>
+          <div class="player-stat" style="color:#3b82f6">63</div>
+          <div class="player-stat-label">odehraných zápasů</div>
+        </div>
+        <div class="player-card">
+          <div class="player-rank">⚡ Nejdelší série</div>
+          <div class="player-name">Kirsty Gilmour</div>
+          <div class="player-team">SK Brno Slatina</div>
+          <div class="player-stat" style="color:#22c55e">18</div>
+          <div class="player-stat-label">výher v řadě</div>
+        </div>
+        <div class="player-card">
+          <div class="player-rank">🎯 Finálový hrdina</div>
+          <div class="player-name">Mikolaj Szymanowski</div>
+          <div class="player-team">BA Plzeň</div>
+          <div class="player-stat" style="color:#a78bfa">89%</div>
+          <div class="player-stat-label">úspěšnost</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav">
+    <div class="nav-btn active">
+      <div class="nav-btn-icon">🏠</div>
+      Přehled
+    </div>
+    <div class="nav-btn">
+      <div class="nav-btn-icon">📊</div>
+      Tabulka
+    </div>
+    <div class="nav-btn">
+      <div class="nav-btn-icon">🏅</div>
+      Play-off
+    </div>
+    <div class="nav-btn">
+      <div class="nav-btn-icon">👤</div>
+      Hráči
+    </div>
+    <div class="nav-btn">
+      <div class="nav-btn-icon">🕐</div>
+      Historie
+    </div>
+  </nav>
+
+</div>
+</body>
+</html>

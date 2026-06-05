@@ -1,4 +1,43 @@
 const Statistics = {
+    KRATKE_NAZVY: {
+        'SK Brno Slatina':                 'Slatina',
+        'SK Brno Slatina B':               'Slatina B',
+        'B.O. Chance Ostrava Sportclub':   'Ostrava',
+        'BA Plzeň':                        'Plzeň',
+        'BA Plzeň B':                      'Plzeň B',
+        'BK Meteor Praha':                 'Meteor',
+        'BK 1973 Benátky nad Jizerou':     'Benátky',
+        'TJ Sokol Klimkovice':             'Klimkovice',
+        'TJ Sokol Klimkovice B':           'Klimkovice B',
+        'Badminton FSpS MU':               'FSpS MU',
+        'Badminton FSpS MU B':             'FSpS MU B',
+        'SK Prosek Praha':                 'Prosek',
+        'SK Prosek Praha B':               'Prosek B',
+        'SK Kuklenská Brno':               'Kuklenská',
+        'TJ Sokol Dobruška':               'Dobruška',
+        'TJ Montas Hradec Králové':        'Montas HK',
+        'TJ Slavoj Český Těšín':           'Slavoj ČT',
+        'TJ Sokol Polabiny Pardubice':     'Pardubice',
+        'BK Kopřivnice':                   'Kopřivnice',
+        'Badminton Akademie Olomouc':      'Olomouc',
+        'SK Hamr':                         'Hamr',
+        'SK Hamr Praha':                   'Hamr Praha',
+        'BaC Kladno':                      'Kladno',
+        'SKB Český Krumlov':               'Krumlov',
+        'TJ Sokol Radotín':                'Radotín',
+        'Sokol Radotín Meteor Praha':      'Radotín',
+        'TJ Astra ZM Praha':               'Astra ZM',
+        'TJ Astra Zahradní Město':         'Astra ZM',
+        'TJ Slovan Vesec':                 'Vesec',
+        'BK Liberec':                      'Liberec',
+        'BK TU v Liberci':                 'TU Liberec',
+        'TJ Orlová-Lutyně':                'Orlová',
+    },
+
+    zkracenyNazev(tym) {
+        return this.KRATKE_NAZVY[tym] || tym;
+    },
+
     // Playoff round detection - kolo values like "QF", "SF", "F", "P5" are playoff
     isPlayoffKolo(kolo) {
         if (!kolo) return false;
@@ -200,7 +239,58 @@ const Statistics = {
         return stats;
     },
 
-    vypocitejTabulku(aktualni_soutez) {
+    // Returns last N match results for a team as array of 'w'/'l'/'d'
+    vypocitejFormuTymu(tym, aktualni_soutez, pocet = 5) {
+        const utkani = {};
+        (Data.zapasy[aktualni_soutez] || []).forEach(zapas => {
+            if (this.isPlayoffKolo(zapas.kolo)) return;
+            if (!zapas.tymDomaci || !zapas.tymHoste) return;
+            if (zapas.tymDomaci !== tym && zapas.tymHoste !== tym) return;
+            const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
+            if (!utkani[klic]) utkani[klic] = { kolo: parseInt(zapas.kolo) || 0, domaci: zapas.tymDomaci, d: 0, h: 0 };
+            const v = this.parseVysledek(zapas.vysledek);
+            utkani[klic].d += v.domaci;
+            utkani[klic].h += v.hoste;
+        });
+        return Object.values(utkani)
+            .filter(u => u.d + u.h > 0)
+            .sort((a, b) => a.kolo - b.kolo)
+            .slice(-pocet)
+            .map(u => {
+                const nase = u.domaci === tym ? u.d : u.h;
+                const soupere = u.domaci === tym ? u.h : u.d;
+                return nase > soupere ? 'w' : nase < soupere ? 'l' : 'd';
+            });
+    },
+
+    // Returns { tym: delta } where delta = positions gained since previous round
+    // positive = moved up, negative = moved down, 0 = no change
+    vypocitejZmenyPozic(aktualni_soutez) {
+        const kola = (Data.zapasy[aktualni_soutez] || [])
+            .map(z => parseInt(z.kolo))
+            .filter(k => !isNaN(k));
+        if (kola.length === 0) return {};
+        const maxKolo = Math.max(...kola);
+        if (maxKolo <= 1) return {};
+
+        const prevTabulka = this.vypocitejTabulku(aktualni_soutez, maxKolo - 1);
+        const prevOrder = this.seraditTymyPodleTabulky(prevTabulka);
+        const currTabulka = this.vypocitejTabulku(aktualni_soutez);
+        const currOrder = this.seraditTymyPodleTabulky(currTabulka);
+
+        const prevPozice = {};
+        prevOrder.forEach((tym, idx) => { prevPozice[tym] = idx + 1; });
+
+        const zmeny = {};
+        currOrder.forEach((tym, idx) => {
+            const curr = idx + 1;
+            const prev = prevPozice[tym];
+            zmeny[tym] = prev !== undefined ? prev - curr : 0;
+        });
+        return zmeny;
+    },
+
+    vypocitejTabulku(aktualni_soutez, doKola = null) {
         const tabulka = {};
         const utkani = {};
         const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
@@ -208,6 +298,10 @@ const Statistics = {
         Data.zapasy[aktualni_soutez].forEach(zapas => {
             // Skip playoff matches in regular season table
             if (this.isPlayoffKolo(zapas.kolo)) return;
+            if (doKola !== null) {
+                const k = parseInt(zapas.kolo);
+                if (isNaN(k) || k > doKola) return;
+            }
             const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
             if (!utkani[klic]) utkani[klic] = {
                 kolo: zapas.kolo,
