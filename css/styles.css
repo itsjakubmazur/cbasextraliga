@@ -1993,14 +1993,26 @@ body.dark-mode .standings-pos-num.pos-bronze { color: #fb923c; }
 /* New compact th-forma */
 .th-forma { width: 80px; text-align: center; }
 
-/* Mobile standings: hide Míče column, tighten cells */
+/* Mobile standings: hide Sety + Míče, truncate names, tighten cells */
 @media (max-width: 768px) {
+    .standings-col-sety,
     .standings-col-mice { display: none; }
+
+    .standings-name-cell {
+        max-width: 130px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .th-name { min-width: 0; max-width: 130px; }
+
     .standings-num-cell,
     .standings-ratio-cell { padding: 10px 2px; font-size: 0.72rem; }
-    .th-num  { width: 24px; }
-    .th-ratio { width: 44px; }
-    .th-forma { width: 64px; }
+    .th-num   { width: 24px; }
+    .th-ratio { width: 46px; }
+    .th-forma { width: 60px; }
+    .th-pts   { width: 36px; padding-right: 6px !important; }
+    .standings-pts-cell { padding: 10px 6px 10px 2px; }
 }
 
 /* Clickable table rows */

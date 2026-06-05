@@ -45,7 +45,7 @@ const Table = {
                 remizaCol +
                 '<td class="standings-num-cell text-loss">' + t.prohry + '</td>' +
                 '<td class="standings-ratio-cell">' + t.zapasyV + ':' + t.zapasyP + '</td>' +
-                '<td class="standings-ratio-cell">' + t.setyV + ':' + t.setyP + '</td>' +
+                '<td class="standings-ratio-cell standings-col-sety">' + t.setyV + ':' + t.setyP + '</td>' +
                 '<td class="standings-ratio-cell standings-col-mice">' + t.bodyV + ':' + t.bodyP + '</td>' +
                 '<td class="standings-forma-cell"><span class="form-dots">' + formaDots + '</span></td>' +
                 '<td class="standings-pts-cell">' + t.body + '</td>' +
@@ -87,7 +87,7 @@ const Table = {
             remizaTh +
             '<th class="th-num" title="Porážky">P</th>' +
             '<th class="th-ratio" title="Poměr dílčích zápasů">Záp.</th>' +
-            '<th class="th-ratio" title="Poměr setů">Sety</th>' +
+            '<th class="th-ratio standings-col-sety" title="Poměr setů">Sety</th>' +
             '<th class="th-ratio standings-col-mice" title="Poměr míčů">Míče</th>' +
             '<th class="th-forma" title="Posledních 5 zápasů">Forma</th>' +
             '<th class="th-pts">Body</th>' +
