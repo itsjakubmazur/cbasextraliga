@@ -2624,9 +2624,13 @@ body.dark-mode .team-tile:hover { border-color: rgba(215,20,26,0.25); box-shadow
 .team-tile-pos { font-size: 1.1rem; font-weight: 900; color: var(--muted); flex-shrink: 0; min-width: 22px; text-align: right; opacity: 0.5; }
 
 /* ── PLAYER ROSTER ────────────────────────────────────────── */
+/* roster-grid lives inside teams-grid (a grid container) — span all columns so it gets full width */
+.teams-grid > .roster-grid {
+    grid-column: 1 / -1;
+}
 .roster-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 14px;
     padding: 16px;
 }
