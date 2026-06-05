@@ -618,7 +618,7 @@
         <!-- ── HEADER ── -->
         <div class="w-header">
             <div class="w-logo">
-                <img src="BAD extraliga official.png" alt="Czech Badminton" style="display:block;height:40px;width:auto;max-height:40px">
+                <img src="css/BAD extraliga official.png" alt="Czech Badminton" style="display:block;height:40px;width:auto;max-height:40px">
             </div>
 
             <div class="w-controls">
@@ -644,13 +644,14 @@
                         <tr>
                             <th class="th-pos">#</th>
                             <th class="th-name" style="text-align:left">Tým</th>
-                            <th class="th-num" title="Utkání">U</th>
-                            <th class="th-num" title="Vítězství" style="color:rgba(255,255,255,0.95)">V</th>
+                            <th class="th-num" title="Vítězství">V</th>
                             <th class="th-num" title="Remízy">R</th>
                             <th class="th-num" title="Porážky">P</th>
-                            <th class="th-num" title="Zápasy (výhry:prohry)">Zápasy</th>
-                            <th class="th-num" title="Sety">Sety</th>
-                            <th class="th-pts" style="text-align:center">Body</th>
+                            <th class="th-ratio" title="Poměr dílčích zápasů">Záp.</th>
+                            <th class="th-ratio" title="Poměr setů">Sety</th>
+                            <th class="th-ratio" title="Poměr míčů">Míče</th>
+                            <th class="th-forma" title="Forma">Forma</th>
+                            <th class="th-pts" style="text-align:right">Body</th>
                         </tr>
                     </thead>
                     <tbody id="tabulkaBody"></tbody>
@@ -867,25 +868,26 @@
                         '<span class="zone-dot zone-dot-' + zoneDot + '"></span>' +
                         escapeHtml(tym) +
                     '</td>' +
-                    '<td class="standings-num-cell text-muted">'  + t.utkani  + '</td>' +
                     '<td class="standings-num-cell text-win">'    + t.vyhry   + '</td>' +
-                    '<td class="standings-num-cell text-muted">'  + t.remizy  + '</td>' +
+                    '<td class="standings-num-cell">'             + t.remizy  + '</td>' +
                     '<td class="standings-num-cell text-loss">'   + t.prohry  + '</td>' +
-                    '<td class="standings-num-cell text-muted" style="font-size:0.76rem">' + t.zapasyV + ':' + t.zapasyP + '</td>' +
-                    '<td class="standings-num-cell text-muted" style="font-size:0.76rem">' + t.setyV   + ':' + t.setyP   + '</td>' +
+                    '<td class="standings-ratio-cell">' + t.zapasyV + ':' + t.zapasyP + '</td>' +
+                    '<td class="standings-ratio-cell">' + t.setyV   + ':' + t.setyP   + '</td>' +
+                    '<td class="standings-ratio-cell">' + t.bodyV   + ':' + t.bodyP   + '</td>' +
+                    '<td class="standings-forma-cell"><span class="form-dots">' + formaDots + '</span></td>' +
                     '<td class="standings-pts-cell">' + t.body + '</td>' +
                     '</tr>'
                 );
 
                 // Zone dividers
                 if (!jePrvniLiga && idx === 1) {
-                    rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="9">↓ Čtvrtfinále</td></tr>');
-                } else if (!jePrvniLiga && idx === 5) {
-                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="9">↓ Baráž</td></tr>');
+                    rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="10"><span>↓ Čtvrtfinále</span></td></tr>');
+                } else if (!jePrvniLiga && idx === 6) {
+                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="10"><span>↓ Baráž</span></td></tr>');
                 } else if (jePrvniLiga && idx === 3) {
-                    rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="9" style="opacity:0.4"></td></tr>');
+                    rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="11"></td></tr>');
                 } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {
-                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="9">↓ Kvalifikace</td></tr>');
+                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="11"><span>↓ Kvalifikace</span></td></tr>');
                 }
             });
 
