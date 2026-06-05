@@ -806,9 +806,10 @@ const Playoff = {
     _renderPlacementMatches(t1A, t1B, res1, t2A, t2B, res2) {
         if (!t1A && !t1B && !t2A && !t2B) return '';
 
-        const makeCard = (tym, place, result, isWinner) => {
+        const makeCard = (tym, result, isWinner) => {
             if (!tym) return this.pendingCard('Poražený z ČF');
             const cls = isWinner ? 'playoff-team-placement-5' : 'playoff-team-placement-7';
+            const place = isWinner ? '5. místo' : '7. místo';
             const placeBadge = result?.vitez
                 ? '<span class="playoff-placement-badge">' + place + '</span>'
                 : '';
@@ -836,9 +837,9 @@ const Playoff = {
             return '<div class="playoff-match playoff-match-placement"' + onclickAttr + '>' +
                 '<div class="playoff-match-label">' + label + '</div>' +
                 '<div class="playoff-match-teams">' +
-                makeCard(tA, '5. místo', res, vitez === tA) +
+                makeCard(tA, res, vitez === tA) +
                 '<div class="playoff-vs">vs</div>' +
-                makeCard(tB, '5. místo', res, vitez === tB) +
+                makeCard(tB, res, vitez === tB) +
                 '</div>' +
                 resultHtml +
                 (vitez ? '<div class="playoff-placement-result"><span class="placement-5">🥈 ' + Statistics.escapeHtml(vitez) + ' – 5. místo</span><span class="placement-7">  ' + Statistics.escapeHtml(porazeny) + ' – 7. místo</span></div>' : '') +
