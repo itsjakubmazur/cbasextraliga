@@ -1993,6 +1993,16 @@ body.dark-mode .standings-pos-num.pos-bronze { color: #fb923c; }
 /* New compact th-forma */
 .th-forma { width: 80px; text-align: center; }
 
+/* Mobile standings: hide Míče column, tighten cells */
+@media (max-width: 768px) {
+    .standings-col-mice { display: none; }
+    .standings-num-cell,
+    .standings-ratio-cell { padding: 10px 2px; font-size: 0.72rem; }
+    .th-num  { width: 24px; }
+    .th-ratio { width: 44px; }
+    .th-forma { width: 64px; }
+}
+
 /* Clickable table rows */
 .standings-table tbody tr.standings-row { cursor: pointer; }
 
