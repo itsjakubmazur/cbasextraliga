@@ -40,7 +40,9 @@ const Table = {
                 '<td class="standings-pos-cell"><span class="standings-pos-num ' + pc + '">' + (idx + 1) + '</span></td>' +
                 '<td class="standings-name-cell">' +
                 '<span class="zone-dot zone-dot-' + (zone || 'none') + '"></span>' +
-                Statistics.escapeHtml(tym) + '</td>' +
+                '<span class="team-name-full">' + Statistics.escapeHtml(tym) + '</span>' +
+                '<span class="team-name-short">' + Statistics.escapeHtml(Statistics.zkracenyNazev(tym)) + '</span>' +
+                '</td>' +
                 '<td class="standings-num-cell text-win">' + t.vyhry + '</td>' +
                 remizaCol +
                 '<td class="standings-num-cell text-loss">' + t.prohry + '</td>' +

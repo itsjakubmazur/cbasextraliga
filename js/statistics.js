@@ -1,4 +1,43 @@
 const Statistics = {
+    KRATKE_NAZVY: {
+        'SK Brno Slatina':                 'Slatina',
+        'SK Brno Slatina B':               'Slatina B',
+        'B.O. Chance Ostrava Sportclub':   'Ostrava',
+        'BA Plzeň':                        'Plzeň',
+        'BA Plzeň B':                      'Plzeň B',
+        'BK Meteor Praha':                 'Meteor',
+        'BK 1973 Benátky nad Jizerou':     'Benátky',
+        'TJ Sokol Klimkovice':             'Klimkovice',
+        'TJ Sokol Klimkovice B':           'Klimkovice B',
+        'Badminton FSpS MU':               'FSpS MU',
+        'Badminton FSpS MU B':             'FSpS MU B',
+        'SK Prosek Praha':                 'Prosek',
+        'SK Prosek Praha B':               'Prosek B',
+        'SK Kuklenská Brno':               'Kuklenská',
+        'TJ Sokol Dobruška':               'Dobruška',
+        'TJ Montas Hradec Králové':        'Montas HK',
+        'TJ Slavoj Český Těšín':           'Slavoj ČT',
+        'TJ Sokol Polabiny Pardubice':     'Pardubice',
+        'BK Kopřivnice':                   'Kopřivnice',
+        'Badminton Akademie Olomouc':      'Olomouc',
+        'SK Hamr':                         'Hamr',
+        'SK Hamr Praha':                   'Hamr Praha',
+        'BaC Kladno':                      'Kladno',
+        'SKB Český Krumlov':               'Krumlov',
+        'TJ Sokol Radotín':                'Radotín',
+        'Sokol Radotín Meteor Praha':      'Radotín',
+        'TJ Astra ZM Praha':               'Astra ZM',
+        'TJ Astra Zahradní Město':         'Astra ZM',
+        'TJ Slovan Vesec':                 'Vesec',
+        'BK Liberec':                      'Liberec',
+        'BK TU v Liberci':                 'TU Liberec',
+        'TJ Orlová-Lutyně':                'Orlová',
+    },
+
+    zkracenyNazev(tym) {
+        return this.KRATKE_NAZVY[tym] || tym;
+    },
+
     // Playoff round detection - kolo values like "QF", "SF", "F", "P5" are playoff
     isPlayoffKolo(kolo) {
         if (!kolo) return false;

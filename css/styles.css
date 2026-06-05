@@ -1993,18 +1993,19 @@ body.dark-mode .standings-pos-num.pos-bronze { color: #fb923c; }
 /* New compact th-forma */
 .th-forma { width: 80px; text-align: center; }
 
-/* Mobile standings: hide Sety + Míče, truncate names, tighten cells */
+/* Short/full team name toggle */
+.team-name-short { display: none; }
+
+/* Mobile standings: short names, hide Sety + Míče, tighten cells */
 @media (max-width: 768px) {
+    .team-name-full  { display: none; }
+    .team-name-short { display: inline; }
+
     .standings-col-sety,
     .standings-col-mice { display: none; }
 
-    .standings-name-cell {
-        max-width: 130px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .th-name { min-width: 0; max-width: 130px; }
+    .standings-name-cell { white-space: nowrap; }
+    .th-name { min-width: 0; }
 
     .standings-num-cell,
     .standings-ratio-cell { padding: 10px 2px; font-size: 0.72rem; }
