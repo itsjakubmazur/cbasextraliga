@@ -34,7 +34,17 @@ const AdminData = {
         else if (JSON.stringify(old) !== JSON.stringify(z)) zmeneno++;
       });
     });
-    return { pridano, zmeneno };
+
+    // Zmeny mimo zapasy (nastaveni sezony, tymy, vitezove, loga) - at "0 novych,
+    // 0 upravenych" nepusobi, jako by se nic nezmenilo, kdyz je koncept dirty.
+    const jineZmeny = [];
+    if (JSON.stringify(this.draft.konfigurace) !== JSON.stringify(this.raw.konfigurace)) jineZmeny.push('nastavení sezóny');
+    if (JSON.stringify(this.draft.tymy) !== JSON.stringify(this.raw.tymy)) jineZmeny.push('týmy');
+    if (JSON.stringify(this.draft.vitezove) !== JSON.stringify(this.raw.vitezove)) jineZmeny.push('vítězové');
+    if (JSON.stringify(this.draft.tymLoga) !== JSON.stringify(this.raw.tymLoga)) jineZmeny.push('loga');
+    if (this.draft.rocnik !== this.raw.rocnik) jineZmeny.push('ročník');
+
+    return { pridano, zmeneno, jineZmeny };
   },
 
   getZapasy(soutez) {

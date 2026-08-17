@@ -1,7 +1,7 @@
 const AdminPublish = {
   refreshSummary() {
     const dirty = AdminData.isDirty();
-    const { pridano, zmeneno } = AdminData.changeSummary();
+    const { pridano, zmeneno, jineZmeny } = AdminData.changeSummary();
     const el = document.getElementById('publishSummary');
     const btn = document.getElementById('publishBtn');
     const dot = document.getElementById('transmitDot');
@@ -9,11 +9,17 @@ const AdminPublish = {
       el.innerHTML = 'Živě · žádné neuložené změny';
       btn.disabled = true;
       dot.classList.remove('pending');
-    } else {
-      el.innerHTML = `<strong>${pridano + zmeneno} změn</strong> připraveno (${pridano} nových, ${zmeneno} upravených)`;
-      btn.disabled = false;
-      dot.classList.add('pending');
+      return;
     }
+
+    const casti = [];
+    if (pridano || zmeneno) casti.push(`${pridano} nových zápasů, ${zmeneno} upravených`);
+    if (jineZmeny.length) casti.push(`upraveno: ${jineZmeny.join(', ')}`);
+    const popis = casti.length ? casti.join(' · ') : 'neuložené změny';
+
+    el.innerHTML = `<strong>Připraveno k publikaci</strong> — ${popis}`;
+    btn.disabled = false;
+    dot.classList.add('pending');
   },
 
   async publish() {
