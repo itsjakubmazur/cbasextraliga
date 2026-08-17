@@ -137,6 +137,7 @@ const AdminSync = {
         (warnings.length ? `<div class="text-xs text-red-600 mt-1">⚠️ ${warnings.join('; ')}</div>` : '') +
         `</td>` +
         `<td class="p-2 text-sm">${z.kolo}</td>` +
+        `<td class="p-2 text-sm">${diffCell('datum')}</td>` +
         `<td class="p-2 text-sm">${z.tymDomaci} – ${z.tymHoste}</td>` +
         `<td class="p-2 text-sm">${diffCell('disciplina')}</td>` +
         `<td class="p-2 text-sm">${diffCell('domaci')} vs ${diffCell('hoste')}</td>` +
