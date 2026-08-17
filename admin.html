@@ -249,6 +249,8 @@
           <!-- Skupina: Extraliga -->
           <div class="card cfg-group cfg-group-ext">
             <h2 class="card-title">🔴 Extraliga</h2>
+
+            <p class="cfg-subhead">Utkání <span class="text-faint" style="font-weight:400;">— kolik dílčích zápasů (disciplín) tvoří celé utkání dvou týmů</span></p>
             <div class="field-row">
               <div class="field">
                 <label class="field-label" for="cfgExtraligaPlayoff">Play-off</label>
@@ -258,16 +260,24 @@
                 </select>
               </div>
               <div class="field">
-                <label class="field-label" for="cfgExtCelkemHer">Her v sérii celkem</label>
+                <label class="field-label" for="cfgExtCelkemHer">Disciplín v utkání celkem</label>
                 <input type="number" id="cfgExtCelkemHer" class="input input-mono">
               </div>
               <div class="field">
-                <label class="field-label" for="cfgExtRemizaPri">Zlatý zápas při</label>
+                <label class="field-label" for="cfgExtRemizaPri">Zlatý zápas při stavu X:X</label>
                 <input type="number" id="cfgExtRemizaPri" class="input input-mono">
               </div>
+            </div>
+
+            <p class="cfg-subhead">Formát jedné hry <span class="text-faint" style="font-weight:400;">— pravidla uvnitř jedné disciplíny (jednoho dílčího zápasu)</span></p>
+            <div class="field-row">
               <div class="field">
-                <label class="field-label" for="cfgExtBodyNaSet">Bodů do setu</label>
+                <label class="field-label" for="cfgExtBodyNaSet">Hraje se do (bodů)</label>
                 <input type="number" id="cfgExtBodyNaSet" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgExtMaxBodu">Max. při prodloužení</label>
+                <input type="number" id="cfgExtMaxBodu" class="input input-mono">
               </div>
               <div class="field">
                 <label class="field-label" for="cfgExtVitezSetu">Vítězných setů na hru</label>
@@ -294,6 +304,8 @@
           <!-- Skupina: 1. liga -->
           <div class="card cfg-group cfg-group-pl">
             <h2 class="card-title">🔵 1. liga <span class="text-faint" style="font-weight:400;">(Východ + Západ + Play-off dohromady)</span></h2>
+
+            <p class="cfg-subhead">Utkání <span class="text-faint" style="font-weight:400;">— kolik dílčích zápasů (disciplín) tvoří celé utkání dvou týmů</span></p>
             <div class="field-row">
               <div class="field">
                 <label class="field-label" for="cfgPrvniLigaPlayoff">Play-off</label>
@@ -305,16 +317,24 @@
                 </select>
               </div>
               <div class="field">
-                <label class="field-label" for="cfgPlCelkemHer">Her v sérii celkem</label>
+                <label class="field-label" for="cfgPlCelkemHer">Disciplín v utkání celkem</label>
                 <input type="number" id="cfgPlCelkemHer" class="input input-mono">
               </div>
               <div class="field">
-                <label class="field-label" for="cfgPlRemizaPri">Zlatý zápas při</label>
+                <label class="field-label" for="cfgPlRemizaPri">Zlatý zápas při stavu X:X</label>
                 <input type="number" id="cfgPlRemizaPri" class="input input-mono">
               </div>
+            </div>
+
+            <p class="cfg-subhead">Formát jedné hry <span class="text-faint" style="font-weight:400;">— pravidla uvnitř jedné disciplíny (jednoho dílčího zápasu)</span></p>
+            <div class="field-row">
               <div class="field">
-                <label class="field-label" for="cfgPlBodyNaSet">Bodů do setu</label>
+                <label class="field-label" for="cfgPlBodyNaSet">Hraje se do (bodů)</label>
                 <input type="number" id="cfgPlBodyNaSet" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgPlMaxBodu">Max. při prodloužení</label>
+                <input type="number" id="cfgPlMaxBodu" class="input input-mono">
               </div>
               <div class="field">
                 <label class="field-label" for="cfgPlVitezSetu">Vítězných setů na hru</label>
@@ -341,6 +361,8 @@
           <!-- Skupina: Baraz -->
           <div class="card cfg-group cfg-group-br">
             <h2 class="card-title">🟡 Baráž</h2>
+
+            <p class="cfg-subhead">Utkání <span class="text-faint" style="font-weight:400;">— kolik dílčích zápasů (disciplín) tvoří celé utkání dvou týmů</span></p>
             <div class="field-row">
               <div class="field">
                 <label class="field-label" for="cfgBaraze">Formát</label>
@@ -350,16 +372,24 @@
                 </select>
               </div>
               <div class="field">
-                <label class="field-label" for="cfgBrCelkemHer">Her v sérii celkem</label>
+                <label class="field-label" for="cfgBrCelkemHer">Disciplín v utkání celkem</label>
                 <input type="number" id="cfgBrCelkemHer" class="input input-mono">
               </div>
               <div class="field">
-                <label class="field-label" for="cfgBrRemizaPri">Zlatý zápas při</label>
+                <label class="field-label" for="cfgBrRemizaPri">Zlatý zápas při stavu X:X</label>
                 <input type="number" id="cfgBrRemizaPri" class="input input-mono">
               </div>
+            </div>
+
+            <p class="cfg-subhead">Formát jedné hry <span class="text-faint" style="font-weight:400;">— pravidla uvnitř jedné disciplíny (jednoho dílčího zápasu)</span></p>
+            <div class="field-row">
               <div class="field">
-                <label class="field-label" for="cfgBrBodyNaSet">Bodů do setu</label>
+                <label class="field-label" for="cfgBrBodyNaSet">Hraje se do (bodů)</label>
                 <input type="number" id="cfgBrBodyNaSet" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgBrMaxBodu">Max. při prodloužení</label>
+                <input type="number" id="cfgBrMaxBodu" class="input input-mono">
               </div>
               <div class="field">
                 <label class="field-label" for="cfgBrVitezSetu">Vítězných setů na hru</label>

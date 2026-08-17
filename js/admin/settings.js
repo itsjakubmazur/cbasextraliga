@@ -46,6 +46,7 @@ const AdminSettings = {
       document.getElementById(`cfg${g.id}CelkemHer`).value = serie.celkemHer || 9;
       document.getElementById(`cfg${g.id}RemizaPri`).value = serie.remizaPri || 4;
       document.getElementById(`cfg${g.id}BodyNaSet`).value = format.bodyNaSet || 21;
+      document.getElementById(`cfg${g.id}MaxBodu`).value = format.maxBoduVSetu || format.bodyNaSet || 21;
       document.getElementById(`cfg${g.id}VitezSetu`).value = format.viteznychSetuNaHru || 2;
       document.getElementById(`cfg${g.id}BodovaniJson`).value = JSON.stringify((k.bodovani && k.bodovani[rep]) || {}, null, 2);
       document.getElementById(`cfg${g.id}ZonyJson`).value = JSON.stringify((k.zony && k.zony[rep]) || [], null, 2);
@@ -100,6 +101,7 @@ const AdminSettings = {
       };
       const formatObj = {
         bodyNaSet: parseInt(document.getElementById(`cfg${g.id}BodyNaSet`).value, 10) || 21,
+        maxBoduVSetu: parseInt(document.getElementById(`cfg${g.id}MaxBodu`).value, 10) || 21,
         viteznychSetuNaHru: parseInt(document.getElementById(`cfg${g.id}VitezSetu`).value, 10) || 2,
       };
       const bodovaniInfo = document.getElementById(`cfg${g.id}BodovaniInfo`).value;

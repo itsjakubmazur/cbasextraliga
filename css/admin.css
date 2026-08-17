@@ -373,6 +373,21 @@ body.admin-body {
 .cfg-group-pl { border-left-color: var(--new); }
 .cfg-group-br { border-left-color: var(--warn); }
 
+.cfg-subhead {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin: 18px 0 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+.cfg-group > .cfg-subhead:first-of-type {
+  margin-top: 14px;
+  padding-top: 0;
+  border-top: none;
+}
+
 /* ---------- Form controls ---------- */
 
 .field { margin-bottom: 14px; }
