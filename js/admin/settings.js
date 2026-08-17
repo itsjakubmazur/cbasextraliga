@@ -1,3 +1,14 @@
+// Kazda soutez ma vlastni format/bodovani/play-off, ktere se meni nezavisle
+// (napr. 1. liga muze prejit na jiny pocet setu/bodu nez extraliga) - proto
+// se nastavuji ve 3 oddelenych skupinach, ne jako jedna spolecna sada poli.
+// "1. liga" skupina zapisuje stejnou hodnotu do vsech tri jejich soutezi
+// (vychod/zapad/playoff), protoze v praxi vzdy hraji stejnym formatem.
+const KONFIG_GROUPS = [
+  { id: 'Ext', label: 'Extraliga', soutezKeys: ['extraliga'] },
+  { id: 'Pl', label: '1. liga', soutezKeys: ['prvni-liga-vychod', 'prvni-liga-zapad', 'prvni-liga-playoff'] },
+  { id: 'Br', label: 'Baráž', soutezKeys: ['baraze'] },
+];
+
 function describeBodovani(b) {
   if (!b) return '—';
   if (b.typ === 'win-draw-loss' && b.body) {
@@ -27,64 +38,80 @@ const AdminSettings = {
     document.getElementById('cfgExtraligaPlayoff').value = k.extraliga_playoff || 'QF+SF+F';
     document.getElementById('cfgPrvniLigaPlayoff').value = k.prvni_liga_playoff || 'combined-8';
     document.getElementById('cfgBaraze').value = k.baraze || 'single';
-    document.getElementById('cfgSerieCelkemHer').value = (k.serie && k.serie.celkemHer) || 9;
-    document.getElementById('cfgSerieRemizaPri').value = (k.serie && k.serie.remizaPri) || 4;
-    document.getElementById('cfgFormatBodyNaSet').value = (k.format && k.format.bodyNaSet) || 21;
-    document.getElementById('cfgFormatVitezSetu').value = (k.format && k.format.viteznychSetuNaHru) || 2;
-    document.getElementById('cfgBodovaniJson').value = JSON.stringify(k.bodovani || {}, null, 2);
-    document.getElementById('cfgZonyJson').value = JSON.stringify(k.zony || {}, null, 2);
-    document.getElementById('cfgBodovaniInfoJson').value = JSON.stringify(k.bodovaniInfo || {}, null, 2);
+
+    KONFIG_GROUPS.forEach((g) => {
+      const rep = g.soutezKeys[0];
+      const serie = (k.serie && k.serie[rep]) || {};
+      const format = (k.format && k.format[rep]) || {};
+      document.getElementById(`cfg${g.id}CelkemHer`).value = serie.celkemHer || 9;
+      document.getElementById(`cfg${g.id}RemizaPri`).value = serie.remizaPri || 4;
+      document.getElementById(`cfg${g.id}BodyNaSet`).value = format.bodyNaSet || 21;
+      document.getElementById(`cfg${g.id}VitezSetu`).value = format.viteznychSetuNaHru || 2;
+      document.getElementById(`cfg${g.id}BodovaniJson`).value = JSON.stringify((k.bodovani && k.bodovani[rep]) || {}, null, 2);
+      document.getElementById(`cfg${g.id}ZonyJson`).value = JSON.stringify((k.zony && k.zony[rep]) || [], null, 2);
+      document.getElementById(`cfg${g.id}BodovaniInfo`).value = (k.bodovaniInfo && k.bodovaniInfo[rep]) || '';
+    });
+
     this.renderKonfigSummary();
   },
 
   renderKonfigSummary() {
     const k = AdminData.draft.konfigurace || {};
-    const bodovani = k.bodovani || {};
-    const zony = k.zony || {};
-    const el = document.getElementById('cfgBodovaniSummary');
-    const keys = Object.keys(bodovani);
-    if (keys.length === 0) {
-      el.innerHTML = '<div class="text-faint">Zatím žádná konfigurace bodování — vyplň JSON pole níže.</div>';
-      return;
-    }
-    el.innerHTML = keys
-      .map(
-        (soutez) => `<div class="cfg-summary-row">
-          <span class="cfg-summary-key">${soutez}</span>
-          <span class="cfg-summary-val">${describeBodovani(bodovani[soutez])}<br>${describeZony(zony[soutez])}</span>
-        </div>`
-      )
-      .join('');
+    KONFIG_GROUPS.forEach((g) => {
+      const rep = g.soutezKeys[0];
+      const bodovani = (k.bodovani && k.bodovani[rep]) || null;
+      const zony = (k.zony && k.zony[rep]) || null;
+      const el = document.getElementById(`cfg${g.id}Summary`);
+      el.innerHTML = `<div class="cfg-summary-row"><span class="cfg-summary-val">${describeBodovani(bodovani)}<br>${describeZony(zony)}</span></div>`;
+    });
   },
 
   saveKonfigForm() {
     if (!AdminData.draft.konfigurace) AdminData.draft.konfigurace = {};
     const k = AdminData.draft.konfigurace;
+    k.bodovani = k.bodovani || {};
+    k.zony = k.zony || {};
+    k.bodovaniInfo = k.bodovaniInfo || {};
+    k.serie = k.serie || {};
+    k.format = k.format || {};
 
-    let bodovani, zony, bodovaniInfo;
-    try {
-      bodovani = JSON.parse(document.getElementById('cfgBodovaniJson').value);
-      zony = JSON.parse(document.getElementById('cfgZonyJson').value);
-      bodovaniInfo = JSON.parse(document.getElementById('cfgBodovaniInfoJson').value);
-    } catch (err) {
-      document.getElementById('cfgStatus').textContent = '❌ Chyba v JSON poli: ' + err.message;
-      return;
+    // Nejdriv naparsovat a zvalidovat VSECHNY skupiny, teprve pak neco zapsat -
+    // at chyba v jedne skupine nenechá koncept v napůl uloženém stavu.
+    const parsed = [];
+    for (const g of KONFIG_GROUPS) {
+      try {
+        const bodovani = JSON.parse(document.getElementById(`cfg${g.id}BodovaniJson`).value);
+        const zony = JSON.parse(document.getElementById(`cfg${g.id}ZonyJson`).value);
+        parsed.push({ g, bodovani, zony });
+      } catch (err) {
+        document.getElementById('cfgStatus').textContent = `❌ Chyba v JSON poli skupiny „${g.label}": ${err.message}`;
+        return;
+      }
     }
 
     k.extraliga_playoff = document.getElementById('cfgExtraligaPlayoff').value;
     k.prvni_liga_playoff = document.getElementById('cfgPrvniLigaPlayoff').value;
     k.baraze = document.getElementById('cfgBaraze').value;
-    k.serie = {
-      celkemHer: parseInt(document.getElementById('cfgSerieCelkemHer').value, 10) || 9,
-      remizaPri: parseInt(document.getElementById('cfgSerieRemizaPri').value, 10) || 4,
-    };
-    k.format = Object.assign({}, k.format, {
-      bodyNaSet: parseInt(document.getElementById('cfgFormatBodyNaSet').value, 10) || 21,
-      viteznychSetuNaHru: parseInt(document.getElementById('cfgFormatVitezSetu').value, 10) || 2,
+
+    parsed.forEach(({ g, bodovani, zony }) => {
+      const serieObj = {
+        celkemHer: parseInt(document.getElementById(`cfg${g.id}CelkemHer`).value, 10) || 9,
+        remizaPri: parseInt(document.getElementById(`cfg${g.id}RemizaPri`).value, 10) || 4,
+      };
+      const formatObj = {
+        bodyNaSet: parseInt(document.getElementById(`cfg${g.id}BodyNaSet`).value, 10) || 21,
+        viteznychSetuNaHru: parseInt(document.getElementById(`cfg${g.id}VitezSetu`).value, 10) || 2,
+      };
+      const bodovaniInfo = document.getElementById(`cfg${g.id}BodovaniInfo`).value;
+
+      g.soutezKeys.forEach((soutez) => {
+        k.serie[soutez] = serieObj;
+        k.format[soutez] = Object.assign({}, k.format[soutez], formatObj);
+        k.bodovani[soutez] = bodovani;
+        k.zony[soutez] = zony;
+        k.bodovaniInfo[soutez] = bodovaniInfo;
+      });
     });
-    k.bodovani = bodovani;
-    k.zony = zony;
-    k.bodovaniInfo = bodovaniInfo;
 
     this.renderKonfigSummary();
     document.getElementById('cfgStatus').textContent = '✓ Nastavení uloženo do konceptu. Nezapomeň publikovat.';

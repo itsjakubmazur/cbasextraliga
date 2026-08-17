@@ -241,18 +241,62 @@
             <button onclick="AdminSettings.zalozitNovouSezonu()" class="btn btn-accent">Založit novou sezónu…</button>
           </div>
 
-          <div class="card">
-            <h2 class="card-title">Formát a bodování</h2>
+          <p class="card-hint" style="margin-bottom:14px;">
+            Každá soutěž má svůj vlastní formát, bodování a play-off — nastavují se úplně odděleně,
+            protože se mezi sezónami mění nezávisle na sobě (např. jiný počet setů/bodů pro 1. ligu než pro extraligu).
+          </p>
+
+          <!-- Skupina: Extraliga -->
+          <div class="card cfg-group cfg-group-ext">
+            <h2 class="card-title">🔴 Extraliga</h2>
             <div class="field-row">
               <div class="field">
-                <label class="field-label" for="cfgExtraligaPlayoff">Play-off extraligy</label>
+                <label class="field-label" for="cfgExtraligaPlayoff">Play-off</label>
                 <select id="cfgExtraligaPlayoff" class="input">
                   <option value="QF+SF+F">QF+SF+F (2 přímo do Final Four)</option>
                   <option value="QF+SF+F+3rd">QF+SF+F + zápas o 3. místo</option>
                 </select>
               </div>
               <div class="field">
-                <label class="field-label" for="cfgPrvniLigaPlayoff">Play-off 1. ligy</label>
+                <label class="field-label" for="cfgExtCelkemHer">Her v sérii celkem</label>
+                <input type="number" id="cfgExtCelkemHer" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgExtRemizaPri">Zlatý zápas při</label>
+                <input type="number" id="cfgExtRemizaPri" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgExtBodyNaSet">Bodů do setu</label>
+                <input type="number" id="cfgExtBodyNaSet" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgExtVitezSetu">Vítězných setů na hru</label>
+                <input type="number" id="cfgExtVitezSetu" class="input input-mono">
+              </div>
+            </div>
+            <div id="cfgExtSummary" class="cfg-summary"></div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="cfgExtBodovaniJson">bodování do tabulky</label>
+                <textarea id="cfgExtBodovaniJson" class="input input-mono" style="height:150px;"></textarea>
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgExtZonyJson">postupové zóny</label>
+                <textarea id="cfgExtZonyJson" class="input input-mono" style="height:150px;"></textarea>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="cfgExtBodovaniInfo">text pod tabulkou</label>
+              <input type="text" id="cfgExtBodovaniInfo" class="input">
+            </div>
+          </div>
+
+          <!-- Skupina: 1. liga -->
+          <div class="card cfg-group cfg-group-pl">
+            <h2 class="card-title">🔵 1. liga <span class="text-faint" style="font-weight:400;">(Východ + Západ + Play-off dohromady)</span></h2>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="cfgPrvniLigaPlayoff">Play-off</label>
                 <select id="cfgPrvniLigaPlayoff" class="input">
                   <option value="combined-8">combined-8 (4+4 společné QF)</option>
                   <option value="combined-4">combined-4 (2+2 rovnou SF)</option>
@@ -261,53 +305,85 @@
                 </select>
               </div>
               <div class="field">
-                <label class="field-label" for="cfgBaraze">Baráž</label>
+                <label class="field-label" for="cfgPlCelkemHer">Her v sérii celkem</label>
+                <input type="number" id="cfgPlCelkemHer" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgPlRemizaPri">Zlatý zápas při</label>
+                <input type="number" id="cfgPlRemizaPri" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgPlBodyNaSet">Bodů do setu</label>
+                <input type="number" id="cfgPlBodyNaSet" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgPlVitezSetu">Vítězných setů na hru</label>
+                <input type="number" id="cfgPlVitezSetu" class="input input-mono">
+              </div>
+            </div>
+            <div id="cfgPlSummary" class="cfg-summary"></div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="cfgPlBodovaniJson">bodování do tabulky</label>
+                <textarea id="cfgPlBodovaniJson" class="input input-mono" style="height:150px;"></textarea>
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgPlZonyJson">postupové zóny</label>
+                <textarea id="cfgPlZonyJson" class="input input-mono" style="height:150px;"></textarea>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="cfgPlBodovaniInfo">text pod tabulkou</label>
+              <input type="text" id="cfgPlBodovaniInfo" class="input">
+            </div>
+          </div>
+
+          <!-- Skupina: Baraz -->
+          <div class="card cfg-group cfg-group-br">
+            <h2 class="card-title">🟡 Baráž</h2>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="cfgBaraze">Formát</label>
                 <select id="cfgBaraze" class="input">
                   <option value="single">single (jedna série)</option>
                   <option value="round-robin-3">round-robin-3 (3 týmy)</option>
                 </select>
               </div>
+              <div class="field">
+                <label class="field-label" for="cfgBrCelkemHer">Her v sérii celkem</label>
+                <input type="number" id="cfgBrCelkemHer" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgBrRemizaPri">Zlatý zápas při</label>
+                <input type="number" id="cfgBrRemizaPri" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgBrBodyNaSet">Bodů do setu</label>
+                <input type="number" id="cfgBrBodyNaSet" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgBrVitezSetu">Vítězných setů na hru</label>
+                <input type="number" id="cfgBrVitezSetu" class="input input-mono">
+              </div>
             </div>
+            <div id="cfgBrSummary" class="cfg-summary"></div>
             <div class="field-row">
               <div class="field">
-                <label class="field-label" for="cfgSerieCelkemHer">Her v sérii celkem</label>
-                <input type="number" id="cfgSerieCelkemHer" class="input input-mono">
+                <label class="field-label" for="cfgBrBodovaniJson">bodování do tabulky</label>
+                <textarea id="cfgBrBodovaniJson" class="input input-mono" style="height:150px;"></textarea>
               </div>
               <div class="field">
-                <label class="field-label" for="cfgSerieRemizaPri">Remíza / zlatý zápas při</label>
-                <input type="number" id="cfgSerieRemizaPri" class="input input-mono">
-              </div>
-              <div class="field">
-                <label class="field-label" for="cfgFormatBodyNaSet">Bodů do setu</label>
-                <input type="number" id="cfgFormatBodyNaSet" class="input input-mono">
-              </div>
-              <div class="field">
-                <label class="field-label" for="cfgFormatVitezSetu">Vítězných setů na hru</label>
-                <input type="number" id="cfgFormatVitezSetu" class="input input-mono">
+                <label class="field-label" for="cfgBrZonyJson">postupové zóny</label>
+                <textarea id="cfgBrZonyJson" class="input input-mono" style="height:150px;"></textarea>
               </div>
             </div>
-            <p class="text-faint">„Her v sérii" a „remíza/zlatý zápas při" určují formát utkání a kdy nastává zlatý zápas — platí pro všechny soutěže této sezóny stejně.</p>
+            <div class="field">
+              <label class="field-label" for="cfgBrBodovaniInfo">text pod tabulkou</label>
+              <input type="text" id="cfgBrBodovaniInfo" class="input">
+            </div>
           </div>
 
           <div class="card">
-            <h2 class="card-title">Bodování do tabulky a postupové zóny</h2>
-            <p class="card-hint">Přehled toho, co je nastavené teď. Pro jemné doladění je pod každým otevřený JSON (per soutěž — extraliga, prvni-liga-vychod, prvni-liga-zapad, prvni-liga-playoff, baraze).</p>
-
-            <div id="cfgBodovaniSummary" class="cfg-summary"></div>
-            <div class="field-row">
-              <div class="field">
-                <label class="field-label" for="cfgBodovaniJson">bodovani</label>
-                <textarea id="cfgBodovaniJson" class="input input-mono" style="height:170px;"></textarea>
-              </div>
-              <div class="field">
-                <label class="field-label" for="cfgZonyJson">zony</label>
-                <textarea id="cfgZonyJson" class="input input-mono" style="height:170px;"></textarea>
-              </div>
-              <div class="field">
-                <label class="field-label" for="cfgBodovaniInfoJson">bodovaniInfo</label>
-                <textarea id="cfgBodovaniInfoJson" class="input input-mono" style="height:170px;"></textarea>
-              </div>
-            </div>
             <button onclick="AdminSettings.saveKonfigForm()" class="btn btn-primary">Uložit nastavení do konceptu</button>
             <p id="cfgStatus" class="text-faint mt-2"></p>
           </div>

@@ -365,6 +365,14 @@ body.admin-body {
   border-color: rgba(227, 30, 51, 0.35);
 }
 
+.cfg-group {
+  border-left-width: 3px;
+  border-left-style: solid;
+}
+.cfg-group-ext { border-left-color: var(--accent); }
+.cfg-group-pl { border-left-color: var(--new); }
+.cfg-group-br { border-left-color: var(--warn); }
+
 /* ---------- Form controls ---------- */
 
 .field { margin-bottom: 14px; }
