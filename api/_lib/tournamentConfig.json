@@ -1,0 +1,35 @@
+{
+  "_comment": "tournamentId/competitionId jsou nepruhledna GUID z czechbadminton.cz API. Dohledano rucne pres devtools/API pro sezonu 2025/2026 - pri zalozeni nove sezony je treba znovu dohledat (viz README v tomto souboru).",
+  "_sezona": "2025/2026",
+  "extraliga": {
+    "tournamentId": "314cfc4c-602a-4c4e-b65c-b31c7cae9ceb",
+    "competitions": {
+      "Základní část": "3b4a4d02-a467-4ab2-8c72-3a437fa7ee04",
+      "PLAY OFF": "674f42c9-58c5-435b-809d-4eb733555e4a"
+    }
+  },
+  "prvni-liga-zapad": {
+    "tournamentId": "6cf4e55a-502c-4d77-9f65-72ac041cc4fc",
+    "competitions": {
+      "Základní část": "c34999bb-d67f-4d32-8786-03dd5e490e6e"
+    }
+  },
+  "prvni-liga-vychod": {
+    "tournamentId": "13fd0732-87ea-4c74-994e-50c685bce20f",
+    "competitions": {
+      "Základní část": "3bbde037-4921-46c0-b5ec-fb19147b41cd"
+    }
+  },
+  "prvni-liga-playoff": {
+    "tournamentId": "c7af455b-df0c-4116-868a-59feb8c740b0",
+    "competitions": {
+      "1. liga PLAY OFF": "d8fb0701-54e4-4272-bd05-a1b76957021c"
+    }
+  },
+  "baraze": {
+    "tournamentId": "08b45012-5ba0-4836-8896-d4ecd68384d7",
+    "competitions": {
+      "Baráž o Extraligu v sezóně 2026-2027": "31929e20-cc63-4163-b1ff-bc06fc1a7710"
+    }
+  }
+}

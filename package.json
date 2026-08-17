@@ -1,0 +1,9 @@
+{
+  "name": "cbasextraliga",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Extraligove tabulky - staticky web + admin API na Vercelu",
+  "engines": {
+    "node": ">=18"
+  }
+}
