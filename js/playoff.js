@@ -1,9 +1,10 @@
 const Playoff = {
     _matchDetails: {},
 
-    _aktualniSerieConfig() {
+    _aktualniSerieConfig(soutez) {
         const konfig = Data.getKonfigurace(App.aktualni_rocnik);
-        return konfig.serie || { celkemHer: 9, remizaPri: 4 };
+        const DEFAULT = { celkemHer: 9, remizaPri: 4 };
+        return (konfig.serie && konfig.serie[soutez]) || DEFAULT;
     },
 
     zobrazitDetail(key) {
@@ -69,7 +70,7 @@ const Playoff = {
             if (!res[klic]) res[klic] = { tym1: z.tymDomaci, tym2: z.tymHoste, kolo: 'F', zapasy: [] };
             res[klic].zapasy.push(z);
         });
-        Object.values(res).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig()));
+        Object.values(res).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig('baraze')));
 
         const serie = Object.values(res)[0];
         if (!serie) return '<p style="color:var(--muted);text-align:center;padding:20px 0;font-size:0.85rem">Žádná data.</p>';
@@ -129,7 +130,7 @@ const Playoff = {
             if (!serie[klic]) serie[klic] = { tym1: z.tymDomaci, tym2: z.tymHoste, kolo: 'RR', zapasy: [] };
             serie[klic].zapasy.push(z);
         });
-        Object.values(serie).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig()));
+        Object.values(serie).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig('baraze')));
 
         // Build standings table
         const body = {};
@@ -321,7 +322,7 @@ const Playoff = {
             if (!results[klic]) results[klic] = { kolo, tym1: z.tymDomaci, tym2: z.tymHoste, zapasy: [] };
             results[klic].zapasy.push(z);
         });
-        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig()));
+        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig(soutez)));
         return results;
     },
 
@@ -422,7 +423,7 @@ const Playoff = {
             results[klic].zapasy.push(z);
         });
 
-        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig()));
+        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig(soutez)));
         return results;
     },
 
@@ -444,7 +445,7 @@ const Playoff = {
             results[klic].zapasy.push(z);
         });
 
-        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig()));
+        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig('prvni-liga-playoff')));
         return results;
     },
 

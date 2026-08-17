@@ -132,17 +132,21 @@ function safeCall(fn, label, failures) {
 }
 
 function main() {
-  const jsonPath = path.join(REPO, 'badminton-data.json');
-  const json = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+  // Data se nacitaji per-kontext stejne jako kod (git ref pro "pred", working
+  // tree pro "po") - pokud commit meni i TVAR dat (napr. migrace konfigurace),
+  // stary kod dostane stara data a novy kod nova data, misto aby se stary kod
+  // tvaril, ze rozumi datum, ktera jeste neexistovala.
+  const oldJson = JSON.parse(gitShow(REF, 'badminton-data.json'));
+  const newJson = JSON.parse(fs.readFileSync(path.join(REPO, 'badminton-data.json'), 'utf8'));
 
   console.log(`Regresni test: ${REF} (pred) vs working tree (po)`);
 
   const oldCtx = buildOld(REF);
   const newCtx = buildNew();
-  loadData(oldCtx, json);
-  loadData(newCtx, json);
+  loadData(oldCtx, oldJson);
+  loadData(newCtx, newJson);
 
-  const seasons = [null, ...Object.keys(json.historicke_rocniky || {})];
+  const seasons = [null, ...Object.keys(newJson.historicke_rocniky || {})];
   const failures = [];
   let checks = 0;
 

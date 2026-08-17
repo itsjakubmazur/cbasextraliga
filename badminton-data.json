@@ -11179,35 +11179,163 @@
           "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
-          "celkemHer": 9,
-          "remizaPri": 4
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
         },
         "format": {
-          "bodyNaSet": 21,
-          "viteznychSetuNaHru": 2,
-          "disciplinCelkem": 8,
-          "discipliny": [
-            {
-              "nazev": "Mužská čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská čtyřhra",
-              "pocet": 1
-            },
-            {
-              "nazev": "Smíšená čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Mužská dvouhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská dvouhra",
-              "pocet": 1
-            }
-          ]
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
         }
       },
       "zapasy": {
@@ -12179,35 +12307,163 @@
           "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
-          "celkemHer": 9,
-          "remizaPri": 4
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
         },
         "format": {
-          "bodyNaSet": 21,
-          "viteznychSetuNaHru": 2,
-          "disciplinCelkem": 8,
-          "discipliny": [
-            {
-              "nazev": "Mužská čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská čtyřhra",
-              "pocet": 1
-            },
-            {
-              "nazev": "Smíšená čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Mužská dvouhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská dvouhra",
-              "pocet": 1
-            }
-          ]
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
         }
       },
       "zapasy": {
@@ -12957,35 +13213,163 @@
           "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
-          "celkemHer": 9,
-          "remizaPri": 4
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
         },
         "format": {
-          "bodyNaSet": 21,
-          "viteznychSetuNaHru": 2,
-          "disciplinCelkem": 8,
-          "discipliny": [
-            {
-              "nazev": "Mužská čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská čtyřhra",
-              "pocet": 1
-            },
-            {
-              "nazev": "Smíšená čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Mužská dvouhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská dvouhra",
-              "pocet": 1
-            }
-          ]
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
         }
       },
       "zapasy": {
@@ -14552,35 +14936,163 @@
           "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
-          "celkemHer": 9,
-          "remizaPri": 4
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
         },
         "format": {
-          "bodyNaSet": 21,
-          "viteznychSetuNaHru": 2,
-          "disciplinCelkem": 8,
-          "discipliny": [
-            {
-              "nazev": "Mužská čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská čtyřhra",
-              "pocet": 1
-            },
-            {
-              "nazev": "Smíšená čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Mužská dvouhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská dvouhra",
-              "pocet": 1
-            }
-          ]
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
         }
       },
       "zapasy": {
@@ -16259,35 +16771,163 @@
           "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
-          "celkemHer": 9,
-          "remizaPri": 4
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
         },
         "format": {
-          "bodyNaSet": 21,
-          "viteznychSetuNaHru": 2,
-          "disciplinCelkem": 8,
-          "discipliny": [
-            {
-              "nazev": "Mužská čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská čtyřhra",
-              "pocet": 1
-            },
-            {
-              "nazev": "Smíšená čtyřhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Mužská dvouhra",
-              "pocet": 2
-            },
-            {
-              "nazev": "Ženská dvouhra",
-              "pocet": 1
-            }
-          ]
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
         }
       },
       "zapasy": {
@@ -27214,35 +27854,163 @@
       "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
     },
     "serie": {
-      "celkemHer": 9,
-      "remizaPri": 4
+      "extraliga": {
+        "celkemHer": 9,
+        "remizaPri": 4
+      },
+      "prvni-liga-vychod": {
+        "celkemHer": 9,
+        "remizaPri": 4
+      },
+      "prvni-liga-zapad": {
+        "celkemHer": 9,
+        "remizaPri": 4
+      },
+      "prvni-liga-playoff": {
+        "celkemHer": 9,
+        "remizaPri": 4
+      },
+      "baraze": {
+        "celkemHer": 9,
+        "remizaPri": 4
+      }
     },
     "format": {
-      "bodyNaSet": 21,
-      "viteznychSetuNaHru": 2,
-      "disciplinCelkem": 8,
-      "discipliny": [
-        {
-          "nazev": "Mužská čtyřhra",
-          "pocet": 2
-        },
-        {
-          "nazev": "Ženská čtyřhra",
-          "pocet": 1
-        },
-        {
-          "nazev": "Smíšená čtyřhra",
-          "pocet": 2
-        },
-        {
-          "nazev": "Mužská dvouhra",
-          "pocet": 2
-        },
-        {
-          "nazev": "Ženská dvouhra",
-          "pocet": 1
-        }
-      ]
+      "extraliga": {
+        "bodyNaSet": 21,
+        "viteznychSetuNaHru": 2,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ]
+      },
+      "prvni-liga-vychod": {
+        "bodyNaSet": 21,
+        "viteznychSetuNaHru": 2,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ]
+      },
+      "prvni-liga-zapad": {
+        "bodyNaSet": 21,
+        "viteznychSetuNaHru": 2,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ]
+      },
+      "prvni-liga-playoff": {
+        "bodyNaSet": 21,
+        "viteznychSetuNaHru": 2,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ]
+      },
+      "baraze": {
+        "bodyNaSet": 21,
+        "viteznychSetuNaHru": 2,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ]
+      }
     }
   },
   "tymLoga": {
