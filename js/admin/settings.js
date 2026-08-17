@@ -9,6 +9,17 @@ const KONFIG_GROUPS = [
   { id: 'Br', label: 'Baráž', soutezKeys: ['baraze'] },
 ];
 
+// "Utkani" (kolik disciplin, kdy zlaty zapas) se resi oddelene od bodovani/
+// zony/formatu-hry vyse, protoze 1. liga se chova jinak pro zakladni cast
+// (remiza je platny konecny vysledek) nez pro play-off (rozhoduje zlaty
+// zapas) - jednu spolecnou hodnotu pro celou "1. ligu" tu nejde pouzit.
+const SERIE_GROUPS = [
+  { id: 'Ext', soutezKeys: ['extraliga'], hasRemiza: true },
+  { id: 'PlZc', soutezKeys: ['prvni-liga-vychod', 'prvni-liga-zapad'], hasRemiza: false },
+  { id: 'PlPo', soutezKeys: ['prvni-liga-playoff'], hasRemiza: true },
+  { id: 'Br', soutezKeys: ['baraze'], hasRemiza: true },
+];
+
 function describeBodovani(b) {
   if (!b) return '—';
   if (b.typ === 'win-draw-loss' && b.body) {
@@ -41,16 +52,22 @@ const AdminSettings = {
 
     KONFIG_GROUPS.forEach((g) => {
       const rep = g.soutezKeys[0];
-      const serie = (k.serie && k.serie[rep]) || {};
       const format = (k.format && k.format[rep]) || {};
-      document.getElementById(`cfg${g.id}CelkemHer`).value = serie.celkemHer || 9;
-      document.getElementById(`cfg${g.id}RemizaPri`).value = serie.remizaPri || 4;
       document.getElementById(`cfg${g.id}BodyNaSet`).value = format.bodyNaSet || 21;
       document.getElementById(`cfg${g.id}MaxBodu`).value = format.maxBoduVSetu || format.bodyNaSet || 21;
       document.getElementById(`cfg${g.id}VitezSetu`).value = format.viteznychSetuNaHru || 2;
       document.getElementById(`cfg${g.id}BodovaniJson`).value = JSON.stringify((k.bodovani && k.bodovani[rep]) || {}, null, 2);
       document.getElementById(`cfg${g.id}ZonyJson`).value = JSON.stringify((k.zony && k.zony[rep]) || [], null, 2);
       document.getElementById(`cfg${g.id}BodovaniInfo`).value = (k.bodovaniInfo && k.bodovaniInfo[rep]) || '';
+    });
+
+    SERIE_GROUPS.forEach((sg) => {
+      const rep = sg.soutezKeys[0];
+      const serie = (k.serie && k.serie[rep]) || {};
+      document.getElementById(`cfg${sg.id}CelkemHer`).value = serie.celkemHer || 9;
+      if (sg.hasRemiza) {
+        document.getElementById(`cfg${sg.id}RemizaPri`).value = serie.remizaPri || 4;
+      }
     });
 
     this.renderKonfigSummary();
@@ -95,10 +112,6 @@ const AdminSettings = {
     k.baraze = document.getElementById('cfgBaraze').value;
 
     parsed.forEach(({ g, bodovani, zony }) => {
-      const serieObj = {
-        celkemHer: parseInt(document.getElementById(`cfg${g.id}CelkemHer`).value, 10) || 9,
-        remizaPri: parseInt(document.getElementById(`cfg${g.id}RemizaPri`).value, 10) || 4,
-      };
       const formatObj = {
         bodyNaSet: parseInt(document.getElementById(`cfg${g.id}BodyNaSet`).value, 10) || 21,
         maxBoduVSetu: parseInt(document.getElementById(`cfg${g.id}MaxBodu`).value, 10) || 21,
@@ -107,11 +120,27 @@ const AdminSettings = {
       const bodovaniInfo = document.getElementById(`cfg${g.id}BodovaniInfo`).value;
 
       g.soutezKeys.forEach((soutez) => {
-        k.serie[soutez] = serieObj;
-        k.format[soutez] = Object.assign({}, k.format[soutez], formatObj);
+        // Cisty prepis (ne merge) - stare "discipliny"/"disciplinCelkem" pole
+        // se timhle prirozene zahodi, uz je nikdo nikde necte.
+        k.format[soutez] = formatObj;
         k.bodovani[soutez] = bodovani;
         k.zony[soutez] = zony;
         k.bodovaniInfo[soutez] = bodovaniInfo;
+      });
+    });
+
+    SERIE_GROUPS.forEach((sg) => {
+      const celkemHer = parseInt(document.getElementById(`cfg${sg.id}CelkemHer`).value, 10) || 9;
+      // Kde zlaty zapas neplati (napr. 1. ligova zakladni cast, kde remiza
+      // je platny konecny vysledek), se remizaPri nastavi na hodnotu, ktere
+      // se v ramci celkemHer her nikdy nemuze dosahnout - mechanismus je
+      // tim strukturalne vyrazen z provozu bez potreby zvlastni "vypnuto" vetve.
+      const remizaPri = sg.hasRemiza
+        ? (parseInt(document.getElementById(`cfg${sg.id}RemizaPri`).value, 10) || 4)
+        : celkemHer;
+      const serieObj = { celkemHer, remizaPri };
+      sg.soutezKeys.forEach((soutez) => {
+        k.serie[soutez] = serieObj;
       });
     });
 

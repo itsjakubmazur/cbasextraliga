@@ -261,7 +261,13 @@
               </div>
               <div class="field">
                 <label class="field-label" for="cfgExtCelkemHer">Disciplín v utkání celkem</label>
-                <input type="number" id="cfgExtCelkemHer" class="input input-mono">
+                <select id="cfgExtCelkemHer" class="input">
+                  <option value="5">5</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="11">11</option>
+                </select>
               </div>
               <div class="field">
                 <label class="field-label" for="cfgExtRemizaPri">Zlatý zápas při stavu X:X</label>
@@ -305,10 +311,10 @@
           <div class="card cfg-group cfg-group-pl">
             <h2 class="card-title">🔵 1. liga <span class="text-faint" style="font-weight:400;">(Východ + Západ + Play-off dohromady)</span></h2>
 
-            <p class="cfg-subhead">Utkání <span class="text-faint" style="font-weight:400;">— kolik dílčích zápasů (disciplín) tvoří celé utkání dvou týmů</span></p>
+            <p class="cfg-subhead">Play-off formát</p>
             <div class="field-row">
               <div class="field">
-                <label class="field-label" for="cfgPrvniLigaPlayoff">Play-off</label>
+                <label class="field-label" for="cfgPrvniLigaPlayoff">Tvar pavouka</label>
                 <select id="cfgPrvniLigaPlayoff" class="input">
                   <option value="combined-8">combined-8 (4+4 společné QF)</option>
                   <option value="combined-4">combined-4 (2+2 rovnou SF)</option>
@@ -316,13 +322,37 @@
                   <option value="separate-QF+SF+F+3rd">separate-QF+SF+F+3rd</option>
                 </select>
               </div>
+            </div>
+
+            <p class="cfg-subhead">Utkání — základní část <span class="text-faint" style="font-weight:400;">(Východ + Západ) — remíza je platný konečný výsledek, žádný zlatý zápas</span></p>
+            <div class="field-row">
               <div class="field">
-                <label class="field-label" for="cfgPlCelkemHer">Disciplín v utkání celkem</label>
-                <input type="number" id="cfgPlCelkemHer" class="input input-mono">
+                <label class="field-label" for="cfgPlZcCelkemHer">Disciplín v utkání celkem</label>
+                <select id="cfgPlZcCelkemHer" class="input">
+                  <option value="5">5</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="11">11</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="cfg-subhead">Utkání — play-off <span class="text-faint" style="font-weight:400;">— tady naopak remíza nesmí zůstat, rozhoduje zlatý zápas</span></p>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="cfgPlPoCelkemHer">Disciplín v utkání celkem</label>
+                <select id="cfgPlPoCelkemHer" class="input">
+                  <option value="5">5</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="11">11</option>
+                </select>
               </div>
               <div class="field">
-                <label class="field-label" for="cfgPlRemizaPri">Zlatý zápas při stavu X:X</label>
-                <input type="number" id="cfgPlRemizaPri" class="input input-mono">
+                <label class="field-label" for="cfgPlPoRemizaPri">Zlatý zápas při stavu X:X</label>
+                <input type="number" id="cfgPlPoRemizaPri" class="input input-mono">
               </div>
             </div>
 
@@ -373,7 +403,13 @@
               </div>
               <div class="field">
                 <label class="field-label" for="cfgBrCelkemHer">Disciplín v utkání celkem</label>
-                <input type="number" id="cfgBrCelkemHer" class="input input-mono">
+                <select id="cfgBrCelkemHer" class="input">
+                  <option value="5">5</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="11">11</option>
+                </select>
               </div>
               <div class="field">
                 <label class="field-label" for="cfgBrRemizaPri">Zlatý zápas při stavu X:X</label>

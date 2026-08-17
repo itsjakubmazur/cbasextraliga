@@ -27855,22 +27855,22 @@
     },
     "serie": {
       "extraliga": {
-        "celkemHer": 9,
-        "remizaPri": 4
-      },
-      "prvni-liga-vychod": {
-        "celkemHer": 9,
-        "remizaPri": 4
-      },
-      "prvni-liga-zapad": {
-        "celkemHer": 9,
-        "remizaPri": 4
-      },
-      "prvni-liga-playoff": {
-        "celkemHer": 9,
+        "celkemHer": 7,
         "remizaPri": 4
       },
       "baraze": {
+        "celkemHer": 7,
+        "remizaPri": 4
+      },
+      "prvni-liga-vychod": {
+        "celkemHer": 8,
+        "remizaPri": 8
+      },
+      "prvni-liga-zapad": {
+        "celkemHer": 8,
+        "remizaPri": 8
+      },
+      "prvni-liga-playoff": {
         "celkemHer": 9,
         "remizaPri": 4
       }
