@@ -10961,7 +10961,7 @@
       "tym": "SK Brno Slatina"
     }
   ],
-  "datum": "2026-08-17T10:24:46.218Z",
+  "datum": "2026-08-17T12:46:48.512Z",
   "historicke_rocniky": {
     "2024/25": {
       "konfigurace": {
@@ -27904,7 +27904,7 @@
         ]
       },
       "prvni-liga-vychod": {
-        "bodyNaSet": 21,
+        "bodyNaSet": 15,
         "viteznychSetuNaHru": 2,
         "disciplinCelkem": 8,
         "discipliny": [
@@ -27931,7 +27931,7 @@
         ]
       },
       "prvni-liga-zapad": {
-        "bodyNaSet": 21,
+        "bodyNaSet": 15,
         "viteznychSetuNaHru": 2,
         "disciplinCelkem": 8,
         "discipliny": [
@@ -27958,7 +27958,7 @@
         ]
       },
       "prvni-liga-playoff": {
-        "bodyNaSet": 21,
+        "bodyNaSet": 15,
         "viteznychSetuNaHru": 2,
         "disciplinCelkem": 8,
         "discipliny": [
