@@ -14,6 +14,8 @@ const AdminData = {
     });
     if (!this.draft.vitezove) this.draft.vitezove = [];
     if (!this.draft.historicke_rocniky) this.draft.historicke_rocniky = {};
+    if (!this.draft.tymLoga) this.draft.tymLoga = {};
+    if (!this.draft.konfigurace) this.draft.konfigurace = {};
     return this.draft;
   },
 
@@ -72,5 +74,14 @@ const AdminData = {
 
   removeVitez(index) {
     this.draft.vitezove.splice(index, 1);
+  },
+
+  // Nedestruktivni sloucení log stažených ze sync API - nastaví/přepíše jen
+  // ty položky, které API skutečně vrátilo, ostatní (např. ruční override
+  // pro tým, co API zatím nemá) zůstávají beze změny.
+  mergeTymLoga(teamLogos) {
+    Object.entries(teamLogos || {}).forEach(([nazev, url]) => {
+      if (url) this.draft.tymLoga[nazev] = url;
+    });
   },
 };

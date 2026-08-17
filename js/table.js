@@ -66,6 +66,7 @@ const Table = {
                 '<td class="standings-pos-cell"><span class="standings-pos-num ' + pc + '">' + (idx + 1) + '</span></td>' +
                 '<td class="standings-name-cell">' +
                 '<span class="zone-dot zone-dot-' + (zone || 'none') + '"></span>' +
+                (Data.tymLoga && Data.tymLoga[tym] ? '<img class="team-row-logo" src="' + Statistics.escapeAttr(Data.tymLoga[tym]) + '" alt="" onerror="this.remove()">' : '') +
                 '<span class="team-name-full">' + Statistics.escapeHtml(tym) + '</span>' +
                 '<span class="team-name-short">' + Statistics.escapeHtml(Statistics.zkracenyNazev(tym)) + '</span>' +
                 '</td>' +

@@ -536,8 +536,15 @@ const App = {
             const color = avatarColors[idx % avatarColors.length];
             const abbr = tym.split(/\s+/).filter(w => !['sk','bk','tj','ba','ac','sc','tk'].includes(w.toLowerCase())).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('') || tym.charAt(0).toUpperCase();
             const statsText = t.utkani ? t.vyhry + 'V / ' + t.prohry + 'P · ' + t.body + ' bodů' : '';
+            const logoUrl = Data.tymLoga && Data.tymLoga[tym];
+            const avatarHtml = logoUrl
+                ? '<div class="team-tile-avatar team-tile-avatar-logo">' +
+                  '<img src="' + Statistics.escapeAttr(logoUrl) + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+                  '<div class="team-tile-avatar-fallback" style="background:' + color + ';display:none;">' + abbr + '</div>' +
+                  '</div>'
+                : '<div class="team-tile-avatar" style="background:' + color + ';">' + abbr + '</div>';
             return '<div class="team-tile" onclick="App.zobrazitRoster(\'' + Statistics.escapeAttr(tym) + '\')">' +
-                '<div class="team-tile-avatar" style="background:' + color + ';">' + abbr + '</div>' +
+                avatarHtml +
                 '<div class="team-tile-info"><div class="team-tile-name">' + Statistics.escapeHtml(tym) + '</div>' +
                 (statsText ? '<div class="team-tile-stats">' + statsText + '</div>' : '') +
                 '</div><div class="team-tile-pos">' + (idx + 1) + '.</div></div>';

@@ -1,5 +1,5 @@
 const { requireAuth } = require('../_lib/auth');
-const { fetchMatches, fetchGamesForMatch } = require('../_lib/czechbadminton');
+const { fetchMatches, fetchGamesForMatch, fetchTeams } = require('../_lib/czechbadminton');
 const { normalizeGame } = require('../_lib/normalize');
 const tournamentConfig = require('../_lib/tournamentConfig.json');
 
@@ -71,11 +71,23 @@ module.exports = async function handler(req, res) {
       }
     });
 
+    // 3) loga tymu (jeden dotaz, nezavisly na poctu zapasu)
+    let teamLogos = {};
+    try {
+      const teams = await fetchTeams(config.tournamentId);
+      teamLogos = Object.fromEntries(
+        teams.filter((t) => t.logoUrl).map((t) => [t.name, 'https://is.czechbadminton.cz' + t.logoUrl])
+      );
+    } catch {
+      // loga jsou bonus - pokud selzou, sync jako celek by kvuli tomu nemel spadnout
+    }
+
     res.status(200).json({
       competitionKey,
       matchCount: allMatches.length,
       candidates,
       warnings,
+      teamLogos,
     });
   } catch (err) {
     res.status(502).json({ error: 'Stažení z czechbadminton.cz selhalo', detail: String(err.message || err) });

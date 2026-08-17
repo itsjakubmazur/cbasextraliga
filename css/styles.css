@@ -513,6 +513,13 @@ body.dark-mode .close:hover { color: #ef4444; }
     color: var(--text2);
     flex-shrink: 0;
 }
+.playoff-team-logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
 
 .playoff-team-green .playoff-seed {
     background: rgba(22,163,74,0.18);
@@ -1999,6 +2006,15 @@ body.dark-mode .standings-pos-num.pos-bronze { color: #fb923c; }
     flex-shrink: 0;
     vertical-align: middle;
 }
+.team-row-logo {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    border-radius: 4px;
+    margin-right: 6px;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
 .zone-dot-top        { background: var(--zone-top); }
 .zone-dot-playoff    { background: var(--zone-playoff); }
 .zone-dot-relegation { background: var(--zone-relegation); }
@@ -2263,6 +2279,25 @@ body.dark-mode .match-detail-away { background: rgba(239,68,68,0.08); }
     font-weight: 900;
     color: white;
     flex-shrink: 0;
+    letter-spacing: -0.02em;
+}
+.team-tile-avatar-logo {
+    background: #fff;
+    padding: 4px;
+    overflow: hidden;
+}
+.team-tile-avatar-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.team-tile-avatar-fallback {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: white;
     letter-spacing: -0.02em;
 }
 

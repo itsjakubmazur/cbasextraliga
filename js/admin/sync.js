@@ -66,6 +66,7 @@ const AdminSync = {
       });
 
       this.lastRows = this.computeDiff(competitionKey, result.candidates);
+      AdminData.mergeTymLoga(result.teamLogos);
       statusEl.textContent = `Staženo ${result.matchCount} schválených zápasů z czechbadminton.cz.`;
       this.render();
     } catch (err) {

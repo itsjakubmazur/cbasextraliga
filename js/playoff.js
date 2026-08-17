@@ -473,9 +473,12 @@ const Playoff = {
         const scoreHtml = seriesScore !== undefined
             ? '<span class="playoff-series-score">' + seriesScore + '</span>'
             : '';
+        const logoUrl = Data.tymLoga && Data.tymLoga[name];
+        const logoHtml = logoUrl ? '<img class="playoff-team-logo" src="' + Statistics.escapeAttr(logoUrl) + '" alt="" onerror="this.remove()">' : '';
         return '<div class="playoff-team ' + cls + '">' +
             '<span class="playoff-seed">' + seed + '</span>' +
             confBadge +
+            logoHtml +
             '<span class="playoff-team-name clickable" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(name) + '\')">' + Statistics.escapeHtml(name) + '</span>' +
             scoreHtml +
             '</div>';

@@ -38,6 +38,10 @@ async function fetchCompetitions(tournamentId) {
   return fetchAllPages('/competitions/simple', buildEqualsFilterParams('tournamentId', tournamentId));
 }
 
+async function fetchTeams(tournamentId) {
+  return fetchAllPages('/teams', buildEqualsFilterParams('tournamentId', tournamentId));
+}
+
 async function fetchMatches(tournamentId, competitionId) {
   const params = [
     ...buildEqualsFilterParams('tournamentId', tournamentId),
@@ -71,4 +75,4 @@ async function fetchGamesForMatch(matchId) {
   ]);
 }
 
-module.exports = { fetchCompetitions, fetchMatches, fetchGamesForMatch };
+module.exports = { fetchCompetitions, fetchMatches, fetchGamesForMatch, fetchTeams };
