@@ -12,7 +12,9 @@ const AdminSync = {
   reconcileTeamName(soutez, apiName) {
     const known = AdminData.draft.tymy[soutez] || [];
     if (known.includes(apiName)) return { name: apiName, matched: true };
-    const norm = (s) => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    // Porovnava jen pismena/cislice - API i rucne zapsane nazvy se casto lisi
+    // v mezerach kolem zkratek (napr. "B.O.CHANCE" vs "B.O. Chance") nebo tecek.
+    const norm = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}]/gu, '');
     const match = known.find((t) => norm(t) === norm(apiName));
     if (match) return { name: match, matched: true };
     return { name: apiName, matched: false };
