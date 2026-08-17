@@ -241,40 +241,14 @@ const App = {
         } else if (pohled === 'extraliga') {
             nadpis.textContent = 'Extraliga play-off – ' + (this.aktualni_rocnik || '').replace('-', '/');
             const heroHtml = this._renderHeroHTML();
-            pavoucek.innerHTML = (heroHtml ? '<div class="hist-hero-wrap">' + heroHtml + '</div>' : '') + this._renderHistorickyPlayoff('extraliga');
+            pavoucek.innerHTML = (heroHtml ? '<div class="hist-hero-wrap">' + heroHtml + '</div>' : '') + Playoff.renderByKonfigurace('extraliga');
             Playoff.drawConnectors();
             this._renderHistorickyStatistiky('extraliga');
         } else {
             nadpis.textContent = '1. liga play-off – ' + (this.aktualni_rocnik || '').replace('-', '/');
-            pavoucek.innerHTML = this._renderHistorickyPlayoff('liga');
+            pavoucek.innerHTML = Playoff.renderByKonfigurace('liga');
             Playoff.drawConnectors();
             this._renderHistorickyStatistiky('liga');
-        }
-    },
-
-    _renderHistorickyPlayoff(typ) {
-        const konfig = Data.getKonfigurace(this.aktualni_rocnik);
-        if (typ === 'extraliga') {
-            const format = konfig.extraliga_playoff || 'QF+SF+F';
-            const tabulkaData = Statistics.vypocitejTabulku('extraliga');
-            let tymy = Playoff.seraditTymy(tabulkaData);
-            const res = Playoff.getPlayoffResults('extraliga');
-            // Historical data has only playoff matches – derive teams from results if table is empty
-            if (tymy.length < 6) {
-                tymy = Playoff._deriveExtraligaTeamsFromResults(res);
-            }
-            if (format === 'QF+SF+F+3rd') {
-                return Playoff.renderExtraligaBracketWithThirdPlace(tymy, tabulkaData, res);
-            }
-            return Playoff.renderExtraligaBracket(tymy, tabulkaData, res);
-        }
-
-        const format = konfig.prvni_liga_playoff || 'combined-8';
-        switch (format) {
-            case 'combined-4': return Playoff.renderPrvniLigaCombined4();
-            case 'separate-SF+F': return Playoff.renderPrvniLigaSeparate('SF');
-            case 'separate-QF+SF+F+3rd': return Playoff.renderPrvniLigaSeparate('QF');
-            default: return Playoff.renderPrvniLigaBracket();
         }
     },
 
