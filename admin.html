@@ -184,13 +184,17 @@
         <section class="admin-panel js-tab-panel" data-tab-panel="teams">
           <div class="panel-header">
             <h1>Týmy</h1>
-            <p>Soutěž se vybírá v panelu „Ruční zadání".</p>
+            <p>Kdo hraje danou soutěž. Loga se doplní automaticky při syncu, nebo je přidej v Nastavení sezóny.</p>
           </div>
           <div class="card">
-            <div class="field-row" style="align-items:flex-end;">
+            <div class="field" style="max-width:280px;">
+              <label class="field-label" for="teamsCompetition">Soutěž</label>
+              <select id="teamsCompetition" class="input js-soutez-select" onchange="AdminManage.onTeamsCompetitionChange()"></select>
+            </div>
+            <div class="field-row mt-2" style="align-items:flex-end;">
               <div class="field" style="flex:1;">
                 <label class="field-label" for="novyTym">Název týmu</label>
-                <input type="text" id="novyTym" class="input">
+                <input type="text" id="novyTym" class="input" placeholder="Přesně tak, jak se má zobrazovat">
               </div>
               <button onclick="AdminManage.addTym()" class="btn btn-accent">Přidat</button>
             </div>
@@ -287,19 +291,21 @@
 
           <div class="card">
             <h2 class="card-title">Bodování do tabulky a postupové zóny</h2>
-            <p class="card-hint">Pro běžnou úpravu stačí formulář výše. Tohle je pro jemné doladění (JSON, per soutěž) — klíče: extraliga, prvni-liga-vychod, prvni-liga-zapad, prvni-liga-playoff, baraze.</p>
+            <p class="card-hint">Přehled toho, co je nastavené teď. Pro jemné doladění je pod každým otevřený JSON (per soutěž — extraliga, prvni-liga-vychod, prvni-liga-zapad, prvni-liga-playoff, baraze).</p>
+
+            <div id="cfgBodovaniSummary" class="cfg-summary"></div>
             <div class="field-row">
               <div class="field">
                 <label class="field-label" for="cfgBodovaniJson">bodovani</label>
-                <textarea id="cfgBodovaniJson" class="input input-mono" style="height:190px;"></textarea>
+                <textarea id="cfgBodovaniJson" class="input input-mono" style="height:170px;"></textarea>
               </div>
               <div class="field">
                 <label class="field-label" for="cfgZonyJson">zony</label>
-                <textarea id="cfgZonyJson" class="input input-mono" style="height:190px;"></textarea>
+                <textarea id="cfgZonyJson" class="input input-mono" style="height:170px;"></textarea>
               </div>
               <div class="field">
                 <label class="field-label" for="cfgBodovaniInfoJson">bodovaniInfo</label>
-                <textarea id="cfgBodovaniInfoJson" class="input input-mono" style="height:190px;"></textarea>
+                <textarea id="cfgBodovaniInfoJson" class="input input-mono" style="height:170px;"></textarea>
               </div>
             </div>
             <button onclick="AdminSettings.saveKonfigForm()" class="btn btn-primary">Uložit nastavení do konceptu</button>
@@ -327,7 +333,23 @@
     </div>
   </div>
 
+  <!-- Modal (nahrazuje alert/confirm/prompt) -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-box">
+      <h3 id="modalTitle" class="modal-title"></h3>
+      <p id="modalBody" class="modal-body"></p>
+      <div id="modalInputWrap" class="field" style="display:none;">
+        <input type="text" id="modalInput" class="input">
+      </div>
+      <div class="modal-actions">
+        <button id="modalCancelBtn" class="btn">Zrušit</button>
+        <button id="modalConfirmBtn" class="btn btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+
 <script src="js/admin/api.js"></script>
+<script src="js/admin/modal.js"></script>
 <script src="js/admin/data.js"></script>
 <script src="js/admin/auth.js"></script>
 <script src="js/admin/sync.js"></script>

@@ -35,7 +35,6 @@ const AdminManage = {
   onCompetitionChange() {
     const soutez = document.getElementById('manageCompetition').value;
     this.populateTeamSelects(soutez);
-    this.renderTeamList(soutez);
     this.renderMatchList(soutez);
   },
 
@@ -49,7 +48,7 @@ const AdminManage = {
     document.getElementById('manageFormTitle').textContent = 'Přidat zápas';
   },
 
-  saveZapas() {
+  async saveZapas() {
     const soutez = document.getElementById('manageCompetition').value;
     const kolo = document.getElementById('manageKolo').value.trim();
     const tymDomaci = document.getElementById('manageTymDomaci').value;
@@ -62,7 +61,7 @@ const AdminManage = {
     const datum = document.getElementById('manageDatum').value;
 
     if (!kolo || !tymDomaci || !tymHoste || !domaci || !hoste || !vysledek) {
-      alert('Vyplň prosím kolo, oba týmy, hráče a výsledek.');
+      await AdminModal.alert({ title: 'Chybí údaje', body: 'Vyplň prosím kolo, oba týmy, hráče a výsledek.' });
       return;
     }
 
@@ -102,8 +101,14 @@ const AdminManage = {
     window.scrollTo({ top: document.getElementById('manageFormTitle').offsetTop - 20, behavior: 'smooth' });
   },
 
-  deleteZapas(soutez, id) {
-    if (!confirm('Opravdu smazat tento zápas z konceptu?')) return;
+  async deleteZapas(soutez, id) {
+    const ok = await AdminModal.confirm({
+      title: 'Smazat zápas?',
+      body: 'Odebere se z konceptu. Nic se na webu nezmění, dokud nepublikuješ.',
+      confirmLabel: 'Smazat',
+      danger: true,
+    });
+    if (!ok) return;
     AdminData.removeZapas(soutez, id);
     this.renderMatchList(soutez);
     AdminPublish.refreshSummary();
@@ -130,8 +135,12 @@ const AdminManage = {
   },
 
   // --- Tymy ---
+  onTeamsCompetitionChange() {
+    this.renderTeamList(document.getElementById('teamsCompetition').value);
+  },
+
   addTym() {
-    const soutez = document.getElementById('manageCompetition').value;
+    const soutez = document.getElementById('teamsCompetition').value;
     const input = document.getElementById('novyTym');
     AdminData.addTym(soutez, input.value);
     input.value = '';
@@ -140,8 +149,14 @@ const AdminManage = {
     AdminPublish.refreshSummary();
   },
 
-  removeTym(soutez, nazev) {
-    if (!confirm(`Odebrat tým "${nazev}" ze seznamu?`)) return;
+  async removeTym(soutez, nazev) {
+    const ok = await AdminModal.confirm({
+      title: 'Odebrat tým?',
+      body: `„${nazev}" zmizí ze seznamu týmů. Zápasy s tímto týmem v konceptu zůstanou beze změny.`,
+      confirmLabel: 'Odebrat',
+      danger: true,
+    });
+    if (!ok) return;
     AdminData.removeTym(soutez, nazev);
     this.populateTeamSelects(soutez);
     this.renderTeamList(soutez);
@@ -156,12 +171,17 @@ const AdminManage = {
       return;
     }
     el.innerHTML = tymy
-      .map(
-        (t) => `<div class="list-row">
-          <span>${t}</span>
+      .map((t) => {
+        const logoUrl = AdminData.draft.tymLoga && AdminData.draft.tymLoga[t];
+        const logo = logoUrl
+          ? `<img class="list-row-logo" src="${logoUrl.replace(/"/g, '&quot;')}" alt="" onerror="this.style.visibility='hidden'">`
+          : `<span class="list-row-logo" style="background:var(--surface-hover);display:inline-block;"></span>`;
+        return `<div class="list-row">
+          ${logo}
+          <span style="flex:1;">${t}</span>
           <button class="btn-danger-text" onclick="AdminManage.removeTym('${soutez}', '${t.replace(/'/g, "\\'")}')">Odebrat</button>
-        </div>`
-      )
+        </div>`;
+      })
       .join('');
   },
 
@@ -176,8 +196,15 @@ const AdminManage = {
     AdminPublish.refreshSummary();
   },
 
-  removeVitez(index) {
-    if (!confirm('Odebrat tento záznam z historie vítězů?')) return;
+  async removeVitez(index) {
+    const v = AdminData.draft.vitezove[index];
+    const ok = await AdminModal.confirm({
+      title: 'Odebrat záznam?',
+      body: v ? `${v.sezona} — ${v.tym} zmizí z historie vítězů.` : 'Tento záznam zmizí z historie vítězů.',
+      confirmLabel: 'Odebrat',
+      danger: true,
+    });
+    if (!ok) return;
     AdminData.removeVitez(index);
     this.renderVitezList();
     AdminPublish.refreshSummary();
@@ -202,8 +229,8 @@ const AdminManage = {
   initAll() {
     const soutez = document.getElementById('manageCompetition').value;
     this.populateTeamSelects(soutez);
-    this.renderTeamList(soutez);
     this.renderMatchList(soutez);
+    this.renderTeamList(document.getElementById('teamsCompetition').value);
     this.renderVitezList();
   },
 };

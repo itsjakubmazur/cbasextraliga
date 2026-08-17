@@ -1,3 +1,20 @@
+function describeBodovani(b) {
+  if (!b) return '—';
+  if (b.typ === 'win-draw-loss' && b.body) {
+    return `výhra ${b.body.vyhra}b · remíza ${b.body.remiza}b · prohra ${b.body.prohra}b`;
+  }
+  if (b.typ === 'margin-tiered' && b.tiers) {
+    return b.tiers.map((t) => `${t.minZapasyVitez}+ výher → ${t.body[0]}:${t.body[1]}b`).join(' · ');
+  }
+  return '—';
+}
+
+function describeZony(zList) {
+  if (!zList || !zList.length) return 'žádné zóny';
+  const legendy = zList.filter((z) => z.legenda).map((z) => z.legenda);
+  return legendy.length ? legendy.join(' · ') : 'žádné zóny';
+}
+
 const AdminSettings = {
   init() {
     document.getElementById('cfgAktualniRocnik').textContent = AdminData.draft.rocnik || '(bez ročníku)';
@@ -17,6 +34,27 @@ const AdminSettings = {
     document.getElementById('cfgBodovaniJson').value = JSON.stringify(k.bodovani || {}, null, 2);
     document.getElementById('cfgZonyJson').value = JSON.stringify(k.zony || {}, null, 2);
     document.getElementById('cfgBodovaniInfoJson').value = JSON.stringify(k.bodovaniInfo || {}, null, 2);
+    this.renderKonfigSummary();
+  },
+
+  renderKonfigSummary() {
+    const k = AdminData.draft.konfigurace || {};
+    const bodovani = k.bodovani || {};
+    const zony = k.zony || {};
+    const el = document.getElementById('cfgBodovaniSummary');
+    const keys = Object.keys(bodovani);
+    if (keys.length === 0) {
+      el.innerHTML = '<div class="text-faint">Zatím žádná konfigurace bodování — vyplň JSON pole níže.</div>';
+      return;
+    }
+    el.innerHTML = keys
+      .map(
+        (soutez) => `<div class="cfg-summary-row">
+          <span class="cfg-summary-key">${soutez}</span>
+          <span class="cfg-summary-val">${describeBodovani(bodovani[soutez])}<br>${describeZony(zony[soutez])}</span>
+        </div>`
+      )
+      .join('');
   },
 
   saveKonfigForm() {
@@ -48,6 +86,7 @@ const AdminSettings = {
     k.zony = zony;
     k.bodovaniInfo = bodovaniInfo;
 
+    this.renderKonfigSummary();
     document.getElementById('cfgStatus').textContent = '✓ Nastavení uloženo do konceptu. Nezapomeň publikovat.';
     AdminPublish.refreshSummary();
   },
@@ -63,7 +102,14 @@ const AdminSettings = {
     AdminPublish.refreshSummary();
   },
 
-  removeLogo(tym) {
+  async removeLogo(tym) {
+    const ok = await AdminModal.confirm({
+      title: 'Odebrat logo?',
+      body: `Logo pro „${tym}" zmizí. Příští sync ho případně zase doplní, pokud ho API nabízí.`,
+      confirmLabel: 'Odebrat',
+      danger: true,
+    });
+    if (!ok) return;
     delete AdminData.draft.tymLoga[tym];
     this.renderLogaList();
     AdminPublish.refreshSummary();
@@ -87,16 +133,30 @@ const AdminSettings = {
       .join('');
   },
 
-  zalozitNovouSezonu() {
+  async zalozitNovouSezonu() {
     const currentRocnik = AdminData.draft.rocnik;
-    const novy = prompt('Zadej novou sezónu (např. 2026/27):', '');
+    const novy = await AdminModal.prompt({
+      title: 'Založit novou sezónu',
+      body: currentRocnik
+        ? `Aktuální ${currentRocnik} se archivuje do historie a živá data se vyresetují na prázdno.`
+        : 'Zadej označení nové sezóny.',
+      inputPlaceholder: 'např. 2026/27',
+      confirmLabel: 'Pokračovat',
+    });
     if (!novy || !novy.trim()) return;
 
     if (currentRocnik) {
       const uzArchivovano = !!AdminData.draft.historicke_rocniky[currentRocnik];
-      const archivovat = !uzArchivovano || confirm(
-        `Sezóna ${currentRocnik} už je v historii archivovaná. Přepsat ji aktuálním živým stavem?`
-      );
+      let archivovat = true;
+      if (uzArchivovano) {
+        archivovat = await AdminModal.confirm({
+          title: 'Sezóna už je archivovaná',
+          body: `${currentRocnik} už je v historii. Přepsat ji aktuálním živým stavem, nebo ponechat, jak tam je?`,
+          confirmLabel: 'Přepsat',
+          cancelLabel: 'Ponechat',
+          danger: false,
+        });
+      }
       if (archivovat) {
         AdminData.draft.historicke_rocniky[currentRocnik] = JSON.parse(JSON.stringify({
           zapasy: AdminData.draft.zapasy,

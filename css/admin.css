@@ -584,6 +584,83 @@ textarea.input { resize: vertical; }
 .text-dim { color: var(--text-dim); }
 .text-faint { color: var(--text-faint); font-size: 0.78rem; }
 
+/* ---------- Modal ---------- */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 10, 14, 0.72);
+  backdrop-filter: blur(2px);
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+.modal-box {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 0 0 8px;
+}
+.modal-body {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin: 0 0 16px;
+  line-height: 1.55;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* ---------- Focus visibility (a11y quality floor) ---------- */
+
+.btn:focus-visible,
+.btn-publish:focus-visible,
+.btn-link:focus-visible,
+.btn-danger-text:focus-visible,
+.admin-nav-btn:focus-visible,
+.input:focus-visible,
+.checkbox:focus-visible {
+  outline: 2px solid var(--new);
+  outline-offset: 2px;
+}
+
+/* ---------- Config summary (Nastavení sezóny) ---------- */
+
+.cfg-summary {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+}
+.cfg-summary-row {
+  display: flex;
+  gap: 10px;
+  padding: 4px 0;
+}
+.cfg-summary-row + .cfg-summary-row { border-top: 1px solid var(--border-soft); }
+.cfg-summary-key {
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+  flex-shrink: 0;
+  width: 150px;
+}
+.cfg-summary-val { color: var(--text-dim); }
+
 @media (max-width: 760px) {
   .admin-shell { flex-direction: column; }
   .admin-sidebar {
