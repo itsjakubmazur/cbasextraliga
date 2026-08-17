@@ -76,6 +76,8 @@ function loadData(ctx, json) {
   ctx.Data.vitezove = json.vitezove || [];
   ctx.Data.historickeRocniky = json.historicke_rocniky || {};
   ctx.Data.rocnik = json.rocnik || null;
+  if (json.konfigurace) ctx.Data.konfigurace = json.konfigurace;
+  if (json.tymLoga) ctx.Data.tymLoga = json.tymLoga;
 }
 
 function buildOld(ref) {

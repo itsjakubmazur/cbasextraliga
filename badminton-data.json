@@ -11043,25 +11043,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "baraze": [
@@ -11069,25 +11073,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-vychod": [
@@ -11095,20 +11103,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-zapad": [
@@ -11116,20 +11127,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-playoff": [
@@ -11137,29 +11151,32 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ]
         },
         "bodovaniInfo": {
-          "extraliga": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "baraze": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "prvni-liga-vychod": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-zapad": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-playoff": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
           "celkemHer": 9,
@@ -12026,25 +12043,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "baraze": [
@@ -12052,25 +12073,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-vychod": [
@@ -12078,20 +12103,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-zapad": [
@@ -12099,20 +12127,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-playoff": [
@@ -12120,29 +12151,32 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ]
         },
         "bodovaniInfo": {
-          "extraliga": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "baraze": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "prvni-liga-vychod": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-zapad": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-playoff": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
           "celkemHer": 9,
@@ -12787,25 +12821,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "baraze": [
@@ -12813,25 +12851,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-vychod": [
@@ -12839,20 +12881,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-zapad": [
@@ -12860,20 +12905,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-playoff": [
@@ -12881,29 +12929,32 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ]
         },
         "bodovaniInfo": {
-          "extraliga": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "baraze": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "prvni-liga-vychod": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-zapad": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-playoff": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
           "celkemHer": 9,
@@ -14365,25 +14416,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "baraze": [
@@ -14391,25 +14446,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-vychod": [
@@ -14417,20 +14476,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-zapad": [
@@ -14438,20 +14500,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-playoff": [
@@ -14459,29 +14524,32 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ]
         },
         "bodovaniInfo": {
-          "extraliga": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "baraze": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "prvni-liga-vychod": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-zapad": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-playoff": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
           "celkemHer": 9,
@@ -16055,25 +16123,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "baraze": [
@@ -16081,25 +16153,29 @@
               "doPozice": 2,
               "typ": "final-four",
               "legenda": "1.–2. Přímý postup do Final Four",
-              "dividerAfter": "↓ Čtvrtfinále"
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
             },
             {
               "doPozice": 6,
               "typ": "playoff",
               "legenda": "3.–6. Čtvrtfinále",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             },
             {
               "doPozice": 7,
               "typ": "",
               "legenda": null,
-              "dividerAfter": "↓ Baráž"
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
             },
             {
               "doPozice": 8,
               "typ": "relegation",
               "legenda": "8. Baráž",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-vychod": [
@@ -16107,20 +16183,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-zapad": [
@@ -16128,20 +16207,23 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ],
           "prvni-liga-playoff": [
@@ -16149,29 +16231,32 @@
               "doPozice": 4,
               "typ": "playoff",
               "legenda": "1.–4. Play-off",
-              "dividerAfter": ""
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
             },
             {
               "doPozice": "last-1",
               "typ": "",
               "legenda": null,
               "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
               "dividerMinTeams": 6
             },
             {
               "doPozice": "last",
               "typ": "relegation",
               "legenda": "Posl. Kvalifikace o 1. ligu",
-              "dividerAfter": null
+              "dividerAfter": null,
+              "dividerClass": null
             }
           ]
         },
         "bodovaniInfo": {
-          "extraliga": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "baraze": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-          "prvni-liga-vychod": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-zapad": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-          "prvni-liga-playoff": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
         },
         "serie": {
           "celkemHer": 9,
@@ -26993,25 +27078,29 @@
           "doPozice": 2,
           "typ": "final-four",
           "legenda": "1.–2. Přímý postup do Final Four",
-          "dividerAfter": "↓ Čtvrtfinále"
+          "dividerAfter": "↓ Čtvrtfinále",
+          "dividerClass": "standings-divider-playoff"
         },
         {
           "doPozice": 6,
           "typ": "playoff",
           "legenda": "3.–6. Čtvrtfinále",
-          "dividerAfter": null
+          "dividerAfter": null,
+          "dividerClass": null
         },
         {
           "doPozice": 7,
           "typ": "",
           "legenda": null,
-          "dividerAfter": "↓ Baráž"
+          "dividerAfter": "↓ Baráž",
+          "dividerClass": "standings-divider-relegation"
         },
         {
           "doPozice": 8,
           "typ": "relegation",
           "legenda": "8. Baráž",
-          "dividerAfter": null
+          "dividerAfter": null,
+          "dividerClass": null
         }
       ],
       "baraze": [
@@ -27019,25 +27108,29 @@
           "doPozice": 2,
           "typ": "final-four",
           "legenda": "1.–2. Přímý postup do Final Four",
-          "dividerAfter": "↓ Čtvrtfinále"
+          "dividerAfter": "↓ Čtvrtfinále",
+          "dividerClass": "standings-divider-playoff"
         },
         {
           "doPozice": 6,
           "typ": "playoff",
           "legenda": "3.–6. Čtvrtfinále",
-          "dividerAfter": null
+          "dividerAfter": null,
+          "dividerClass": null
         },
         {
           "doPozice": 7,
           "typ": "",
           "legenda": null,
-          "dividerAfter": "↓ Baráž"
+          "dividerAfter": "↓ Baráž",
+          "dividerClass": "standings-divider-relegation"
         },
         {
           "doPozice": 8,
           "typ": "relegation",
           "legenda": "8. Baráž",
-          "dividerAfter": null
+          "dividerAfter": null,
+          "dividerClass": null
         }
       ],
       "prvni-liga-vychod": [
@@ -27045,20 +27138,23 @@
           "doPozice": 4,
           "typ": "playoff",
           "legenda": "1.–4. Play-off",
-          "dividerAfter": ""
+          "dividerAfter": "",
+          "dividerClass": "standings-divider-mid"
         },
         {
           "doPozice": "last-1",
           "typ": "",
           "legenda": null,
           "dividerAfter": "↓ Kvalifikace",
+          "dividerClass": "standings-divider-relegation",
           "dividerMinTeams": 6
         },
         {
           "doPozice": "last",
           "typ": "relegation",
           "legenda": "Posl. Kvalifikace o 1. ligu",
-          "dividerAfter": null
+          "dividerAfter": null,
+          "dividerClass": null
         }
       ],
       "prvni-liga-zapad": [
@@ -27066,20 +27162,23 @@
           "doPozice": 4,
           "typ": "playoff",
           "legenda": "1.–4. Play-off",
-          "dividerAfter": ""
+          "dividerAfter": "",
+          "dividerClass": "standings-divider-mid"
         },
         {
           "doPozice": "last-1",
           "typ": "",
           "legenda": null,
           "dividerAfter": "↓ Kvalifikace",
+          "dividerClass": "standings-divider-relegation",
           "dividerMinTeams": 6
         },
         {
           "doPozice": "last",
           "typ": "relegation",
           "legenda": "Posl. Kvalifikace o 1. ligu",
-          "dividerAfter": null
+          "dividerAfter": null,
+          "dividerClass": null
         }
       ],
       "prvni-liga-playoff": [
@@ -27087,29 +27186,32 @@
           "doPozice": 4,
           "typ": "playoff",
           "legenda": "1.–4. Play-off",
-          "dividerAfter": ""
+          "dividerAfter": "",
+          "dividerClass": "standings-divider-mid"
         },
         {
           "doPozice": "last-1",
           "typ": "",
           "legenda": null,
           "dividerAfter": "↓ Kvalifikace",
+          "dividerClass": "standings-divider-relegation",
           "dividerMinTeams": 6
         },
         {
           "doPozice": "last",
           "typ": "relegation",
           "legenda": "Posl. Kvalifikace o 1. ligu",
-          "dividerAfter": null
+          "dividerAfter": null,
+          "dividerClass": null
         }
       ]
     },
     "bodovaniInfo": {
-      "extraliga": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-      "baraze": "Bodování: Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
-      "prvni-liga-vychod": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-      "prvni-liga-zapad": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
-      "prvni-liga-playoff": "Bodování: Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+      "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+      "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+      "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+      "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+      "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
     },
     "serie": {
       "celkemHer": 9,

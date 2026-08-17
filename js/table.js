@@ -1,21 +1,47 @@
 const Table = {
+    // Cista funkce: pro dany pocet tymu vrati pole (0-based, delky tymyCount)
+    // { typ, legenda, dividerAfter, dividerMinTeams } podle konfig.zony[soutez].
+    // zonyConfig je serazeny seznam { doPozice, typ, legenda, dividerAfter, dividerMinTeams },
+    // doPozice je 1-based pozice v tabulce (nebo 'last'/'last-1' relativne k poctu tymu);
+    // prvni polozka s pozice <= doPozice vyhrava (stejny vzor jako bodovani.tiers).
+    vypocitejZony(tymyCount, zonyConfig) {
+        const resolvePozice = (doPozice) => {
+            if (doPozice === 'last') return tymyCount;
+            if (doPozice === 'last-1') return tymyCount - 1;
+            return doPozice;
+        };
+        const resolved = (zonyConfig || []).map(z => ({ ...z, _pozice: resolvePozice(z.doPozice) }));
+        const zony = [];
+        for (let idx = 0; idx < tymyCount; idx++) {
+            const pozice = idx + 1;
+            const match = resolved.find(z => pozice <= z._pozice);
+            if (!match) {
+                zony.push({ typ: '', legenda: null, dividerAfter: null, dividerClass: null, dividerMinTeams: null });
+                continue;
+            }
+            // dividerAfter/dividerClass plati jen na POSLEDNI pozici dane zony
+            // (hranici k dalsi), ne na kazde pozici, co do teto zony spada.
+            const jeHranice = pozice === match._pozice;
+            zony.push({
+                typ: match.typ,
+                legenda: match.legenda,
+                dividerAfter: jeHranice ? match.dividerAfter : null,
+                dividerClass: jeHranice ? match.dividerClass : null,
+                dividerMinTeams: jeHranice ? match.dividerMinTeams : null,
+            });
+        }
+        return zony;
+    },
+
     render(aktualni_soutez) {
         const tabulkaData = Statistics.vypocitejTabulku(aktualni_soutez);
         const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
-        const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
+        const konfig = Data.getKonfigurace(App.aktualni_rocnik);
+        const bodovani = (konfig.bodovani && konfig.bodovani[aktualni_soutez]) || Statistics._FALLBACK_BODOVANI.extraliga;
+        const jePrvniLiga = bodovani.remizaMozna;
+        const zony = this.vypocitejZony(tymy.length, (konfig.zony && konfig.zony[aktualni_soutez]) || []);
 
-        const getZone = (idx) => {
-            if (jePrvniLiga) {
-                if (idx <= 3) return 'playoff';
-                if (idx === tymy.length - 1) return 'relegation';
-                return '';
-            } else {
-                if (idx <= 1) return 'final-four';
-                if (idx <= 5) return 'playoff';
-                if (idx === 7) return 'relegation';
-                return '';
-            }
-        };
+        const getZone = (idx) => zony[idx].typ;
 
         const posClass = (idx) => ['pos-gold', 'pos-silver', 'pos-bronze'][idx] || '';
 
@@ -56,27 +82,19 @@ const Table = {
             );
 
             // Zone dividers (inserted after current row)
-            if (!jePrvniLiga && idx === 1) {
-                rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="' + colspan + '"><span>↓ Čtvrtfinále</span></td></tr>');
-            } else if (!jePrvniLiga && idx === 6) {
-                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="' + colspan + '"><span>↓ Baráž</span></td></tr>');
-            } else if (jePrvniLiga && idx === 3) {
-                rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="' + colspan + '"></td></tr>');
-            } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {
-                rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="' + colspan + '"><span>↓ Kvalifikace</span></td></tr>');
+            const z = zony[idx];
+            if (z.dividerAfter !== null && z.dividerAfter !== undefined && (!z.dividerMinTeams || tymy.length > z.dividerMinTeams - 1)) {
+                const label = z.dividerAfter ? '<span>' + z.dividerAfter + '</span>' : '';
+                rows.push('<tr class="standings-divider' + (z.dividerClass ? ' ' + z.dividerClass : '') + '"><td colspan="' + colspan + '">' + label + '</td></tr>');
             }
         });
 
-        const legendaInfo = jePrvniLiga
-            ? '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 1.–4. Play-off</span>' +
-              '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> Posl. Kvalifikace o 1. ligu</span>'
-            : '<span class="legenda-item"><span class="legenda-dot legenda-final-four"></span> 1.–2. Přímý postup do Final Four</span>' +
-              '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 3.–6. Čtvrtfinále</span>' +
-              '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 8. Baráž</span>';
+        const legendaInfo = ((konfig.zony && konfig.zony[aktualni_soutez]) || [])
+            .filter(z => z.legenda)
+            .map(z => '<span class="legenda-item"><span class="legenda-dot legenda-' + z.typ + '"></span> ' + z.legenda + '</span>')
+            .join('');
 
-        const bodovaniInfo = jePrvniLiga
-            ? '<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b'
-            : '<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b';
+        const bodovaniInfo = (konfig.bodovaniInfo && konfig.bodovaniInfo[aktualni_soutez]) || '';
 
         const remizaTh = jePrvniLiga ? '<th class="th-num" title="Remízy">R</th>' : '';
 
