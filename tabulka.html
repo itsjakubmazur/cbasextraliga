@@ -692,23 +692,35 @@
         </div>
     </div>
 
+    <!--
+      Sdilene vypocetni jadro se zbytkem webu (Data/Statistics/Table/Playoff) -
+      zajistuje, ze tenhle embed pocita body/zony/zlaty zapas STEJNE jako
+      hlavni web a reaguje na zmeny v Nastaveni sezony, misto aby mel
+      vlastni, tise se rozchazejici kopii teto logiky.
+      Vlastni vzhled/rozlozeni (nize) zustava beze zmeny.
+    -->
+    <script src="js/data.js"></script>
+    <script src="js/statistics.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/playoff.js"></script>
     <script>
+        // Tenhle widget vzdy zobrazuje jen zivou sezonu (zadny prohlizec historickych rocniku).
+        const App = { aktualni_rocnik: null };
+
         let zapasy = {};
         let aktualni_soutez = 'extraliga';
         let aktualni_pohled = 'zakladni';
 
         async function nacistData() {
-            try {
-                const response = await fetch('badminton-data.json');
-                const data = await response.json();
-                zapasy = data.zapasy;
-                aktualizujBarazeBtn();
-                zobrazitTabulku();
-            } catch (error) {
-                console.error('Chyba načítání:', error);
+            const ok = await Data.nacist();
+            if (!ok) {
                 document.getElementById('tabulkaBody').innerHTML =
                     '<tr><td colspan="9" style="padding:20px;text-align:center;color:#dc2626">Nepodařilo se načíst data</td></tr>';
+                return;
             }
+            zapasy = Data.zapasy;
+            aktualizujBarazeBtn();
+            zobrazitTabulku();
         }
 
         function aktualizujBarazeBtn() {
@@ -799,78 +811,22 @@
             return results;
         }
 
+        // Mapuje zonu (z Table.vypocitejZony, sdilene s hlavnim webem) na
+        // CSS tridy, ktere uz tenhle widget definuje pro radky/tecky.
+        const ZONE_ROW_CLASS = { 'final-four': 'standings-row-top', 'playoff': 'standings-row-playoff', 'relegation': 'standings-row-relegation', '': '' };
+
         function zobrazitTabulku() {
-            const tabulka = {};
-            const utkani  = {};
-            const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
-
-            (zapasy[aktualni_soutez] || []).forEach(zapas => {
-                if (isPlayoffKolo(zapas.kolo)) return;
-                const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
-                if (!utkani[klic]) utkani[klic] = { kolo:zapas.kolo, domaci:zapas.tymDomaci, hoste:zapas.tymHoste, zapasy:[] };
-                utkani[klic].zapasy.push(zapas);
-            });
-
-            Object.values(utkani).forEach(utk => {
-                const d = utk.domaci, h = utk.hoste;
-                if (!d || !h) return;
-
-                if (!tabulka[d]) tabulka[d] = { utkani:0, vyhry:0, remizy:0, prohry:0, zapasyV:0, zapasyP:0, setyV:0, setyP:0, bodyV:0, bodyP:0, body:0 };
-                if (!tabulka[h]) tabulka[h] = { utkani:0, vyhry:0, remizy:0, prohry:0, zapasyV:0, zapasyP:0, setyV:0, setyP:0, bodyV:0, bodyP:0, body:0 };
-
-                let dz=0, hz=0, ds=0, hs=0, db=0, hb=0;
-                utk.zapasy.forEach(z => {
-                    const v  = parseVysledek(z.vysledek);
-                    const bd = parseSety(z.sety);
-                    if (v.domaci>v.hoste) dz++; else hz++;
-                    ds+=v.domaci; hs+=v.hoste;
-                    db+=bd.domaciBody; hb+=bd.hosteBody;
-                });
-
-                let dbt=0, hbt=0;
-                if (jePrvniLiga) {
-                    if (dz===hz)  { dbt=2; hbt=2; tabulka[d].remizy++; tabulka[h].remizy++; }
-                    else if(dz>hz){ dbt=3; hbt=1; tabulka[d].vyhry++; tabulka[h].prohry++; }
-                    else           { hbt=3; dbt=1; tabulka[h].vyhry++; tabulka[d].prohry++; }
-                } else {
-                    if (dz>hz) { dbt=dz>=6?3:2; hbt=dz>=6?0:1; tabulka[d].vyhry++; tabulka[h].prohry++; }
-                    else        { hbt=hz>=6?3:2; dbt=hz>=6?0:1; tabulka[h].vyhry++; tabulka[d].prohry++; }
-                }
-
-                tabulka[d].utkani++; tabulka[d].zapasyV+=dz; tabulka[d].zapasyP+=hz;
-                tabulka[d].setyV+=ds; tabulka[d].setyP+=hs;
-                tabulka[d].bodyV+=db; tabulka[d].bodyP+=hb; tabulka[d].body+=dbt;
-
-                tabulka[h].utkani++; tabulka[h].zapasyV+=hz; tabulka[h].zapasyP+=dz;
-                tabulka[h].setyV+=hs; tabulka[h].setyP+=ds;
-                tabulka[h].bodyV+=hb; tabulka[h].bodyP+=db; tabulka[h].body+=hbt;
-            });
-
-            const tymy = Object.keys(tabulka).sort((a,b) => {
-                const tA=tabulka[a], tB=tabulka[b];
-                if (tB.body   !== tA.body)   return tB.body-tA.body;
-                if (tB.vyhry  !== tA.vyhry)  return tB.vyhry-tA.vyhry;
-                const rzA=tA.zapasyV-tA.zapasyP, rzB=tB.zapasyV-tB.zapasyP;
-                if (rzB !== rzA) return rzB-rzA;
-                const rsA=tA.setyV-tA.setyP, rsB=tB.setyV-tB.setyP;
-                if (rsB !== rsA) return rsB-rsA;
-                return (tB.bodyV-tB.bodyP)-(tA.bodyV-tA.bodyP);
-            });
+            const tabulkaData = Statistics.vypocitejTabulku(aktualni_soutez);
+            const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
+            const konfig = Data.getKonfigurace(App.aktualni_rocnik);
+            const zony = Table.vypocitejZony(tymy.length, (konfig.zony && konfig.zony[aktualni_soutez]) || []);
 
             const rows = [];
             tymy.forEach((tym, idx) => {
-                const t = tabulka[tym];
-
-                // Zone class
-                let zoneClass = '', zoneDot = 'none';
-                if (jePrvniLiga) {
-                    if (idx <= 3)                    { zoneClass = 'standings-row-playoff';    zoneDot = 'playoff'; }
-                    else if (idx === tymy.length - 1){ zoneClass = 'standings-row-relegation'; zoneDot = 'relegation'; }
-                } else {
-                    if (idx <= 1)     { zoneClass = 'standings-row-top';        zoneDot = 'final-four'; }
-                    else if (idx <= 5){ zoneClass = 'standings-row-playoff';    zoneDot = 'playoff'; }
-                    else if (idx === 7){ zoneClass = 'standings-row-relegation'; zoneDot = 'relegation'; }
-                }
+                const t = tabulkaData[tym];
+                const zone = zony[idx];
+                const zoneClass = ZONE_ROW_CLASS[zone.typ] || '';
+                const zoneDot = zone.typ || 'none';
 
                 // Position medal class
                 const posClass = ['pos-gold','pos-silver','pos-bronze'][idx] || '';
@@ -899,101 +855,36 @@
                 );
 
                 // Zone dividers
-                if (!jePrvniLiga && idx === 1) {
-                    rows.push('<tr class="standings-divider standings-divider-playoff"><td colspan="11"><span>↓ Čtvrtfinále</span></td></tr>');
-                } else if (!jePrvniLiga && idx === 6) {
-                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="11"><span>↓ Baráž</span></td></tr>');
-                } else if (jePrvniLiga && idx === 3) {
-                    rows.push('<tr class="standings-divider standings-divider-mid"><td colspan="11"></td></tr>');
-                } else if (jePrvniLiga && tymy.length > 5 && idx === tymy.length - 2) {
-                    rows.push('<tr class="standings-divider standings-divider-relegation"><td colspan="11"><span>↓ Kvalifikace</span></td></tr>');
+                if (zone.dividerAfter !== null && zone.dividerAfter !== undefined && (!zone.dividerMinTeams || tymy.length > zone.dividerMinTeams - 1)) {
+                    const label = zone.dividerAfter ? '<span>' + zone.dividerAfter + '</span>' : '';
+                    rows.push('<tr class="standings-divider' + (zone.dividerClass ? ' ' + zone.dividerClass : '') + '"><td colspan="11">' + label + '</td></tr>');
                 }
             });
 
             document.getElementById('tabulkaBody').innerHTML = rows.join('');
 
-            // Footer: legend + scoring info
-            const legenda = jePrvniLiga
-                ? '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 1.–4. Play-off</span>' +
-                  '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> Posl. Kvalifikace o 1. ligu</span>'
-                : '<span class="legenda-item"><span class="legenda-dot legenda-final-four"></span> 1.–2. Přímý postup do Final Four</span>' +
-                  '<span class="legenda-item"><span class="legenda-dot legenda-playoff"></span> 3.–6. Čtvrtfinále</span>' +
-                  '<span class="legenda-item"><span class="legenda-dot legenda-relegation"></span> 8. Baráž</span>';
-
-            const bodovani = jePrvniLiga
-                ? '<strong>Bodování:</strong> Výhra = 3b · Remíza = 2b · Prohra = 1b'
-                : '<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b';
+            // Footer: legend + scoring info (z konfigurace sezony)
+            const legenda = ((konfig.zony && konfig.zony[aktualni_soutez]) || [])
+                .filter(z => z.legenda)
+                .map(z => '<span class="legenda-item"><span class="legenda-dot legenda-' + z.typ + '"></span> ' + z.legenda + '</span>')
+                .join('');
+            const bodovani = (konfig.bodovaniInfo && konfig.bodovaniInfo[aktualni_soutez]) || '';
 
             document.getElementById('bodovaniInfo').innerHTML =
                 '<div class="standings-legenda">' + legenda + '</div>' + bodovani;
         }
 
         /* ── PLAYOFF HELPERS ─────────────────────────────────── */
-        function getPlayoffResults(soutez) {
-            const results = {};
-            (zapasy[soutez] || []).forEach(z => {
-                if (!isPlayoffKolo(z.kolo)) return;
-                const kolo = normalizeKolo(z.kolo);
-                const klic = kolo + '-' + [z.tymDomaci, z.tymHoste].sort().join('-');
-                if (!results[klic]) results[klic] = { kolo, tym1:z.tymDomaci, tym2:z.tymHoste, zapasy:[] };
-                results[klic].zapasy.push(z);
-            });
-            Object.values(results).forEach(r => {
-                let v1=0, v2=0, odb=0;
-                r.zapasy.forEach(z => {
-                    const v = parseVysledek(z.vysledek);
-                    if (v.domaci===0 && v.hoste===0) return;
-                    odb++;
-                    if (z.tymDomaci===r.tym1) { if(v.domaci>v.hoste) v1++; else v2++; }
-                    else                        { if(v.hoste>v.domaci)  v1++; else v2++; }
-                });
-                r.skore1 = v1; r.skore2 = v2;
-                r.zlatyZapas = (odb >= 8 && v1===4 && v2===4) || (odb>=9 && ((v1===5&&v2===4)||(v2===5&&v1===4)));
-                r.vitez   = v1>v2 ? r.tym1 : (v2>v1 ? r.tym2 : null);
-                r.porazeny = r.vitez ? (r.vitez===r.tym1 ? r.tym2 : r.tym1) : null;
-            });
-            return results;
-        }
-
+        // Golden-zapas detekce a razeni jde pres sdilene Playoff/Statistics funkce
+        // (viz komentar u <script src="js/playoff.js">) - misto vlastni kopie s
+        // natvrdo zadratovanym prahem 8/9 her a jePrvniLiga vetvi.
         function findResult(results, kolo, tym1, tym2) {
             if (!tym1 || !tym2) return null;
             return results[kolo + '-' + [tym1, tym2].sort().join('-')] || null;
         }
 
         function seraditTymy(soutez) {
-            const tabulka = {}, utkani = {};
-            (zapasy[soutez] || []).forEach(zapas => {
-                if (isPlayoffKolo(zapas.kolo)) return;
-                const k = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
-                if (!utkani[k]) utkani[k] = { domaci:zapas.tymDomaci, hoste:zapas.tymHoste, zapasy:[] };
-                utkani[k].zapasy.push(zapas);
-            });
-            Object.values(utkani).forEach(utk => {
-                const d=utk.domaci, h=utk.hoste;
-                if (!d||!h) return;
-                if (!tabulka[d]) tabulka[d]={vyhry:0,zapasyV:0,zapasyP:0,setyV:0,setyP:0,bodyV:0,bodyP:0,body:0};
-                if (!tabulka[h]) tabulka[h]={vyhry:0,zapasyV:0,zapasyP:0,setyV:0,setyP:0,bodyV:0,bodyP:0,body:0};
-                let dz=0,hz=0,ds=0,hs=0,db=0,hb=0;
-                utk.zapasy.forEach(z=>{
-                    const v=parseVysledek(z.vysledek), bd=parseSety(z.sety);
-                    if(v.domaci>v.hoste) dz++; else hz++;
-                    ds+=v.domaci; hs+=v.hoste; db+=bd.domaciBody; hb+=bd.hosteBody;
-                });
-                const pl=soutez.includes('prvni-liga');
-                let dbt=0,hbt=0;
-                if(pl){ if(dz===hz){dbt=2;hbt=2;}else if(dz>hz){dbt=3;hbt=1;tabulka[d].vyhry++;}else{hbt=3;dbt=1;tabulka[h].vyhry++;} }
-                else  { if(dz>hz){dbt=dz>=6?3:2;hbt=dz>=6?0:1;tabulka[d].vyhry++;}else{hbt=hz>=6?3:2;dbt=hz>=6?0:1;tabulka[h].vyhry++;} }
-                tabulka[d].zapasyV+=dz;tabulka[d].zapasyP+=hz;tabulka[d].setyV+=ds;tabulka[d].setyP+=hs;
-                tabulka[d].bodyV+=db;tabulka[d].bodyP+=hb;tabulka[d].body+=dbt;
-                tabulka[h].zapasyV+=hz;tabulka[h].zapasyP+=dz;tabulka[h].setyV+=hs;tabulka[h].setyP+=ds;
-                tabulka[h].bodyV+=hb;tabulka[h].bodyP+=db;tabulka[h].body+=hbt;
-            });
-            return Object.keys(tabulka).sort((a,b)=>{
-                const tA=tabulka[a],tB=tabulka[b];
-                if(tB.body!==tA.body) return tB.body-tA.body;
-                if(tB.vyhry!==tA.vyhry) return tB.vyhry-tA.vyhry;
-                return (tB.zapasyV-tB.zapasyP)-(tA.zapasyV-tA.zapasyP);
-            });
+            return Statistics.seraditTymyPodleTabulky(Statistics.vypocitejTabulku(soutez));
         }
 
         /* ── Card helpers ── */
@@ -1044,7 +935,7 @@
 
         function zobrazitPlayoffExtraliga(container) {
             const tymy = seraditTymy('extraliga');
-            const res  = getPlayoffResults('extraliga');
+            const res  = Playoff.getPlayoffResults('extraliga');
 
             if (tymy.length < 6) {
                 container.innerHTML = '<div class="empty-state">Nedostatek týmů pro zobrazení play-off.</div>';
@@ -1117,7 +1008,7 @@
         function zobrazitPlayoffPrvniLiga(container) {
             const tymyV = seraditTymy('prvni-liga-vychod');
             const tymyZ = seraditTymy('prvni-liga-zapad');
-            const res   = getPlayoffResults('prvni-liga-playoff');
+            const res   = Playoff.getPlayoffResultsPrvniLiga();
 
             if (tymyV.length < 4 || tymyZ.length < 4) {
                 container.innerHTML = '<div class="empty-state">Nedostatek týmů pro zobrazení play-off.</div>';
@@ -1234,20 +1125,8 @@
                 res[k].zapasy.push(z);
             });
 
-            Object.values(res).forEach(r => {
-                let v1=0, v2=0, odb=0;
-                r.zapasy.forEach(z => {
-                    const v=parseVysledek(z.vysledek);
-                    if(v.domaci===0&&v.hoste===0) return;
-                    odb++;
-                    if(z.tymDomaci===r.tym1){if(v.domaci>v.hoste)v1++;else v2++;}
-                    else{if(v.hoste>v.domaci)v1++;else v2++;}
-                });
-                r.skore1=v1; r.skore2=v2;
-                r.vitez=v1>v2?r.tym1:(v2>v1?r.tym2:null);
-                r.porazeny=r.vitez?(r.vitez===r.tym1?r.tym2:r.tym1):null;
-                r.zlatyZapas=odb>=9&&((v1===5&&v2===4)||(v2===5&&v1===4));
-            });
+            const serieConfig = Playoff._aktualniSerieConfig();
+            Object.values(res).forEach(r => Playoff._vypocitejSerii(r, serieConfig));
 
             const series = Object.values(res);
 
