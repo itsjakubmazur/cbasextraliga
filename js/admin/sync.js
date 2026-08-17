@@ -18,23 +18,39 @@ const AdminSync = {
     return { name: apiName, matched: false };
   },
 
+  // Prirozeny klic pro sparovani "tohle je tentyz realny dilci zapas", nezavisly
+  // na tom, jak vznikl 'id' (rucne pres stary nastroj = timestamp, sync = "api:...").
+  // Bez tohohle by se kazdy zapas zapsany drive rucne pri kazdem syncu tvaril
+  // jako "novy" (jiny 'id') a publikace by vytvorila duplicity.
+  naturalKey(z) {
+    return [z.kolo, z.tymDomaci, z.tymHoste, z.disciplina, z.domaci, z.hoste].join('|||');
+  },
+
   computeDiff(soutez, candidates) {
-    const currentById = new Map(AdminData.getZapasy(soutez).map((z) => [z.id, z]));
-    const candidateIds = new Set(candidates.map((c) => c.id));
+    const current = AdminData.getZapasy(soutez);
+    const currentByNaturalKey = new Map(current.map((z) => [this.naturalKey(z), z]));
+    const matchedIds = new Set();
     const rows = [];
 
     candidates.forEach((c) => {
-      const old = currentById.get(c.id);
-      if (!old) rows.push({ status: 'new', id: c.id, candidate: c, current: null });
-      else if (JSON.stringify(old) !== JSON.stringify(c)) rows.push({ status: 'changed', id: c.id, candidate: c, current: old });
-      else rows.push({ status: 'unchanged', id: c.id, candidate: c, current: old });
+      const old = currentByNaturalKey.get(this.naturalKey(c));
+      if (!old) {
+        rows.push({ status: 'new', id: c.id, warningsKey: c.id, candidate: c, current: null });
+        return;
+      }
+      matchedIds.add(old.id);
+      // stejny realny zapas - prevezme se puvodni id, at "Pouzit vybrane" zapasu
+      // aktualizuje existujici zaznam misto pridani duplicitu.
+      const merged = { ...c, id: old.id };
+      const status = JSON.stringify(old) !== JSON.stringify(merged) ? 'changed' : 'unchanged';
+      rows.push({ status, id: old.id, warningsKey: c.id, candidate: merged, current: old });
     });
 
-    // zapasy, ktere drive prisly ze syncu (id "api:...") a API uz je nevraci
-    // (napr. prestaly byt schvalene) - nikdy se nesmaze automaticky
-    currentById.forEach((z, id) => {
-      if (String(id).startsWith('api:') && !candidateIds.has(id)) {
-        rows.push({ status: 'removed', id, candidate: null, current: z });
+    // zapasy, ktere drive prisly ze syncu (id "api:...") a tento sync uz je
+    // nenasel (napr. prestaly byt schvalene) - nikdy se nesmaze automaticky
+    current.forEach((z) => {
+      if (String(z.id).startsWith('api:') && !matchedIds.has(z.id)) {
+        rows.push({ status: 'removed', id: z.id, warningsKey: z.id, candidate: null, current: z });
       }
     });
 
@@ -100,7 +116,7 @@ const AdminSync = {
 
     visible.forEach((row, idx) => {
       const z = row.candidate || row.current;
-      const warnings = this.lastWarningsById.get(row.id) || [];
+      const warnings = this.lastWarningsById.get(row.warningsKey) || [];
       const defaultChecked = row.status !== 'removed' && warnings.length === 0;
 
       const tr = document.createElement('tr');
