@@ -7,8 +7,8 @@ module.exports = async function handler(req, res) {
   }
 
   const storedHash = process.env.ADMIN_PASSWORD_HASH;
-  if (!storedHash) {
-    res.status(500).json({ error: 'Admin not configured' });
+  if (!storedHash || !process.env.SESSION_SECRET) {
+    res.status(500).json({ error: 'Admin ještě není nakonfigurovaný (chybí ADMIN_PASSWORD_HASH nebo SESSION_SECRET env var)' });
     return;
   }
 

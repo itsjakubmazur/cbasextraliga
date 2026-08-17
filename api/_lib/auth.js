@@ -65,9 +65,15 @@ function clearSessionCookie() {
 }
 
 function isAuthenticated(req) {
+  let secret;
+  try {
+    secret = sessionSecret();
+  } catch {
+    return false; // SESSION_SECRET not configured yet - treat as logged out, not a crash
+  }
   const cookies = parseCookies(req.headers.cookie);
   const token = cookies[COOKIE_NAME];
-  return verify(token, sessionSecret()) !== null;
+  return verify(token, secret) !== null;
 }
 
 function requireAuth(req, res) {
