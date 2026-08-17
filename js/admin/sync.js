@@ -84,7 +84,16 @@ const AdminSync = {
       });
 
       this.lastRows = this.computeDiff(competitionKey, result.candidates);
-      AdminData.mergeTymLoga(result.teamLogos);
+
+      // Loga se z API vraci pod stejnym syrovym nazvem tymu jako zapasy
+      // (napr. "BK METEOR PRAHA") - sladit se stavajicim seznamem tymu,
+      // jinak by se logo ulozilo pod nazev, ktery na webu nikde neni.
+      const reconciledLogos = {};
+      Object.entries(result.teamLogos || {}).forEach(([apiName, url]) => {
+        const { name } = this.reconcileTeamName(competitionKey, apiName);
+        reconciledLogos[name] = url;
+      });
+      AdminData.mergeTymLoga(reconciledLogos);
       statusEl.textContent = `Staženo ${result.matchCount} schválených zápasů z czechbadminton.cz.`;
       this.render();
     } catch (err) {
