@@ -50,6 +50,7 @@
         <button class="js-tab-btn bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold" data-tab="manage">➕ Ruční zadání</button>
         <button class="js-tab-btn bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold" data-tab="teams">👥 Týmy</button>
         <button class="js-tab-btn bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold" data-tab="winners">🏆 Vítězové</button>
+        <button class="js-tab-btn bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold" data-tab="settings">⚙️ Nastavení sezóny</button>
       </div>
 
       <!-- Tab: Sync -->
@@ -168,6 +169,106 @@
         </div>
       </div>
 
+      <!-- Tab: Nastaveni sezony -->
+      <div class="js-tab-panel" data-tab-panel="settings" style="display:none;">
+
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-amber-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-2">🆕 Založit novou sezónu</h2>
+          <p class="text-sm text-gray-600 mb-3">
+            Aktuální ročník: <strong id="cfgAktualniRocnik"></strong>.
+            Archivuje živé zápasy/týmy/nastavení do historie (pokud tam už nejsou), vyresetuje živou sezónu na prázdno
+            a jako výchozí nastavení ponechá to dnešní — uprav ho níže. Nic se nezapíše na web, dokud nepublikuješ.
+          </p>
+          <button onclick="AdminSettings.zalozitNovouSezonu()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+            Založit novou sezónu…
+          </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <h2 class="text-lg font-bold text-gray-800 mb-4">Formát a bodování</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Play-off extraligy</label>
+              <select id="cfgExtraligaPlayoff" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                <option value="QF+SF+F">QF+SF+F (2 přímo do Final Four)</option>
+                <option value="QF+SF+F+3rd">QF+SF+F + zápas o 3. místo</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Play-off 1. ligy</label>
+              <select id="cfgPrvniLigaPlayoff" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                <option value="combined-8">combined-8 (4+4 společné QF)</option>
+                <option value="combined-4">combined-4 (2+2 rovnou SF)</option>
+                <option value="separate-SF+F">separate-SF+F (Východ/Západ zvlášť)</option>
+                <option value="separate-QF+SF+F+3rd">separate-QF+SF+F+3rd</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Baráž</label>
+              <select id="cfgBaraze" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                <option value="single">single (jedna série)</option>
+                <option value="round-robin-3">round-robin-3 (3 týmy)</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Her v sérii celkem</label>
+              <input type="number" id="cfgSerieCelkemHer" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Remíza/zlatý zápas při</label>
+              <input type="number" id="cfgSerieRemizaPri" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Bodů do setu</label>
+              <input type="number" id="cfgFormatBodyNaSet" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Vítězných setů na hru</label>
+              <input type="number" id="cfgFormatVitezSetu" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+            </div>
+          </div>
+          <p class="text-xs text-gray-400">„Her v sérii" a „remíza/zlatý zápas při" určují, kolik dílčích zápasů (disciplín) tvoří jedno utkání a kdy nastává zlatý zápas — platí pro všechny soutěže této sezóny stejně.</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <h2 class="text-lg font-bold text-gray-800 mb-2">Bodování do tabulky a postupové zóny <span class="text-xs font-normal text-gray-400">(JSON, per soutěž)</span></h2>
+          <p class="text-sm text-gray-500 mb-3">Pro běžnou úpravu stačí horní formulář a play-off dropdowny. Tohle je pro jemné doladění — klíče: extraliga, prvni-liga-vychod, prvni-liga-zapad, prvni-liga-playoff, baraze.</p>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">bodovani</label>
+              <textarea id="cfgBodovaniJson" class="w-full h-48 border border-gray-300 rounded-lg p-2 font-mono text-xs"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">zony</label>
+              <textarea id="cfgZonyJson" class="w-full h-48 border border-gray-300 rounded-lg p-2 font-mono text-xs"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">bodovaniInfo (text pod tabulkou)</label>
+              <textarea id="cfgBodovaniInfoJson" class="w-full h-48 border border-gray-300 rounded-lg p-2 font-mono text-xs"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <button onclick="AdminSettings.saveKonfigForm()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+            Uložit nastavení do konceptu
+          </button>
+          <p id="cfgStatus" class="text-sm text-gray-500 mt-2"></p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <h2 class="text-lg font-bold text-gray-800 mb-4">Loga týmů</h2>
+          <div class="flex gap-2 mb-4">
+            <input type="text" id="logoTym" placeholder="Přesný název týmu" class="flex-1 border border-gray-300 rounded-lg px-4 py-2">
+            <input type="text" id="logoUrl" placeholder="URL loga" class="flex-1 border border-gray-300 rounded-lg px-4 py-2">
+            <button onclick="AdminSettings.addLogo()" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">+ Přidat / upravit</button>
+          </div>
+          <div id="seznamLoga" class="border border-gray-200 rounded-lg p-3 max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -176,6 +277,7 @@
 <script src="js/admin/auth.js"></script>
 <script src="js/admin/sync.js"></script>
 <script src="js/admin/manage.js"></script>
+<script src="js/admin/settings.js"></script>
 <script src="js/admin/publish.js"></script>
 <script src="js/admin/app.js"></script>
 <script>

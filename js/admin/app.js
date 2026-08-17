@@ -8,6 +8,7 @@ const AdminApp = {
       AdminManage.populateCompetitionSelects();
       AdminManage.populateDisciplinySelect();
       AdminManage.initAll();
+      AdminSettings.init();
       AdminPublish.refreshSummary();
       this.wireTabs();
       this.initialized = true;
