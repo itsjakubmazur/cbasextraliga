@@ -114,15 +114,15 @@ const AdminManage = {
     const list = [...AdminData.getZapasy(soutez)].sort((a, b) => String(a.kolo).localeCompare(String(b.kolo)));
     tbody.innerHTML = list
       .map(
-        (z) => `<tr class="border-b border-gray-100 text-sm">
-          <td class="p-1.5">${z.kolo}</td>
-          <td class="p-1.5">${z.tymDomaci} – ${z.tymHoste}</td>
-          <td class="p-1.5">${z.disciplina}</td>
-          <td class="p-1.5">${z.domaci} vs ${z.hoste}</td>
-          <td class="p-1.5 font-semibold">${z.vysledek}</td>
-          <td class="p-1.5 text-right whitespace-nowrap">
-            <button class="text-blue-600 hover:underline mr-2" onclick="AdminManage.editZapas('${soutez}','${z.id}')">Upravit</button>
-            <button class="text-red-600 hover:underline" onclick="AdminManage.deleteZapas('${soutez}','${z.id}')">Smazat</button>
+        (z) => `<tr>
+          <td class="mono">${z.kolo}</td>
+          <td>${z.tymDomaci} – ${z.tymHoste}</td>
+          <td>${z.disciplina}</td>
+          <td>${z.domaci} vs ${z.hoste}</td>
+          <td class="mono" style="font-weight:600;">${z.vysledek}</td>
+          <td style="text-align:right;white-space:nowrap;">
+            <button class="btn-link" style="margin-right:10px;" onclick="AdminManage.editZapas('${soutez}','${z.id}')">Upravit</button>
+            <button class="btn-danger-text" onclick="AdminManage.deleteZapas('${soutez}','${z.id}')">Smazat</button>
           </td>
         </tr>`
       )
@@ -151,11 +151,15 @@ const AdminManage = {
   renderTeamList(soutez) {
     const el = document.getElementById('seznamTymu');
     const tymy = AdminData.draft.tymy[soutez] || [];
+    if (tymy.length === 0) {
+      el.innerHTML = '<div class="list-empty">Zatím žádné týmy v této soutěži.</div>';
+      return;
+    }
     el.innerHTML = tymy
       .map(
-        (t) => `<div class="flex justify-between items-center py-1 border-b border-gray-100 text-sm">
+        (t) => `<div class="list-row">
           <span>${t}</span>
-          <button class="text-red-600 hover:underline" onclick="AdminManage.removeTym('${soutez}', '${t.replace(/'/g, "\\'")}')">Odebrat</button>
+          <button class="btn-danger-text" onclick="AdminManage.removeTym('${soutez}', '${t.replace(/'/g, "\\'")}')">Odebrat</button>
         </div>`
       )
       .join('');
@@ -181,11 +185,15 @@ const AdminManage = {
 
   renderVitezList() {
     const el = document.getElementById('seznamVitezu');
+    if (AdminData.draft.vitezove.length === 0) {
+      el.innerHTML = '<div class="list-empty">Zatím žádní vítězové.</div>';
+      return;
+    }
     el.innerHTML = AdminData.draft.vitezove
       .map(
-        (v, i) => `<div class="flex justify-between items-center py-1 border-b border-gray-100 text-sm">
-          <span>${v.sezona} — ${v.tym}</span>
-          <button class="text-red-600 hover:underline" onclick="AdminManage.removeVitez(${i})">Odebrat</button>
+        (v, i) => `<div class="list-row">
+          <span class="mono">${v.sezona}</span> <span>— ${v.tym}</span>
+          <button class="btn-danger-text" style="margin-left:auto;" onclick="AdminManage.removeVitez(${i})">Odebrat</button>
         </div>`
       )
       .join('');

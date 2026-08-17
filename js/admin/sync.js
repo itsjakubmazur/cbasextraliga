@@ -113,7 +113,6 @@ const AdminSync = {
     }
     document.getElementById('syncDiffContainer').style.display = 'block';
 
-    const badgeClass = { new: 'bg-green-100 text-green-800', changed: 'bg-yellow-100 text-yellow-800', removed: 'bg-red-100 text-red-800' };
     const badgeText = { new: 'Nové', changed: 'Změněno', removed: 'Zmizelo' };
 
     visible.forEach((row, idx) => {
@@ -122,27 +121,27 @@ const AdminSync = {
       const defaultChecked = row.status !== 'removed' && warnings.length === 0;
 
       const tr = document.createElement('tr');
-      tr.className = 'border-b border-gray-200 align-top';
+      tr.className = `diff-row row-${row.status}`;
 
       const diffCell = (field, label) => {
         if (row.status === 'changed' && row.current[field] !== row.candidate[field]) {
-          return `<div class="text-xs"><span class="line-through text-gray-400">${row.current[field]}</span><br><span class="font-semibold text-gray-900">${row.candidate[field]}</span></div>`;
+          return `<div><span class="diff-old">${row.current[field] || '—'}</span><br><span class="diff-new">${row.candidate[field]}</span></div>`;
         }
         return `<span>${z[field] || ''}</span>`;
       };
 
       tr.innerHTML =
-        `<td class="p-2"><input type="checkbox" data-idx="${idx}" ${defaultChecked ? 'checked' : ''}></td>` +
-        `<td class="p-2"><span class="text-xs px-2 py-0.5 rounded-full ${badgeClass[row.status]}">${badgeText[row.status]}</span>` +
-        (warnings.length ? `<div class="text-xs text-red-600 mt-1">⚠️ ${warnings.join('; ')}</div>` : '') +
+        `<td><input type="checkbox" class="checkbox" data-idx="${idx}" ${defaultChecked ? 'checked' : ''}></td>` +
+        `<td><span class="status-chip status-${row.status}">${badgeText[row.status]}</span>` +
+        (warnings.length ? `<div class="warning-note">⚠ ${warnings.join('; ')}</div>` : '') +
         `</td>` +
-        `<td class="p-2 text-sm">${z.kolo}</td>` +
-        `<td class="p-2 text-sm">${diffCell('datum')}</td>` +
-        `<td class="p-2 text-sm">${z.tymDomaci} – ${z.tymHoste}</td>` +
-        `<td class="p-2 text-sm">${diffCell('disciplina')}</td>` +
-        `<td class="p-2 text-sm">${diffCell('domaci')} vs ${diffCell('hoste')}</td>` +
-        `<td class="p-2 text-sm">${diffCell('vysledek')}</td>` +
-        `<td class="p-2 text-xs">${diffCell('sety')}</td>`;
+        `<td class="mono">${z.kolo}</td>` +
+        `<td class="mono">${diffCell('datum')}</td>` +
+        `<td>${z.tymDomaci} – ${z.tymHoste}</td>` +
+        `<td>${diffCell('disciplina')}</td>` +
+        `<td>${diffCell('domaci')} vs ${diffCell('hoste')}</td>` +
+        `<td class="mono">${diffCell('vysledek')}</td>` +
+        `<td class="mono" style="font-size:0.75rem;">${diffCell('sety')}</td>`;
 
       tbody.appendChild(tr);
     });

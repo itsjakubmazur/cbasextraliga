@@ -4,12 +4,15 @@ const AdminPublish = {
     const { pridano, zmeneno } = AdminData.changeSummary();
     const el = document.getElementById('publishSummary');
     const btn = document.getElementById('publishBtn');
+    const dot = document.getElementById('transmitDot');
     if (!dirty) {
-      el.textContent = 'Žádné neuložené změny.';
+      el.innerHTML = 'Živě · žádné neuložené změny';
       btn.disabled = true;
+      dot.classList.remove('pending');
     } else {
-      el.textContent = `Neuložené změny: ${pridano} nových zápasů, ${zmeneno} upravených. Zkontroluj prosím a teprve pak publikuj.`;
+      el.innerHTML = `<strong>${pridano + zmeneno} změn</strong> připraveno (${pridano} nových, ${zmeneno} upravených)`;
       btn.disabled = false;
+      dot.classList.add('pending');
     }
   },
 

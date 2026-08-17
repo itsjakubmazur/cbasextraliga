@@ -5,271 +5,325 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Administrace — Czech Badminton Extraliga</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="css/styles.css">
+<link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="admin-body">
 
   <!-- Přihlašovací obrazovka -->
-  <div id="loginScreen" class="min-h-screen flex items-center justify-center">
-    <form id="loginForm" class="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
-      <h1 class="text-xl font-bold text-gray-800 mb-6">🔒 Administrace</h1>
-      <label class="block text-sm font-medium text-gray-700 mb-2">Heslo</label>
-      <input type="password" id="loginPassword" class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:ring-2 focus:ring-red-500" autofocus>
-      <p id="loginError" class="text-sm text-red-600 mb-4"></p>
-      <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">Přihlásit</button>
+  <div id="loginScreen" class="admin-login-screen">
+    <form id="loginForm" class="admin-login-card">
+      <div class="admin-login-mark"><span class="dot"></span><span>ADMINISTRACE</span></div>
+      <label for="loginPassword">Heslo</label>
+      <input type="password" id="loginPassword" class="input" autofocus>
+      <p id="loginError" class="admin-error"></p>
+      <button type="submit" class="btn btn-accent" style="width:100%;justify-content:center;margin-top:6px;">Přihlásit</button>
     </form>
   </div>
 
   <!-- Admin aplikace -->
-  <div id="adminApp" style="display:none;">
-    <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-      <h1 class="text-lg font-bold text-gray-800">🏸 Administrace — Extraliga</h1>
-      <button onclick="AdminAuth.logout()" class="text-sm text-gray-500 hover:text-gray-800">Odhlásit</button>
-    </div>
+  <div id="adminApp" class="admin-shell" style="display:none;">
 
-    <div id="adminLoading" class="p-8 text-center text-gray-500">Načítám data…</div>
+    <aside class="admin-sidebar">
+      <div class="admin-brand"><span class="dot"></span><span>EXTRALIGA</span></div>
+      <nav class="admin-nav">
+        <button class="js-tab-btn admin-nav-btn active" data-tab="sync"><span class="admin-nav-icon">⟳</span>Sync z czechbadminton.cz</button>
+        <button class="js-tab-btn admin-nav-btn" data-tab="manage"><span class="admin-nav-icon">＋</span>Ruční zadání</button>
+        <button class="js-tab-btn admin-nav-btn" data-tab="teams"><span class="admin-nav-icon">◫</span>Týmy</button>
+        <button class="js-tab-btn admin-nav-btn" data-tab="winners"><span class="admin-nav-icon">◆</span>Vítězové</button>
+        <button class="js-tab-btn admin-nav-btn" data-tab="settings"><span class="admin-nav-icon">⚙</span>Nastavení sezóny</button>
+      </nav>
+      <div class="admin-sidebar-spacer"></div>
+      <button class="admin-logout" onclick="AdminAuth.logout()">Odhlásit se</button>
+    </aside>
 
-    <div id="adminContent" class="max-w-6xl mx-auto p-6" style="display:none;">
+    <div class="admin-main">
 
-      <!-- Publikační lišta - vždy viditelná nahoře -->
-      <div class="bg-white rounded-xl shadow-lg p-4 mb-6 sticky top-2 z-10 border-2 border-red-100">
-        <div class="flex flex-wrap items-center gap-3">
-          <span id="publishSummary" class="text-sm text-gray-700 flex-1">Žádné neuložené změny.</span>
-          <input type="text" id="publishMessage" placeholder="Poznámka ke commitu (nepovinné)" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-64">
-          <button id="publishBtn" onclick="AdminPublish.publish()" disabled class="bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold px-5 py-2 rounded-lg transition-colors">
-            🚀 Publikovat na web
-          </button>
+      <!-- Vysílací lišta -->
+      <div class="transmit-bar">
+        <div class="transmit-status">
+          <span id="transmitDot" class="transmit-dot"></span>
+          <span id="publishSummary" class="transmit-label">Kontroluji stav…</span>
         </div>
-        <p id="publishStatus" class="text-sm text-gray-500 mt-2"></p>
+        <input type="text" id="publishMessage" class="transmit-note-input" placeholder="Poznámka ke commitu (nepovinné)">
+        <button id="publishBtn" onclick="AdminPublish.publish()" disabled class="btn-publish">Publikovat →</button>
       </div>
+      <p id="publishStatus" class="transmit-result"></p>
 
-      <!-- Taby -->
-      <div class="flex gap-2 mb-6">
-        <button class="js-tab-btn bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold" data-tab="sync">📥 Sync z czechbadminton.cz</button>
-        <button class="js-tab-btn bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold" data-tab="manage">➕ Ruční zadání</button>
-        <button class="js-tab-btn bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold" data-tab="teams">👥 Týmy</button>
-        <button class="js-tab-btn bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold" data-tab="winners">🏆 Vítězové</button>
-        <button class="js-tab-btn bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold" data-tab="settings">⚙️ Nastavení sezóny</button>
+      <div id="adminLoading" style="padding:40px;text-align:center;color:var(--text-dim);">Načítám data…</div>
+
+      <div id="adminContent" class="admin-content" style="display:none;">
+
+        <!-- Panel: Sync -->
+        <section class="admin-panel js-tab-panel active" data-tab-panel="sync">
+          <div class="panel-header">
+            <h1>Sync z czechbadminton.cz</h1>
+            <p>Stáhne schválené výsledky, porovná je s tím, co už máš, a nic nezapíše, dokud ručně neschválíš a nepublikuješ.</p>
+          </div>
+
+          <div class="card">
+            <div class="field-row" style="align-items:flex-end;">
+              <div class="field" style="flex:0 0 220px;">
+                <label class="field-label" for="syncCompetition">Soutěž</label>
+                <select id="syncCompetition" class="input js-soutez-select"></select>
+              </div>
+              <button id="syncFetchBtn" onclick="AdminSync.runSync(document.getElementById('syncCompetition').value)" class="btn btn-primary">Zkontrolovat nové výsledky</button>
+            </div>
+            <p id="syncStatus" class="text-faint mt-2"></p>
+          </div>
+
+          <div id="syncDiffContainer" class="card" style="display:none;">
+            <div class="flex-row" style="justify-content:space-between;margin-bottom:14px;">
+              <p id="syncSummary" class="text-dim" style="font-size:0.82rem;margin:0;"></p>
+              <div class="flex-row">
+                <button class="btn-link" onclick="AdminSync.toggleAll(true)">Vybrat vše</button>
+                <button class="btn-link" onclick="AdminSync.toggleAll(false)">Zrušit výběr</button>
+              </div>
+            </div>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Stav</th>
+                    <th>Kolo</th>
+                    <th>Datum</th>
+                    <th>Zápas</th>
+                    <th>Disciplína</th>
+                    <th>Hráči</th>
+                    <th>Výsledek</th>
+                    <th>Sety</th>
+                  </tr>
+                </thead>
+                <tbody id="syncDiffBody"></tbody>
+              </table>
+            </div>
+            <button onclick="AdminSync.applySelected()" class="btn btn-primary mt-2">Použít vybrané do konceptu</button>
+          </div>
+        </section>
+
+        <!-- Panel: Ruční zadání -->
+        <section class="admin-panel js-tab-panel" data-tab-panel="manage">
+          <div class="panel-header">
+            <h1>Ruční zadání</h1>
+            <p>Pro zápasy, které API nepokrývá, nebo ruční opravy.</p>
+          </div>
+
+          <div class="card">
+            <div class="field" style="max-width:280px;">
+              <label class="field-label" for="manageCompetition">Soutěž</label>
+              <select id="manageCompetition" class="input js-soutez-select" onchange="AdminManage.onCompetitionChange()"></select>
+            </div>
+
+            <h2 id="manageFormTitle" class="card-title" style="margin-top:18px;">Přidat zápas</h2>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="manageKolo">Kolo</label>
+                <input type="text" id="manageKolo" placeholder="1. nebo QF/SF/F/P5" class="input">
+              </div>
+              <div class="field">
+                <label class="field-label" for="manageDatum">Datum</label>
+                <input type="date" id="manageDatum" class="input">
+              </div>
+              <div class="field">
+                <label class="field-label" for="manageDisciplina">Disciplína</label>
+                <select id="manageDisciplina" class="input"></select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="manageTymDomaci">Tým domácí</label>
+                <select id="manageTymDomaci" class="input"></select>
+              </div>
+              <div class="field">
+                <label class="field-label" for="manageTymHoste">Tým hosté</label>
+                <select id="manageTymHoste" class="input"></select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="manageDomaci">Hráči domácí</label>
+                <input type="text" id="manageDomaci" placeholder="Příjmení Jméno, …" class="input">
+              </div>
+              <div class="field">
+                <label class="field-label" for="manageHoste">Hráči hosté</label>
+                <input type="text" id="manageHoste" placeholder="Příjmení Jméno, …" class="input">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="manageVysledek">Výsledek</label>
+                <input type="text" id="manageVysledek" placeholder="3:1" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="manageSety">Sety</label>
+                <input type="text" id="manageSety" placeholder="11:5, 11:8, 9:11, 11:7" class="input input-mono">
+              </div>
+            </div>
+            <div class="flex-row mt-2">
+              <button onclick="AdminManage.saveZapas()" class="btn btn-primary">Uložit do konceptu</button>
+              <button onclick="AdminManage.resetForm()" class="btn">Zrušit úpravu</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Zápasy v konceptu</h2>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Kolo</th><th>Zápas</th><th>Disciplína</th><th>Hráči</th><th>Výsledek</th><th></th></tr>
+                </thead>
+                <tbody id="manageMatchesBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Panel: Tymy -->
+        <section class="admin-panel js-tab-panel" data-tab-panel="teams">
+          <div class="panel-header">
+            <h1>Týmy</h1>
+            <p>Soutěž se vybírá v panelu „Ruční zadání".</p>
+          </div>
+          <div class="card">
+            <div class="field-row" style="align-items:flex-end;">
+              <div class="field" style="flex:1;">
+                <label class="field-label" for="novyTym">Název týmu</label>
+                <input type="text" id="novyTym" class="input">
+              </div>
+              <button onclick="AdminManage.addTym()" class="btn btn-accent">Přidat</button>
+            </div>
+            <div id="seznamTymu" class="list-panel mt-2"></div>
+          </div>
+        </section>
+
+        <!-- Panel: Viteoze -->
+        <section class="admin-panel js-tab-panel" data-tab-panel="winners">
+          <div class="panel-header">
+            <h1>Historie vítězů</h1>
+            <p>Extraligoví mistři podle sezóny.</p>
+          </div>
+          <div class="card">
+            <div class="field-row" style="align-items:flex-end;">
+              <div class="field" style="flex:0 0 180px;">
+                <label class="field-label" for="novaSezona">Sezóna</label>
+                <input type="text" id="novaSezona" placeholder="2024/2025" class="input">
+              </div>
+              <div class="field" style="flex:1;">
+                <label class="field-label" for="novyVitezTym">Vítězný tým</label>
+                <input type="text" id="novyVitezTym" class="input">
+              </div>
+              <button onclick="AdminManage.addVitez()" class="btn btn-accent">Přidat</button>
+            </div>
+            <div id="seznamVitezu" class="list-panel mt-2"></div>
+          </div>
+        </section>
+
+        <!-- Panel: Nastaveni sezony -->
+        <section class="admin-panel js-tab-panel" data-tab-panel="settings">
+          <div class="panel-header">
+            <h1>Nastavení sezóny</h1>
+            <p>Bodování, formát utkání, play-off a loga — vždy vázané na konkrétní sezónu.</p>
+          </div>
+
+          <div class="card card-danger">
+            <h2 class="card-title">Založit novou sezónu</h2>
+            <p class="card-hint">
+              Aktuální ročník: <strong id="cfgAktualniRocnik" style="color:var(--text);"></strong>.
+              Archivuje živá data do historie (pokud tam už nejsou), vyresetuje živou sezónu na prázdno
+              a ponechá dnešní nastavení jako výchozí bod. Nic se nezapíše na web, dokud nepublikuješ.
+            </p>
+            <button onclick="AdminSettings.zalozitNovouSezonu()" class="btn btn-accent">Založit novou sezónu…</button>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Formát a bodování</h2>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="cfgExtraligaPlayoff">Play-off extraligy</label>
+                <select id="cfgExtraligaPlayoff" class="input">
+                  <option value="QF+SF+F">QF+SF+F (2 přímo do Final Four)</option>
+                  <option value="QF+SF+F+3rd">QF+SF+F + zápas o 3. místo</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgPrvniLigaPlayoff">Play-off 1. ligy</label>
+                <select id="cfgPrvniLigaPlayoff" class="input">
+                  <option value="combined-8">combined-8 (4+4 společné QF)</option>
+                  <option value="combined-4">combined-4 (2+2 rovnou SF)</option>
+                  <option value="separate-SF+F">separate-SF+F (Východ/Západ zvlášť)</option>
+                  <option value="separate-QF+SF+F+3rd">separate-QF+SF+F+3rd</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgBaraze">Baráž</label>
+                <select id="cfgBaraze" class="input">
+                  <option value="single">single (jedna série)</option>
+                  <option value="round-robin-3">round-robin-3 (3 týmy)</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="cfgSerieCelkemHer">Her v sérii celkem</label>
+                <input type="number" id="cfgSerieCelkemHer" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgSerieRemizaPri">Remíza / zlatý zápas při</label>
+                <input type="number" id="cfgSerieRemizaPri" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgFormatBodyNaSet">Bodů do setu</label>
+                <input type="number" id="cfgFormatBodyNaSet" class="input input-mono">
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgFormatVitezSetu">Vítězných setů na hru</label>
+                <input type="number" id="cfgFormatVitezSetu" class="input input-mono">
+              </div>
+            </div>
+            <p class="text-faint">„Her v sérii" a „remíza/zlatý zápas při" určují formát utkání a kdy nastává zlatý zápas — platí pro všechny soutěže této sezóny stejně.</p>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Bodování do tabulky a postupové zóny</h2>
+            <p class="card-hint">Pro běžnou úpravu stačí formulář výše. Tohle je pro jemné doladění (JSON, per soutěž) — klíče: extraliga, prvni-liga-vychod, prvni-liga-zapad, prvni-liga-playoff, baraze.</p>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="cfgBodovaniJson">bodovani</label>
+                <textarea id="cfgBodovaniJson" class="input input-mono" style="height:190px;"></textarea>
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgZonyJson">zony</label>
+                <textarea id="cfgZonyJson" class="input input-mono" style="height:190px;"></textarea>
+              </div>
+              <div class="field">
+                <label class="field-label" for="cfgBodovaniInfoJson">bodovaniInfo</label>
+                <textarea id="cfgBodovaniInfoJson" class="input input-mono" style="height:190px;"></textarea>
+              </div>
+            </div>
+            <button onclick="AdminSettings.saveKonfigForm()" class="btn btn-primary">Uložit nastavení do konceptu</button>
+            <p id="cfgStatus" class="text-faint mt-2"></p>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Loga týmů</h2>
+            <div class="field-row" style="align-items:flex-end;">
+              <div class="field" style="flex:1;">
+                <label class="field-label" for="logoTym">Přesný název týmu</label>
+                <input type="text" id="logoTym" class="input">
+              </div>
+              <div class="field" style="flex:1;">
+                <label class="field-label" for="logoUrl">URL loga</label>
+                <input type="text" id="logoUrl" class="input input-mono">
+              </div>
+              <button onclick="AdminSettings.addLogo()" class="btn btn-accent">Přidat / upravit</button>
+            </div>
+            <div id="seznamLoga" class="list-panel mt-2"></div>
+          </div>
+        </section>
+
       </div>
-
-      <!-- Tab: Sync -->
-      <div class="js-tab-panel" data-tab-panel="sync">
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">Zkontrolovat nové výsledky</h2>
-          <div class="flex gap-2 items-center mb-2">
-            <select id="syncCompetition" class="js-soutez-select border border-gray-300 rounded-lg px-4 py-2"></select>
-            <button id="syncFetchBtn" onclick="AdminSync.runSync(document.getElementById('syncCompetition').value)" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors">
-              Zkontrolovat nové výsledky
-            </button>
-          </div>
-          <p id="syncStatus" class="text-sm text-gray-500"></p>
-        </div>
-
-        <div id="syncDiffContainer" class="bg-white rounded-xl shadow-lg p-6" style="display:none;">
-          <div class="flex justify-between items-center mb-3">
-            <p id="syncSummary" class="text-sm text-gray-700"></p>
-            <div class="flex gap-2">
-              <button onclick="AdminSync.toggleAll(true)" class="text-xs text-blue-600 hover:underline">Vybrat vše</button>
-              <button onclick="AdminSync.toggleAll(false)" class="text-xs text-blue-600 hover:underline">Zrušit výběr</button>
-            </div>
-          </div>
-          <div class="overflow-x-auto mb-4">
-            <table class="w-full text-sm border-collapse">
-              <thead>
-                <tr class="bg-gray-100 text-left">
-                  <th class="p-2 w-8"></th>
-                  <th class="p-2">Stav</th>
-                  <th class="p-2">Kolo</th>
-                  <th class="p-2">Datum</th>
-                  <th class="p-2">Zápas</th>
-                  <th class="p-2">Disciplína</th>
-                  <th class="p-2">Hráči</th>
-                  <th class="p-2">Výsledek</th>
-                  <th class="p-2">Sety</th>
-                </tr>
-              </thead>
-              <tbody id="syncDiffBody"></tbody>
-            </table>
-          </div>
-          <button onclick="AdminSync.applySelected()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
-            Použít vybrané do konceptu
-          </button>
-        </div>
-      </div>
-
-      <!-- Tab: Rucni zadani -->
-      <div class="js-tab-panel" data-tab-panel="manage" style="display:none;">
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Soutěž</label>
-            <select id="manageCompetition" class="js-soutez-select border border-gray-300 rounded-lg px-4 py-2" onchange="AdminManage.onCompetitionChange()"></select>
-          </div>
-
-          <h2 id="manageFormTitle" class="text-lg font-bold text-gray-800 mb-3">Přidat zápas</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
-            <input type="text" id="manageKolo" placeholder="Kolo (např. 1. nebo QF/SF/F/P5)" class="border border-gray-300 rounded-lg px-3 py-2">
-            <input type="date" id="manageDatum" class="border border-gray-300 rounded-lg px-3 py-2">
-            <select id="manageDisciplina" class="border border-gray-300 rounded-lg px-3 py-2"></select>
-            <select id="manageTymDomaci" class="border border-gray-300 rounded-lg px-3 py-2"></select>
-            <select id="manageTymHoste" class="border border-gray-300 rounded-lg px-3 py-2"></select>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-            <input type="text" id="manageDomaci" placeholder="Hráči domácí (Příjmení Jméno, …)" class="border border-gray-300 rounded-lg px-3 py-2">
-            <input type="text" id="manageHoste" placeholder="Hráči hosté (Příjmení Jméno, …)" class="border border-gray-300 rounded-lg px-3 py-2">
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-            <input type="text" id="manageVysledek" placeholder="Výsledek (např. 3:1)" class="border border-gray-300 rounded-lg px-3 py-2">
-            <input type="text" id="manageSety" placeholder="Sety (např. 11:5, 11:8, 9:11, 11:7)" class="border border-gray-300 rounded-lg px-3 py-2">
-          </div>
-          <div class="flex gap-2">
-            <button onclick="AdminManage.saveZapas()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">Uložit do konceptu</button>
-            <button onclick="AdminManage.resetForm()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-6 py-2 rounded-lg transition-colors">Zrušit úpravu</button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-lg font-bold text-gray-800 mb-3">Zápasy v konceptu</h2>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse">
-              <thead>
-                <tr class="bg-gray-100 text-left">
-                  <th class="p-1.5">Kolo</th><th class="p-1.5">Zápas</th><th class="p-1.5">Disciplína</th>
-                  <th class="p-1.5">Hráči</th><th class="p-1.5">Výsledek</th><th class="p-1.5"></th>
-                </tr>
-              </thead>
-              <tbody id="manageMatchesBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab: Tymy -->
-      <div class="js-tab-panel" data-tab-panel="teams" style="display:none;">
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">Správa týmů</h2>
-          <p class="text-sm text-gray-500 mb-3">Soutěž se vybírá v tabu „Ruční zadání“.</p>
-          <div class="flex gap-2 mb-4">
-            <input type="text" id="novyTym" placeholder="Název týmu" class="flex-1 border border-gray-300 rounded-lg px-4 py-2">
-            <button onclick="AdminManage.addTym()" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">+ Přidat</button>
-          </div>
-          <div id="seznamTymu" class="border border-gray-200 rounded-lg p-3 max-h-96 overflow-y-auto"></div>
-        </div>
-      </div>
-
-      <!-- Tab: Viteoze -->
-      <div class="js-tab-panel" data-tab-panel="winners" style="display:none;">
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">Historie extraligových vítězů</h2>
-          <div class="flex gap-2 mb-4">
-            <input type="text" id="novaSezona" placeholder="Sezóna (např. 2024/2025)" class="border border-gray-300 rounded-lg px-4 py-2 w-48">
-            <input type="text" id="novyVitezTym" placeholder="Vítězný tým" class="flex-1 border border-gray-300 rounded-lg px-4 py-2">
-            <button onclick="AdminManage.addVitez()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">+ Přidat</button>
-          </div>
-          <div id="seznamVitezu" class="border border-gray-200 rounded-lg p-3 max-h-96 overflow-y-auto"></div>
-        </div>
-      </div>
-
-      <!-- Tab: Nastaveni sezony -->
-      <div class="js-tab-panel" data-tab-panel="settings" style="display:none;">
-
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-amber-200">
-          <h2 class="text-lg font-bold text-gray-800 mb-2">🆕 Založit novou sezónu</h2>
-          <p class="text-sm text-gray-600 mb-3">
-            Aktuální ročník: <strong id="cfgAktualniRocnik"></strong>.
-            Archivuje živé zápasy/týmy/nastavení do historie (pokud tam už nejsou), vyresetuje živou sezónu na prázdno
-            a jako výchozí nastavení ponechá to dnešní — uprav ho níže. Nic se nezapíše na web, dokud nepublikuješ.
-          </p>
-          <button onclick="AdminSettings.zalozitNovouSezonu()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
-            Založit novou sezónu…
-          </button>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">Formát a bodování</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Play-off extraligy</label>
-              <select id="cfgExtraligaPlayoff" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                <option value="QF+SF+F">QF+SF+F (2 přímo do Final Four)</option>
-                <option value="QF+SF+F+3rd">QF+SF+F + zápas o 3. místo</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Play-off 1. ligy</label>
-              <select id="cfgPrvniLigaPlayoff" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                <option value="combined-8">combined-8 (4+4 společné QF)</option>
-                <option value="combined-4">combined-4 (2+2 rovnou SF)</option>
-                <option value="separate-SF+F">separate-SF+F (Východ/Západ zvlášť)</option>
-                <option value="separate-QF+SF+F+3rd">separate-QF+SF+F+3rd</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Baráž</label>
-              <select id="cfgBaraze" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                <option value="single">single (jedna série)</option>
-                <option value="round-robin-3">round-robin-3 (3 týmy)</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Her v sérii celkem</label>
-              <input type="number" id="cfgSerieCelkemHer" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Remíza/zlatý zápas při</label>
-              <input type="number" id="cfgSerieRemizaPri" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Bodů do setu</label>
-              <input type="number" id="cfgFormatBodyNaSet" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Vítězných setů na hru</label>
-              <input type="number" id="cfgFormatVitezSetu" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-            </div>
-          </div>
-          <p class="text-xs text-gray-400">„Her v sérii" a „remíza/zlatý zápas při" určují, kolik dílčích zápasů (disciplín) tvoří jedno utkání a kdy nastává zlatý zápas — platí pro všechny soutěže této sezóny stejně.</p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <h2 class="text-lg font-bold text-gray-800 mb-2">Bodování do tabulky a postupové zóny <span class="text-xs font-normal text-gray-400">(JSON, per soutěž)</span></h2>
-          <p class="text-sm text-gray-500 mb-3">Pro běžnou úpravu stačí horní formulář a play-off dropdowny. Tohle je pro jemné doladění — klíče: extraliga, prvni-liga-vychod, prvni-liga-zapad, prvni-liga-playoff, baraze.</p>
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">bodovani</label>
-              <textarea id="cfgBodovaniJson" class="w-full h-48 border border-gray-300 rounded-lg p-2 font-mono text-xs"></textarea>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">zony</label>
-              <textarea id="cfgZonyJson" class="w-full h-48 border border-gray-300 rounded-lg p-2 font-mono text-xs"></textarea>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">bodovaniInfo (text pod tabulkou)</label>
-              <textarea id="cfgBodovaniInfoJson" class="w-full h-48 border border-gray-300 rounded-lg p-2 font-mono text-xs"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <button onclick="AdminSettings.saveKonfigForm()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
-            Uložit nastavení do konceptu
-          </button>
-          <p id="cfgStatus" class="text-sm text-gray-500 mt-2"></p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">Loga týmů</h2>
-          <div class="flex gap-2 mb-4">
-            <input type="text" id="logoTym" placeholder="Přesný název týmu" class="flex-1 border border-gray-300 rounded-lg px-4 py-2">
-            <input type="text" id="logoUrl" placeholder="URL loga" class="flex-1 border border-gray-300 rounded-lg px-4 py-2">
-            <button onclick="AdminSettings.addLogo()" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">+ Přidat / upravit</button>
-          </div>
-          <div id="seznamLoga" class="border border-gray-200 rounded-lg p-3 max-h-96 overflow-y-auto"></div>
-        </div>
-      </div>
-
     </div>
   </div>
 

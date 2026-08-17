@@ -73,15 +73,15 @@ const AdminSettings = {
     const el = document.getElementById('seznamLoga');
     const entries = Object.entries(AdminData.draft.tymLoga || {});
     if (entries.length === 0) {
-      el.innerHTML = '<p class="text-sm text-gray-400">Zatím žádná loga. Doplní se automaticky při syncu, nebo je přidej ručně výše.</p>';
+      el.innerHTML = '<div class="list-empty">Zatím žádná loga. Doplní se automaticky při syncu, nebo je přidej ručně výše.</div>';
       return;
     }
     el.innerHTML = entries
       .map(
-        ([tym, url]) => `<div class="flex justify-between items-center py-1.5 border-b border-gray-100 text-sm gap-2">
-          <img src="${url.replace(/"/g, '&quot;')}" alt="" style="width:24px;height:24px;object-fit:contain;border-radius:4px;flex-shrink:0;" onerror="this.style.visibility='hidden'">
-          <span class="flex-1">${tym}</span>
-          <button class="text-red-600 hover:underline" onclick="AdminSettings.removeLogo('${tym.replace(/'/g, "\\'")}')">Odebrat</button>
+        ([tym, url]) => `<div class="list-row">
+          <img class="list-row-logo" src="${url.replace(/"/g, '&quot;')}" alt="" onerror="this.style.visibility='hidden'">
+          <span style="flex:1;">${tym}</span>
+          <button class="btn-danger-text" onclick="AdminSettings.removeLogo('${tym.replace(/'/g, "\\'")}')">Odebrat</button>
         </div>`
       )
       .join('');

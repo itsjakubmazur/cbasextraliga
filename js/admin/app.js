@@ -28,12 +28,10 @@ const AdminApp = {
 
   showTab(name) {
     document.querySelectorAll('.js-tab-panel').forEach((el) => {
-      el.style.display = el.dataset.tabPanel === name ? 'block' : 'none';
+      el.classList.toggle('active', el.dataset.tabPanel === name);
     });
     document.querySelectorAll('.js-tab-btn').forEach((btn) => {
-      btn.classList.toggle('bg-red-600', btn.dataset.tab === name);
-      btn.classList.toggle('text-white', btn.dataset.tab === name);
-      btn.classList.toggle('bg-gray-200', btn.dataset.tab !== name);
+      btn.classList.toggle('active', btn.dataset.tab === name);
     });
   },
 };

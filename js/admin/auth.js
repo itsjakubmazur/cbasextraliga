@@ -7,7 +7,7 @@ const AdminAuth = {
 
   showApp(authenticated) {
     document.getElementById('loginScreen').style.display = authenticated ? 'none' : 'flex';
-    document.getElementById('adminApp').style.display = authenticated ? 'block' : 'none';
+    document.getElementById('adminApp').style.display = authenticated ? 'flex' : 'none';
   },
 
   async login(ev) {
