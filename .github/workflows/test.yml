@@ -1,0 +1,35 @@
+name: Testy
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['badminton-data.json']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Testy syncu
+        run: npm test
+
+      # Regresni test porovna vypocty tabulek/play-off "pred" (zakladni commit)
+      # a "po" (tento commit) nad vsemi sezonami v badminton-data.json.
+      - name: Regresni test vypoctu
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then BASE=HEAD~1; fi
+          node scripts/validate-konfigurace-regression.mjs "$BASE"
