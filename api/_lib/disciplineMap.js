@@ -1,5 +1,5 @@
 // sportDisciplineName z czechbadminton.cz API -> disciplina v badminton-data.json
-// Stejná tabulka jako importDisciplineMap v badminton-stats-fixed-4.html (řádek 1783).
+// Původně převzato z importDisciplineMap starého nástroje badminton-stats-fixed-4.html (odstraněn).
 const DISCIPLINE_MAP = {
   '1. dvouhra mužů': 'Dvouhra mužů',
   '2. dvouhra mužů': 'Dvouhra mužů',
