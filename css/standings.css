@@ -4,6 +4,8 @@
    --zone-top, --zone-playoff, --zone-relegation, --cba-blue.
    Jediný výrazný prvek je červený sloupec bodů; zbytek je záměrně tichý. */
 
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
 .lt-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
 .lt-table th { font-size: 0.72rem; font-weight: 600; color: var(--text2); padding: 8px 6px; text-align: center; white-space: nowrap; }
 .lt-table th.lt-l, .lt-table td.lt-l { text-align: left; }
@@ -114,3 +116,66 @@
     .lt-mobile-extra b { color: var(--text); margin-left: 4px; }
     .lt-foot { padding: 12px 14px 16px; }
 }
+
+/* Play-off pavouk: bílé zápasy, zóny jako proužek, skóre série v červeném pruhu */
+.playoff-match {
+    background: var(--surface);
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 0 0;
+    box-shadow: none;
+    overflow: hidden;
+    transition: background 0.15s;
+}
+.playoff-match:hover { transform: none; box-shadow: none; border-color: var(--text2); }
+.playoff-match-label { font-size: 0.72rem; font-weight: 600; color: var(--text2); padding: 0 12px; margin-bottom: 6px; }
+.playoff-match-teams { gap: 0; }
+.playoff-vs, .playoff-series-result { display: none; }
+.playoff-team,
+.playoff-team-green, .playoff-team-blue, .playoff-team-east, .playoff-team-west,
+.playoff-team-orange, .playoff-team-red, .playoff-team-pending,
+.playoff-team-placement-5, .playoff-team-placement-7 {
+    background: none;
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    padding: 0 0 0 12px;
+    min-height: 40px;
+    gap: 8px;
+    box-shadow: inset 4px 0 0 transparent;
+}
+.playoff-team-green { box-shadow: inset 4px 0 0 var(--zone-top); }
+.playoff-team-blue, .playoff-team-west { box-shadow: inset 4px 0 0 var(--zone-playoff); }
+.playoff-team-east { box-shadow: inset 4px 0 0 var(--draw); }
+.playoff-team-red { box-shadow: inset 4px 0 0 var(--zone-relegation); }
+.playoff-team-orange { box-shadow: inset 4px 0 0 #f97316; }
+.playoff-team-pending .playoff-team-name { color: var(--muted); font-weight: 500; }
+.playoff-seed,
+.playoff-team-green .playoff-seed, .playoff-team-blue .playoff-seed, .playoff-team-east .playoff-seed,
+.playoff-team-west .playoff-seed, .playoff-team-orange .playoff-seed, .playoff-team-red .playoff-seed,
+.playoff-team-placement-5 .playoff-seed, .playoff-team-placement-7 .playoff-seed {
+    background: none; color: var(--text); width: auto; min-width: 22px; height: auto; border-radius: 0;
+    font-size: 0.8rem; font-weight: 800; justify-content: flex-start;
+}
+.playoff-team-logo { width: 26px; height: 26px; }
+.playoff-team-name { font-weight: 700; }
+.playoff-series-score {
+    align-self: stretch; display: flex; align-items: center; justify-content: center;
+    min-width: 40px; margin-left: auto;
+    background: var(--cba-red); color: #fff; font-weight: 800; font-size: 1rem;
+    border-top: 0;
+}
+
+.playoff-team-logo { background: #fff; border-radius: 50%; box-shadow: 0 0 0 1px var(--border); padding: 3px; object-fit: contain; box-sizing: border-box; }
+
+/* Embed tabulka.html: soutěže a pohledy jako podtržené záložky */
+.widget .soutez-tabs, .widget .view-toggle { display: inline-flex; gap: 0; background: none; border: 0; border-bottom: 2px solid var(--border); border-radius: 0; padding: 0; }
+.widget .soutez-tab, .widget .view-toggle-btn {
+    font: inherit; font-size: 0.8rem; font-weight: 700; color: var(--text2);
+    background: none; border: 0; border-bottom: 2px solid transparent; border-radius: 0; box-shadow: none;
+    padding: 6px 12px; margin-bottom: -2px; cursor: pointer; transition: color 0.2s, border-color 0.25s;
+}
+.widget .soutez-tab:hover, .widget .view-toggle-btn:hover { color: var(--text); background: none; }
+.widget .soutez-tab.active, .widget .view-toggle-btn.active { color: var(--cba-red); border-bottom-color: var(--cba-red); background: none; box-shadow: none; }
+.widget .card { border: 0; border-radius: 16px; box-shadow: var(--shadow); background: var(--surface); }

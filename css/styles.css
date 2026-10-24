@@ -2969,57 +2969,6 @@ body.dark-mode .hero-card { background: var(--surface); border: 0; }
 .hero-trophy svg { width: 26px; height: 26px; }
 .hist-hero-wrap { margin-bottom: 16px; }
 
-/* Play-off pavouk: bílé zápasy, zóny jako proužek, skóre série v červeném pruhu */
-.playoff-match {
-    background: var(--surface);
-    backdrop-filter: none; -webkit-backdrop-filter: none;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 8px 0 0;
-    box-shadow: none;
-    overflow: hidden;
-    transition: background 0.15s;
-}
-.playoff-match:hover { transform: none; box-shadow: none; border-color: var(--text2); }
-body.dark-mode .playoff-match { background: var(--surface); border-color: var(--border); }
-.playoff-match-label { font-size: 0.72rem; font-weight: 600; color: var(--text2); padding: 0 12px; margin-bottom: 6px; }
-.playoff-match-teams { gap: 0; }
-.playoff-vs, .playoff-series-result { display: none; }
-.playoff-team,
-.playoff-team-green, .playoff-team-blue, .playoff-team-east, .playoff-team-west,
-.playoff-team-orange, .playoff-team-red, .playoff-team-pending,
-.playoff-team-placement-5, .playoff-team-placement-7 {
-    background: none;
-    border: 0;
-    border-top: 1px solid var(--border);
-    border-radius: 0;
-    padding: 0 0 0 12px;
-    min-height: 40px;
-    gap: 8px;
-    box-shadow: inset 4px 0 0 transparent;
-}
-.playoff-team-green { box-shadow: inset 4px 0 0 var(--zone-top); }
-.playoff-team-blue, .playoff-team-west { box-shadow: inset 4px 0 0 var(--zone-playoff); }
-.playoff-team-east { box-shadow: inset 4px 0 0 var(--draw); }
-.playoff-team-red { box-shadow: inset 4px 0 0 var(--zone-relegation); }
-.playoff-team-orange { box-shadow: inset 4px 0 0 #f97316; }
-.playoff-team-pending .playoff-team-name { color: var(--muted); font-weight: 500; }
-.playoff-seed,
-.playoff-team-green .playoff-seed, .playoff-team-blue .playoff-seed, .playoff-team-east .playoff-seed,
-.playoff-team-west .playoff-seed, .playoff-team-orange .playoff-seed, .playoff-team-red .playoff-seed,
-.playoff-team-placement-5 .playoff-seed, .playoff-team-placement-7 .playoff-seed {
-    background: none; color: var(--text); width: auto; min-width: 22px; height: auto; border-radius: 0;
-    font-size: 0.8rem; font-weight: 800; justify-content: flex-start;
-}
-.playoff-team-logo { width: 26px; height: 26px; }
-.playoff-team-name { font-weight: 700; }
-.playoff-series-score {
-    align-self: stretch; display: flex; align-items: center; justify-content: center;
-    min-width: 40px; margin-left: auto;
-    background: var(--cba-red); color: #fff; font-weight: 800; font-size: 1rem;
-    border-top: 0;
-}
-
 /* Výsledky: loga u týmů, skóre utkání v červeném pruhu, bez barevných výplní */
 .match-subhead th { background: none; font-size: 0.72rem; font-weight: 600; color: var(--text2); }
 .match-row td { border-top: 1px solid var(--border); }
@@ -3079,3 +3028,11 @@ body.dark-mode .match-detail-home, body.dark-mode .match-detail-away, body.dark-
 .modal-stat-item.win .modal-stat-value, .modal-stat-item.loss .modal-stat-value, .modal-stat-item.rate .modal-stat-value,
 body.dark-mode .modal-stat-item.win .modal-stat-value, body.dark-mode .modal-stat-item.loss .modal-stat-value { color: var(--text); }
 .modal-stat-item.metric .modal-stat-value { color: #fff !important; }
+
+/* Historie vítězů */
+.app-main > .app-card + .app-card { margin-top: 16px; }
+.champions-table .stats-pos { width: 48px; padding-left: 20px; }
+.champions-table .champions-season { width: 110px; padding-left: 20px; font-weight: 800; white-space: nowrap; color: var(--text); background: none; border-radius: 0; }
+.champions-season-link { color: var(--cba-red); text-decoration: underline; text-underline-offset: 2px; }
+.champions-table .match-tym .lt-logo { width: 30px; height: 30px; }
+.champions-table td.lt-metric { width: 90px; }
