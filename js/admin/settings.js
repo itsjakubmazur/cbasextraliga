@@ -220,6 +220,7 @@ const AdminSettings = {
           zapasy: AdminData.draft.zapasy,
           tymy: AdminData.draft.tymy,
           konfigurace: AdminData.draft.konfigurace,
+          soupisky: AdminData.draft.soupisky || {},
         }));
       }
     }
@@ -232,6 +233,7 @@ const AdminSettings = {
     });
     AdminData.draft.zapasy = emptyZapasy;
     AdminData.draft.tymy = emptyTymy;
+    AdminData.draft.soupisky = {};
     AdminData.draft.rocnik = novy.trim();
     // konfigurace se ponechava jako vychozi bod pro novou sezonu (klon te dnesni) - uprav nize.
 

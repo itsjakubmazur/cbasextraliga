@@ -590,22 +590,36 @@ const App = {
             });
         });
 
+        // Svazova soupiska (Data.soupisky, plni ji auto-sync): ukazat i hrace,
+        // kteri jeste nenastoupili. Kdo hral a na soupisce neni, zustava taky.
+        const soupiska = (Data.soupisky[soutez] && Data.soupisky[soutez][tym]) || [];
+        const poradiNaSoupisce = new Map(soupiska.map((s, i) => [s.jmeno, i]));
+        const nahradnici = new Set(soupiska.filter(s => s.nahradnik).map(s => s.jmeno));
+        soupiska.forEach(s => {
+            if (!hraci[s.jmeno]) hraci[s.jmeno] = { zapasy: 0, vyhry: 0, prohry: 0 };
+        });
+
         const avatarColors = ['#D7141A','#2563eb','#16a34a','#d97706','#8b5cf6','#ec4899','#06b6d4','#0891b2','#7c3aed','#db2777'];
         const cardsHtml = Object.entries(hraci)
-            .sort((a, b) => b[1].vyhry - a[1].vyhry || b[1].zapasy - a[1].zapasy)
+            .sort((a, b) => b[1].vyhry - a[1].vyhry || b[1].zapasy - a[1].zapasy
+                || (poradiNaSoupisce.get(a[0]) ?? 999) - (poradiNaSoupisce.get(b[0]) ?? 999))
             .map(([h, st], idx) => {
-                const wr = st.zapasy > 0 ? ((st.vyhry / st.zapasy) * 100).toFixed(0) : '0';
-                const isGood = parseFloat(wr) >= 50;
+                const hral = st.zapasy > 0;
+                const wr = hral ? ((st.vyhry / st.zapasy) * 100).toFixed(0) : null;
+                const isGood = hral && parseFloat(wr) >= 50;
                 const color = avatarColors[idx % avatarColors.length];
                 const abbr = h.split(/\s+/).pop()?.charAt(0).toUpperCase() || h.charAt(0).toUpperCase();
                 const safeH = Statistics.escapeAttr(h);
-                return '<div class="roster-card" onclick="Modals.zobrazitDetailHrace(\'' + safeH + '\')">' +
+                const badge = nahradnici.has(h) ? '<div class="roster-badge">náhradník</div>' : '';
+                return '<div class="roster-card' + (hral ? '' : ' roster-card-inactive') + '"' +
+                    (hral ? ' onclick="Modals.zobrazitDetailHrace(\'' + safeH + '\')"' : '') + '>' +
                     '<div class="roster-photo">' +
                     '<div class="roster-photo-img" style="background:' + color + '">' + abbr + '</div>' +
                     '</div>' +
-                    '<div class="roster-winrate ' + (isGood ? 'good' : 'bad') + '">' + wr + '%</div>' +
+                    '<div class="roster-winrate ' + (hral ? (isGood ? 'good' : 'bad') : 'none') + '">' + (hral ? wr + '%' : '–') + '</div>' +
                     '<div class="roster-name">' + Statistics.escapeHtml(h) + '</div>' +
-                    '<div class="roster-stats">' + st.vyhry + 'V · ' + st.prohry + 'P · ' + st.zapasy + 'Z</div>' +
+                    badge +
+                    '<div class="roster-stats">' + (hral ? st.vyhry + 'V · ' + st.prohry + 'P · ' + st.zapasy + 'Z' : 'zatím nenastoupil/a') + '</div>' +
                     '</div>';
             }).join('');
 

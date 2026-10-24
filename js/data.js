@@ -25,6 +25,7 @@ const Data = {
     rocnik: null,
     konfigurace: null,
     tymLoga: {},
+    soupisky: {},       // { soutez: { tym: [{ jmeno, pohlavi, poradi?, poradiCtyrhra?, nahradnik? }] } } - ze svazových soupisek
     _dataBackup: null,
 
     async nacist() {
@@ -39,6 +40,7 @@ const Data = {
             if (data.rocnik) this.rocnik = data.rocnik;
             if (data.konfigurace) this.konfigurace = data.konfigurace;
             if (data.tymLoga) this.tymLoga = data.tymLoga;
+            if (data.soupisky) this.soupisky = data.soupisky;
             const datumAktualizace = data.datum ? new Date(data.datum).toLocaleString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'neznámé';
             const aktualizaceEl = document.getElementById('aktualizaceInfo');
             if (aktualizaceEl) aktualizaceEl.textContent = '✓ Aktualizace: ' + datumAktualizace;
@@ -81,6 +83,7 @@ const Data = {
         if (this._dataBackup) {
             this.zapasy = this._dataBackup.zapasy;
             this.tymy = this._dataBackup.tymy;
+            this.soupisky = this._dataBackup.soupisky;
             this._dataBackup = null;
         }
         if (!rocnik) return;
@@ -88,10 +91,11 @@ const Data = {
         const hist = this.historickeRocniky[rocnik];
         if (!hist) return;
 
-        this._dataBackup = { zapasy: this.zapasy, tymy: this.tymy };
+        this._dataBackup = { zapasy: this.zapasy, tymy: this.tymy, soupisky: this.soupisky };
 
         const emptyZapasy = { 'extraliga': [], 'prvni-liga-vychod': [], 'prvni-liga-zapad': [], 'prvni-liga-playoff': [], 'baraze': [] };
         this.zapasy = { ...emptyZapasy, ...hist.zapasy };
         this.tymy = { ...this.tymy, ...(hist.tymy || {}) };
+        this.soupisky = hist.soupisky || {};
     }
 };

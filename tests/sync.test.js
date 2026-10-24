@@ -2,7 +2,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { seasonKey, reconcileTeamName, computeDiff, knownTeamsEverywhere } = require('../api/_lib/merge');
-const { detectSkrec, normalizeGame } = require('../api/_lib/normalize');
+const { detectSkrec, normalizeGame, normalizeRosters } = require('../api/_lib/normalize');
 const { mapRound } = require('../api/_lib/roundMap');
 
 const zapas = (over) => ({
@@ -89,4 +89,22 @@ test('computeDiff: schvaleni zapasu (zmizi neschvaleno) je zmena', () => {
   const rows = computeDiff([zapas({ id: 'api:m1:1', neschvaleno: true })], [zapas({ id: 'api:m1:1' })]);
   assert.equal(rows[0].status, 'changed');
   assert.equal('neschvaleno' in rows[0].candidate, false);
+});
+
+test('normalizeRosters: poradi, nahradnici, duplicity z vice casti souteze', () => {
+  const r = (lastName, firstName, extra) => ({ teamName: 'BA Plzeň ', lastName, firstName, sexId: 1, teamPersonTypeId: 'PLAYER', ...extra });
+  const out = normalizeRosters([
+    r('Král', 'Ondřej', { order: 2 }),
+    r('Šilhavá', 'Klára', { sexId: 2 }),
+    r('Leveque', 'Sacha', { order: 1, orderDouble: 5 }),
+    r('Novák', 'Jan', { teamPersonTypeId: 'SUBSTITUTE' }),
+    r('Král', 'Ondřej', { order: 2 }), // tentyz hrac na soupisce play-off
+  ]);
+  assert.deepEqual(Object.keys(out), ['BA Plzeň']);
+  assert.deepEqual(out['BA Plzeň'], [
+    { jmeno: 'Leveque Sacha', pohlavi: 'M', poradi: 1, poradiCtyrhra: 5 },
+    { jmeno: 'Král Ondřej', pohlavi: 'M', poradi: 2 },
+    { jmeno: 'Šilhavá Klára', pohlavi: 'Z' },
+    { jmeno: 'Novák Jan', pohlavi: 'M', nahradnik: true },
+  ]);
 });

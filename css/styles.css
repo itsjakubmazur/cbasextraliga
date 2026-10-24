@@ -2796,6 +2796,21 @@ body.dark-mode .roster-card { background: linear-gradient(145deg, rgba(40,45,65,
 .roster-winrate { font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; }
 .roster-winrate.good { color: var(--win); }
 .roster-winrate.bad { color: var(--loss); }
+.roster-winrate.none { color: var(--text2); }
+.roster-card-inactive { cursor: default; opacity: 0.75; }
+.roster-card-inactive:hover { transform: none; }
+.roster-badge {
+    display: inline-block;
+    margin: 2px 0 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text2);
+    background: rgba(100,116,139,0.12);
+    border-radius: 4px;
+    padding: 1px 6px;
+}
 .roster-name { font-size: 0.8rem; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 4px; }
 .roster-stats { font-size: 0.68rem; color: var(--muted); }
 

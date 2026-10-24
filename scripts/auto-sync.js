@@ -10,6 +10,7 @@
 // - když _sezona v tournamentConfig.json neodpovídá rocnik v datech, nic se nezapíše
 // - --new-season nejdřív archivuje aktuální ročník do historicke_rocniky a založí
 //   prázdný nový (jako "Založit novou sezónu" v adminu), pak teprve synchronizuje
+// - soupisky družstev se stahují taky a soupiska týmu se vždy nahradí tou ze svazu
 //
 // Do --report-dir zapíše summary.md (souhrn běhu), issue.md (co je potřeba
 // zkontrolovat ručně; prázdný = nic) a result.json.
@@ -43,10 +44,12 @@ function zalozitNovouSezonu(data, novy) {
       zapasy: data.zapasy,
       tymy: data.tymy,
       konfigurace: data.konfigurace,
+      soupisky: data.soupisky || {},
     }));
   }
   data.zapasy = Object.fromEntries(SOUTEZE.map((s) => [s, []]));
   data.tymy = Object.fromEntries(SOUTEZE.map((s) => [s, []]));
+  data.soupisky = {};
   data.rocnik = novy;
   return archived;
 }
@@ -70,7 +73,7 @@ function matchIdOf(zapas) {
 async function syncSoutez(data, soutez, report) {
   const config = tournamentConfig[soutez];
   if (!config) return;
-  const r = { soutez, matchCount: 0, applied: { new: 0, changed: 0 }, unchanged: 0, removed: [], skipped: [], newTeams: [], logos: 0 };
+  const r = { soutez, matchCount: 0, applied: { new: 0, changed: 0 }, unchanged: 0, removed: [], skipped: [], newTeams: [], logos: 0, soupisky: 0 };
   report.souteze.push(r);
 
   const result = await syncCompetition(config);
@@ -121,6 +124,21 @@ async function syncSoutez(data, soutez, report) {
     r.applied[row.status]++;
   });
 
+  // Soupisky ze svazu jsou autoritativni - soupiska tymu se nahradi celá.
+  // Ukladaji se jen pro tymy, ktere v soutezi opravdu jsou.
+  if (result.soupisky) {
+    data.soupisky = data.soupisky || {};
+    data.soupisky[soutez] = data.soupisky[soutez] || {};
+    Object.entries(result.soupisky).forEach(([apiName, hraci]) => {
+      const rec = reconcileTeamName(data.tymy[soutez], everywhere, apiName);
+      if (!rec.matched || !data.tymy[soutez].includes(rec.name)) return;
+      if (JSON.stringify(data.soupisky[soutez][rec.name]) !== JSON.stringify(hraci)) {
+        data.soupisky[soutez][rec.name] = hraci;
+        r.soupisky++;
+      }
+    });
+  }
+
   // Loga se ukladaji jen pro tymy, ktere v datech opravdu jsou - jinak by
   // vznikaly polozky pod syrovym API nazvem, ktery na webu nikde neni.
   const everywhereNow = knownTeamsEverywhere(data);
@@ -146,10 +164,10 @@ function renderSummary(report) {
     lines.push(`⛔ ${report.blocked}`);
     return lines.join('\n') + '\n';
   }
-  lines.push('| Soutěž | Utkání (čeká na schválení) | Nové | Změněné | Beze změny | Přeskočeno | Zmizelé | Nové týmy | Loga |');
-  lines.push('|---|---|---|---|---|---|---|---|---|');
+  lines.push('| Soutěž | Utkání (čeká na schválení) | Nové | Změněné | Beze změny | Přeskočeno | Zmizelé | Nové týmy | Loga | Soupisky |');
+  lines.push('|---|---|---|---|---|---|---|---|---|---|');
   report.souteze.forEach((r) => {
-    lines.push(`| ${r.soutez} | ${r.matchCount}${r.pendingCount ? ` (${r.pendingCount})` : ''} | ${r.applied.new} | ${r.applied.changed} | ${r.unchanged} | ${r.skipped.length} | ${r.removed.length} | ${r.newTeams.join(', ') || '—'} | ${r.logos} |`);
+    lines.push(`| ${r.soutez} | ${r.matchCount}${r.pendingCount ? ` (${r.pendingCount})` : ''} | ${r.applied.new} | ${r.applied.changed} | ${r.unchanged} | ${r.skipped.length} | ${r.removed.length} | ${r.newTeams.join(', ') || '—'} | ${r.logos} | ${r.soupisky} |`);
   });
   lines.push('');
   report.errors.forEach((e) => lines.push(`❌ ${e}`));

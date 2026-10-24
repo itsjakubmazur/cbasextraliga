@@ -75,4 +75,12 @@ async function fetchGamesForMatch(matchId) {
   ]);
 }
 
-module.exports = { fetchCompetitions, fetchMatches, fetchGamesForMatch, fetchTeams };
+// Soupisky ligových družstev (hráči + náhradníci) pro jednu část soutěže.
+async function fetchRosterPlayers(tournamentId, competitionId) {
+  return fetchAllPages('/competitions/rosters/players', [
+    ...buildEqualsFilterParams('tournamentId', tournamentId),
+    ...buildEqualsFilterParams('competitionId', competitionId),
+  ]);
+}
+
+module.exports = { fetchCompetitions, fetchMatches, fetchGamesForMatch, fetchTeams, fetchRosterPlayers };

@@ -1,8 +1,8 @@
 // Stažení kandidátů (dílčích zápasů) jedné soutěže z czechbadminton.cz.
 // Sdílí ho admin endpoint api/sync/fetch.js i scripts/auto-sync.js, ať
 // ruční i automatický sync vidí přesně stejná data.
-const { fetchMatches, fetchGamesForMatch, fetchTeams } = require('./czechbadminton');
-const { normalizeGame, isApproved } = require('./normalize');
+const { fetchMatches, fetchGamesForMatch, fetchTeams, fetchRosterPlayers } = require('./czechbadminton');
+const { normalizeGame, normalizeRosters, isApproved } = require('./normalize');
 
 function isWaitingForApproval(m) {
   return m.stateId === 'WaitForApproval' || m.stateName === 'Čeká na schválení';
@@ -25,7 +25,7 @@ async function mapWithConcurrency(items, limit, fn) {
 
 /**
  * config = jedna položka z tournamentConfig.json ({ tournamentId, competitions }).
- * Vrací { matchCount, pendingCount, candidates, warnings, teamLogos } - stejný tvar, jaký
+ * Vrací { matchCount, pendingCount, candidates, warnings, teamLogos, soupisky } - stejný tvar, jaký
  * admin UI dostává z /api/sync/fetch.
  */
 async function syncCompetition(config) {
@@ -69,8 +69,20 @@ async function syncCompetition(config) {
     // loga jsou bonus - pokud selzou, sync jako celek by kvuli tomu nemel spadnout
   }
 
+  // 4) soupisky druzstev - stejne jako loga bonus, sync zapasu kvuli nim nespadne
+  let soupisky = null;
+  try {
+    const rosterPlayers = [];
+    for (const competitionId of Object.values(config.competitions)) {
+      rosterPlayers.push(...(await fetchRosterPlayers(config.tournamentId, competitionId)));
+    }
+    soupisky = normalizeRosters(rosterPlayers);
+  } catch {
+    soupisky = null;
+  }
+
   const pendingCount = allMatches.filter((m) => !isApproved(m)).length;
-  return { matchCount: allMatches.length, pendingCount, candidates, warnings, teamLogos };
+  return { matchCount: allMatches.length, pendingCount, candidates, warnings, teamLogos, soupisky };
 }
 
 module.exports = { syncCompetition };

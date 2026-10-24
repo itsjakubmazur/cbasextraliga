@@ -76,4 +76,39 @@ function normalizeGame(match, game) {
   return { zapas, warnings, sourceMatchId: match.id, sourceGameId: game.id };
 }
 
-module.exports = { normalizeGame, formatPlayers, formatDatum, detectSkrec, isApproved };
+/**
+ * Soupisky z /competitions/rosters/players -> { <API název týmu>: [hráč] },
+ * hráč = { jmeno, pohlavi: 'M'|'Z', poradi?, poradiCtyrhra?, nahradnik? }.
+ * Jméno se skládá stejně jako u zápasů (formatPlayers), aby se dalo spárovat.
+ * Kontaktní údaje ani ID osob se neukládají.
+ */
+function normalizeRosters(rosterPlayers) {
+  const byTeam = {};
+  const seen = new Set();
+  (rosterPlayers || []).forEach((r) => {
+    const jmeno = `${r.lastName || ''} ${r.firstName || ''}`.trim();
+    const tym = String(r.teamName || '').trim();
+    if (!jmeno || !tym) return;
+    // stejny hrac muze byt na soupisce zakladni casti i play-off
+    const key = tym + '|' + jmeno;
+    if (seen.has(key)) return;
+    seen.add(key);
+    const hrac = { jmeno, pohlavi: r.sexId === 2 || r.sexName === 'Žena' ? 'Z' : 'M' };
+    if (r.order != null) hrac.poradi = r.order;
+    if (r.orderDouble != null) hrac.poradiCtyrhra = r.orderDouble;
+    if (r.teamPersonTypeId === 'SUBSTITUTE') hrac.nahradnik = true;
+    (byTeam[tym] = byTeam[tym] || []).push(hrac);
+  });
+  Object.values(byTeam).forEach((list) => list.sort(compareRosterPlayers));
+  return byTeam;
+}
+
+// hraci pred nahradniky, muzi pred zenami, pak podle poradi na soupisce, pak abecedne
+function compareRosterPlayers(a, b) {
+  return (a.nahradnik ? 1 : 0) - (b.nahradnik ? 1 : 0)
+    || (a.pohlavi === 'Z' ? 1 : 0) - (b.pohlavi === 'Z' ? 1 : 0)
+    || (a.poradi ?? 99) - (b.poradi ?? 99)
+    || a.jmeno.localeCompare(b.jmeno, 'cs');
+}
+
+module.exports = { normalizeRosters, normalizeGame, formatPlayers, formatDatum, detectSkrec, isApproved };
