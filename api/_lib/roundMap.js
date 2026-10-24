@@ -7,6 +7,7 @@
 // z js/statistics.js (playoffKoloNazev, řádky 54-58): QF/SF/F/P5/3M/RR.
 const PLAYOFF_ROUND_MAP = {
   'čtvrtfinále': 'QF',
+  'čvrtfinále': 'QF', // preklep primo v API (1. liga play-off 2025/26)
   'semifinále': 'SF',
   'finále': 'F',
   'o 5. místo': 'P5',

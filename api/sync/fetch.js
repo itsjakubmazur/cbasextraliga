@@ -1,22 +1,6 @@
 const { requireAuth } = require('../_lib/auth');
-const { fetchMatches, fetchGamesForMatch, fetchTeams } = require('../_lib/czechbadminton');
-const { normalizeGame } = require('../_lib/normalize');
+const { syncCompetition } = require('../_lib/syncCompetition');
 const tournamentConfig = require('../_lib/tournamentConfig.json');
-
-const CONCURRENCY = 5;
-
-async function mapWithConcurrency(items, limit, fn) {
-  const results = new Array(items.length);
-  let next = 0;
-  async function worker() {
-    while (next < items.length) {
-      const i = next++;
-      results[i] = await fn(items[i], i);
-    }
-  }
-  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
-  return results;
-}
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -45,49 +29,11 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const competitionEntries = Object.entries(config.competitions);
-
-    // 1) seznam schvalenych zapasu napric vsemi castmi souteze (zakladni cast + play-off apod.)
-    const allMatches = [];
-    for (const [competitionName, competitionId] of competitionEntries) {
-      const matches = await fetchMatches(config.tournamentId, competitionId);
-      matches
-        .filter((m) => m.stateName === 'Schváleno' || m.stateId === 'Approved')
-        .forEach((m) => allMatches.push({ ...m, _competitionName: competitionName }));
-    }
-
-    // 2) pro kazdy zapas hry jednotlivych disciplin (s omezenou konkurenci, ať to nezahltí API/timeout)
-    const perMatch = await mapWithConcurrency(allMatches, CONCURRENCY, async (match) => {
-      const games = await fetchGamesForMatch(match.id);
-      return games.map((game) => normalizeGame(match, game));
-    });
-
-    const candidates = [];
-    const warnings = [];
-    perMatch.flat().forEach(({ zapas, warnings: gameWarnings }) => {
-      candidates.push(zapas);
-      if (gameWarnings.length) {
-        warnings.push({ id: zapas.id, tymDomaci: zapas.tymDomaci, tymHoste: zapas.tymHoste, issues: gameWarnings });
-      }
-    });
-
-    // 3) loga tymu (jeden dotaz, nezavisly na poctu zapasu)
-    let teamLogos = {};
-    try {
-      const teams = await fetchTeams(config.tournamentId);
-      teamLogos = Object.fromEntries(
-        teams.filter((t) => t.logoUrl).map((t) => [t.name, 'https://is.czechbadminton.cz' + t.logoUrl])
-      );
-    } catch {
-      // loga jsou bonus - pokud selzou, sync jako celek by kvuli tomu nemel spadnout
-    }
-
+    const result = await syncCompetition(config);
     res.status(200).json({
       competitionKey,
-      matchCount: allMatches.length,
-      candidates,
-      warnings,
-      teamLogos,
+      sezona: tournamentConfig._sezona,
+      ...result,
     });
   } catch (err) {
     res.status(502).json({ error: 'Stažení z czechbadminton.cz selhalo', detail: String(err.message || err) });

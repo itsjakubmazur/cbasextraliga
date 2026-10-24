@@ -66,6 +66,16 @@ const AdminSync = {
 
     try {
       const result = await AdminApi.syncFetch(competitionKey);
+      // tournamentConfig.json uz muze mit ID nove sezony, zatimco koncept je
+      // jeste ve stare - zapasy by se jinak tise namichaly do spatneho rocniku.
+      const seasonKey = (str) => {
+        const m = String(str || '').match(/(\d{4})\s*[/-]\s*(\d{4}|\d{2})/);
+        return m ? `${m[1]}/${m[2].length === 2 ? m[1].slice(0, 2) + m[2] : m[2]}` : null;
+      };
+      if (result.sezona && seasonKey(result.sezona) !== seasonKey(AdminData.draft.rocnik)) {
+        statusEl.textContent = `❌ Sync je nastavený na sezónu ${result.sezona}, ale koncept je ${AdminData.draft.rocnik || '(bez ročníku)'}. Nejdřív založ novou sezónu.`;
+        return;
+      }
       this.lastCompetitionKey = competitionKey;
       this.lastWarningsById = new Map(result.warnings.map((w) => [w.id, [...w.issues]]));
 

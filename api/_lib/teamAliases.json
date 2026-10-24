@@ -1,0 +1,9 @@
+{
+  "_comment": "Název týmu z czechbadminton.cz API -> zavedený název v badminton-data.json. Jen pro případy, kdy se názvy liší víc než velikostí písmen/mezerami/tečkami (to řeší merge.js sám). Používá scripts/auto-sync.js.",
+  "B.O.CHANCE OSTRAVA": "B.O. Chance Ostrava Sportclub",
+  "BA Olomouc": "Badminton Akademie Olomouc",
+  "Montas HK": "TJ Montas Hradec Králové",
+  "SK Badminton Český Krumlov": "SKB Český Krumlov",
+  "Sportovní klub Badminton Český Krumlov": "SKB Český Krumlov",
+  "TJ Astra Praha": "TJ Astra Zahradní Město"
+}
