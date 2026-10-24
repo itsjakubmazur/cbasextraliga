@@ -452,6 +452,20 @@ const App = {
                 if (el) el.style.display = 'none';
             });
             document.getElementById('prazdnyStav').style.display = 'block';
+
+            // Zacatek zive sezony: zapasy jeste nejsou, ale tymy ano - ukazat
+            // aspon tabulku s nulami (Statistics.vypocitejTabulku je doplni).
+            const tymy = Data.tymy[this.aktualni_soutez] || [];
+            if (!this.aktualni_rocnik && tymy.length > 0) {
+                document.getElementById('tabulkaPlayoffContainer').style.display = 'block';
+                document.getElementById('tabulkaObsah').style.display = 'block';
+                document.getElementById('playoffObsah').style.display = 'none';
+                document.getElementById('barazeObsah').style.display = 'none';
+                document.getElementById('tabulkaPlayoffTitle').textContent = 'Tabulka';
+                Table.render(this.aktualni_soutez);
+                const popis = document.querySelector('#prazdnyStav p');
+                if (popis) popis.textContent = 'Sezóna právě začíná – výsledky se objeví po prvních schválených utkáních.';
+            }
             return;
         }
 

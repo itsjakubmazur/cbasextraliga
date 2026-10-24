@@ -415,7 +415,21 @@ const Statistics = {
             tabulka[hoste].bodyP += domaciBody;
             tabulka[hoste].body += hosteBodyTabulka;
         });
-        
+
+        // Tymy ze seznamu souteze, ktere jeste nehraly (napr. zacatek sezony
+        // pred prvnim schvalenym utkanim) - at se v tabulce ukazou s nulami.
+        // Pridavaji se az na konec, aby se nezmenilo poradi pri shode bodu.
+        // Jen pro zivou sezonu - archivy maji v tymy[] i soutez, ze ktere se
+        // uchovalo jen play-off, a tam ma tabulka zakladni casti zustat prazdna.
+        const zivaSezona = !App.aktualni_rocnik || App.aktualni_rocnik === 'current';
+        if (zivaSezona) (Data.tymy[aktualni_soutez] || []).forEach(tym => {
+            if (!tabulka[tym]) tabulka[tym] = {
+                utkani: 0, vyhry: 0, remizy: 0, prohry: 0,
+                zapasyV: 0, zapasyP: 0, setyV: 0, setyP: 0,
+                bodyV: 0, bodyP: 0, body: 0
+            };
+        });
+
         return tabulka;
     }
 };
