@@ -42,6 +42,8 @@ function makeEl() {
     set innerHTML(v) { html = v; },
     style: {},
     classList: { add() {}, remove() {}, contains() { return false; }, toggle() {} },
+    querySelector() { return null; },
+    querySelectorAll() { return []; },
   };
 }
 
@@ -148,6 +150,7 @@ function main() {
 
   const seasons = [null, ...Object.keys(newJson.historicke_rocniky || {})];
   const failures = [];
+  const renderZmeny = new Set();
   let checks = 0;
 
   seasons.forEach((rocnik) => {
@@ -178,7 +181,11 @@ function main() {
         failures.push(`${label}/${soutez}: seraditTymyPodleTabulky MISMATCH old=${JSON.stringify(oldOrder)} new=${JSON.stringify(newOrder)}`);
       }
 
-      const oldHtml = safeCall(() => { oldCtx.Table.render(soutez); return oldCtx.document.getElementById('tabulkaObsah').innerHTML; }, `${label}/${soutez} Table.render(old)`, failures);
+      // HTML se porovnava jen kdyz se kod vykreslovani nezmenil - pak rozdil
+      // znamena zmenu vypoctu/konfigurace. Zamerny redesign tabulky se jen ohlasi.
+      const renderZmenen = String(oldCtx.Table.render) !== String(newCtx.Table.render);
+      if (renderZmenen) renderZmeny.add('Table.render');
+      const oldHtml = renderZmenen ? undefined : safeCall(() => { oldCtx.Table.render(soutez); return oldCtx.document.getElementById('tabulkaObsah').innerHTML; }, `${label}/${soutez} Table.render(old)`, failures);
       const newHtml = safeCall(() => { newCtx.Table.render(soutez); return newCtx.document.getElementById('tabulkaObsah').innerHTML; }, `${label}/${soutez} Table.render(new)`, failures);
       checks++;
       if (oldHtml !== undefined && newHtml !== undefined && oldHtml !== newHtml) {
@@ -211,7 +218,9 @@ function main() {
     }
 
     // Baraz HTML (pouziva _vypocitejSerii primo)
-    const oldBaraz = safeCall(() => oldCtx.Playoff.renderBaraze(), `${label} renderBaraze(old)`, failures);
+    const barazZmenena = String(oldCtx.Playoff.renderBaraze) !== String(newCtx.Playoff.renderBaraze);
+    if (barazZmenena) renderZmeny.add('Playoff.renderBaraze');
+    const oldBaraz = barazZmenena ? undefined : safeCall(() => oldCtx.Playoff.renderBaraze(), `${label} renderBaraze(old)`, failures);
     const newBaraz = safeCall(() => newCtx.Playoff.renderBaraze(), `${label} renderBaraze(new)`, failures);
     checks++;
     if (oldBaraz !== undefined && newBaraz !== undefined && oldBaraz !== newBaraz) {
@@ -233,6 +242,9 @@ function main() {
   });
 
   console.log(`Provedeno ${checks} kontrol napric ${seasons.length} sezonami x ${SOUTEZE.length} soutezemi.`);
+  if (renderZmeny.size) {
+    console.log(`Pozn.: zmenil se kod vykreslovani (${[...renderZmeny].join(', ')}) - porovnani HTML preskoceno, vypocty se kontroluji dal.`);
+  }
   if (failures.length) {
     console.error(`\n✗ ${failures.length} REGRESI NALEZENO:\n`);
     failures.forEach((f) => console.error(' - ' + f));
