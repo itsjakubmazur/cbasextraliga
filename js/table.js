@@ -153,7 +153,7 @@ const Table = {
 
     logoHtml(tym) {
         const url = Data.tymLoga && Data.tymLoga[tym];
-        if (url) return '<span class="lt-logo"><img src="' + Statistics.escapeAttr(url) + '" alt="" loading="lazy" onerror="this.parentNode.classList.add(\'lt-logo-empty\');this.remove()"></span>';
+        if (url) return '<span class="lt-logo"><img src="' + Statistics.escapeAttr(url) + '" alt="" onerror="this.parentNode.classList.add(\'lt-logo-empty\');this.remove()"></span>';
         const zkratka = String(tym).split(/\s+/).filter(w => !['sk', 'bk', 'tj', 'ba', 'bac', 'skb', 'skp'].includes(w.toLowerCase())).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('');
         return '<span class="lt-logo lt-logo-empty">' + Statistics.escapeHtml(zkratka || '?') + '</span>';
     },

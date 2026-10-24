@@ -144,7 +144,7 @@
         function logoHtml(tym) {
             const url = tymLoga[tym];
             return url
-                ? '<span class="lt-logo"><img src="' + escapeHtml(url).replace(/"/g, '&quot;') + '" alt="" loading="lazy" onerror="this.parentNode.classList.add(\'lt-logo-empty\');this.remove()"></span>'
+                ? '<span class="lt-logo"><img src="' + escapeHtml(url).replace(/"/g, '&quot;') + '" alt="" onerror="this.parentNode.classList.add(\'lt-logo-empty\');this.remove()"></span>'
                 : '<span class="lt-logo lt-logo-empty">' + escapeHtml(String(tym).split(/\s+/).filter(w => !['sk','bk','tj','ba'].includes(w.toLowerCase())).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('')) + '</span>';
         }
 
