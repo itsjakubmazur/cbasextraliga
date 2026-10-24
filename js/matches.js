@@ -63,20 +63,20 @@ const Matches = {
                     const skrecBadge = skrec ? ' <span class="match-skrec-badge">SKREČ</span>' : '';
                     return '<tr class="' + rc + '">' +
                         '<td class="match-detail-cell match-detail-disc">' + Statistics.escapeHtml(z.disciplina || '') + '</td>' +
-                        '<td class="match-detail-cell">' + Statistics.escapeHtml(z.domaci || '') + skrecBadge + '</td>' +
-                        '<td class="match-detail-cell">' + Statistics.escapeHtml(z.hoste || '') + '</td>' +
+                        '<td class="match-detail-cell' + (!neodehrano && vyhralDom ? ' match-win' : '') + '">' + Statistics.escapeHtml(z.domaci || '') + skrecBadge + '</td>' +
+                        '<td class="match-detail-cell' + (!neodehrano && !vyhralDom ? ' match-win' : '') + '">' + Statistics.escapeHtml(z.hoste || '') + '</td>' +
                         '<td class="match-detail-cell match-detail-score">' + (neodehrano ? '–' : (z.vysledek || '')) + '</td>' +
                         '<td class="match-detail-cell match-detail-sets">' + (z.sety || '–') + '</td>' +
                         '</tr>';
                 }).join('');
 
                 return '<tr class="' + rowCls + ' cursor-pointer" onclick="Matches.toggleDetail(\'utk-' + uIdx + '\')">' +
-                    '<td class="p-2 match-datum-cell">' + (u.datum || '–') +
+                    '<td class="p-2 match-datum-cell">' + (u.datum ? Statistics.formatDatum(u.datum, true) : '–') +
                         (u.zapasy.some(z => z.neschvaleno) ? '<span class="match-pending-badge" title="Výsledek ještě čeká na schválení svazem">neschváleno</span>' : '') +
                     '</td>' +
-                    '<td class="p-2 match-tym-cell clickable" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.tymDomaci) + '\')">' + Statistics.escapeHtml(u.tymDomaci) + '</td>' +
-                    '<td class="p-2 text-center match-score ' + vysledekClass + '">' + dV + ' : ' + hV + '</td>' +
-                    '<td class="p-2 match-tym-cell clickable" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.tymHoste) + '\')">' + Statistics.escapeHtml(u.tymHoste) + '</td>' +
+                    '<td class="p-2 match-tym-cell match-tym-home clickable' + (dV > hV ? ' match-win' : '') + '" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.tymDomaci) + '\')"><span class="match-tym">' + Statistics.escapeHtml(u.tymDomaci) + Table.logoHtml(u.tymDomaci) + '</span></td>' +
+                    '<td class="match-score-band ' + vysledekClass + '">' + dV + ':' + hV + '</td>' +
+                    '<td class="p-2 match-tym-cell clickable' + (hV > dV ? ' match-win' : '') + '" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.tymHoste) + '\')"><span class="match-tym">' + Table.logoHtml(u.tymHoste) + Statistics.escapeHtml(u.tymHoste) + '</span></td>' +
                     '<td class="p-2 text-right"><span id="mtoggle-' + uIdx + '" class="match-toggle">' + Icons.chevronRight() + '</span></td>' +
                     '</tr>' +
                     '<tr id="utk-' + uIdx + '" style="display:none"><td colspan="5" class="p-0">' +
@@ -101,8 +101,8 @@ const Matches = {
                 '</div>' +
                 '<div id="mround-' + ki + '" class="match-round-body" style="display:' + bodyDisplay + '">' +
                 '<table class="w-full text-sm"><thead><tr class="match-subhead">' +
-                '<th class="text-left p-2">Datum</th><th class="text-left p-2">Domácí</th>' +
-                '<th class="text-center p-2">Výsledek</th><th class="text-left p-2">Hosté</th>' +
+                '<th class="text-left p-2">Datum</th><th class="p-2" style="text-align:right">Domácí</th>' +
+                '<th class="match-score-head">Výsledek</th><th class="text-left p-2">Hosté</th>' +
                 '<th></th></tr></thead>' +
                 utkaniRows +
                 '</table></div></div>';

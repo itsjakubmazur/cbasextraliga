@@ -33,94 +33,207 @@ const Table = {
         return zony;
     },
 
-    render(aktualni_soutez) {
+    // Ligová tabulka v jednotném designu webu (css/standings.css). Kreslí ji
+    // hlavní web i embed tabulka.html.
+    //   opts.containerId  - kam vykreslit (výchozí 'tabulkaObsah')
+    //   opts.naDetail     - funkce(tym) pro odkaz "Detail týmu" v rozbaleném řádku
+    //   opts.animace      - přehrát přesun týmů po novém kole (výchozí true)
+    render(aktualni_soutez, opts = {}) {
+        const container = document.getElementById(opts.containerId || 'tabulkaObsah');
+        if (!container) return;
         const tabulkaData = Statistics.vypocitejTabulku(aktualni_soutez);
         const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
         const konfig = Data.getKonfigurace(App.aktualni_rocnik);
         const bodovani = (konfig.bodovani && konfig.bodovani[aktualni_soutez]) || Statistics._FALLBACK_BODOVANI.extraliga;
         const jePrvniLiga = bodovani.remizaMozna;
-        const zony = this.vypocitejZony(tymy.length, (konfig.zony && konfig.zony[aktualni_soutez]) || []);
-
-        const getZone = (idx) => zony[idx].typ;
-
-        const posClass = (idx) => ['pos-gold', 'pos-silver', 'pos-bronze'][idx] || '';
-
-        // Number of columns: base 11 (extraliga) or 12 (1. liga with R)
-        const colspan = jePrvniLiga ? 12 : 11;
+        const zonyConfig = (konfig.zony && konfig.zony[aktualni_soutez]) || [];
+        const zony = this.vypocitejZony(tymy.length, zonyConfig);
+        const zmeny = Statistics.vypocitejZmenyPozic(aktualni_soutez);
+        const esc = (x) => Statistics.escapeHtml(x);
+        const attr = (x) => Statistics.escapeAttr(x);
+        const colspan = jePrvniLiga ? 10 : 9; // všechny sloupce kromě bodů
 
         const rows = [];
         tymy.forEach((tym, idx) => {
             const t = tabulkaData[tym];
-            const zone = getZone(idx);
-            const pc = posClass(idx);
-
-            const forma = Statistics.vypocitejFormuTymu(tym, aktualni_soutez);
-            const formaDots = forma.map(r => '<span class="form-dot form-dot-' + r + '"></span>').join('');
-
-            const remizaCol = jePrvniLiga
-                ? '<td class="standings-num-cell">' + t.remizy + '</td>'
-                : '';
+            const z = zony[idx];
+            const delta = zmeny[tym] || 0;
+            const deltaHtml = delta > 0 ? '<span class="lt-delta up" title="Posun o ' + delta + ' nahoru">▲' + delta + '</span>'
+                : delta < 0 ? '<span class="lt-delta down" title="Posun o ' + (-delta) + ' dolů">▼' + (-delta) + '</span>' : '';
+            const formaHtml = this.formaHtml(Statistics.vypocitejFormuTymu(tym, aktualni_soutez));
 
             rows.push(
-                '<tr class="standings-row" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' +
-                '<td class="standings-pos-cell"><span class="standings-pos-num ' + pc + '">' + (idx + 1) + '</span></td>' +
-                '<td class="standings-name-cell">' +
-                '<span class="zone-dot zone-dot-' + (zone || 'none') + '"></span>' +
-                (Data.tymLoga && Data.tymLoga[tym] ? '<img class="team-row-logo" src="' + Statistics.escapeAttr(Data.tymLoga[tym]) + '" alt="" onerror="this.remove()">' : '') +
-                '<span class="team-name-full">' + Statistics.escapeHtml(tym) + '</span>' +
-                '<span class="team-name-short">' + Statistics.escapeHtml(Statistics.zkracenyNazev(tym)) + '</span>' +
-                '</td>' +
-                '<td class="standings-num-cell">' + t.utkani + '</td>' +
-                '<td class="standings-num-cell text-win">' + t.vyhry + '</td>' +
-                remizaCol +
-                '<td class="standings-num-cell text-loss">' + t.prohry + '</td>' +
-                '<td class="standings-ratio-cell">' + t.zapasyV + ':' + t.zapasyP + '</td>' +
-                '<td class="standings-ratio-cell standings-col-sety">' + t.setyV + ':' + t.setyP + '</td>' +
-                '<td class="standings-ratio-cell standings-col-mice">' + t.bodyV + ':' + t.bodyP + '</td>' +
-                '<td class="standings-forma-cell"><span class="form-dots">' + formaDots + '</span></td>' +
-                '<td class="standings-pts-cell">' + t.body + '</td>' +
+                '<tr class="lt-row" data-i="' + idx + '" data-tym="' + attr(tym) + '" tabindex="0" aria-expanded="false">' +
+                '<td class="lt-pos lt-z-' + (z.typ || 'none') + '"><span class="lt-posnum">' + (idx + 1) + '</span>' + deltaHtml + '</td>' +
+                '<td class="lt-l"><div class="lt-team">' + this.logoHtml(tym) +
+                    '<span class="lt-name"><span class="lt-name-full">' + esc(tym) + '</span><span class="lt-name-short">' + esc(Statistics.zkracenyNazev(tym)) + '</span></span></div></td>' +
+                '<td>' + t.utkani + '</td><td>' + t.vyhry + '</td>' +
+                (jePrvniLiga ? '<td>' + t.remizy + '</td>' : '') +
+                '<td>' + t.prohry + '</td>' +
+                '<td class="lt-col-wide">' + t.zapasyV + ':' + t.zapasyP + '</td>' +
+                '<td class="lt-col-wide">' + this.rozdilHtml(t.setyV, t.setyP) + '</td>' +
+                '<td class="lt-col-wide">' + this.rozdilHtml(t.bodyV, t.bodyP) + '</td>' +
+                '<td class="lt-col-wide">' + formaHtml + '</td>' +
+                '<td class="lt-pts" data-body="' + t.body + '">' + t.body + '</td>' +
                 '</tr>'
             );
 
-            // Zone dividers (inserted after current row)
-            const z = zony[idx];
+            const utkani = Statistics.utkaniTymu(tym, aktualni_soutez).slice(0, 4);
+            const vysledky = utkani.map(u => {
+                const [, m, d] = (u.datum || '').split('-').map(Number);
+                return '<tr><td class="lt-kolo">' + esc(u.kolo) + ' kolo</td><td class="lt-misto">' + (u.doma ? 'doma' : 'venku') + '</td>' +
+                    '<td class="lt-souper">' + this.logoHtml(u.souper) + '<span>' + esc(u.souper) + '</span>' +
+                        (u.neschvaleno ? '<span class="lt-pending" title="Čeká na schválení svazem">neschváleno</span>' : '') + '</td>' +
+                    '<td class="lt-kolo lt-datum">' + (d ? d + '. ' + m + '.' : '') + '</td>' +
+                    '<td class="lt-skore ' + u.vysledek + '">' + u.nase + ':' + u.jejich + '</td></tr>';
+            }).join('');
+            rows.push(
+                '<tr class="lt-detail" data-for="' + idx + '"><td colspan="' + colspan + '"><div class="lt-collapse"><div class="lt-collapse-in"><div class="lt-collapse-pad">' +
+                '<div class="lt-mobile-extra"><span>Sety<b>' + t.setyV + ':' + t.setyP + '</b></span><span>Míče<b>' + t.bodyV + ':' + t.bodyP + '</b></span><span>' + formaHtml + '</span></div>' +
+                (vysledky ? '<table class="lt-results">' + vysledky + '</table>' : '<div class="lt-empty-results">Zatím bez odehraného utkání.</div>') +
+                (opts.naDetail ? '<div class="lt-detail-link"><button type="button" data-detail="' + attr(tym) + '">Detail týmu a soupiska</button></div>' : '') +
+                '</div></div></div></td><td class="lt-pts"></td></tr>'
+            );
+
             if (z.dividerAfter !== null && z.dividerAfter !== undefined && (!z.dividerMinTeams || tymy.length > z.dividerMinTeams - 1)) {
-                const label = z.dividerAfter ? '<span>' + z.dividerAfter + '</span>' : '';
-                rows.push('<tr class="standings-divider' + (z.dividerClass ? ' ' + z.dividerClass : '') + '"><td colspan="' + colspan + '">' + label + '</td></tr>');
+                const cls = (z.dividerClass || '').includes('relegation') ? 'relegation' : 'playoff';
+                const label = String(z.dividerAfter || '').replace('↓', '').trim();
+                rows.push('<tr class="lt-divider ' + cls + '"><td colspan="' + colspan + '">' + esc(label) + '</td><td class="lt-pts"></td></tr>');
             }
         });
 
-        const legendaInfo = ((konfig.zony && konfig.zony[aktualni_soutez]) || [])
-            .filter(z => z.legenda)
-            .map(z => '<span class="legenda-item"><span class="legenda-dot legenda-' + z.typ + '"></span> ' + z.legenda + '</span>')
-            .join('');
-
+        const barvyZon = { 'final-four': 'var(--zone-top)', top: 'var(--zone-top)', playoff: 'var(--zone-playoff)', relegation: 'var(--zone-relegation)' };
+        const legenda = zonyConfig.filter(z => z.legenda)
+            .map(z => '<span><i style="background:' + (barvyZon[z.typ] || 'var(--border)') + '"></i>' + esc(z.legenda) + '</span>').join('');
         const bodovaniInfo = (konfig.bodovaniInfo && konfig.bodovaniInfo[aktualni_soutez]) || '';
 
-        const remizaTh = jePrvniLiga ? '<th class="th-num" title="Remízy">R</th>' : '';
-
-        document.getElementById('tabulkaObsah').innerHTML =
-            '<div class="overflow-x-auto">' +
-            '<table class="standings-table">' +
-            '<thead><tr class="standings-thead">' +
-            '<th class="th-pos">#</th>' +
-            '<th class="th-name">Tým</th>' +
-            '<th class="th-num" title="Utkání">U</th>' +
-            '<th class="th-num" title="Vítězství">V</th>' +
-            remizaTh +
-            '<th class="th-num" title="Porážky">P</th>' +
-            '<th class="th-ratio" title="Poměr dílčích zápasů">Záp.</th>' +
-            '<th class="th-ratio standings-col-sety" title="Poměr setů">Sety</th>' +
-            '<th class="th-ratio standings-col-mice" title="Poměr míčů">Míče</th>' +
-            '<th class="th-forma" title="Posledních 5 zápasů">Forma</th>' +
-            '<th class="th-pts">Body</th>' +
-            '</tr></thead>' +
-            '<tbody>' + rows.join('') + '</tbody>' +
-            '</table></div>' +
-            '<div class="table-footer">' +
-            '<div class="standings-legenda">' + legendaInfo + '</div>' +
-            '<div class="table-bodovani">' + bodovaniInfo + '</div>' +
-            (Statistics.maNeschvalene(aktualni_soutez) ? '<div class="table-neschvaleno">* Zahrnuje i výsledky, které ještě čekají na schválení svazem.</div>' : '') +
+        container.innerHTML =
+            '<div class="overflow-x-auto"><table class="lt-table">' +
+            '<thead><tr>' +
+            '<th class="lt-pos"><span class="sr-only">Pořadí</span></th><th class="lt-l">Tým</th>' +
+            '<th title="Utkání">U</th><th title="Výhry">V</th>' + (jePrvniLiga ? '<th title="Remízy">R</th>' : '') + '<th title="Prohry">P</th>' +
+            '<th class="lt-col-wide" title="Poměr dílčích zápasů">Zápasy</th><th class="lt-col-wide" title="Rozdíl setů">Sety</th>' +
+            '<th class="lt-col-wide" title="Rozdíl míčů">Míče</th><th class="lt-col-wide" title="Posledních 5 utkání">Forma</th>' +
+            '<th class="lt-pts">Body</th>' +
+            '</tr></thead><tbody>' + rows.join('') + '</tbody></table></div>' +
+            '<div class="lt-foot">' + legenda +
+            (Object.keys(zmeny).length ? '<span><b style="color:var(--win)">▲</b> <b style="color:var(--loss)">▼</b> posun oproti minulému kolu</span>' : '') +
+            (bodovaniInfo ? '<span class="lt-bod">' + bodovaniInfo + '</span>' : '') +
+            (Statistics.maNeschvalene(aktualni_soutez) ? '<span class="lt-note">Zahrnuje i výsledky, které ještě čekají na schválení svazem.</span>' : '') +
             '</div>';
+
+        this._fixColspans(container);
+        const table = container.querySelector('.lt-table');
+        container.querySelectorAll('.lt-row').forEach(r => {
+            r.addEventListener('click', () => this._toggle(table, r.dataset.i));
+            r.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this._toggle(table, r.dataset.i); }
+            });
+        });
+        if (opts.naDetail) {
+            container.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', (e) => {
+                e.stopPropagation();
+                opts.naDetail(b.dataset.detail);
+            }));
+        }
+        if (opts.animace !== false) this.animujPoradi(table, aktualni_soutez);
+    },
+
+    // Řádky s colspan musí pokrýt jen viditelné sloupce, jinak červený sloupec
+    // bodů na mobilu (skryté sloupce) ujede doprava.
+    _fixColspans(container) {
+        const visible = [...container.querySelectorAll('.lt-table thead th')].filter(th => getComputedStyle(th).display !== 'none').length;
+        container.querySelectorAll('.lt-detail > td:first-child, .lt-divider > td:first-child').forEach(td => { td.colSpan = Math.max(1, visible - 1); });
+    },
+
+    _toggle(table, i) {
+        const det = table.querySelector('.lt-detail[data-for="' + i + '"] .lt-collapse');
+        const row = table.querySelector('.lt-row[data-i="' + i + '"]');
+        if (!det || !row) return;
+        const open = !det.classList.contains('open');
+        det.classList.toggle('open', open);
+        row.classList.toggle('open', open);
+        row.setAttribute('aria-expanded', String(open));
+    },
+
+    logoHtml(tym) {
+        const url = Data.tymLoga && Data.tymLoga[tym];
+        if (url) return '<span class="lt-logo"><img src="' + Statistics.escapeAttr(url) + '" alt="" loading="lazy" onerror="this.parentNode.classList.add(\'lt-logo-empty\');this.remove()"></span>';
+        const zkratka = String(tym).split(/\s+/).filter(w => !['sk', 'bk', 'tj', 'ba', 'bac', 'skb', 'skp'].includes(w.toLowerCase())).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('');
+        return '<span class="lt-logo lt-logo-empty">' + Statistics.escapeHtml(zkratka || '?') + '</span>';
+    },
+
+    // forma = pole 'w'/'l'/'d' (nejstarší první); doplní se šedými na 5
+    formaHtml(forma) {
+        const f = [...(forma || [])];
+        while (f.length < 5) f.unshift('e');
+        const pismeno = { w: 'V', l: 'P', d: 'R', e: '' };
+        const popis = { w: 'výhra', l: 'prohra', d: 'remíza', e: '' };
+        return '<span class="lt-form">' + f.map(x => '<span class="' + x + '"' + (popis[x] ? ' title="' + popis[x] + '"' : '') + '>' + pismeno[x] + '</span>').join('') + '</span>';
+    },
+
+    rozdilHtml(a, b) {
+        const d = a - b;
+        return '<span class="lt-pm ' + (d > 0 ? 'plus' : d < 0 ? 'minus' : '') + '">' + (d > 0 ? '+' : d < 0 ? '−' : '') + Math.abs(d) + '</span>' +
+            '<span class="lt-ratio">' + a + ':' + b + '</span>';
+    },
+
+    // Jediná "velká" animace webu: po novém kole se týmy přesunou z pořadí po
+    // předchozím kole na aktuální místa a body se dopočítají. Pro každého
+    // návštěvníka jen jednou na kolo, respektuje omezení pohybu.
+    animujPoradi(table, soutez) {
+        if (!table || !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const kola = (Data.zapasy[soutez] || []).map(z => parseInt(z.kolo)).filter(k => !isNaN(k));
+        if (kola.length === 0) return;
+        const maxKolo = Math.max(...kola);
+        if (maxKolo <= 1) return;
+        const klic = 'lt-anim:' + soutez + ':' + (App.aktualni_rocnik || Data.rocnik || '') + ':' + maxKolo;
+        try {
+            if (localStorage.getItem(klic)) return;
+            localStorage.setItem(klic, '1');
+        } catch (e) { return; }
+
+        const prevTab = Statistics.vypocitejTabulku(soutez, maxKolo - 1);
+        const prevOrder = Statistics.seraditTymyPodleTabulky(prevTab);
+        const rows = [...table.querySelectorAll('.lt-row')];
+        const slotTop = rows.map(r => r.getBoundingClientRect().top);
+        const prevBody = (tym) => (prevTab[tym] ? prevTab[tym].body : 0);
+
+        table.classList.add('intro');
+        rows.forEach((r, i) => {
+            const prevIdx = prevOrder.indexOf(r.dataset.tym);
+            const dy = prevIdx >= 0 ? slotTop[prevIdx] - slotTop[i] : 0;
+            r.style.transition = 'none';
+            r.style.transform = 'translateY(' + dy + 'px)';
+            if (dy) r.classList.add('moving');
+            r.querySelector('.lt-pts').textContent = prevBody(r.dataset.tym);
+            r.querySelector('.lt-posnum').textContent = prevIdx >= 0 ? prevIdx + 1 : i + 1;
+        });
+        void table.offsetHeight;
+
+        setTimeout(() => {
+            const dur = 900;
+            rows.forEach(r => {
+                r.style.transition = 'transform ' + dur + 'ms cubic-bezier(.65,0,.35,1)';
+                r.style.transform = '';
+            });
+            const start = performance.now();
+            const tick = (now) => {
+                const p = Math.min(1, (now - start) / dur);
+                rows.forEach(r => {
+                    const pts = r.querySelector('.lt-pts');
+                    const from = prevBody(r.dataset.tym);
+                    pts.textContent = Math.round(from + (Number(pts.dataset.body) - from) * p);
+                });
+                if (p < 1) { requestAnimationFrame(tick); return; }
+                rows.forEach((r, i) => {
+                    r.classList.remove('moving');
+                    r.style.transition = '';
+                    r.querySelector('.lt-posnum').textContent = i + 1;
+                });
+                table.classList.remove('intro');
+            };
+            requestAnimationFrame(tick);
+        }, 400);
     }
 };

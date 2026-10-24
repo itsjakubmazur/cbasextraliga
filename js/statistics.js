@@ -252,6 +252,40 @@ const Statistics = {
         return stats;
     },
 
+    // "2026-10-24" -> "24. 10. 2026" (bezRoku -> "24. 10.")
+    formatDatum(iso, bezRoku = false) {
+        const [y, m, d] = String(iso || '').split('-').map(Number);
+        if (!d) return iso || '';
+        return d + '. ' + m + '.' + (bezRoku ? '' : ' ' + y);
+    },
+
+    // Utkání týmu v základní části (nejnovější první) pro rozbalený řádek tabulky:
+    // [{ kolo, datum, souper, doma, nase, jejich, vysledek: 'w'|'l'|'d', neschvaleno }]
+    utkaniTymu(tym, soutez) {
+        const utkani = {};
+        (Data.zapasy[soutez] || []).forEach(z => {
+            if (this.isPlayoffKolo(z.kolo)) return;
+            if (z.tymDomaci !== tym && z.tymHoste !== tym) return;
+            const klic = z.kolo + '|' + z.tymDomaci + '|' + z.tymHoste;
+            if (!utkani[klic]) utkani[klic] = { kolo: z.kolo, datum: z.datum, dom: z.tymDomaci, hos: z.tymHoste, d: 0, h: 0, neschvaleno: false };
+            const u = utkani[klic];
+            if (z.neschvaleno) u.neschvaleno = true;
+            if (z.datum && (!u.datum || z.datum < u.datum)) u.datum = z.datum;
+            if (this.isNeodehrano(z)) return;
+            const v = this.parseVysledek(z.vysledek);
+            if (v.domaci > v.hoste) u.d++; else if (v.hoste > v.domaci) u.h++;
+        });
+        return Object.values(utkani)
+            .filter(u => u.d + u.h > 0)
+            .sort((a, b) => (parseInt(b.kolo) || 0) - (parseInt(a.kolo) || 0))
+            .map(u => {
+                const doma = u.dom === tym;
+                const nase = doma ? u.d : u.h, jejich = doma ? u.h : u.d;
+                return { kolo: u.kolo, datum: u.datum, souper: doma ? u.hos : u.dom, doma, nase, jejich,
+                    vysledek: nase > jejich ? 'w' : nase < jejich ? 'l' : 'd', neschvaleno: u.neschvaleno };
+            });
+    },
+
     // Returns last N match results for a team as array of 'w'/'l'/'d'
     vypocitejFormuTymu(tym, aktualni_soutez, pocet = 5) {
         const utkani = {};

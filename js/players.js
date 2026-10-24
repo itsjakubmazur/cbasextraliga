@@ -28,32 +28,29 @@ const Players = {
 
         if (top3.length === 0) {
             document.getElementById('hracMesiceContainer').innerHTML =
-                '<div class="app-card-header"><h2 class="app-card-title">' + Icons.flame() + ' TOP 3 Hráči</h2></div>' +
+                '<div class="app-card-header"><h2 class="app-card-title">Nejlepší hráči</h2></div>' +
                 '<div style="padding: 12px 16px;">' + filterHtml + '<p style="color:var(--text2);font-size:0.8rem;">Žádní hráči pro vybraná kola</p></div>';
             return;
         }
-
-        const rankLabels = ['1. místo', '2. místo', '3. místo'];
-        const statColors = ['player-stat-gold', 'player-stat-silver', 'player-stat-bronze'];
-        const rankBadgeColors = ['rank-gold', 'rank-silver', 'rank-bronze'];
 
         const html = top3.map((hrac, idx) => {
             const s = stats[hrac];
             const winRate = ((s.vyhry / s.zapasy) * 100).toFixed(1);
             const tymNazev = Object.keys(s.tymy).sort((a, b) => s.tymy[b] - s.tymy[a])[0] || '';
-            return '<div class="player-card" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(hrac) + '\')">' +
-                '<div class="player-rank ' + rankBadgeColors[idx] + '">' + rankLabels[idx] + '</div>' +
-                '<div class="player-name">' + Statistics.escapeHtml(hrac) + '</div>' +
-                '<div class="player-team">' + Statistics.escapeHtml(tymNazev) + '</div>' +
-                '<div class="player-stat ' + statColors[idx] + '">' + winRate + '%</div>' +
-                '<div class="player-stat-label">' + s.vyhry + 'V / ' + s.prohry + 'P · ' + s.zapasy + ' zápasů</div>' +
-                '</div>';
+            return '<button type="button" class="top3-card" onclick="Modals.zobrazitDetailHrace(\'' + Statistics.escapeAttr(hrac) + '\')">' +
+                '<span class="top3-pos">' + (idx + 1) + '</span>' +
+                Table.logoHtml(tymNazev) +
+                '<span class="top3-who"><span class="top3-name">' + Statistics.escapeHtml(hrac) + '</span>' +
+                '<span class="top3-team">' + Statistics.escapeHtml(tymNazev) + ', ' + s.vyhry + ' výher z ' + s.zapasy + '</span></span>' +
+                '<span class="top3-metric">' + winRate.replace('.', ',') + ' %</span>' +
+                '</button>';
         }).join('');
 
         document.getElementById('hracMesiceContainer').innerHTML =
-            '<div class="app-card-header"><h2 class="app-card-title">' + Icons.flame() + ' TOP 3 Hráči</h2></div>' +
+            '<div class="app-card-header"><div><h2 class="app-card-title">Nejlepší hráči</h2>' +
+            '<div class="app-card-sub">Podle úspěšnosti ve vybraných kolech</div></div></div>' +
             '<div style="padding: 10px 16px 4px;">' + filterHtml + '</div>' +
-            '<div class="players-grid">' + html + '</div>';
+            '<div class="top3-list">' + html + '</div>';
     },
 
     toggleTop3Filtr() {
@@ -131,9 +128,7 @@ const Players = {
             const isGood = parseFloat(winRatio) >= 50;
 
             const forma = Statistics.getForma(hrac, Statistics.getZapasyProSoutez(aktualni_soutez));
-            const formaHtml = forma.split('').map(v =>
-                '<span class="form-dot form-dot-' + (v === 'V' ? 'w' : 'l') + '"></span>'
-            ).join('');
+            const formaHtml = forma ? Table.formaHtml(forma.split('').map(v => (v === 'V' ? 'w' : 'l'))) : '';
 
             return '<tr class="stats-row">' +
                 '<td class="stats-cell stats-pos">' + (idx + 1) + '</td>' +
@@ -142,8 +137,8 @@ const Players = {
                 '<td class="stats-cell stats-num">' + s.zapasy + '</td>' +
                 '<td class="stats-cell stats-num stats-win">' + s.vyhry + '</td>' +
                 '<td class="stats-cell stats-num stats-loss">' + s.prohry + '</td>' +
-                '<td class="stats-cell stats-num ' + (isGood ? 'stats-winrate-good' : 'stats-winrate-bad') + '">' + winRatio + '%</td>' +
-                '<td class="stats-cell"><span class="form-dots">' + (formaHtml || '–') + '</span></td>' +
+                '<td class="stats-cell stats-forma">' + (formaHtml || '–') + '</td>' +
+                '<td class="stats-cell lt-metric">' + winRatio.replace('.', ',') + ' %</td>' +
                 '</tr>';
         }).join('');
 
@@ -169,7 +164,7 @@ const Players = {
             '<input type="number" id="minZapasy" value="' + minZapasyHodnota + '" min="0" class="stats-filter-input" oninput="Players.renderStatistiky(App.aktualni_soutez, App.vybrana_kola)"></div>' +
             '<div class="stats-filter-group"><label class="stats-filter-sublabel">Řadit dle</label>' +
             '<select id="razeniSloupec" class="stats-filter-input" onchange="Players.renderStatistiky(App.aktualni_soutez, App.vybrana_kola)">' +
-            '<option value="winrate"' + (razeniSloupec === 'winrate' ? ' selected' : '') + '>Win %</option>' +
+            '<option value="winrate"' + (razeniSloupec === 'winrate' ? ' selected' : '') + '>Úspěšnost</option>' +
             '<option value="zapasy"' + (razeniSloupec === 'zapasy' ? ' selected' : '') + '>Zápasy</option>' +
             '<option value="vyhry"' + (razeniSloupec === 'vyhry' ? ' selected' : '') + '>Výhry</option>' +
             '<option value="jmeno"' + (razeniSloupec === 'jmeno' ? ' selected' : '') + '>Jméno</option>' +
@@ -195,8 +190,8 @@ const Players = {
             '<th class="th-num" title="Zápasy">Z</th>' +
             '<th class="th-num" title="Výhry">V</th>' +
             '<th class="th-num" title="Porážky">P</th>' +
-            '<th class="th-num">Win%</th>' +
             '<th class="th-forma">Forma</th>' +
+            '<th class="th-num lt-metric">Úspěšnost</th>' +
             '</tr></thead><tbody>' + rows + '</tbody></table></div>';
 
         Filters.renderKolaCheckboxy(aktualni_soutez, vybrana_kola);

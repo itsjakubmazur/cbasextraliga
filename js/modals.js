@@ -77,9 +77,7 @@ const Modals = {
 
         // Forma
         const forma = Statistics.getForma(hrac, Statistics.getZapasyProSoutez(soutezProHrace));
-        const formaHtml = forma.split('').map(v =>
-            '<span class="form-dot form-dot-' + (v === 'V' ? 'w' : 'l') + ' form-dot-lg"></span>'
-        ).join('');
+        const formaHtml = Table.formaHtml(forma.split('').map(v => (v === 'V' ? 'w' : 'l')));
 
         // Opponents
         const souperiCount = {};
@@ -105,8 +103,8 @@ const Modals = {
             '</div>' +
             ((forma || nejSouperi) ?
                 '<div class="modal-section" style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;padding:10px 14px">' +
-                (forma ? '<div><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);margin-bottom:5px">Forma</div><div class="form-dots" style="gap:4px">' + formaHtml + '</div></div>' : '') +
-                (nejSouperi ? '<div style="flex:1;min-width:180px"><div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);margin-bottom:5px">Nejčastější soupeři</div><div class="opponent-pills" style="gap:4px">' + nejSouperi + '</div></div>' : '') +
+                (forma ? '<div><div style="font-size:0.72rem;font-weight:600;color:var(--text2);margin-bottom:5px">Forma</div><div>' + formaHtml + '</div></div>' : '') +
+                (nejSouperi ? '<div style="flex:1;min-width:180px"><div style="font-size:0.72rem;font-weight:600;color:var(--text2);margin-bottom:5px">Nejčastější soupeři</div><div class="opponent-pills" style="gap:4px">' + nejSouperi + '</div></div>' : '') +
                 '</div>'
             : '') +
             '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:8px 14px 4px">Zápasy</div>' +

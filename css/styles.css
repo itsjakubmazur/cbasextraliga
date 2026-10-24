@@ -374,8 +374,8 @@ body.dark-mode .close:hover { color: #ef4444; }
 .bracket-round-title {
     font-weight: 700;
     font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    text-transform: none;
+    letter-spacing: 0;
     color: #6b7280;
     text-align: center;
     padding-bottom: 8px;
@@ -436,8 +436,8 @@ body.dark-mode .close:hover { color: #ef4444; }
     font-size: 0.65rem;
     font-weight: 600;
     color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    text-transform: none;
+    letter-spacing: 0;
     margin-bottom: 6px;
 }
 
@@ -665,8 +665,8 @@ body.dark-mode .playoff-placement-section {
 .playoff-placement-title {
     font-weight: 700;
     font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    text-transform: none;
+    letter-spacing: 0;
     color: #6b7280;
     margin-bottom: 14px;
 }
@@ -818,7 +818,7 @@ body.dark-mode .group-winner-banner { background: rgba(234,179,8,0.07); border-c
 .rr-standings { margin-bottom: 14px; }
 .rr-section-title { font-size: 0.78rem; font-weight: 700; color: var(--text2); margin-bottom: 8px; }
 .rr-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-.rr-table th { padding: 5px 8px; background: var(--surface2); color: var(--muted); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; border-bottom: 1px solid var(--border); }
+.rr-table th { padding: 5px 8px; background: var(--surface2); color: var(--muted); font-size: 0.62rem; font-weight: 700; text-transform: none; letter-spacing: 0; text-align: center; border-bottom: 1px solid var(--border); }
 .rr-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
 .rr-table td:first-child { font-weight: 700; text-align: center; color: var(--muted); }
 .rr-winner-row td { background: rgba(22,163,74,0.06); font-weight: 700; }
@@ -835,18 +835,6 @@ body.dark-mode .group-winner-banner { background: rgba(234,179,8,0.07); border-c
 .playoff-placement-section { border-top-color: var(--border); }
 .playoff-placement-title { color: var(--muted); }
 
-/* Smooth section transitions */
-#zapasyObsah,
-#statistikyObsah,
-#playoffObsah,
-#tabulkaObsah {
-    animation: fadeIn 0.2s ease-in;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
-}
 
 /* Active filter indicator */
 .filter-active {
@@ -1102,8 +1090,8 @@ body.dark-mode .playoff-team-orange {
 .baraze-label {
     font-size: 0.75rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    text-transform: none;
+    letter-spacing: 0;
     color: #6b7280;
     margin-bottom: 12px;
     text-align: center;
@@ -1180,8 +1168,8 @@ body.dark-mode .baraze-team {
 .separate-round-label {
     font-size: 0.65rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--muted);
     margin-bottom: 6px;
 }
@@ -1260,8 +1248,8 @@ body.dark-mode .bg-white {
     padding: 10px 8px;
     font-weight: 700;
     font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    text-transform: none;
+    letter-spacing: 0;
     white-space: nowrap;
 }
 
@@ -1441,8 +1429,8 @@ body.dark-mode .standings-pts-cell { color: #60a5fa; }
     background: transparent;
     transition: color 0.15s;
     padding: 6px 1px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    text-transform: none;
+    letter-spacing: 0;
 }
 .bottom-nav-btn .nav-icon { font-size: 18px; line-height: 1; }
 .bottom-nav-btn.active { color: var(--cba-red); }
@@ -1611,8 +1599,8 @@ body {
 .sidebar-section-label {
     font-size: 0.6rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--muted);
     padding: 4px 10px 6px;
     display: block;
@@ -1772,8 +1760,8 @@ body.dark-mode .hero-card {
 .hero-eyebrow {
     font-size: 0.6rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--cba-red);
     margin-bottom: 4px;
 }
@@ -2044,8 +2032,8 @@ body.dark-mode .standings-pos-num.pos-bronze { color: #fb923c; }
     padding: 3px 8px;
     font-size: 0.6rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    text-transform: none;
+    letter-spacing: 0;
     border-bottom: none !important;
 }
 .standings-divider td span {
@@ -2164,8 +2152,8 @@ body.dark-mode .standings-pos-num.pos-bronze { color: #fb923c; }
 .player-rank {
     font-size: 0.62rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--muted);
     margin-bottom: 6px;
 }
@@ -2256,8 +2244,8 @@ body.dark-mode .match-row-playoff { background: rgba(139,92,246,0.08); }
     font-weight: 600;
     color: var(--text2);
     background: var(--surface2);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    text-transform: none;
+    letter-spacing: 0;
 }
 .match-detail-home    { background: rgba(22,163,74,0.05); }
 .match-detail-away    { background: rgba(220,38,38,0.05); }
@@ -2457,8 +2445,8 @@ body.dark-mode .match-detail-away { background: rgba(239,68,68,0.08); }
     gap: 5px;
     font-size: 0.62rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--muted);
     margin-bottom: 10px;
 }
@@ -2475,7 +2463,7 @@ body.dark-mode .match-detail-away { background: rgba(239,68,68,0.08); }
     .stats-filter-grid { grid-template-columns: repeat(4, 1fr); }
 }
 .stats-filter-group { display: flex; flex-direction: column; gap: 4px; }
-.stats-filter-sublabel { font-size: 0.65rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.stats-filter-sublabel { font-size: 0.65rem; font-weight: 600; color: var(--muted); text-transform: none; letter-spacing: 0; }
 .stats-filter-input {
     border: 1.5px solid var(--border);
     border-radius: 7px;
@@ -2592,7 +2580,7 @@ body.dark-mode .app-icon-btn { background: rgba(22,24,33,0.7); border-color: rgb
 .modal-stat-item:last-child { border-right: none; }
 @media (max-width: 400px) { .modal-stat-item:nth-child(2) { border-right: none; } .modal-stat-item:nth-child(3) { border-right: 1px solid var(--border); } }
 .modal-stat-value { font-size: 1.25rem; font-weight: 800; color: var(--text); line-height: 1; }
-.modal-stat-label { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-top: 4px; }
+.modal-stat-label { font-size: 0.58rem; font-weight: 700; text-transform: none; letter-spacing: 0; color: var(--muted); margin-top: 4px; }
 .modal-stat-item.win .modal-stat-value { color: var(--win); }
 .modal-stat-item.loss .modal-stat-value { color: var(--loss); }
 .modal-stat-item.rate .modal-stat-value { color: var(--cba-red); }
@@ -2601,7 +2589,7 @@ body.dark-mode .app-icon-btn { background: rgba(22,24,33,0.7); border-color: rgb
 .modal-section { padding: 12px 16px; border-bottom: 1px solid var(--border); }
 .modal-section:last-child { border-bottom: none; }
 .modal-section.no-pad { padding: 0; }
-.modal-section-title { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+.modal-section-title { font-size: 0.6rem; font-weight: 700; text-transform: none; letter-spacing: 0; color: var(--muted); margin-bottom: 8px; }
 
 /* Larger form dots in modal */
 .form-dot-lg { width: 10px; height: 10px; }
@@ -2652,14 +2640,14 @@ body.modal-open { overflow: hidden; }
 .match-round-arrow { color: var(--muted); display: flex; align-items: center; transition: transform 0.2s; }
 .match-round-header.open .match-round-arrow { transform: rotate(180deg); }
 .match-round-body { border-top: 1px solid var(--border); }
-.match-subhead th { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding: 6px 10px; background: var(--surface2); border-bottom: 1px solid var(--border); }
+.match-subhead th { font-size: 0.65rem; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--muted); padding: 6px 10px; background: var(--surface2); border-bottom: 1px solid var(--border); }
 
 /* ── MATCH DETAIL REDESIGN ───────────────────────────────── */
 .match-detail-head th {
     font-size: 0.62rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    text-transform: none;
+    letter-spacing: 0;
     padding: 6px 10px;
     background: var(--surface2);
     color: var(--muted);
@@ -2683,8 +2671,8 @@ body.dark-mode .match-detail-screc { background: rgba(202,138,4,0.1); }
 .stats-round-sep td {
     font-size: 0.6rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--muted);
     padding: 7px 12px 4px;
     background: var(--surface2);
@@ -2804,8 +2792,8 @@ body.dark-mode .roster-card { background: linear-gradient(145deg, rgba(40,45,65,
     margin: 2px 0 4px;
     font-size: 0.6rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--text2);
     background: rgba(100,116,139,0.12);
     border-radius: 4px;
@@ -2830,3 +2818,247 @@ body.dark-mode .roster-card { background: linear-gradient(145deg, rgba(40,45,65,
 }
 .roster-back-btn:hover { color: var(--text); background: var(--surface2); }
 .roster-back-btn .icon-svg { margin-right: 0; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   DESIGNOVÝ JAZYK WEBU (2026/27)
+   Vychází z ligové tabulky (css/standings.css): klidné plochy, normální
+   písmo místo VERZÁLEK, hairline oddělovače, loga v bílém kolečku,
+   přepínače jako podtržené záložky a jediný výrazný prvek - červený pruh
+   u hlavní metriky (body týmů, úspěšnost hráčů). Tahle sekce je záměrně
+   na konci souboru, aby přebila starší styly výše.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Karty: plná plocha místo „skla“ */
+.app-card {
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 0;
+    box-shadow: var(--shadow);
+    border-radius: 16px;
+}
+body.dark-mode .app-card { background: var(--surface); border: 0; }
+.app-card-header { padding: 18px 20px 14px; border-bottom: 1px solid var(--border); align-items: flex-end; }
+.app-card-header.collapsible { align-items: center; }
+.app-card-title { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; }
+.app-card-sub { font-size: 0.78rem; color: var(--text2); margin-top: 4px; font-weight: 500; }
+#tabulkaPlayoffContainer .app-card-header { border-bottom: 0; padding-bottom: 6px; }
+
+/* Přepínače = podtržené záložky */
+.view-toggle {
+    display: inline-flex;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid var(--border);
+    border-radius: 0;
+    padding: 0;
+    gap: 0;
+}
+.view-toggle-btn {
+    padding: 6px 12px;
+    margin-bottom: -2px;
+    border-radius: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text2);
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    box-shadow: none;
+    transition: color 0.2s, border-color 0.25s;
+}
+.view-toggle-btn:hover { background: none; color: var(--text); }
+.view-toggle-btn.active { background: none; color: var(--cba-red); border-bottom-color: var(--cba-red); box-shadow: none; }
+body.dark-mode .view-toggle-btn.active { background: none; }
+
+/* Filtry: tiché štítky, aktivní = plná neutrální barva (červená patří metrice) */
+.filter-pill, .stats-kola-btn, .kolo-tag {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 999px;
+    box-shadow: none;
+    font-weight: 600;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.filter-pill:hover, .stats-kola-btn:hover, .kolo-tag:hover { border-color: var(--text2); background: none; }
+.filter-pill.active, .filter-pill-active, .kolo-tag-active {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--surface);
+}
+.stats-filter-input {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: none;
+}
+.stats-filter-input:focus { outline: 2px solid var(--cba-blue); outline-offset: 0; border-color: transparent; }
+.stats-filter-sublabel, .stats-filter-label { color: var(--text2); font-weight: 600; }
+
+/* Ostatní tabulky (hráči, okna) ve stejném duchu jako ligová tabulka */
+.standings-thead tr, .standings-thead { background: none; color: var(--text2); }
+.standings-thead th { font-size: 0.72rem; font-weight: 600; color: var(--text2); padding: 8px 6px; }
+body.dark-mode .standings-thead tr { background: none; }
+.standings-table td, .stats-cell { border-top: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+.standings-table .stats-row, .standings-table tr { border-bottom: 0; }
+.stats-row:hover td:not(.lt-metric) { background: var(--surface2); }
+.standings-table th.lt-metric { background: var(--cba-red); color: #fff; font-weight: 700; text-align: center; }
+.standings-table td.lt-metric { background: var(--cba-red); color: #fff; font-weight: 800; font-size: 1rem; text-align: center; border-top-color: rgba(255,255,255,0.18); white-space: nowrap; }
+.stats-pos { font-weight: 800; }
+.stats-name { font-weight: 700; }
+
+/* Loga klubů všude v bílém kolečku */
+.playoff-team-logo, .team-row-logo {
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--border);
+    padding: 3px;
+    object-fit: contain;
+    box-sizing: border-box;
+}
+.team-tile-avatar-logo { background: #fff !important; border-radius: 50% !important; box-shadow: 0 0 0 1px var(--border); }
+
+/* Plynulé rozbalování sekcí */
+.app-toggle-icon { transition: transform 0.25s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .view-toggle-btn, .filter-pill, .kolo-tag, .app-toggle-icon { transition: none !important; }
+}
+
+/* Nejlepší hráči (TOP 3) - řádky ve stylu tabulky, metrika v červeném */
+.top3-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 8px 16px 16px; }
+.top3-card {
+    font: inherit; text-align: left; cursor: pointer;
+    display: grid; grid-template-columns: auto auto 1fr; grid-template-rows: auto auto; align-items: center; gap: 4px 10px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 0 0 14px; overflow: hidden; color: var(--text);
+}
+.top3-card:hover { background: var(--surface2); }
+.top3-card:focus-visible { outline: 2px solid var(--cba-blue); outline-offset: 2px; }
+.top3-pos { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+.top3-card .lt-logo { width: 34px; height: 34px; }
+.top3-who { display: flex; flex-direction: column; min-width: 0; padding-right: 12px; }
+.top3-name { font-weight: 800; font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top3-team { font-size: 0.72rem; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top3-metric { grid-column: 1 / -1; margin: 8px 0 0 -14px; padding: 8px 14px; background: var(--cba-red); color: #fff; font-weight: 800; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) { .top3-list { grid-template-columns: 1fr; } }
+
+/* Konečné pořadí sezóny (hero) - řádky jako v tabulce, mistr s červeným pruhem */
+.hero-card {
+    background: var(--surface);
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    border: 0; border-radius: 16px; box-shadow: var(--shadow);
+    padding: 0; overflow: hidden;
+}
+.hero-card::before { display: none; }
+body.dark-mode .hero-card { background: var(--surface); border: 0; }
+.hero-list { list-style: none; margin: 0; padding: 0; }
+.hero-row { display: flex; align-items: center; gap: 12px; padding: 10px 0 10px 20px; border-top: 1px solid var(--border); cursor: pointer; }
+.hero-row:hover { background: var(--surface2); }
+.hero-pos { min-width: 34px; font-weight: 800; font-size: 1rem; }
+.hero-name { flex: 1; min-width: 0; font-weight: 700; font-size: 0.92rem; display: flex; flex-direction: column; }
+.hero-label { font-size: 0.74rem; font-weight: 500; color: var(--text2); margin-top: 2px; }
+.hero-row-champion { padding: 14px 0 14px 20px; }
+.hero-row-champion .hero-pos { font-size: 1.5rem; }
+.hero-row-champion .lt-logo { width: 52px; height: 52px; }
+.hero-row-champion .hero-name { font-size: 1.25rem; font-weight: 800; }
+.hero-trophy { align-self: stretch; display: flex; align-items: center; justify-content: center; width: 64px; margin: -14px 0; background: var(--cba-red); color: #fff; }
+.hero-trophy svg { width: 26px; height: 26px; }
+.hist-hero-wrap { margin-bottom: 16px; }
+
+/* Play-off pavouk: bílé zápasy, zóny jako proužek, skóre série v červeném pruhu */
+.playoff-match {
+    background: var(--surface);
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 0 0;
+    box-shadow: none;
+    overflow: hidden;
+    transition: background 0.15s;
+}
+.playoff-match:hover { transform: none; box-shadow: none; border-color: var(--text2); }
+body.dark-mode .playoff-match { background: var(--surface); border-color: var(--border); }
+.playoff-match-label { font-size: 0.72rem; font-weight: 600; color: var(--text2); padding: 0 12px; margin-bottom: 6px; }
+.playoff-match-teams { gap: 0; }
+.playoff-vs, .playoff-series-result { display: none; }
+.playoff-team,
+.playoff-team-green, .playoff-team-blue, .playoff-team-east, .playoff-team-west,
+.playoff-team-orange, .playoff-team-red, .playoff-team-pending,
+.playoff-team-placement-5, .playoff-team-placement-7 {
+    background: none;
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    padding: 0 0 0 12px;
+    min-height: 40px;
+    gap: 8px;
+    box-shadow: inset 4px 0 0 transparent;
+}
+.playoff-team-green { box-shadow: inset 4px 0 0 var(--zone-top); }
+.playoff-team-blue, .playoff-team-west { box-shadow: inset 4px 0 0 var(--zone-playoff); }
+.playoff-team-east { box-shadow: inset 4px 0 0 var(--draw); }
+.playoff-team-red { box-shadow: inset 4px 0 0 var(--zone-relegation); }
+.playoff-team-orange { box-shadow: inset 4px 0 0 #f97316; }
+.playoff-team-pending .playoff-team-name { color: var(--muted); font-weight: 500; }
+.playoff-seed,
+.playoff-team-green .playoff-seed, .playoff-team-blue .playoff-seed, .playoff-team-east .playoff-seed,
+.playoff-team-west .playoff-seed, .playoff-team-orange .playoff-seed, .playoff-team-red .playoff-seed,
+.playoff-team-placement-5 .playoff-seed, .playoff-team-placement-7 .playoff-seed {
+    background: none; color: var(--text); width: auto; min-width: 22px; height: auto; border-radius: 0;
+    font-size: 0.8rem; font-weight: 800; justify-content: flex-start;
+}
+.playoff-team-logo { width: 26px; height: 26px; }
+.playoff-team-name { font-weight: 700; }
+.playoff-series-score {
+    align-self: stretch; display: flex; align-items: center; justify-content: center;
+    min-width: 40px; margin-left: auto;
+    background: var(--cba-red); color: #fff; font-weight: 800; font-size: 1rem;
+    border-top: 0;
+}
+
+/* Výsledky: loga u týmů, skóre utkání v červeném pruhu, bez barevných výplní */
+.match-subhead th { background: none; font-size: 0.72rem; font-weight: 600; color: var(--text2); }
+.match-row td { border-top: 1px solid var(--border); }
+.match-row:hover td:not(.match-score-band) { background: var(--surface2); }
+.match-tym { display: inline-flex; align-items: center; gap: 10px; }
+.match-tym .lt-logo { width: 30px; height: 30px; }
+.match-tym-home { text-align: right; }
+.match-tym-cell { font-weight: 600; color: var(--text); }
+.match-tym-cell.match-win, .match-detail-cell.match-win { font-weight: 800; }
+.match-datum-cell { color: var(--text2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.match-score-head { width: 72px; background: var(--cba-red); color: #fff !important; text-align: center; font-weight: 700; }
+.match-score-band { width: 72px; text-align: center; background: var(--cba-red); color: #fff; font-weight: 800; font-size: 1.05rem; font-variant-numeric: tabular-nums; border-top-color: rgba(255,255,255,0.18) !important; }
+.match-detail-home, .match-detail-away, .match-detail-screc, .match-detail-pending,
+body.dark-mode .match-detail-home, body.dark-mode .match-detail-away, body.dark-mode .match-detail-screc { background: none; }
+.match-detail-head th { background: none; font-size: 0.7rem; font-weight: 600; color: var(--text2); }
+.match-detail-cell { border-top: 1px solid var(--border); }
+.match-detail-disc { font-style: normal; color: var(--text2); }
+.match-detail-score { font-weight: 800; }
+.match-round-header { border-top: 1px solid var(--border); }
+.match-round-label { font-weight: 800; color: var(--text); }
+.match-round-playoff { color: var(--cba-red); }
+@media (max-width: 640px) {
+    .match-tym .lt-logo { display: none; }
+    .match-score-band, .match-score-head { width: 52px; }
+}
+.match-detail-disc { white-space: nowrap; }
+
+/* Soupisky: seznam týmů jako řádky tabulky, soupiska jako tabulka hráčů */
+.team-list { list-style: none; margin: 0; padding: 0; }
+.team-list-row { font: inherit; width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 16px 10px 20px; background: none; border: 0; border-top: 1px solid var(--border); color: var(--text); text-align: left; cursor: pointer; }
+.team-list li:first-child .team-list-row { border-top: 0; }
+.team-list-row:hover { background: var(--surface2); }
+.team-list-row:focus-visible { outline: 2px solid var(--cba-blue); outline-offset: -2px; }
+.team-list-pos { min-width: 26px; font-weight: 800; font-size: 1rem; }
+.team-list-name { flex: 1; min-width: 0; font-weight: 700; font-size: 0.95rem; display: flex; flex-direction: column; }
+.team-list-meta { font-size: 0.74rem; font-weight: 500; color: var(--text2); margin-top: 2px; }
+.team-list-arrow { color: var(--muted); display: inline-flex; }
+.roster-group td { padding: 12px 6px 4px 16px; font-size: 0.74rem; font-weight: 700; color: var(--text2); border-top: 0; background: none; }
+.roster-group td.lt-metric { padding: 0; }
+.roster-row-inactive .stats-name, .roster-row-inactive .stats-num { color: var(--muted); }
+.roster-table .stats-pos { width: 40px; padding-left: 16px; color: var(--text2); }
+.roster-back-btn { transform: rotate(180deg); }

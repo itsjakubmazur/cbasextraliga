@@ -379,10 +379,10 @@ const App = {
 
         if (pohled === 'zakladni') {
             tabulkaObsah.style.display = 'block';
-            document.getElementById('tabulkaPlayoffTitle').textContent = 'Tabulka';
+            document.getElementById('tabulkaPlayoffTitle').textContent = this.podtitulTabulky();
         } else if (pohled === 'playoff') {
             playoffObsah.style.display = 'block';
-            document.getElementById('tabulkaPlayoffTitle').textContent = 'Play-off pavouk';
+            document.getElementById('tabulkaPlayoffTitle').textContent = 'Play-off';
             Playoff.render(this.aktualni_soutez);
             Playoff.drawConnectors();
         } else if (pohled === 'baraze') {
@@ -440,6 +440,16 @@ const App = {
         Filters.renderKolaCheckboxy(this.aktualni_soutez, this.vybrana_kola);
     },
 
+    // "Stav po 6. kole, 4. 1. 2026" pod nadpisem tabulky
+    podtitulTabulky() {
+        const zapasy = (Data.zapasy[this.aktualni_soutez] || []).filter(z => !Statistics.isPlayoffKolo(z.kolo));
+        const kola = zapasy.map(z => parseInt(z.kolo)).filter(k => !isNaN(k));
+        if (kola.length === 0) return 'Sezóna právě začíná';
+        const datum = zapasy.map(z => z.datum).filter(Boolean).sort().pop();
+        const [y, m, d] = (datum || '').split('-').map(Number);
+        return 'Stav po ' + Math.max(...kola) + '. kole' + (d ? ', ' + d + '. ' + m + '. ' + y : '');
+    },
+
     zobrazitData() {
         const tymyView = document.getElementById('tymyViewContainer');
         if (tymyView) tymyView.style.display = 'none';
@@ -461,8 +471,8 @@ const App = {
                 document.getElementById('tabulkaObsah').style.display = 'block';
                 document.getElementById('playoffObsah').style.display = 'none';
                 document.getElementById('barazeObsah').style.display = 'none';
-                document.getElementById('tabulkaPlayoffTitle').textContent = 'Tabulka';
-                Table.render(this.aktualni_soutez);
+                document.getElementById('tabulkaPlayoffTitle').textContent = this.podtitulTabulky();
+                Table.render(this.aktualni_soutez, { naDetail: (tym) => Modals.zobrazitDetailTymu(tym) });
                 const popis = document.querySelector('#prazdnyStav p');
                 if (popis) popis.textContent = 'Sezóna právě začíná – výsledky se objeví po prvních schválených utkáních.';
             }
@@ -485,13 +495,13 @@ const App = {
         this._renderHero();
         Filters.render(this.aktualni_soutez, this.vybrana_kola);
         Players.renderTop3(this.aktualni_soutez, this.vybrana_kola);
-        Table.render(this.aktualni_soutez);
+        Table.render(this.aktualni_soutez, { naDetail: (tym) => Modals.zobrazitDetailTymu(tym) });
 
         if (this.aktualni_pohled === 'playoff') {
             document.getElementById('tabulkaObsah').style.display = 'none';
             document.getElementById('playoffObsah').style.display = 'block';
             document.getElementById('barazeObsah').style.display = 'none';
-            document.getElementById('tabulkaPlayoffTitle').textContent = 'Play-off pavouk';
+            document.getElementById('tabulkaPlayoffTitle').textContent = 'Play-off';
             Playoff.render(this.aktualni_soutez);
             Playoff.drawConnectors();
         } else if (this.aktualni_pohled === 'baraze') {
@@ -504,7 +514,7 @@ const App = {
             document.getElementById('tabulkaObsah').style.display = 'block';
             document.getElementById('playoffObsah').style.display = 'none';
             document.getElementById('barazeObsah').style.display = 'none';
-            document.getElementById('tabulkaPlayoffTitle').textContent = 'Tabulka';
+            document.getElementById('tabulkaPlayoffTitle').textContent = this.podtitulTabulky();
         }
 
         Matches.render(this.aktualni_soutez);
@@ -539,30 +549,25 @@ const App = {
         const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
         const soutezLabels = { 'extraliga': 'Extraliga', 'prvni-liga-vychod': '1. liga – Východ', 'prvni-liga-zapad': '1. liga – Západ' };
         const nadpis = document.getElementById('tymyViewNadpis');
-        if (nadpis) nadpis.innerHTML = Icons.users() + ' ' + (soutezLabels[soutez] || 'Soupisky');
-        const avatarColors = ['#D7141A','#2563eb','#16a34a','#d97706','#8b5cf6','#ec4899','#06b6d4','#0891b2','#7c3aed','#db2777','#059669','#b45309','#dc2626','#1d4ed8','#047857'];
+        if (nadpis) nadpis.innerHTML = '<span>Soupisky<span class="app-card-sub" style="display:block">' + (soutezLabels[soutez] || '') + '</span></span>';
         if (tymy.length === 0) {
             document.getElementById('tymyViewGrid').innerHTML = '<div style="padding:32px;text-align:center;color:var(--text2);font-size:0.85rem;">Pro tuto soutěž nejsou data.</div>';
             return;
         }
-        document.getElementById('tymyViewGrid').innerHTML = tymy.map((tym, idx) => {
+        const soupisky = Data.soupisky[soutez] || {};
+        document.getElementById('tymyViewGrid').innerHTML = '<ul class="team-list">' + tymy.map((tym, idx) => {
             const t = tabulkaData[tym] || {};
-            const color = avatarColors[idx % avatarColors.length];
-            const abbr = tym.split(/\s+/).filter(w => !['sk','bk','tj','ba','ac','sc','tk'].includes(w.toLowerCase())).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('') || tym.charAt(0).toUpperCase();
-            const statsText = t.utkani ? t.vyhry + 'V / ' + t.prohry + 'P · ' + t.body + ' bodů' : '';
-            const logoUrl = Data.tymLoga && Data.tymLoga[tym];
-            const avatarHtml = logoUrl
-                ? '<div class="team-tile-avatar team-tile-avatar-logo">' +
-                  '<img src="' + Statistics.escapeAttr(logoUrl) + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
-                  '<div class="team-tile-avatar-fallback" style="background:' + color + ';display:none;">' + abbr + '</div>' +
-                  '</div>'
-                : '<div class="team-tile-avatar" style="background:' + color + ';">' + abbr + '</div>';
-            return '<div class="team-tile" onclick="App.zobrazitRoster(\'' + Statistics.escapeAttr(tym) + '\')">' +
-                avatarHtml +
-                '<div class="team-tile-info"><div class="team-tile-name">' + Statistics.escapeHtml(tym) + '</div>' +
-                (statsText ? '<div class="team-tile-stats">' + statsText + '</div>' : '') +
-                '</div><div class="team-tile-pos">' + (idx + 1) + '.</div></div>';
-        }).join('');
+            const pocet = (soupisky[tym] || []).length;
+            const meta = [
+                pocet ? pocet + ' ' + (pocet >= 5 ? 'hráčů' : pocet > 1 ? 'hráči' : 'hráč') + ' na soupisce' : '',
+                t.utkani ? t.vyhry + ' výher, ' + t.prohry + ' proher' : ''
+            ].filter(Boolean).join(', ');
+            return '<li><button type="button" class="team-list-row" onclick="App.zobrazitRoster(\'' + Statistics.escapeAttr(tym) + '\')">' +
+                '<span class="team-list-pos">' + (idx + 1) + '.</span>' + Table.logoHtml(tym) +
+                '<span class="team-list-name">' + Statistics.escapeHtml(tym) + (meta ? '<span class="team-list-meta">' + meta + '</span>' : '') + '</span>' +
+                '<span class="team-list-arrow" aria-hidden="true">' + Icons.chevronRight() + '</span>' +
+                '</button></li>';
+        }).join('') + '</ul>';
     },
 
     zobrazitRoster(tym) {
@@ -591,44 +596,47 @@ const App = {
         });
 
         // Svazova soupiska (Data.soupisky, plni ji auto-sync): ukazat i hrace,
-        // kteri jeste nenastoupili. Kdo hral a na soupisce neni, zustava taky.
+        // kteri jeste nenastoupili, rozdelene na muze / zeny / nahradniky.
+        // Kdo hral a na soupisce neni, je v samostatne skupine na konci.
         const soupiska = (Data.soupisky[soutez] && Data.soupisky[soutez][tym]) || [];
-        const poradiNaSoupisce = new Map(soupiska.map((s, i) => [s.jmeno, i]));
-        const nahradnici = new Set(soupiska.filter(s => s.nahradnik).map(s => s.jmeno));
-        soupiska.forEach(s => {
-            if (!hraci[s.jmeno]) hraci[s.jmeno] = { zapasy: 0, vyhry: 0, prohry: 0 };
-        });
+        const naSoupisce = new Set(soupiska.map(s => s.jmeno));
+        const skupiny = [
+            ['Muži', soupiska.filter(s => !s.nahradnik && s.pohlavi !== 'Z')],
+            ['Ženy', soupiska.filter(s => !s.nahradnik && s.pohlavi === 'Z')],
+            ['Náhradníci', soupiska.filter(s => s.nahradnik)],
+        ].map(([nazev, list]) => [nazev, list.map(s => s.jmeno)]);
+        const mimo = Object.keys(hraci).filter(h => !naSoupisce.has(h))
+            .sort((a, b) => hraci[b].vyhry - hraci[a].vyhry || hraci[b].zapasy - hraci[a].zapasy);
+        if (mimo.length) skupiny.push([soupiska.length ? 'Mimo soupisku' : 'Hráči', mimo]);
 
-        const avatarColors = ['#D7141A','#2563eb','#16a34a','#d97706','#8b5cf6','#ec4899','#06b6d4','#0891b2','#7c3aed','#db2777'];
-        const cardsHtml = Object.entries(hraci)
-            .sort((a, b) => b[1].vyhry - a[1].vyhry || b[1].zapasy - a[1].zapasy
-                || (poradiNaSoupisce.get(a[0]) ?? 999) - (poradiNaSoupisce.get(b[0]) ?? 999))
-            .map(([h, st], idx) => {
-                const hral = st.zapasy > 0;
-                const wr = hral ? ((st.vyhry / st.zapasy) * 100).toFixed(0) : null;
-                const isGood = hral && parseFloat(wr) >= 50;
-                const color = avatarColors[idx % avatarColors.length];
-                const abbr = h.split(/\s+/).pop()?.charAt(0).toUpperCase() || h.charAt(0).toUpperCase();
-                const safeH = Statistics.escapeAttr(h);
-                const badge = nahradnici.has(h) ? '<div class="roster-badge">náhradník</div>' : '';
-                return '<div class="roster-card' + (hral ? '' : ' roster-card-inactive') + '"' +
-                    (hral ? ' onclick="Modals.zobrazitDetailHrace(\'' + safeH + '\')"' : '') + '>' +
-                    '<div class="roster-photo">' +
-                    '<div class="roster-photo-img" style="background:' + color + '">' + abbr + '</div>' +
-                    '</div>' +
-                    '<div class="roster-winrate ' + (hral ? (isGood ? 'good' : 'bad') : 'none') + '">' + (hral ? wr + '%' : '–') + '</div>' +
-                    '<div class="roster-name">' + Statistics.escapeHtml(h) + '</div>' +
-                    badge +
-                    '<div class="roster-stats">' + (hral ? st.vyhry + 'V · ' + st.prohry + 'P · ' + st.zapasy + 'Z' : 'zatím nenastoupil/a') + '</div>' +
-                    '</div>';
-            }).join('');
+        const radek = (h) => {
+            const st = hraci[h] || { zapasy: 0, vyhry: 0, prohry: 0 };
+            const hral = st.zapasy > 0;
+            const s = soupiska.find(x => x.jmeno === h);
+            const safeH = Statistics.escapeAttr(h);
+            return '<tr class="stats-row' + (hral ? '' : ' roster-row-inactive') + '"' + (hral ? ' onclick="Modals.zobrazitDetailHrace(\'' + safeH + '\')" style="cursor:pointer"' : '') + '>' +
+                '<td class="stats-cell stats-pos">' + (s && s.poradi ? s.poradi + '.' : '') + '</td>' +
+                '<td class="stats-cell stats-name">' + Statistics.escapeHtml(h) + '</td>' +
+                '<td class="stats-cell stats-num">' + st.zapasy + '</td>' +
+                '<td class="stats-cell stats-num stats-win">' + st.vyhry + '</td>' +
+                '<td class="stats-cell stats-num stats-loss">' + st.prohry + '</td>' +
+                '<td class="stats-cell lt-metric">' + (hral ? ((st.vyhry / st.zapasy) * 100).toFixed(0) + ' %' : '–') + '</td>' +
+                '</tr>';
+        };
+        const telo = skupiny.filter(([, list]) => list.length).map(([nazev, list]) =>
+            '<tr class="roster-group"><td colspan="5">' + nazev + '</td><td class="lt-metric"></td></tr>' + list.map(radek).join('')
+        ).join('');
+        const cardsHtml = '<table class="standings-table roster-table"><thead><tr class="standings-thead">' +
+            '<th class="th-pos" title="Pořadí na soupisce">#</th><th class="th-name">Hráč</th>' +
+            '<th class="th-num" title="Zápasy">Z</th><th class="th-num" title="Výhry">V</th><th class="th-num" title="Prohry">P</th>' +
+            '<th class="th-num lt-metric">Úspěšnost</th></tr></thead><tbody>' + telo + '</tbody></table>';
 
         const nadpis = document.getElementById('tymyViewNadpis');
         if (nadpis) nadpis.innerHTML =
             '<button onclick="App._renderTymyGrid()" class="roster-back-btn" title="Zpět na týmy">' + Icons.chevronRight() + '</button>' +
             Statistics.escapeHtml(tym);
 
-        document.getElementById('tymyViewGrid').innerHTML = '<div class="roster-grid">' + cardsHtml + '</div>';
+        document.getElementById('tymyViewGrid').innerHTML = '<div class="overflow-x-auto">' + cardsHtml + '</div>';
     },
 
     nahratFotku(hrac, cardIdx) {
@@ -697,25 +705,26 @@ const App = {
             ctvrty = [...p3Teams].find(t => t !== treti) || null;
         }
 
-        let pillsHtml = '';
-        if (druhy) pillsHtml += '<span class="hero-pill"><span class="hero-pill-rank">2.</span> ' + Statistics.escapeHtml(druhy) + '</span>';
+        const poradi = [[1, vitez]];
+        if (druhy) poradi.push([2, druhy]);
         if (treti) {
-            pillsHtml += '<span class="hero-pill"><span class="hero-pill-rank">3.</span> ' + Statistics.escapeHtml(treti) + '</span>';
-            if (ctvrty) pillsHtml += '<span class="hero-pill"><span class="hero-pill-rank">4.</span> ' + Statistics.escapeHtml(ctvrty) + '</span>';
+            poradi.push([3, treti]);
+            if (ctvrty) poradi.push([4, ctvrty]);
         } else {
-            sfLosers.slice(0, 2).forEach(t => {
-                pillsHtml += '<span class="hero-pill"><span class="hero-pill-rank">3.–4.</span> ' + Statistics.escapeHtml(t) + '</span>';
-            });
+            sfLosers.slice(0, 2).forEach(t => poradi.push(['3.–4', t]));
         }
+        const radky = poradi.map(([pos, tym], i) =>
+            '<li class="hero-row' + (i === 0 ? ' hero-row-champion' : '') + '" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(tym) + '\')">' +
+            '<span class="hero-pos">' + pos + '.</span>' + Table.logoHtml(tym) +
+            '<span class="hero-name">' + Statistics.escapeHtml(tym) + (i === 0 ? '<span class="hero-label">Mistr extraligy ' + Statistics.escapeHtml(sezóna) + '</span>' : '') + '</span>' +
+            (i === 0 ? '<span class="hero-trophy" aria-hidden="true">' + Icons.trophy() + '</span>' : '') +
+            '</li>'
+        ).join('');
 
         return '<div class="hero-card">' +
-            '<div class="hero-eyebrow">Sezóna ' + Statistics.escapeHtml(sezóna) + ' · Extraliga</div>' +
-            '<div class="hero-champion-box">' +
-            '<div class="hero-trophy">' + Icons.trophy() + '</div>' +
-            '<div><div class="hero-champion-name">' + Statistics.escapeHtml(vitez) + '</div>' +
-            '<div class="hero-champion-label">Mistr Extraligy ' + Statistics.escapeHtml(sezóna) + '</div></div>' +
-            '</div>' +
-            (pillsHtml ? '<div class="hero-pills">' + pillsHtml + '</div>' : '') +
+            '<div class="app-card-header"><div><h2 class="app-card-title">Konečné pořadí</h2>' +
+            '<div class="app-card-sub">Extraliga ' + Statistics.escapeHtml(sezóna) + '</div></div></div>' +
+            '<ol class="hero-list">' + radky + '</ol>' +
             '</div>';
     },
 

@@ -1,0 +1,116 @@
+/* Ligová tabulka (Table.render) - sdílí ji hlavní web i embed tabulka.html.
+   Používá jen tokeny, které definují obě stránky: --cba-red, --surface,
+   --surface2, --border, --text, --text2, --muted, --win, --loss, --draw,
+   --zone-top, --zone-playoff, --zone-relegation, --cba-blue.
+   Jediný výrazný prvek je červený sloupec bodů; zbytek je záměrně tichý. */
+
+.lt-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+.lt-table th { font-size: 0.72rem; font-weight: 600; color: var(--text2); padding: 8px 6px; text-align: center; white-space: nowrap; }
+.lt-table th.lt-l, .lt-table td.lt-l { text-align: left; }
+.lt-table td { padding: 11px 6px; text-align: center; color: var(--text); border-top: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+
+.lt-row { cursor: pointer; position: relative; }
+.lt-row:hover td:not(.lt-pts), .lt-row.open td:not(.lt-pts) { background: var(--surface2); }
+.lt-row:focus-visible { outline: 2px solid var(--cba-blue); outline-offset: -2px; }
+
+.lt-pos { width: 64px; padding-left: 16px !important; text-align: left !important; white-space: nowrap; box-shadow: inset 4px 0 0 transparent; transition: box-shadow 0.3s; }
+.lt-z-final-four, .lt-z-top { box-shadow: inset 4px 0 0 var(--zone-top); }
+.lt-z-playoff { box-shadow: inset 4px 0 0 var(--zone-playoff); }
+.lt-z-relegation { box-shadow: inset 4px 0 0 var(--zone-relegation); }
+.lt-posnum { display: inline-block; min-width: 20px; font-weight: 800; font-size: 1.15rem; }
+.lt-delta { font-size: 0.66rem; font-weight: 700; margin-left: 2px; transition: opacity 0.3s; }
+.lt-delta.up { color: var(--win); }
+.lt-delta.down { color: var(--loss); }
+
+.lt-team { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.lt-name { font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lt-name-short { display: none; }
+
+/* Logo klubu v bílém kolečku - stejné všude na webu (viz .club-logo ve styles.css) */
+.lt-logo { width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px var(--border); display: inline-flex; align-items: center; justify-content: center; overflow: hidden; }
+.lt-logo img { display: block; max-width: 70%; max-height: 70%; object-fit: contain; }
+.lt-logo-empty { background: var(--surface2); color: var(--text2); font-size: 0.7rem; font-weight: 800; }
+
+.lt-pm { font-weight: 700; }
+.lt-pm.plus { color: var(--win); }
+.lt-pm.minus { color: var(--loss); }
+.lt-ratio { display: block; font-size: 0.68rem; color: var(--muted); font-weight: 500; margin-top: 1px; }
+
+/* Forma - čtverečky V/R/P, stejné u týmů i hráčů */
+.lt-form { display: inline-flex; gap: 2px; vertical-align: middle; }
+.lt-form span { width: 16px; height: 16px; border-radius: 3px; font-size: 0.58rem; font-weight: 800; color: #fff; display: inline-flex; align-items: center; justify-content: center; }
+.lt-form .w { background: var(--win); }
+.lt-form .l { background: var(--loss); }
+.lt-form .d { background: var(--draw); }
+.lt-form .e { background: var(--border); }
+
+/* Hlavní metrika = červený pruh přes celý sloupec */
+.lt-table th.lt-pts { color: #fff; background: var(--cba-red); font-weight: 700; }
+.lt-table td.lt-pts { width: 64px; background: var(--cba-red); color: #fff; font-size: 1.35rem; font-weight: 800; border-top-color: rgba(255,255,255,0.18); }
+
+.lt-divider td { padding: 10px 6px 4px 20px; font-size: 0.74rem; font-weight: 700; text-align: left; border-top: 0; }
+.lt-divider td.lt-pts { padding: 0; }
+.lt-divider.playoff td { color: var(--zone-playoff); }
+.lt-divider.relegation td { color: var(--zone-relegation); }
+.lt-divider.top td { color: var(--zone-top); }
+
+/* Rozbalení týmu - plynule přes grid-template-rows */
+.lt-detail > td { padding: 0; background: var(--surface2); text-align: left; border-top: 0; }
+.lt-detail > td.lt-pts { padding: 0; }
+.lt-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.32s cubic-bezier(.2,.8,.2,1); }
+.lt-collapse.open { grid-template-rows: 1fr; }
+.lt-collapse-in { overflow: hidden; min-height: 0; }
+.lt-collapse-pad { padding: 4px 0 14px; opacity: 0; transform: translateY(-4px); transition: opacity 0.2s, transform 0.32s cubic-bezier(.2,.8,.2,1); }
+.lt-collapse.open .lt-collapse-pad { opacity: 1; transform: none; transition-delay: 0.06s; }
+
+.lt-results { margin: 0 20px 0 80px; border-collapse: collapse; width: calc(100% - 100px); font-size: 0.8rem; }
+.lt-results td { border-top: 1px solid var(--border); padding: 7px 8px; text-align: left; background: none !important; }
+.lt-results tr:first-child td { border-top: 0; }
+.lt-results .lt-kolo { width: 64px; color: var(--text2); white-space: nowrap; }
+.lt-results .lt-misto { width: 44px; color: var(--text2); }
+.lt-results .lt-souper { font-weight: 700; }
+.lt-results .lt-souper .lt-logo { width: 26px; height: 26px; vertical-align: middle; margin-right: 8px; }
+.lt-results .lt-skore { width: 48px; text-align: right; font-weight: 800; font-size: 0.95rem; }
+.lt-results .lt-skore.w { color: var(--win); }
+.lt-results .lt-skore.l { color: var(--loss); }
+.lt-results .lt-skore.d { color: var(--draw); }
+.lt-detail-link { margin: 6px 20px 0 88px; font-size: 0.76rem; }
+.lt-detail-link button { font: inherit; font-weight: 700; color: var(--cba-red); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.lt-empty-results { margin: 2px 20px 0 88px; font-size: 0.78rem; color: var(--text2); }
+.lt-mobile-extra { display: none; }
+.lt-pending { display: inline-block; margin-left: 6px; font-size: 0.62rem; font-weight: 700; color: var(--draw); }
+
+.lt-foot { padding: 14px 20px 18px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.74rem; color: var(--text2); border-top: 1px solid var(--border); }
+.lt-foot i { display: inline-block; width: 4px; height: 12px; margin-right: 6px; vertical-align: -2px; }
+.lt-foot .lt-bod { flex-basis: 100%; }
+.lt-foot .lt-note { flex-basis: 100%; font-style: italic; }
+
+/* Animace pořadí po novém kole (Table.animujPoradi) */
+.lt-row.moving { z-index: 2; }
+.lt-row.moving td { background: var(--surface); }
+.lt-row.moving td.lt-pts { background: var(--cba-red); }
+.lt-table.intro .lt-delta { opacity: 0; }
+.lt-table.intro .lt-pos { box-shadow: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .lt-collapse, .lt-collapse-pad, .lt-delta, .lt-pos { transition: none !important; }
+}
+
+@media (max-width: 640px) {
+    .lt-col-wide { display: none; }
+    .lt-name-full { display: none; }
+    .lt-name-short { display: inline; }
+    .lt-logo { width: 34px; height: 34px; }
+    .lt-team { gap: 9px; }
+    .lt-pos { width: 52px; padding-left: 12px !important; }
+    .lt-table td.lt-pts { width: 52px; font-size: 1.15rem; }
+    .lt-results { margin: 0 12px; width: calc(100% - 24px); table-layout: fixed; }
+    .lt-results .lt-misto, .lt-results .lt-datum { display: none; }
+    .lt-results .lt-kolo { width: 56px; }
+    .lt-results .lt-souper { display: flex; align-items: center; min-width: 0; }
+    .lt-results .lt-souper span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lt-detail-link, .lt-empty-results { margin-left: 12px; }
+    .lt-mobile-extra { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin: 4px 12px 6px; font-size: 0.72rem; color: var(--text2); }
+    .lt-mobile-extra b { color: var(--text); margin-left: 4px; }
+    .lt-foot { padding: 12px 14px 16px; }
+}

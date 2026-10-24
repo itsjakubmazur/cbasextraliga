@@ -12,6 +12,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.cdnfonts.com/css/telegraf" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/standings.css">
 </head>
 <body>
 
@@ -102,7 +103,7 @@
                     <div class="app-card-header">
                         <h2 class="app-card-title" id="tymyViewNadpis">Soupisky</h2>
                     </div>
-                    <div id="tymyViewGrid" class="teams-grid" style="padding: 12px 16px;"></div>
+                    <div id="tymyViewGrid"></div>
                 </div>
             </div>
 
@@ -123,10 +124,10 @@
 
             <div id="tabulkaPlayoffContainer" class="app-card" style="display: none;">
                 <div class="app-card-header">
-                    <h2 class="app-card-title">
-                        <span id="tabulkaPlayoffTitle">Tabulka</span>
-                        — <span id="tabulkaSoutez"></span>
-                    </h2>
+                    <div>
+                        <h2 class="app-card-title" id="tabulkaSoutez"></h2>
+                        <div class="app-card-sub" id="tabulkaPlayoffTitle"></div>
+                    </div>
                     <div class="view-toggle" id="viewToggle">
                         <button class="view-toggle-btn active" id="viewToggleZakladni" onclick="App.prepnoutPohled('zakladni')">Základní část</button>
                         <button class="view-toggle-btn" id="viewTogglePlayoff" onclick="App.prepnoutPohled('playoff')">Play-off</button>
