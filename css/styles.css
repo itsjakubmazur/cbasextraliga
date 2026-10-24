@@ -2007,6 +2007,9 @@ body.dark-mode .standings-pos-num.pos-bronze { color: #fb923c; }
     vertical-align: middle;
 }
 .team-row-logo {
+    /* index.html nacita Tailwind, jehoz preflight dava img display:block -
+       logo by pak zalomilo radek (tecka / logo / nazev pod sebou). */
+    display: inline-block;
     width: 18px;
     height: 18px;
     object-fit: contain;
