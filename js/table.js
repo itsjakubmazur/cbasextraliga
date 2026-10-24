@@ -51,7 +51,10 @@ const Table = {
         const zmeny = Statistics.vypocitejZmenyPozic(aktualni_soutez);
         const esc = (x) => Statistics.escapeHtml(x);
         const attr = (x) => Statistics.escapeAttr(x);
-        const colspan = jePrvniLiga ? 10 : 9; // všechny sloupce kromě bodů
+        // Oddělovače a rozbalené řádky jdou přes celou šířku (colspan větší než
+        // počet sloupců); červený pruh bodů v nich dokreslí CSS pozadí s pevnou
+        // šířkou sloupce - funguje i na mobilu, kde se část sloupců skrývá.
+        const colspan = 99;
 
         const rows = [];
         tymy.forEach((tym, idx) => {
@@ -92,13 +95,13 @@ const Table = {
                 '<div class="lt-mobile-extra"><span>Sety<b>' + t.setyV + ':' + t.setyP + '</b></span><span>Míče<b>' + t.bodyV + ':' + t.bodyP + '</b></span><span>' + formaHtml + '</span></div>' +
                 (vysledky ? '<table class="lt-results">' + vysledky + '</table>' : '<div class="lt-empty-results">Zatím bez odehraného utkání.</div>') +
                 (opts.naDetail ? '<div class="lt-detail-link"><button type="button" data-detail="' + attr(tym) + '">Detail týmu a soupiska</button></div>' : '') +
-                '</div></div></div></td><td class="lt-pts"></td></tr>'
+                '</div></div></div></td></tr>'
             );
 
             if (z.dividerAfter !== null && z.dividerAfter !== undefined && (!z.dividerMinTeams || tymy.length > z.dividerMinTeams - 1)) {
                 const cls = (z.dividerClass || '').includes('relegation') ? 'relegation' : 'playoff';
                 const label = String(z.dividerAfter || '').replace('↓', '').trim();
-                rows.push('<tr class="lt-divider ' + cls + '"><td colspan="' + colspan + '">' + esc(label) + '</td><td class="lt-pts"></td></tr>');
+                rows.push('<tr class="lt-divider ' + cls + '"><td colspan="' + colspan + '">' + esc(label) + '</td></tr>');
             }
         });
 
@@ -122,7 +125,6 @@ const Table = {
             (Statistics.maNeschvalene(aktualni_soutez) ? '<span class="lt-note">Zahrnuje i výsledky, které ještě čekají na schválení svazem.</span>' : '') +
             '</div>';
 
-        this._fixColspans(container);
         const table = container.querySelector('.lt-table');
         container.querySelectorAll('.lt-row').forEach(r => {
             r.addEventListener('click', () => this._toggle(table, r.dataset.i));
@@ -137,13 +139,6 @@ const Table = {
             }));
         }
         if (opts.animace !== false) this.animujPoradi(table, aktualni_soutez);
-    },
-
-    // Řádky s colspan musí pokrýt jen viditelné sloupce, jinak červený sloupec
-    // bodů na mobilu (skryté sloupce) ujede doprava.
-    _fixColspans(container) {
-        const visible = [...container.querySelectorAll('.lt-table thead th')].filter(th => getComputedStyle(th).display !== 'none').length;
-        container.querySelectorAll('.lt-detail > td:first-child, .lt-divider > td:first-child').forEach(td => { td.colSpan = Math.max(1, visible - 1); });
     },
 
     _toggle(table, i) {

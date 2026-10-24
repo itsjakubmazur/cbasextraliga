@@ -47,18 +47,20 @@
 .lt-form .e { background: var(--border); }
 
 /* Hlavní metrika = červený pruh přes celý sloupec */
+.lt-table { --lt-pts-w: 64px; }
+.lt-table th.lt-pts, .lt-table td.lt-pts { width: var(--lt-pts-w); min-width: var(--lt-pts-w); box-sizing: border-box; }
 .lt-table th.lt-pts { color: #fff; background: var(--cba-red); font-weight: 700; }
-.lt-table td.lt-pts { width: 64px; background: var(--cba-red); color: #fff; font-size: 1.35rem; font-weight: 800; border-top-color: rgba(255,255,255,0.18); }
+.lt-table td.lt-pts { background: var(--cba-red); color: #fff; font-size: 1.35rem; font-weight: 800; border-top-color: rgba(255,255,255,0.18); }
 
-.lt-divider td { padding: 10px 6px 4px 20px; font-size: 0.74rem; font-weight: 700; text-align: left; border-top: 0; }
-.lt-divider td.lt-pts { padding: 0; }
+.lt-divider td { padding: 10px 6px 4px 20px; font-size: 0.74rem; font-weight: 700; text-align: left; border-top: 0;
+    background: linear-gradient(to left, var(--cba-red) var(--lt-pts-w), transparent var(--lt-pts-w)); }
 .lt-divider.playoff td { color: var(--zone-playoff); }
 .lt-divider.relegation td { color: var(--zone-relegation); }
 .lt-divider.top td { color: var(--zone-top); }
 
 /* Rozbalení týmu - plynule přes grid-template-rows */
-.lt-detail > td { padding: 0; background: var(--surface2); text-align: left; border-top: 0; }
-.lt-detail > td.lt-pts { padding: 0; }
+.lt-detail > td { padding: 0 var(--lt-pts-w) 0 0; text-align: left; border-top: 0;
+    background: linear-gradient(to left, var(--cba-red) var(--lt-pts-w), var(--surface2) var(--lt-pts-w)); }
 .lt-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.32s cubic-bezier(.2,.8,.2,1); }
 .lt-collapse.open { grid-template-rows: 1fr; }
 .lt-collapse-in { overflow: hidden; min-height: 0; }
@@ -105,7 +107,8 @@
     .lt-logo { width: 34px; height: 34px; }
     .lt-team { gap: 9px; }
     .lt-pos { width: 52px; padding-left: 12px !important; }
-    .lt-table td.lt-pts { width: 52px; font-size: 1.15rem; }
+    .lt-table { --lt-pts-w: 52px; }
+    .lt-table td.lt-pts { font-size: 1.15rem; }
     .lt-results { margin: 0 12px; width: calc(100% - 24px); table-layout: fixed; }
     .lt-results .lt-misto, .lt-results .lt-datum { display: none; }
     .lt-results .lt-kolo { width: 56px; }
