@@ -8,9 +8,38 @@
     "baraze": []
   },
   "tymy": {
-    "extraliga": [],
-    "prvni-liga-vychod": [],
-    "prvni-liga-zapad": [],
+    "extraliga": [
+      "B.O. Chance Ostrava Sportclub",
+      "BA Plzeň",
+      "BK 1973 Benátky nad Jizerou",
+      "BK Meteor Praha",
+      "Badminton FSpS MU",
+      "SK Brno Slatina",
+      "SK Prosek Praha",
+      "SK Unity Brno"
+    ],
+    "prvni-liga-vychod": [
+      "BK Kopřivnice",
+      "Badminton Akademie Olomouc",
+      "SK Brno Slatina B",
+      "SK Unity Brno B",
+      "SKP Kometa Brno",
+      "TJ Montas Hradec Králové",
+      "TJ Slavoj Český Těšín",
+      "TJ Sokol Dobruška",
+      "TJ Sokol Klimkovice"
+    ],
+    "prvni-liga-zapad": [
+      "BA Plzeň B",
+      "BaC Kladno",
+      "SK Hamr",
+      "SK Prosek Praha B",
+      "SKB Český Krumlov",
+      "TJ Astra Zahradní Město",
+      "TJ Slovan Vesec",
+      "TJ Sokol Křemže",
+      "TJ Sokol Radotín"
+    ],
     "prvni-liga-playoff": [],
     "baraze": []
   },
@@ -268,7 +297,7 @@
       "tym": "SK Brno Slatina"
     }
   ],
-  "datum": "2026-10-24T21:59:19.474Z",
+  "datum": "2026-10-24T22:07:45.172Z",
   "historicke_rocniky": {
     "2024/25": {
       "konfigurace": {
@@ -17351,6 +17380,10 @@
     "BK Kopřivnice": "https://is.czechbadminton.cz/storage/v1/club-storage/0c4d038f-9190-4831-897c-2a9941d88acf/1_logo_modre_ctverec.png",
     "SK Brno Slatina B": "https://is.czechbadminton.cz/storage/v1/club-storage/cd50e67a-da4e-473b-994c-1c6e4899d581/sk brno slatina.png",
     "Badminton Akademie Olomouc": "https://is.czechbadminton.cz/storage/v1/club-storage/3f3641f8-b75b-4856-b44f-bdf7f0258ad8/Logo BAO.png",
-    "TJ Sokol Radotín": "https://is.czechbadminton.cz/storage/v1/club-storage/9761873e-32ec-4ef8-86a8-e92a26e92950/logo 2.png"
+    "TJ Sokol Radotín": "https://is.czechbadminton.cz/storage/v1/club-storage/9761873e-32ec-4ef8-86a8-e92a26e92950/logo 2.png",
+    "SK Unity Brno": "https://is.czechbadminton.cz/storage/v1/club-storage/0829b5c9-171b-4ab1-ae3e-416219992f69/Logo - Horizontal - Full color - Light theme.png",
+    "SK Unity Brno B": "https://is.czechbadminton.cz/storage/v1/club-storage/0829b5c9-171b-4ab1-ae3e-416219992f69/Logo - Horizontal - Full color - Light theme.png",
+    "SKP Kometa Brno": "https://is.czechbadminton.cz/storage/v1/club-storage/dee939a4-7763-49ff-9cc1-86aaa6f226f7/Znac╠îka-color.png",
+    "TJ Sokol Křemže": "https://is.czechbadminton.cz/storage/v1/club-storage/d88ab06d-d585-4a74-9a8d-5396c16e3213/Logo Křemže.png"
   }
 }
