@@ -1808,7 +1808,7 @@
       "tym": "SK Brno Slatina"
     }
   ],
-  "datum": "2026-10-24T22:48:15.508Z",
+  "datum": "2026-10-24T23:04:23.196Z",
   "historicke_rocniky": {
     "2024/25": {
       "konfigurace": {
@@ -18488,6 +18488,1789 @@
             "maxBoduVSetu": 15
           }
         }
+      },
+      "soupisky": {
+        "extraliga": {
+          "BK Meteor Praha": [
+            {
+              "jmeno": "Kwinta Dominik",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Kopřiva Dominik",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Golas Mateusz",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Corvee Lucas",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Rogalski Michal",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Szydlowski Przemyslaw",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Cybulski Robert",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Dziolko Adrian",
+              "pohlavi": "M"
+            },
+            {
+              "jmeno": "Dąbczyńska Wiktoria",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Lavrova Sofiia",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Maixnerová Petra",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Stoliarenko Mariia",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Swierczynska Magdalena",
+              "pohlavi": "Z"
+            }
+          ],
+          "B.O. Chance Ostrava Sportclub": [
+            {
+              "jmeno": "Filimon Collins",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Makboul Romeo",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Petrovič Viktor",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Lassen Nielsen Sebastian",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Eipe Joel Chacko Gamrath",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Daragh Rachael Charlotte",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Klausholm Anna",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Popovska Hristomira",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Švábíková Tereza",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Matuš Vojtěch",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Helešicová Barbora",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Moravcová Mia",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Růžičková Marie",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Šuhajová Lucie",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "TJ Sokol Klimkovice": [
+            {
+              "jmeno": "Rajarajan Karan Rajan",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Danielak Maksymilian",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Budzel Filip",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Hrazdíra Patrik",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Osladilová Kateřina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Tomalová Kateřina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Van Coppenolle Sharleen Tallulah",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Wojewodová Marie",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Klimeš Vojtěch",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Slíva David",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Waliszewski Marek",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Frischová Kateřina",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Petrušková Klára",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "SK Prosek Praha": [
+            {
+              "jmeno": "Chlubna Jaroslav",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Thor Lukáš",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Poříz Vojtěch",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 8
+            },
+            {
+              "jmeno": "Diviš Jakub",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Šulc Adam",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Titěra Filip",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Coufal Kryštof",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Palán Václav",
+              "pohlavi": "M",
+              "poradi": 8,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Kalkušová Karolína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Maixnerová Amélie",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Sedláčková Vanda",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Treperová Ivana",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Bříza Petr",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Derka Jiří",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Podivín Václav",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Zelinková Michaela",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "SK Brno Slatina": [
+            {
+              "jmeno": "Coelho de Oliveira Ygor",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Janoštík Jan",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Muhammad Andi Fadel",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Svendsen Victor",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Mendrek Adam",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Grimley Christopher",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Grimley Matthew",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Ellis Marcus",
+              "pohlavi": "M"
+            },
+            {
+              "jmeno": "Gilmour Kirsty",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Hankiewicz Paulina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Lundgaard Hansen Sara",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Marczak Kornelie",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Van Dalm Kajsa",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Matiska David",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Pleska Josef",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Vícen Jarolím",
+              "pohlavi": "M",
+              "nahradnik": true
+            }
+          ],
+          "BK 1973 Benátky nad Jizerou": [
+            {
+              "jmeno": "Bruun Jepe",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Patzák Lukáš",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Havlíček Vojtěch",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Soby Hansen Jeppe",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Renoir Lucas",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Lundsgaard Calvin",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Danielak Mateusz",
+              "pohlavi": "M"
+            },
+            {
+              "jmeno": "Gysel Léo Van",
+              "pohlavi": "M"
+            },
+            {
+              "jmeno": "Hede Jakob",
+              "pohlavi": "M"
+            },
+            {
+              "jmeno": "Singer Valentin",
+              "pohlavi": "M"
+            },
+            {
+              "jmeno": "Andersen Irina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Bayrak Özge",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Bergstein Iben",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Sillassen Benedicte",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Torrance Ciara",
+              "pohlavi": "Z"
+            }
+          ],
+          "Badminton FSpS MU": [
+            {
+              "jmeno": "Brázda Tadeáš",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Hubáček Matěj",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Janáček Jaromír",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Beržanskis Danielius",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Cybulka Antonina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Cybulka Ruzana",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Slosiariková Sofia",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Reichman Jakub",
+              "pohlavi": "M",
+              "nahradnik": true
+            }
+          ]
+        },
+        "prvni-liga-vychod": {
+          "SK Kuklenská Brno": [
+            {
+              "jmeno": "Nielsen Mathias Solgaard",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Ludík Milan",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Puńko Bartosz",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Ehm Adam",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Cirók Josef",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Fliglová Nela",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Gavnholt Kristína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Klapalová Adéla",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Sandorhazi Vivien",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Benírške Štěpán",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Trkan Gabriel",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Vrbka Tomáš",
+              "pohlavi": "M",
+              "nahradnik": true
+            }
+          ],
+          "TJ Slavoj Český Těšín": [
+            {
+              "jmeno": "Stokfisz Szymon",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Szczypka Michal",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Kadlec Sebastián",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Rzeplinski Matěj",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Kadlecová Olívia",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Stokfisz Kinga",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Mendrek Wojciech",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Szarzec Adam",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Vitoš Michal",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Bury Viktorie",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Lotková Adéla",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Pawliková Veronika",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "TJ Sokol Klimkovice B": [
+            {
+              "jmeno": "Waliszewski Marek",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Klimeš Vojtěch",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Závodný Ondřej",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Ociepa Maciej",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Slíva David",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Walder Jakub",
+              "pohlavi": "M"
+            },
+            {
+              "jmeno": "Petrušková Klára",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Tomalová Kateřina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Wojewodová Marie",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Kiša Jáchym",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Láznička Jakub",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Oswald Michal",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Dejlová Veronika",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Frischová Kateřina",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Závodná Adéla",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "TJ Sokol Dobruška": [
+            {
+              "jmeno": "Slavík Matyáš",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Horáček David",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Šváb Matěj",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Klapal Tomáš",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Antoška Andrej",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Horák Jakub",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Bureš Marek",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Kopřiva Ondřej",
+              "pohlavi": "M",
+              "poradi": 8,
+              "poradiCtyrhra": 8
+            },
+            {
+              "jmeno": "Almalalha Raiia",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Bielobrovchuk Sofiia",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Kubečková Veronika",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Kuncová Markéta",
+              "pohlavi": "Z"
+            }
+          ],
+          "TJ Montas Hradec Králové": [
+            {
+              "jmeno": "Tvrdík Lukáš",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Šolar Ondřej",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Holub Lukáš",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Janoušek Petr",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Aubus Marek",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 8
+            },
+            {
+              "jmeno": "Skalický Mojmír",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Herout Martin",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Hubáček Jan",
+              "pohlavi": "M",
+              "poradi": 8,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Fuchsová Michaela",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Jarošová Veronika",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Kuchová Anna",
+              "pohlavi": "Z"
+            }
+          ],
+          "BK Kopřivnice": [
+            {
+              "jmeno": "Cimosz Lukas",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Slíva Martin",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Raška Jakub",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Čermák Filip",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Raška Libor",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Benišová Petra",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Orzechowicz Jessica",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Buček Jan",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Dostál Tomáš",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Sagáčik Jakub",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Tůma Dalibor",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Kelnarová Eliška",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Pargačová Anna",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "TJ Sokol Polabiny Pardubice": [
+            {
+              "jmeno": "Grund Michal",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Skála Tomáš",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Ehm Matěj",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Havlíček Jaroslav",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Burget Adam",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Skřivan Jakub",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Krpatová Pavlína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Valentová Kateřina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Hamáček Michal",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Urbanec Tomáš",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Wsól Lukáš",
+              "pohlavi": "M",
+              "nahradnik": true
+            }
+          ],
+          "SK Brno Slatina B": [
+            {
+              "jmeno": "Matiska David",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Pleska Josef",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Nikolov Daniel Lachezarov",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Kadirun Farusdaq Abdul",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Petrovič Alex",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Kordek Patryk",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Bálint Dárius",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Vícen Jarolím",
+              "pohlavi": "M",
+              "poradi": 8,
+              "poradiCtyrhra": 8
+            },
+            {
+              "jmeno": "Dobešová Markéta",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Otáhalová Barbora",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Slobodová Natália",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Urbánková Veronika",
+              "pohlavi": "Z"
+            }
+          ],
+          "Badminton Akademie Olomouc": [
+            {
+              "jmeno": "Smith Callum",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Ovčačík Jan",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Frýdek Jan",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Ryba František",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Valášek Martin",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Axmanová Karolína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Hrubá Viola",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Jančíková Michaela",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Vavrečková Anna",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Chumchal Martin",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Tlustý Lukáš",
+              "pohlavi": "M",
+              "nahradnik": true
+            }
+          ]
+        },
+        "prvni-liga-zapad": {
+          "BaC Kladno": [
+            {
+              "jmeno": "Běhounek Ondřej",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Havlíček Michael",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Larsen Jonathan",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Suchý Simeon",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Suchý Andrej",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Smutný David",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Morávek Michal",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Hořínková Soňa",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Skrčená Malvína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Turoňová Adéla",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Veght Laura",
+              "pohlavi": "Z"
+            }
+          ],
+          "TJ Astra Zahradní Město": [
+            {
+              "jmeno": "Moravec Michal",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Kašša Marek",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Klíma Kryštof",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Fiala Jan",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Rue Rasmussen Niels Magnus",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Sebera Vojtěch",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Synovec Pavel",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Kurzová Dominika",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Osičková Erika",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Oubrechtová Kateřina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Dinh Duc Trung",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Toman Václav",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Kobyláková Andrea",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "TJ Slovan Vesec": [
+            {
+              "jmeno": "Stejskal David",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Líbal Štěpán",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Kerpl Dennis",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Klimeš Ondřej",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Foukal Aleš",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Vajsejtl Jiří",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Foukalová Iva",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Kerplová Sofia",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Líbalová Šárka",
+              "pohlavi": "Z"
+            }
+          ],
+          "TJ Sokol Radotín": [
+            {
+              "jmeno": "Hnilica Petr",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Kovář Milan",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Král Adam",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Bitman Jakub",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Drančák Pavel",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Hnilicová Jana",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Mikelová Kateřina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Vnoučková Karolína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Franta Vojtěch",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Zevl Lukáš",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Burdová Veronika",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Knotková Barbora",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Malá Kateřina",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "BK Liberec": [
+            {
+              "jmeno": "Šída Mirko",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Marek Filip",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Ickert Daniel",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Rázl Jan",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Czysz Tymoteusz",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Koňas Jan",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Vitvera Jakub",
+              "pohlavi": "M",
+              "poradi": 7,
+              "poradiCtyrhra": 7
+            },
+            {
+              "jmeno": "Burdová Tereza",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Dobiášová Veronika",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Goldwasser Emilia",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Orosová Sára",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Tomešová Karolína",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "BA Plzeň B": [
+            {
+              "jmeno": "Viktora Jan",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Rataj Vojtěch",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Bízek Vojtěch",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Holeček Jaroslav",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Voráč Přemysl",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Louda Jiří",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Dvořáková Anna",
+              "pohlavi": "Z",
+              "poradi": 1
+            },
+            {
+              "jmeno": "Benediktová Klára",
+              "pohlavi": "Z",
+              "poradi": 2
+            },
+            {
+              "jmeno": "Kozempelová Kristina",
+              "pohlavi": "Z",
+              "poradi": 3
+            },
+            {
+              "jmeno": "Pixová Aneta",
+              "pohlavi": "Z",
+              "poradi": 4
+            }
+          ],
+          "SK Prosek Praha B": [
+            {
+              "jmeno": "Thor Lukáš",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Derka Jiří",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Poříz Vojtěch",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Bříza Petr",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Schumpeter Marek",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Titěra Filip",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Coufal Kryštof",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Vorlík Jan",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Podivín Václav",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Ausbergerová Berta",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Kalkušová Karolína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Maixnerová Amélie",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Stará Natálie",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Zelinková Michaela",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Maleček Pavel",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Nechvátal Marek",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Nývlt Jiří",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Stádník Filip",
+              "pohlavi": "M",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Gerbelová Klára",
+              "pohlavi": "Z",
+              "nahradnik": true
+            },
+            {
+              "jmeno": "Nýdrlová Štěpánka",
+              "pohlavi": "Z",
+              "nahradnik": true
+            }
+          ],
+          "SK Hamr": [
+            {
+              "jmeno": "Dvořák Daniel",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Strejček Vojtěch",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Srnec Adam",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Macák Jan",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Volf Matěj",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Hurtík Jonáš",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Bílková Eliška",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Koliášová Kateřina",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Telehaničová Michaela",
+              "pohlavi": "Z"
+            }
+          ],
+          "SKB Český Krumlov": [
+            {
+              "jmeno": "Maňásek Pavel",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Pražák Dennis",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Puffr Matyáš",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Vrchotický František",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Nowak Oliver Lee",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Čada Daniel",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Fišerová Eva",
+              "pohlavi": "Z",
+              "poradi": 1,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Kozáková Kristýna",
+              "pohlavi": "Z",
+              "poradi": 2,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Černá Lucie",
+              "pohlavi": "Z",
+              "poradi": 3,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Mikešová Eliška",
+              "pohlavi": "Z",
+              "poradi": 4,
+              "poradiCtyrhra": 4
+            }
+          ]
+        },
+        "prvni-liga-playoff": {},
+        "baraze": {
+          "SK Kuklenská Brno": [
+            {
+              "jmeno": "Nielsen Mathias Solgaard",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Ludík Milan",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Puńko Bartosz",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Ehm Adam",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Cirók Josef",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Fliglová Nela",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Gavnholt Kristína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Klapalová Adéla",
+              "pohlavi": "Z"
+            }
+          ],
+          "SK Prosek Praha": [
+            {
+              "jmeno": "Thor Lukáš",
+              "pohlavi": "M",
+              "poradi": 1,
+              "poradiCtyrhra": 5
+            },
+            {
+              "jmeno": "Poříz Vojtěch",
+              "pohlavi": "M",
+              "poradi": 2,
+              "poradiCtyrhra": 6
+            },
+            {
+              "jmeno": "Diviš Jakub",
+              "pohlavi": "M",
+              "poradi": 3,
+              "poradiCtyrhra": 3
+            },
+            {
+              "jmeno": "Titěra Filip",
+              "pohlavi": "M",
+              "poradi": 4,
+              "poradiCtyrhra": 2
+            },
+            {
+              "jmeno": "Coufal Kryštof",
+              "pohlavi": "M",
+              "poradi": 5,
+              "poradiCtyrhra": 4
+            },
+            {
+              "jmeno": "Palán Václav",
+              "pohlavi": "M",
+              "poradi": 6,
+              "poradiCtyrhra": 1
+            },
+            {
+              "jmeno": "Kalkušová Karolína",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Maixnerová Amélie",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Sedláčková Vanda",
+              "pohlavi": "Z"
+            },
+            {
+              "jmeno": "Treperová Ivana",
+              "pohlavi": "Z"
+            }
+          ]
+        }
       }
     }
   },
@@ -18827,5 +20610,1570 @@
     "SK Unity Brno B": "https://is.czechbadminton.cz/storage/v1/club-storage/0829b5c9-171b-4ab1-ae3e-416219992f69/Logo - Horizontal - Full color - Light theme.png",
     "SKP Kometa Brno": "https://is.czechbadminton.cz/storage/v1/club-storage/dee939a4-7763-49ff-9cc1-86aaa6f226f7/Znac╠îka-color.png",
     "TJ Sokol Křemže": "https://is.czechbadminton.cz/storage/v1/club-storage/d88ab06d-d585-4a74-9a8d-5396c16e3213/Logo Křemže.png"
+  },
+  "soupisky": {
+    "extraliga": {
+      "BK Meteor Praha": [
+        {
+          "jmeno": "Brázda Tadeáš",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Rogalski Michal",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 10
+        },
+        {
+          "jmeno": "Kwinta Dominik",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 8
+        },
+        {
+          "jmeno": "Kopřiva Dominik",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Golas Mateusz",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 9
+        },
+        {
+          "jmeno": "Eckerlin David",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Corvee Lucas",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Hubáček Matěj",
+          "pohlavi": "M",
+          "poradi": 8,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Cybulski Robert",
+          "pohlavi": "M",
+          "poradi": 9,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Szydlowski Przemyslaw",
+          "pohlavi": "M",
+          "poradi": 10,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Krulová Lucie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Lavrova Sofiia",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Maixnerová Petra",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Stoliarenko Mariia",
+          "pohlavi": "Z"
+        }
+      ],
+      "BA Plzeň": [
+        {
+          "jmeno": "Leveque Sacha",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Szymanowski Mikolaj",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Král Jiří",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Louda Jan",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Trecki Wiktor",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Švejda Tomáš",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Král Ondřej",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Almalalha Raiia",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Harris Abbygael",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Šilhavá Klára",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Van Coppenolle Sharleen Tallulah",
+          "pohlavi": "Z"
+        }
+      ],
+      "Badminton FSpS MU": [
+        {
+          "jmeno": "Shahbazi Mehran",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Mahmoud Aram",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 8
+        },
+        {
+          "jmeno": "Yakovlev Vyacheslav",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Beržanskis Danielius",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Salutt David",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Massetti  Matteo",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Kis-Kasza Miklós",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Horváth Csanad",
+          "pohlavi": "M",
+          "poradi": 8,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Cybulka Antonina",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Dobiášová Veronika",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Slosiariková Sofia",
+          "pohlavi": "Z"
+        }
+      ],
+      "B.O. Chance Ostrava Sportclub": [
+        {
+          "jmeno": "Petrovič Viktor",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Filimon Collins",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Vittoriani Christopher",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Lievre Amaury",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Lassen Nielsen Sebastian",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Makboul Romeo",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 8
+        },
+        {
+          "jmeno": "Smilowski Pawel",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Eipe Joel Chacko Gamrath",
+          "pohlavi": "M",
+          "poradi": 8,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Klausholm Anna",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Popovska Hristomira",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Švábíková Tereza",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Wang Cecilia",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Matuš Vojtěch",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Štefek Jakub",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Helešicová Barbora",
+          "pohlavi": "Z",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Šuhajová Lucie",
+          "pohlavi": "Z",
+          "nahradnik": true
+        }
+      ],
+      "BK 1973 Benátky nad Jizerou": [
+        {
+          "jmeno": "Bruun Jepe",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Rajarajan Karan Rajan",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Patzák Lukáš",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Soby Hansen Jeppe",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Nebel Robert",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Havlíček Vojtěch",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Lundsgaard Calvin",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Bergstein Iben",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Hvid Laerke Tolstrup",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Ostergaard Frederike",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Røjkjær Sofie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Sillassen Benedicte",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Vitman Andjela",
+          "pohlavi": "Z"
+        }
+      ],
+      "SK Brno Slatina": [
+        {
+          "jmeno": "Merkle Arnaud",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Muhammad Andi Fadel",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Svendsen Victor",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Ellis Marcus",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Janoštík Jan",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Gysel Léo Van",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 8
+        },
+        {
+          "jmeno": "Mendrek Adam",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 9
+        },
+        {
+          "jmeno": "Grimley Christopher",
+          "pohlavi": "M",
+          "poradi": 8,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Grimley Matthew",
+          "pohlavi": "M",
+          "poradi": 9,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Gilmour Kirsty",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Hankiewicz Paulina",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Marczak Kornelie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Schulz Signe",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Thomsen Laura Fløj",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Van Dalm Kajsa",
+          "pohlavi": "Z"
+        }
+      ],
+      "SK Prosek Praha": [
+        {
+          "jmeno": "Thor Lukáš",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Coufal Kryštof",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Šulc Adam",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Titěra Filip",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Kalkušová Karolína",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Maixnerová Amélie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Treperová Ivana",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Bříza Petr",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Palán Václav",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Sedláčková Vanda",
+          "pohlavi": "Z",
+          "nahradnik": true
+        }
+      ],
+      "SK Unity Brno": [
+        {
+          "jmeno": "Nielsen Mathias Solgaard",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Burget Adam",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Soogard Rasmussen Nikolaj",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Krawczyk Adrian",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Espersen Rasmus Franck Prasz",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Fliglová Nela",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Fuglsang Anne",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Nyqvist Nella Olivia",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Ehm Adam",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Vrbka Tomáš",
+          "pohlavi": "M",
+          "nahradnik": true
+        }
+      ]
+    },
+    "prvni-liga-vychod": {
+      "BK Kopřivnice": [
+        {
+          "jmeno": "Cimosz Lukas",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Raška Jakub",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Nachtman Daniel",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Raška Libor",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Benišová Petra",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Orzechowicz Jessica",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Buček Jan",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Čermák Filip",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Dostál Tomáš",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Sagáčik Jakub",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Slíva Martin",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Tůma Dalibor",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Elingrová Ema",
+          "pohlavi": "Z",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Kelnarová Eliška",
+          "pohlavi": "Z",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Pargačová Anna",
+          "pohlavi": "Z",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Pražáková Vanessa",
+          "pohlavi": "Z",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Tomášková Barbora",
+          "pohlavi": "Z",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Závěšická Petra",
+          "pohlavi": "Z",
+          "nahradnik": true
+        }
+      ],
+      "TJ Montas Hradec Králové": [
+        {
+          "jmeno": "Holub Lukáš",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Tvrdík Lukáš",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Hubáček Jan",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Čada Daniel",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Šolar Ondřej",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Aubus Marek",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Klapal Tomáš",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Fuchsová Michaela",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Jarošová Veronika",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Kuchová Anna",
+          "pohlavi": "Z"
+        }
+      ],
+      "Badminton Akademie Olomouc": [
+        {
+          "jmeno": "Valášek Martin",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Frýdek Jan",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Smith Callum",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Ryba František",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Ehm Matěj",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Slepecki Szymon",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Axmanová Karolína",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Skařupová Lucie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Vavrečková Anna",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Ovčačík Jan",
+          "pohlavi": "M",
+          "nahradnik": true
+        }
+      ],
+      "SK Brno Slatina B": [
+        {
+          "jmeno": "Stokfisz Szymon",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Reichman Jakub",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Klecer Šimon",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Kozinka David Antonio",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Barč Daniele",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Kadirun Farusdaq Abdul",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Dobešová Markéta",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Hálová Charlotta",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Otáhalová Barbora",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Slobodová Natália",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Vícen Jarolím",
+          "pohlavi": "M",
+          "nahradnik": true
+        }
+      ],
+      "SK Unity Brno B": [
+        {
+          "jmeno": "Pavlík Richard",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Vrbka Tomáš",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Puńko Bartosz",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Sidor Jakub",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Trkan Gabriel",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Ehm Adam",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Chadimová Adéla",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Klapalová Adéla",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Valentová Kateřina",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Volskaya Ulyana",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Ludík Milan",
+          "pohlavi": "M",
+          "nahradnik": true
+        }
+      ],
+      "SKP Kometa Brno": [
+        {
+          "jmeno": "Dang Tomáš",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Diviš Jakub",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Dostál Marek",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Havlíček Michael",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Kohoutek Stanislav",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Paulík Jan",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Diviš David",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Eliášková Ella",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Fedorková Michaela",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Königová Julie",
+          "pohlavi": "Z"
+        }
+      ],
+      "TJ Slavoj Český Těšín": [
+        {
+          "jmeno": "Szczypka Michal",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Rzeplinski Matěj",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Kadlec Sebastián",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Liszka Piotr",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Kadlecová Olívia",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Stokfisz Kinga",
+          "pohlavi": "Z"
+        }
+      ],
+      "TJ Sokol Dobruška": [
+        {
+          "jmeno": "Skála Tomáš",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Antoška Andrej",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Horáček David",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Šváb Matěj",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Horák Jakub",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Havlíček Jaroslav",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Bielobrovchuk Sofiia",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Kubečková Veronika",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Skálová Lucie",
+          "pohlavi": "Z"
+        }
+      ],
+      "TJ Sokol Klimkovice": [
+        {
+          "jmeno": "Budzel Filip",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Láznička Jakub",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Grund Michal",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Ociepa Maciej",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Petrušková Klára",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Wojewodová Marie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Klimeš Vojtěch",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Kňazovčík Johan",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Wanke Karel",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Frischová Kateřina",
+          "pohlavi": "Z",
+          "nahradnik": true
+        }
+      ]
+    },
+    "prvni-liga-zapad": {
+      "BaC Kladno": [
+        {
+          "jmeno": "Larsen Jonathan",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Suchý Andrej",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Suchý Simeon",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Morávek Michal",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Smutný David",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Běhounek Ondřej",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Jankowská Zuzia",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Skrčená Malvína",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Tománková Lucie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Turoňová Adéla",
+          "pohlavi": "Z"
+        }
+      ],
+      "BA Plzeň B": [
+        {
+          "jmeno": "Voráč Přemysl",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Viktora Jan",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Rataj Vojtěch",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Holeček Jaroslav",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Louda Jiří",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Benediktová Klára",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Gutwirthová Lucie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Pixová Aneta",
+          "pohlavi": "Z"
+        }
+      ],
+      "SKB Český Krumlov": [
+        {
+          "jmeno": "Maňásek Pavel",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Puffr Matyáš",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Nowak Oliver Lee",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Vrchotický František",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Pražák Dennis",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Jakeš Marek",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Černá Lucie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Fišerová Eva",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Kozáková Kristýna",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Mikešová Eliška",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Štika Martin",
+          "pohlavi": "M",
+          "nahradnik": true
+        }
+      ],
+      "SK Hamr": [
+        {
+          "jmeno": "Dvořák Daniel",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Macák Jan",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Strejček Vojtěch",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Srnec Adam",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Volf Matěj",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Hurtík Jonáš",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Bílková Eliška",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Koliášová Kateřina",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Šilhavá Radka",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Telehaničová Michaela",
+          "pohlavi": "Z"
+        }
+      ],
+      "SK Prosek Praha B": [
+        {
+          "jmeno": "Vorlík Jan",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Podivín Václav",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Derka Jiří",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Lipták Marián",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Bříza Petr",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Poříz Vojtěch",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 8
+        },
+        {
+          "jmeno": "Schumpeter Marek",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Rázl Jan",
+          "pohlavi": "M",
+          "poradi": 8,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Palán Václav",
+          "pohlavi": "M",
+          "poradi": 9,
+          "poradiCtyrhra": 9
+        },
+        {
+          "jmeno": "Ausbergerová Berta",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Stará Natálie",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Zelinková Michaela",
+          "pohlavi": "Z"
+        }
+      ],
+      "TJ Astra Zahradní Město": [
+        {
+          "jmeno": "Moravec Michal",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Synovec Pavel",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Kašša Marek",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Fiala Jan",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Klíma Kryštof",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Kurzová Dominika",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Osičková Erika",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Oubrechtová Kateřina",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Dinh Duc Trung",
+          "pohlavi": "M",
+          "nahradnik": true
+        },
+        {
+          "jmeno": "Kobyláková Andrea",
+          "pohlavi": "Z",
+          "nahradnik": true
+        }
+      ],
+      "TJ Slovan Vesec": [
+        {
+          "jmeno": "Kerpl Dennis",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Klimeš Ondřej",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Amosov Oleg",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Stejskal David",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Foukal Aleš",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Líbal Štěpán",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Foukalová Iva",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Kerplová Sofia",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Líbalová Šárka",
+          "pohlavi": "Z"
+        }
+      ],
+      "TJ Sokol Křemže": [
+        {
+          "jmeno": "Kej Tobias",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Hammer Luka",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Patera Tomáš",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Bednář Jan",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Fošum Josef",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 6
+        },
+        {
+          "jmeno": "Chládek Alexandr",
+          "pohlavi": "M",
+          "poradi": 6,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Beran Petr",
+          "pohlavi": "M",
+          "poradi": 7,
+          "poradiCtyrhra": 7
+        },
+        {
+          "jmeno": "Kukač Jindřich",
+          "pohlavi": "M",
+          "poradi": 8,
+          "poradiCtyrhra": 8
+        },
+        {
+          "jmeno": "Fučíková Zuzana",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Krejčí Adéla",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Mouritsen Anne Margrethe",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Mouritsen Caroline Margrethe",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Mouritsen Laerke Margrethe",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Paterová Lucie",
+          "pohlavi": "Z"
+        }
+      ],
+      "TJ Sokol Radotín": [
+        {
+          "jmeno": "Hnilica Petr",
+          "pohlavi": "M",
+          "poradi": 1,
+          "poradiCtyrhra": 4
+        },
+        {
+          "jmeno": "Král Adam",
+          "pohlavi": "M",
+          "poradi": 2,
+          "poradiCtyrhra": 2
+        },
+        {
+          "jmeno": "Matiska David",
+          "pohlavi": "M",
+          "poradi": 3,
+          "poradiCtyrhra": 5
+        },
+        {
+          "jmeno": "Bitman Jakub",
+          "pohlavi": "M",
+          "poradi": 4,
+          "poradiCtyrhra": 3
+        },
+        {
+          "jmeno": "Drančák Pavel",
+          "pohlavi": "M",
+          "poradi": 5,
+          "poradiCtyrhra": 1
+        },
+        {
+          "jmeno": "Mikelová Kateřina",
+          "pohlavi": "Z"
+        },
+        {
+          "jmeno": "Šikalová  Denisa",
+          "pohlavi": "Z"
+        }
+      ]
+    },
+    "prvni-liga-playoff": {},
+    "baraze": {}
   }
 }
