@@ -11,6 +11,7 @@ const PLAYOFF_ROUND_MAP = {
   'semifinále': 'SF',
   'finále': 'F',
   'o 5. místo': 'P5',
+  'o pořadí': 'P5', // 1. liga play-off: porazeni ze ctvrtfinale (rucne se zapisovalo jako P5)
   'o 3. místo': '3M',
   'baráž': 'RR',
 };

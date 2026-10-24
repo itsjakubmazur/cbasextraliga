@@ -107,7 +107,7 @@ async function syncSoutez(data, soutez, report) {
     }
     const issues = [...(warningsById.get(row.warningsKey) || []), ...(row.issues || [])];
     if (issues.length) {
-      r.skipped.push({ zapas: row.candidate, status: row.status, issues });
+      r.skipped.push({ zapas: row.candidate, key: row.warningsKey, status: row.status, issues });
       return;
     }
     (pendingTeams.get(row.warningsKey) || []).forEach((t) => {
@@ -169,7 +169,7 @@ function renderIssue(report) {
       // seskupeno po utkanich - jedno utkani = az 9 dilcich zapasu se stejnym problemem
       const byMatch = new Map();
       r.skipped.forEach((s) => {
-        const key = matchIdOf(s.zapas);
+        const key = matchIdOf({ id: s.key });
         const g = byMatch.get(key) || { zapas: s.zapas, games: 0, issues: new Set() };
         g.games++;
         s.issues.forEach((i) => g.issues.add(i));
