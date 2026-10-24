@@ -3,61 +3,11 @@ const AdminSync = {
   lastCompetitionKey: null,
   lastWarningsById: new Map(),
 
-  // API vraci nazvy tymu casto v jine velikosti pismen/mezerach nez uz mame
-  // ulozene (napr. "B.O.CHANCE OSTRAVA SPORTCLUB" vs "B.O. Chance Ostrava
-  // Sportclub"). Pokud jde jen o takovouhle drobnost, pouzije se uz zavedeny
-  // nazev z draftu, at nevznikaji tise "dva ruzne" tymy. Pokud tym vubec
-  // neznáme (napr. novy postoupivsi tym), vrati se beze zmeny + matched:false,
-  // aby to sync oznacil k rucni kontrole a nic se nedohadovalo samo.
-  reconcileTeamName(soutez, apiName) {
-    const known = AdminData.draft.tymy[soutez] || [];
-    if (known.includes(apiName)) return { name: apiName, matched: true };
-    // Porovnava jen pismena/cislice - API i rucne zapsane nazvy se casto lisi
-    // v mezerach kolem zkratek (napr. "B.O.CHANCE" vs "B.O. Chance") nebo tecek.
-    const norm = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}]/gu, '');
-    const match = known.find((t) => norm(t) === norm(apiName));
-    if (match) return { name: match, matched: true };
-    return { name: apiName, matched: false };
-  },
-
-  // Prirozeny klic pro sparovani "tohle je tentyz realny dilci zapas", nezavisly
-  // na tom, jak vznikl 'id' (rucne pres stary nastroj = timestamp, sync = "api:...").
-  // Bez tohohle by se kazdy zapas zapsany drive rucne pri kazdem syncu tvaril
-  // jako "novy" (jiny 'id') a publikace by vytvorila duplicity.
-  naturalKey(z) {
-    return [z.kolo, z.tymDomaci, z.tymHoste, z.disciplina, z.domaci, z.hoste].join('|||');
-  },
-
-  computeDiff(soutez, candidates) {
-    const current = AdminData.getZapasy(soutez);
-    const currentByNaturalKey = new Map(current.map((z) => [this.naturalKey(z), z]));
-    const matchedIds = new Set();
-    const rows = [];
-
-    candidates.forEach((c) => {
-      const old = currentByNaturalKey.get(this.naturalKey(c));
-      if (!old) {
-        rows.push({ status: 'new', id: c.id, warningsKey: c.id, candidate: c, current: null });
-        return;
-      }
-      matchedIds.add(old.id);
-      // stejny realny zapas - prevezme se puvodni id, at "Pouzit vybrane" zapasu
-      // aktualizuje existujici zaznam misto pridani duplicitu.
-      const merged = { ...c, id: old.id };
-      const status = JSON.stringify(old) !== JSON.stringify(merged) ? 'changed' : 'unchanged';
-      rows.push({ status, id: old.id, warningsKey: c.id, candidate: merged, current: old });
-    });
-
-    // zapasy, ktere drive prisly ze syncu (id "api:...") a tento sync uz je
-    // nenasel (napr. prestaly byt schvalene) - nikdy se nesmaze automaticky
-    current.forEach((z) => {
-      if (String(z.id).startsWith('api:') && !matchedIds.has(z.id)) {
-        rows.push({ status: 'removed', id: z.id, warningsKey: z.id, candidate: null, current: z });
-      }
-    });
-
-    return rows;
-  },
+  // Parovani zapasu a sjednoceni nazvu tymu je ve sdilenem js/sync-merge.js
+  // (stejna logika jako automaticky sync). Tym nalezeny jinde v datech
+  // (historie, alias) se nehlasi jako neznamy - pri "Pouzit vybrane" se
+  // doplni do tymu souteze.
+  lastTeamsToAdd: new Map(),
 
   async runSync(competitionKey) {
     const statusEl = document.getElementById('syncStatus');
@@ -68,40 +18,43 @@ const AdminSync = {
       const result = await AdminApi.syncFetch(competitionKey);
       // tournamentConfig.json uz muze mit ID nove sezony, zatimco koncept je
       // jeste ve stare - zapasy by se jinak tise namichaly do spatneho rocniku.
-      const seasonKey = (str) => {
-        const m = String(str || '').match(/(\d{4})\s*[/-]\s*(\d{4}|\d{2})/);
-        return m ? `${m[1]}/${m[2].length === 2 ? m[1].slice(0, 2) + m[2] : m[2]}` : null;
-      };
-      if (result.sezona && seasonKey(result.sezona) !== seasonKey(AdminData.draft.rocnik)) {
+      if (result.sezona && SyncMerge.seasonKey(result.sezona) !== SyncMerge.seasonKey(AdminData.draft.rocnik)) {
         statusEl.textContent = `❌ Sync je nastavený na sezónu ${result.sezona}, ale koncept je ${AdminData.draft.rocnik || '(bez ročníku)'}. Nejdřív založ novou sezónu.`;
         return;
       }
       this.lastCompetitionKey = competitionKey;
       this.lastWarningsById = new Map(result.warnings.map((w) => [w.id, [...w.issues]]));
+      this.lastTeamsToAdd = new Map();
 
-      // Sjednoceni nazvu tymu podle uz zavedeneho seznamu (viz reconcileTeamName)
+      const known = AdminData.draft.tymy[competitionKey] || [];
+      const everywhere = SyncMerge.knownTeamsEverywhere(AdminData.draft);
+      const reconcile = (apiName) => SyncMerge.reconcileTeamName(known, everywhere, apiName, result.teamAliases);
+
       result.candidates.forEach((c) => {
-        const home = this.reconcileTeamName(competitionKey, c.tymDomaci);
-        const away = this.reconcileTeamName(competitionKey, c.tymHoste);
-        c.tymDomaci = home.name;
-        c.tymHoste = away.name;
-        if (!home.matched || !away.matched) {
-          const issues = this.lastWarningsById.get(c.id) || [];
-          if (!home.matched) issues.push(`Neznámý tým: "${home.name}" (zkontroluj, jestli nejde o nový tým)`);
-          if (!away.matched) issues.push(`Neznámý tým: "${away.name}" (zkontroluj, jestli nejde o nový tým)`);
-          this.lastWarningsById.set(c.id, issues);
-        }
+        const issues = this.lastWarningsById.get(c.id) || [];
+        const toAdd = [];
+        ['tymDomaci', 'tymHoste'].forEach((field) => {
+          const rec = reconcile(c[field]);
+          c[field] = rec.name;
+          if (!rec.matched) issues.push(`Neznámý tým: "${rec.name}" (zkontroluj, jestli nejde o nový tým)`);
+          else if (rec.source === 'jinde') toAdd.push(rec.name);
+        });
+        if (issues.length) this.lastWarningsById.set(c.id, issues);
+        this.lastTeamsToAdd.set(c.id, toAdd);
       });
 
-      this.lastRows = this.computeDiff(competitionKey, result.candidates);
+      this.lastRows = SyncMerge.computeDiff(AdminData.getZapasy(competitionKey), result.candidates);
+      this.lastRows.forEach((row) => {
+        if (!row.issues) return;
+        this.lastWarningsById.set(row.warningsKey, [...(this.lastWarningsById.get(row.warningsKey) || []), ...row.issues]);
+      });
 
-      // Loga se z API vraci pod stejnym syrovym nazvem tymu jako zapasy
-      // (napr. "BK METEOR PRAHA") - sladit se stavajicim seznamem tymu,
-      // jinak by se logo ulozilo pod nazev, ktery na webu nikde neni.
+      // Loga se z API vraci pod syrovym nazvem tymu (napr. "BK METEOR PRAHA")
+      // - ulozi se jen pro tymy, ktere v datech opravdu jsou.
       const reconciledLogos = {};
       Object.entries(result.teamLogos || {}).forEach(([apiName, url]) => {
-        const { name } = this.reconcileTeamName(competitionKey, apiName);
-        reconciledLogos[name] = url;
+        const rec = reconcile(apiName);
+        if (rec.matched) reconciledLogos[rec.name] = url;
       });
       AdminData.mergeTymLoga(reconciledLogos);
       statusEl.textContent = `Staženo ${result.matchCount} schválených zápasů z czechbadminton.cz.`;
@@ -178,6 +131,7 @@ const AdminSync = {
       if (row.status === 'removed') {
         AdminData.removeZapas(this.lastCompetitionKey, row.id);
       } else {
+        (this.lastTeamsToAdd.get(row.warningsKey) || []).forEach((t) => AdminData.addTym(this.lastCompetitionKey, t));
         AdminData.upsertZapas(this.lastCompetitionKey, row.candidate);
       }
       applied++;

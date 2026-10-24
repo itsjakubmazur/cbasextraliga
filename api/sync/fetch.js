@@ -1,6 +1,7 @@
 const { requireAuth } = require('../_lib/auth');
 const { syncCompetition } = require('../_lib/syncCompetition');
 const tournamentConfig = require('../_lib/tournamentConfig.json');
+const teamAliases = require('../_lib/teamAliases.json');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -33,6 +34,7 @@ module.exports = async function handler(req, res) {
     res.status(200).json({
       competitionKey,
       sezona: tournamentConfig._sezona,
+      teamAliases,
       ...result,
     });
   } catch (err) {
