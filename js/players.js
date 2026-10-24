@@ -211,10 +211,9 @@ const Players = {
         const stats = {};
         zapasy.forEach(zapas => {
             if (Statistics.isNeodehrano(zapas)) return;
+            if (Statistics.isSkrec(zapas)) return; // skreč se hráčům nepočítá
             const v = Statistics.parseVysledek(zapas.vysledek);
             const domaciVyhral = v.domaci > v.hoste;
-            const domaciSkrecovali = zapas.domaci === 'SKREČ';
-            const hosteSkrecovali = zapas.hoste === 'SKREČ';
 
             const pridatHrace = (jmena, vyhral, tym) => {
                 jmena.split(',').map(h => h.trim()).filter(h => h).forEach(hrac => {
@@ -225,8 +224,8 @@ const Players = {
                 });
             };
 
-            if (!domaciSkrecovali) pridatHrace(zapas.domaci, domaciVyhral, zapas.tymDomaci);
-            if (!hosteSkrecovali) pridatHrace(zapas.hoste, !domaciVyhral, zapas.tymHoste);
+            pridatHrace(zapas.domaci, domaciVyhral, zapas.tymDomaci);
+            pridatHrace(zapas.hoste, !domaciVyhral, zapas.tymHoste);
         });
 
         const hraciList = Object.keys(stats).filter(h => stats[h].zapasy >= 1);

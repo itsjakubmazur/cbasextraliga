@@ -195,10 +195,10 @@ const Modals = {
         const hraci = {};
         zapasyTymu.forEach(z => {
             if (Statistics.isNeodehrano(z)) return;
+            if (Statistics.isSkrec(z)) return; // skreč se hráčům nepočítá
             const jeDom = z.tymDomaci === tym;
             const hraciT = jeDom ? Statistics.getHraciFromTeam(z.domaci) : Statistics.getHraciFromTeam(z.hoste);
             hraciT.forEach(h => {
-                if (h === 'SKREČ') return;
                 if (!hraci[h]) hraci[h] = { zapasy: 0, vyhry: 0, prohry: 0 };
                 hraci[h].zapasy++;
                 const v = Statistics.parseVysledek(z.vysledek);

@@ -156,6 +156,7 @@ const Statistics = {
 
     getForma(hrac, vsechnyZapasy) {
         const hracovaZapasy = vsechnyZapasy.filter(z => {
+            if (this.isSkrec(z)) return false;
             const domaciHraci = this.getHraciFromTeam(z.domaci);
             const hosteHraci = this.getHraciFromTeam(z.hoste);
             return domaciHraci.includes(hrac) || hosteHraci.includes(hrac);
@@ -184,6 +185,9 @@ const Statistics = {
             if (vybrana_kola.size > 0 && !vybrana_kola.has(zapas.kolo)) return;
 
             if (this.isNeodehrano(zapas)) return; // neodehraný zápas
+            // Skreč: tým body dostane (tabulka týmů), ale hráči nehráli - do
+            // individuálních statistik se nepočítá ani vítězné straně.
+            if (this.isSkrec(zapas)) return;
 
             if (filtrDisciplina) {
                 const jeDvouhra = zapas.disciplina?.toLowerCase().includes('dvouhra');
