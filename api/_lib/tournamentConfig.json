@@ -1,35 +1,35 @@
 {
-  "_comment": "tournamentId/competitionId jsou nepruhledna GUID z czechbadminton.cz API. Dohledano rucne pres devtools/API pro sezonu 2025/2026 - pri zalozeni nove sezony je treba znovu dohledat (viz README v tomto souboru).",
-  "_sezona": "2025/2026",
+  "_comment": "tournamentId/competitionId jsou nepruhledna GUID z czechbadminton.cz API. Od sezony 2026/2027 ma svaz jen 2 turnaje: 'BYD Czech Badminton Extraliga 2026/2027' (zakladni cast, play-off, baraz) a '1. liga CBaS 2026/2027' (zapad, vychod, play-off). Dohledano pres /api/public-zone/tournaments-dynamic (categoryId LEAGUE) + /competitions/simple. Pri zalozeni nove sezony je treba znovu dohledat.",
+  "_sezona": "2026/2027",
   "extraliga": {
-    "tournamentId": "314cfc4c-602a-4c4e-b65c-b31c7cae9ceb",
+    "tournamentId": "eab362d2-2de0-4e12-aae4-3fbb7204d641",
     "competitions": {
-      "Základní část": "3b4a4d02-a467-4ab2-8c72-3a437fa7ee04",
-      "PLAY OFF": "674f42c9-58c5-435b-809d-4eb733555e4a"
+      "Základní část": "cf2419fb-0e6f-4df3-98bd-7e4aaa50e472",
+      "Play-off": "89d35d44-2d23-4aec-9358-97ffab3e45bc"
     }
   },
   "prvni-liga-zapad": {
-    "tournamentId": "6cf4e55a-502c-4d77-9f65-72ac041cc4fc",
+    "tournamentId": "51f3d431-b395-4dce-b34c-e613d24f2b52",
     "competitions": {
-      "Základní část": "c34999bb-d67f-4d32-8786-03dd5e490e6e"
+      "ZÁPAD - základní část": "1ae462d5-8304-4e9d-b8f6-861fe13c516a"
     }
   },
   "prvni-liga-vychod": {
-    "tournamentId": "13fd0732-87ea-4c74-994e-50c685bce20f",
+    "tournamentId": "51f3d431-b395-4dce-b34c-e613d24f2b52",
     "competitions": {
-      "Základní část": "3bbde037-4921-46c0-b5ec-fb19147b41cd"
+      "VÝCHOD - základní část": "69d7acbe-83fb-4a25-be5d-d77f7735e26a"
     }
   },
   "prvni-liga-playoff": {
-    "tournamentId": "c7af455b-df0c-4116-868a-59feb8c740b0",
+    "tournamentId": "51f3d431-b395-4dce-b34c-e613d24f2b52",
     "competitions": {
-      "1. liga PLAY OFF": "d8fb0701-54e4-4272-bd05-a1b76957021c"
+      "Play-off": "f406bee2-a2c2-4316-b370-c10af73bf8e2"
     }
   },
   "baraze": {
-    "tournamentId": "08b45012-5ba0-4836-8896-d4ecd68384d7",
+    "tournamentId": "eab362d2-2de0-4e12-aae4-3fbb7204d641",
     "competitions": {
-      "Baráž o Extraligu v sezóně 2026-2027": "31929e20-cc63-4163-b1ff-bc06fc1a7710"
+      "Baráž": "f877930e-8414-49ca-90d2-0fda9a8a6505"
     }
   }
 }
