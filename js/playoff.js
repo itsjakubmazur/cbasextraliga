@@ -1,6 +1,12 @@
 const Playoff = {
     _matchDetails: {},
 
+    _aktualniSerieConfig(soutez) {
+        const konfig = Data.getKonfigurace(App.aktualni_rocnik);
+        const DEFAULT = { celkemHer: 9, remizaPri: 4 };
+        return (konfig.serie && konfig.serie[soutez]) || DEFAULT;
+    },
+
     zobrazitDetail(key) {
         const result = this._matchDetails[key];
         if (result) Modals.zobrazitDetailUtkani(result);
@@ -9,16 +15,32 @@ const Playoff = {
     render(aktualni_soutez) {
         const container = document.getElementById('playoffObsah');
         if (!container) return;
+        const typ = aktualni_soutez.includes('prvni-liga') ? 'liga' : 'extraliga';
+        container.innerHTML = this.renderByKonfigurace(typ);
+    },
 
-        const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
+    // Sjednoceny dispatcher pro tvar play-off pavouka podle konfigurace dane
+    // sezony (Data.getKonfigurace(App.aktualni_rocnik)) - pouziva ho jak zivy
+    // sezony pohled (render() vyse), tak prohlizec historickych rocniku
+    // (drive duplikovano v App._renderHistorickyPlayoff).
+    renderByKonfigurace(typ) {
+        const konfig = Data.getKonfigurace(App.aktualni_rocnik);
+        if (typ === 'extraliga') {
+            const format = konfig.extraliga_playoff || 'QF+SF+F';
+            const tabulkaData = Statistics.vypocitejTabulku('extraliga');
+            let tymy = this.seraditTymy(tabulkaData);
+            const res = this.getPlayoffResults('extraliga');
+            if (tymy.length < 6) tymy = this._deriveExtraligaTeamsFromResults(res);
+            if (format === 'QF+SF+F+3rd') return this.renderExtraligaBracketWithThirdPlace(tymy, tabulkaData, res);
+            return this.renderExtraligaBracket(tymy, tabulkaData, res);
+        }
 
-        if (jePrvniLiga) {
-            container.innerHTML = this.renderPrvniLigaBracket();
-        } else {
-            const tabulkaData = Statistics.vypocitejTabulku(aktualni_soutez);
-            const tymy = this.seraditTymy(tabulkaData);
-            const playoffResults = this.getPlayoffResults(aktualni_soutez);
-            container.innerHTML = this.renderExtraligaBracket(tymy, tabulkaData, playoffResults);
+        const format = konfig.prvni_liga_playoff || 'combined-8';
+        switch (format) {
+            case 'combined-4': return this.renderPrvniLigaCombined4();
+            case 'separate-SF+F': return this.renderPrvniLigaSeparate('SF');
+            case 'separate-QF+SF+F+3rd': return this.renderPrvniLigaSeparate('QF');
+            default: return this.renderPrvniLigaBracket();
         }
     },
 
@@ -48,7 +70,7 @@ const Playoff = {
             if (!res[klic]) res[klic] = { tym1: z.tymDomaci, tym2: z.tymHoste, kolo: 'F', zapasy: [] };
             res[klic].zapasy.push(z);
         });
-        Object.values(res).forEach(r => this._vypocitejSerii(r));
+        Object.values(res).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig('baraze')));
 
         const serie = Object.values(res)[0];
         if (!serie) return '<p style="color:var(--muted);text-align:center;padding:20px 0;font-size:0.85rem">Žádná data.</p>';
@@ -108,7 +130,7 @@ const Playoff = {
             if (!serie[klic]) serie[klic] = { tym1: z.tymDomaci, tym2: z.tymHoste, kolo: 'RR', zapasy: [] };
             serie[klic].zapasy.push(z);
         });
-        Object.values(serie).forEach(r => this._vypocitejSerii(r));
+        Object.values(serie).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig('baraze')));
 
         // Build standings table
         const body = {};
@@ -300,7 +322,7 @@ const Playoff = {
             if (!results[klic]) results[klic] = { kolo, tym1: z.tymDomaci, tym2: z.tymHoste, zapasy: [] };
             results[klic].zapasy.push(z);
         });
-        Object.values(results).forEach(r => this._vypocitejSerii(r));
+        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig(soutez)));
         return results;
     },
 
@@ -350,8 +372,12 @@ const Playoff = {
         return html;
     },
 
-    // Shared helper: calculate series result from array of match records
-    _vypocitejSerii(r) {
+    // Shared helper: calculate series result from array of match records.
+    // serieConfig = { celkemHer, remizaPri } - kolik her tvori serii a pri
+    // jakem skore (X:X) se ceka/rozhodl zlaty zapas. Default reprodukuje
+    // puvodni natvrdo zadratovanou hodnotu (9 her, remiza pri 4:4).
+    _vypocitejSerii(r, serieConfig) {
+        const cfg = serieConfig || { celkemHer: 9, remizaPri: 4 };
         let v1 = 0, v2 = 0, odehranoHer = 0;
         r.zapasy.forEach(z => {
             if (Statistics.isNeodehrano(z)) return;
@@ -367,10 +393,12 @@ const Playoff = {
         r.skore1 = v1;
         r.skore2 = v2;
         r.odehranoHer = odehranoHer;
-        // zlatyZapas = true pokud je stav 4:4 (čeká se) NEBO 5:4 po 9 hrách (rozhodl zlatý zápas)
-        const remiza44 = v1 === 4 && v2 === 4 && odehranoHer >= 8;
-        const rozhodnutZZ = odehranoHer >= 9 && ((v1 === 5 && v2 === 4) || (v2 === 5 && v1 === 4));
-        r.zlatyZapas = remiza44 || rozhodnutZZ;
+        // zlatyZapas = true pokud je stav remizaPri:remizaPri (čeká se) NEBO
+        // (remizaPri+1):remizaPri po celkemHer hrach (rozhodl zlaty zapas)
+        const remiza = v1 === cfg.remizaPri && v2 === cfg.remizaPri && odehranoHer >= 2 * cfg.remizaPri;
+        const rozhodnutZZ = odehranoHer >= cfg.celkemHer &&
+            ((v1 === cfg.remizaPri + 1 && v2 === cfg.remizaPri) || (v2 === cfg.remizaPri + 1 && v1 === cfg.remizaPri));
+        r.zlatyZapas = remiza || rozhodnutZZ;
         r.vitez = v1 > v2 ? r.tym1 : (v2 > v1 ? r.tym2 : null);
         r.porazeny = r.vitez ? (r.vitez === r.tym1 ? r.tym2 : r.tym1) : null;
     },
@@ -395,7 +423,7 @@ const Playoff = {
             results[klic].zapasy.push(z);
         });
 
-        Object.values(results).forEach(r => this._vypocitejSerii(r));
+        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig(soutez)));
         return results;
     },
 
@@ -417,7 +445,7 @@ const Playoff = {
             results[klic].zapasy.push(z);
         });
 
-        Object.values(results).forEach(r => this._vypocitejSerii(r));
+        Object.values(results).forEach(r => this._vypocitejSerii(r, this._aktualniSerieConfig('prvni-liga-playoff')));
         return results;
     },
 
@@ -446,9 +474,12 @@ const Playoff = {
         const scoreHtml = seriesScore !== undefined
             ? '<span class="playoff-series-score">' + seriesScore + '</span>'
             : '';
+        const logoUrl = Data.tymLoga && Data.tymLoga[name];
+        const logoHtml = logoUrl ? '<img class="playoff-team-logo" src="' + Statistics.escapeAttr(logoUrl) + '" alt="" onerror="this.remove()">' : '';
         return '<div class="playoff-team ' + cls + '">' +
             '<span class="playoff-seed">' + seed + '</span>' +
             confBadge +
+            logoHtml +
             '<span class="playoff-team-name clickable" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(name) + '\')">' + Statistics.escapeHtml(name) + '</span>' +
             scoreHtml +
             '</div>';

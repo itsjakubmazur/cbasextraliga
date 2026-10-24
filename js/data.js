@@ -23,6 +23,8 @@ const Data = {
     vitezove: [],
     historickeRocniky: {},
     rocnik: null,
+    konfigurace: null,
+    tymLoga: {},
     _dataBackup: null,
 
     async nacist() {
@@ -35,13 +37,18 @@ const Data = {
             if (data.vitezove) this.vitezove = data.vitezove;
             if (data.historicke_rocniky) this.historickeRocniky = data.historicke_rocniky;
             if (data.rocnik) this.rocnik = data.rocnik;
+            if (data.konfigurace) this.konfigurace = data.konfigurace;
+            if (data.tymLoga) this.tymLoga = data.tymLoga;
             const datumAktualizace = data.datum ? new Date(data.datum).toLocaleString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'neznámé';
-            document.getElementById('aktualizaceInfo').textContent = '✓ Aktualizace: ' + datumAktualizace;
+            const aktualizaceEl = document.getElementById('aktualizaceInfo');
+            if (aktualizaceEl) aktualizaceEl.textContent = '✓ Aktualizace: ' + datumAktualizace;
             return true;
         } catch (error) {
             console.error('Chyba:', error);
-            document.getElementById('aktualizaceInfo').textContent = '❌ Chyba načítání';
-            document.getElementById('prazdnyStav').innerHTML =
+            const aktualizaceEl = document.getElementById('aktualizaceInfo');
+            if (aktualizaceEl) aktualizaceEl.textContent = '❌ Chyba načítání';
+            const prazdnyStavEl = document.getElementById('prazdnyStav');
+            if (prazdnyStavEl) prazdnyStavEl.innerHTML =
                 '<div class="text-6xl mb-4">⚠️</div>' +
                 '<h3 class="text-xl font-semibold text-gray-700 mb-2">Chyba</h3>' +
                 '<p class="text-gray-500">Soubor badminton-data.json nenalezen</p>';
@@ -54,11 +61,15 @@ const Data = {
     },
 
     getKonfigurace(rocnik) {
-        if (!rocnik || rocnik === 'current') return {
-            extraliga_playoff: 'QF+SF+F',
-            prvni_liga_playoff: 'combined-8',
-            baraze: 'single'
-        };
+        if (!rocnik || rocnik === 'current') {
+            // this.konfigurace se naplni z badminton-data.json v nacist(); tenhle
+            // literal je jen zaloha pro pripad starsiho JSONu bez migrace.
+            return this.konfigurace || {
+                extraliga_playoff: 'QF+SF+F',
+                prvni_liga_playoff: 'combined-8',
+                baraze: 'single'
+            };
+        }
         const r = this.historickeRocniky[rocnik];
         return (r && r.konfigurace) ? r.konfigurace : {};
     },

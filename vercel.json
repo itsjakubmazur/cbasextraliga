@@ -1,0 +1,17 @@
+{
+  "functions": {
+    "api/sync/fetch.js": {
+      "maxDuration": 60
+    }
+  },
+  "headers": [
+    {
+      "source": "/badminton-data.json",
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+    }
+  ]
+}

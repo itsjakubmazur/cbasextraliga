@@ -290,10 +290,56 @@ const Statistics = {
         return zmeny;
     },
 
-    vypocitejTabulku(aktualni_soutez, doKola = null) {
+    // Zaloha pro pripad, ze konfig.bodovani[soutez] chybi (stary JSON pred migraci
+    // apod.) - reprodukuje puvodni natvrdo zadratovane hodnoty podle jePrvniLiga.
+    _FALLBACK_BODOVANI: {
+        extraliga: { typ: 'margin-tiered', remizaMozna: false, tiers: [{ minZapasyVitez: 6, body: [3, 0] }, { minZapasyVitez: 4, body: [2, 1] }] },
+        prvniLiga: { typ: 'win-draw-loss', remizaMozna: true, body: { vyhra: 3, remiza: 2, prohra: 1 } }
+    },
+
+    // Cista funkce: kolik bodu do tabulky dostane domaci/hoste tym za utkani
+    // s danym poctem vyhranych dilcich zapasu, podle konfigurace bodovani.
+    vypocitejBodyUtkani(domaciZapasy, hosteZapasy, bodovani) {
+        const out = { domaciBody: 0, hosteBody: 0, domaciVysledek: 'P', hosteVysledek: 'P' };
+
+        if (bodovani.typ === 'win-draw-loss') {
+            if (domaciZapasy === hosteZapasy) {
+                out.domaciBody = bodovani.body.remiza; out.hosteBody = bodovani.body.remiza;
+                out.domaciVysledek = 'R'; out.hosteVysledek = 'R';
+            } else if (domaciZapasy > hosteZapasy) {
+                out.domaciBody = bodovani.body.vyhra; out.hosteBody = bodovani.body.prohra;
+                out.domaciVysledek = 'V'; out.hosteVysledek = 'P';
+            } else {
+                out.hosteBody = bodovani.body.vyhra; out.domaciBody = bodovani.body.prohra;
+                out.hosteVysledek = 'V'; out.domaciVysledek = 'P';
+            }
+            return out;
+        }
+
+        // margin-tiered: body podle poctu vyhranych dilcich zapasu viteze
+        const domaciVyhral = domaciZapasy > hosteZapasy;
+        const vitezZapasy = domaciVyhral ? domaciZapasy : hosteZapasy;
+        let vitezBody = 0, porazenyBody = 0;
+        const tiers = bodovani.tiers || [];
+        for (const tier of tiers) {
+            if (vitezZapasy >= tier.minZapasyVitez) { vitezBody = tier.body[0]; porazenyBody = tier.body[1]; break; }
+        }
+        if (domaciVyhral) {
+            out.domaciBody = vitezBody; out.hosteBody = porazenyBody;
+            out.domaciVysledek = 'V'; out.hosteVysledek = 'P';
+        } else {
+            out.hosteBody = vitezBody; out.domaciBody = porazenyBody;
+            out.hosteVysledek = 'V'; out.domaciVysledek = 'P';
+        }
+        return out;
+    },
+
+    vypocitejTabulku(aktualni_soutez, doKola = null, konfig = null) {
         const tabulka = {};
         const utkani = {};
-        const jePrvniLiga = aktualni_soutez.includes('prvni-liga');
+        const kfg = konfig || Data.getKonfigurace(App.aktualni_rocnik);
+        const bodovani = (kfg.bodovani && kfg.bodovani[aktualni_soutez])
+            || (aktualni_soutez.includes('prvni-liga') ? this._FALLBACK_BODOVANI.prvniLiga : this._FALLBACK_BODOVANI.extraliga);
 
         Data.zapasy[aktualni_soutez].forEach(zapas => {
             // Skip playoff matches in regular season table
@@ -343,32 +389,14 @@ const Statistics = {
                 hosteBody += bodyData.hosteBody;
             });
             
-            let domaciBodyTabulka = 0, hosteBodyTabulka = 0;
-            
-            if (jePrvniLiga) {
-                if (domaciZapasy === hosteZapasy) {
-                    domaciBodyTabulka = 2; hosteBodyTabulka = 2;
-                    tabulka[domaci].remizy++; tabulka[hoste].remizy++;
-                } else if (domaciZapasy > hosteZapasy) {
-                    domaciBodyTabulka = 3; hosteBodyTabulka = 1;
-                    tabulka[domaci].vyhry++; tabulka[hoste].prohry++;
-                } else {
-                    hosteBodyTabulka = 3; domaciBodyTabulka = 1;
-                    tabulka[hoste].vyhry++; tabulka[domaci].prohry++;
-                }
-            } else {
-                const domaciVyhral = domaciZapasy > hosteZapasy;
-                if (domaciVyhral) {
-                    if (domaciZapasy >= 6) { domaciBodyTabulka = 3; hosteBodyTabulka = 0; }
-                    else if (domaciZapasy >= 4) { domaciBodyTabulka = 2; hosteBodyTabulka = 1; }
-                    tabulka[domaci].vyhry++; tabulka[hoste].prohry++;
-                } else {
-                    if (hosteZapasy >= 6) { hosteBodyTabulka = 3; domaciBodyTabulka = 0; }
-                    else if (hosteZapasy >= 4) { hosteBodyTabulka = 2; domaciBodyTabulka = 1; }
-                    tabulka[hoste].vyhry++; tabulka[domaci].prohry++;
-                }
-            }
-            
+            const vysledekUtkani = this.vypocitejBodyUtkani(domaciZapasy, hosteZapasy, bodovani);
+            const domaciBodyTabulka = vysledekUtkani.domaciBody;
+            const hosteBodyTabulka = vysledekUtkani.hosteBody;
+
+            if (vysledekUtkani.domaciVysledek === 'R') { tabulka[domaci].remizy++; tabulka[hoste].remizy++; }
+            else if (vysledekUtkani.domaciVysledek === 'V') { tabulka[domaci].vyhry++; tabulka[hoste].prohry++; }
+            else { tabulka[hoste].vyhry++; tabulka[domaci].prohry++; }
+
             tabulka[domaci].utkani++;
             tabulka[domaci].zapasyV += domaciZapasy;
             tabulka[domaci].zapasyP += hosteZapasy;

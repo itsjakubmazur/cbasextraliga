@@ -241,40 +241,14 @@ const App = {
         } else if (pohled === 'extraliga') {
             nadpis.textContent = 'Extraliga play-off – ' + (this.aktualni_rocnik || '').replace('-', '/');
             const heroHtml = this._renderHeroHTML();
-            pavoucek.innerHTML = (heroHtml ? '<div class="hist-hero-wrap">' + heroHtml + '</div>' : '') + this._renderHistorickyPlayoff('extraliga');
+            pavoucek.innerHTML = (heroHtml ? '<div class="hist-hero-wrap">' + heroHtml + '</div>' : '') + Playoff.renderByKonfigurace('extraliga');
             Playoff.drawConnectors();
             this._renderHistorickyStatistiky('extraliga');
         } else {
             nadpis.textContent = '1. liga play-off – ' + (this.aktualni_rocnik || '').replace('-', '/');
-            pavoucek.innerHTML = this._renderHistorickyPlayoff('liga');
+            pavoucek.innerHTML = Playoff.renderByKonfigurace('liga');
             Playoff.drawConnectors();
             this._renderHistorickyStatistiky('liga');
-        }
-    },
-
-    _renderHistorickyPlayoff(typ) {
-        const konfig = Data.getKonfigurace(this.aktualni_rocnik);
-        if (typ === 'extraliga') {
-            const format = konfig.extraliga_playoff || 'QF+SF+F';
-            const tabulkaData = Statistics.vypocitejTabulku('extraliga');
-            let tymy = Playoff.seraditTymy(tabulkaData);
-            const res = Playoff.getPlayoffResults('extraliga');
-            // Historical data has only playoff matches – derive teams from results if table is empty
-            if (tymy.length < 6) {
-                tymy = Playoff._deriveExtraligaTeamsFromResults(res);
-            }
-            if (format === 'QF+SF+F+3rd') {
-                return Playoff.renderExtraligaBracketWithThirdPlace(tymy, tabulkaData, res);
-            }
-            return Playoff.renderExtraligaBracket(tymy, tabulkaData, res);
-        }
-
-        const format = konfig.prvni_liga_playoff || 'combined-8';
-        switch (format) {
-            case 'combined-4': return Playoff.renderPrvniLigaCombined4();
-            case 'separate-SF+F': return Playoff.renderPrvniLigaSeparate('SF');
-            case 'separate-QF+SF+F+3rd': return Playoff.renderPrvniLigaSeparate('QF');
-            default: return Playoff.renderPrvniLigaBracket();
         }
     },
 
@@ -562,8 +536,15 @@ const App = {
             const color = avatarColors[idx % avatarColors.length];
             const abbr = tym.split(/\s+/).filter(w => !['sk','bk','tj','ba','ac','sc','tk'].includes(w.toLowerCase())).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('') || tym.charAt(0).toUpperCase();
             const statsText = t.utkani ? t.vyhry + 'V / ' + t.prohry + 'P · ' + t.body + ' bodů' : '';
+            const logoUrl = Data.tymLoga && Data.tymLoga[tym];
+            const avatarHtml = logoUrl
+                ? '<div class="team-tile-avatar team-tile-avatar-logo">' +
+                  '<img src="' + Statistics.escapeAttr(logoUrl) + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+                  '<div class="team-tile-avatar-fallback" style="background:' + color + ';display:none;">' + abbr + '</div>' +
+                  '</div>'
+                : '<div class="team-tile-avatar" style="background:' + color + ';">' + abbr + '</div>';
             return '<div class="team-tile" onclick="App.zobrazitRoster(\'' + Statistics.escapeAttr(tym) + '\')">' +
-                '<div class="team-tile-avatar" style="background:' + color + ';">' + abbr + '</div>' +
+                avatarHtml +
                 '<div class="team-tile-info"><div class="team-tile-name">' + Statistics.escapeHtml(tym) + '</div>' +
                 (statsText ? '<div class="team-tile-stats">' + statsText + '</div>' : '') +
                 '</div><div class="team-tile-pos">' + (idx + 1) + '.</div></div>';

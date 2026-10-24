@@ -5,7 +5,7 @@
       {
         "id": 1760342488874,
         "kolo": "1.",
-        "datum": "",
+        "datum": "2025-10-11",
         "disciplina": "Smíšená čtyřhra",
         "domaci": "Vitman Andjela, Král Ondřej",
         "hoste": "Klausholm Anna, Petrovič Viktor",
@@ -17,7 +17,7 @@
       {
         "id": 1760342512588,
         "kolo": "1.",
-        "datum": "",
+        "datum": "2025-10-11",
         "disciplina": "Čtyřhra mužů",
         "domaci": "Melaniuk Jakub, Trecki Wiktor",
         "hoste": "Filimon Collins, Eipe Joel Chacko Gamrath",
@@ -29,7 +29,7 @@
       {
         "id": 1760342534840,
         "kolo": "1.",
-        "datum": "",
+        "datum": "2025-10-11",
         "disciplina": "Dvouhra mužů",
         "domaci": "Szymanowski Mikolaj",
         "hoste": "Filimon Collins",
@@ -41,7 +41,7 @@
       {
         "id": 1760342555310,
         "kolo": "1.",
-        "datum": "",
+        "datum": "2025-10-11",
         "disciplina": "Dvouhra mužů",
         "domaci": "Král Jiří",
         "hoste": "Makboul Romeo",
@@ -53,7 +53,7 @@
       {
         "id": 1760342574539,
         "kolo": "1.",
-        "datum": "",
+        "datum": "2025-10-11",
         "disciplina": "Dvouhra žen",
         "domaci": "Šilhavá Klára",
         "hoste": "Popovska Hristomira",
@@ -10961,13 +10961,382 @@
       "tym": "SK Brno Slatina"
     }
   ],
-  "datum": "2026-06-04T17:42:01.251Z",
+  "datum": "2026-08-17T12:46:48.512Z",
   "historicke_rocniky": {
     "2024/25": {
       "konfigurace": {
         "extraliga_playoff": "QF+SF+F",
         "prvni_liga_playoff": "combined-4",
-        "baraze": "single"
+        "baraze": "single",
+        "bodovani": {
+          "extraliga": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "baraze": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-zapad": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-playoff": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          }
+        },
+        "zony": {
+          "extraliga": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "baraze": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-vychod": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-zapad": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-playoff": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ]
+        },
+        "bodovaniInfo": {
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+        },
+        "serie": {
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
+        },
+        "format": {
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
+        }
       },
       "zapasy": {
         "extraliga": [
@@ -11726,7 +12095,376 @@
       "konfigurace": {
         "extraliga_playoff": "QF+SF+F+3rd",
         "prvni_liga_playoff": "combined-4",
-        "baraze": "single"
+        "baraze": "single",
+        "bodovani": {
+          "extraliga": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "baraze": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-zapad": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-playoff": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          }
+        },
+        "zony": {
+          "extraliga": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "baraze": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-vychod": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-zapad": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-playoff": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ]
+        },
+        "bodovaniInfo": {
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+        },
+        "serie": {
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
+        },
+        "format": {
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
+        }
       },
       "zapasy": {
         "extraliga": [
@@ -12263,7 +13001,376 @@
       "konfigurace": {
         "extraliga_playoff": "QF+SF+F+3rd",
         "prvni_liga_playoff": "separate-SF+F",
-        "baraze": "round-robin-3"
+        "baraze": "round-robin-3",
+        "bodovani": {
+          "extraliga": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "baraze": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-zapad": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-playoff": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          }
+        },
+        "zony": {
+          "extraliga": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "baraze": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-vychod": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-zapad": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-playoff": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ]
+        },
+        "bodovaniInfo": {
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+        },
+        "serie": {
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
+        },
+        "format": {
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
+        }
       },
       "zapasy": {
         "extraliga": [
@@ -13617,7 +14724,376 @@
       "konfigurace": {
         "extraliga_playoff": "QF+SF+F+3rd",
         "prvni_liga_playoff": "separate-QF+SF+F+3rd",
-        "baraze": "round-robin-3"
+        "baraze": "round-robin-3",
+        "bodovani": {
+          "extraliga": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "baraze": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-zapad": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-playoff": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          }
+        },
+        "zony": {
+          "extraliga": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "baraze": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-vychod": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-zapad": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-playoff": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ]
+        },
+        "bodovaniInfo": {
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+        },
+        "serie": {
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
+        },
+        "format": {
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
+        }
       },
       "zapasy": {
         "extraliga": [
@@ -15083,7 +16559,376 @@
       "konfigurace": {
         "extraliga_playoff": "QF+SF+F",
         "prvni_liga_playoff": "combined-8",
-        "baraze": "single"
+        "baraze": "single",
+        "bodovani": {
+          "extraliga": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "baraze": {
+            "typ": "margin-tiered",
+            "remizaMozna": false,
+            "tiers": [
+              {
+                "minZapasyVitez": 6,
+                "body": [
+                  3,
+                  0
+                ]
+              },
+              {
+                "minZapasyVitez": 4,
+                "body": [
+                  2,
+                  1
+                ]
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-zapad": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          },
+          "prvni-liga-playoff": {
+            "typ": "win-draw-loss",
+            "remizaMozna": true,
+            "body": {
+              "vyhra": 3,
+              "remiza": 2,
+              "prohra": 1
+            }
+          }
+        },
+        "zony": {
+          "extraliga": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "baraze": [
+            {
+              "doPozice": 2,
+              "typ": "final-four",
+              "legenda": "1.–2. Přímý postup do Final Four",
+              "dividerAfter": "↓ Čtvrtfinále",
+              "dividerClass": "standings-divider-playoff"
+            },
+            {
+              "doPozice": 6,
+              "typ": "playoff",
+              "legenda": "3.–6. Čtvrtfinále",
+              "dividerAfter": null,
+              "dividerClass": null
+            },
+            {
+              "doPozice": 7,
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Baráž",
+              "dividerClass": "standings-divider-relegation"
+            },
+            {
+              "doPozice": 8,
+              "typ": "relegation",
+              "legenda": "8. Baráž",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-vychod": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-zapad": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ],
+          "prvni-liga-playoff": [
+            {
+              "doPozice": 4,
+              "typ": "playoff",
+              "legenda": "1.–4. Play-off",
+              "dividerAfter": "",
+              "dividerClass": "standings-divider-mid"
+            },
+            {
+              "doPozice": "last-1",
+              "typ": "",
+              "legenda": null,
+              "dividerAfter": "↓ Kvalifikace",
+              "dividerClass": "standings-divider-relegation",
+              "dividerMinTeams": 6
+            },
+            {
+              "doPozice": "last",
+              "typ": "relegation",
+              "legenda": "Posl. Kvalifikace o 1. ligu",
+              "dividerAfter": null,
+              "dividerClass": null
+            }
+          ]
+        },
+        "bodovaniInfo": {
+          "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+          "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+          "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+        },
+        "serie": {
+          "extraliga": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-vychod": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-zapad": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "prvni-liga-playoff": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          },
+          "baraze": {
+            "celkemHer": 9,
+            "remizaPri": 4
+          }
+        },
+        "format": {
+          "extraliga": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-vychod": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-zapad": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "prvni-liga-playoff": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          },
+          "baraze": {
+            "bodyNaSet": 21,
+            "viteznychSetuNaHru": 2,
+            "disciplinCelkem": 8,
+            "discipliny": [
+              {
+                "nazev": "Mužská čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská čtyřhra",
+                "pocet": 1
+              },
+              {
+                "nazev": "Smíšená čtyřhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Mužská dvouhra",
+                "pocet": 2
+              },
+              {
+                "nazev": "Ženská dvouhra",
+                "pocet": 1
+              }
+            ]
+          }
+        }
       },
       "zapasy": {
         "extraliga": [
@@ -25793,5 +27638,394 @@
         ]
       }
     }
+  },
+  "konfigurace": {
+    "extraliga_playoff": "QF+SF+F",
+    "prvni_liga_playoff": "combined-8",
+    "baraze": "single",
+    "bodovani": {
+      "extraliga": {
+        "typ": "margin-tiered",
+        "remizaMozna": false,
+        "tiers": [
+          {
+            "minZapasyVitez": 6,
+            "body": [
+              3,
+              0
+            ]
+          },
+          {
+            "minZapasyVitez": 4,
+            "body": [
+              2,
+              1
+            ]
+          }
+        ]
+      },
+      "baraze": {
+        "typ": "margin-tiered",
+        "remizaMozna": false,
+        "tiers": [
+          {
+            "minZapasyVitez": 6,
+            "body": [
+              3,
+              0
+            ]
+          },
+          {
+            "minZapasyVitez": 4,
+            "body": [
+              2,
+              1
+            ]
+          }
+        ]
+      },
+      "prvni-liga-vychod": {
+        "typ": "win-draw-loss",
+        "remizaMozna": true,
+        "body": {
+          "vyhra": 3,
+          "remiza": 2,
+          "prohra": 1
+        }
+      },
+      "prvni-liga-zapad": {
+        "typ": "win-draw-loss",
+        "remizaMozna": true,
+        "body": {
+          "vyhra": 3,
+          "remiza": 2,
+          "prohra": 1
+        }
+      },
+      "prvni-liga-playoff": {
+        "typ": "win-draw-loss",
+        "remizaMozna": true,
+        "body": {
+          "vyhra": 3,
+          "remiza": 2,
+          "prohra": 1
+        }
+      }
+    },
+    "zony": {
+      "extraliga": [
+        {
+          "doPozice": 2,
+          "typ": "final-four",
+          "legenda": "1.–2. Přímý postup do Final Four",
+          "dividerAfter": "↓ Čtvrtfinále",
+          "dividerClass": "standings-divider-playoff"
+        },
+        {
+          "doPozice": 6,
+          "typ": "playoff",
+          "legenda": "3.–6. Čtvrtfinále",
+          "dividerAfter": null,
+          "dividerClass": null
+        },
+        {
+          "doPozice": 7,
+          "typ": "",
+          "legenda": null,
+          "dividerAfter": "↓ Baráž",
+          "dividerClass": "standings-divider-relegation"
+        },
+        {
+          "doPozice": 8,
+          "typ": "relegation",
+          "legenda": "8. Baráž",
+          "dividerAfter": null,
+          "dividerClass": null
+        }
+      ],
+      "baraze": [
+        {
+          "doPozice": 2,
+          "typ": "final-four",
+          "legenda": "1.–2. Přímý postup do Final Four",
+          "dividerAfter": "↓ Čtvrtfinále",
+          "dividerClass": "standings-divider-playoff"
+        },
+        {
+          "doPozice": 6,
+          "typ": "playoff",
+          "legenda": "3.–6. Čtvrtfinále",
+          "dividerAfter": null,
+          "dividerClass": null
+        },
+        {
+          "doPozice": 7,
+          "typ": "",
+          "legenda": null,
+          "dividerAfter": "↓ Baráž",
+          "dividerClass": "standings-divider-relegation"
+        },
+        {
+          "doPozice": 8,
+          "typ": "relegation",
+          "legenda": "8. Baráž",
+          "dividerAfter": null,
+          "dividerClass": null
+        }
+      ],
+      "prvni-liga-vychod": [
+        {
+          "doPozice": 4,
+          "typ": "playoff",
+          "legenda": "1.–4. Play-off",
+          "dividerAfter": "",
+          "dividerClass": "standings-divider-mid"
+        },
+        {
+          "doPozice": "last-1",
+          "typ": "",
+          "legenda": null,
+          "dividerAfter": "↓ Kvalifikace",
+          "dividerClass": "standings-divider-relegation",
+          "dividerMinTeams": 6
+        },
+        {
+          "doPozice": "last",
+          "typ": "relegation",
+          "legenda": "Posl. Kvalifikace o 1. ligu",
+          "dividerAfter": null,
+          "dividerClass": null
+        }
+      ],
+      "prvni-liga-zapad": [
+        {
+          "doPozice": 4,
+          "typ": "playoff",
+          "legenda": "1.–4. Play-off",
+          "dividerAfter": "",
+          "dividerClass": "standings-divider-mid"
+        },
+        {
+          "doPozice": "last-1",
+          "typ": "",
+          "legenda": null,
+          "dividerAfter": "↓ Kvalifikace",
+          "dividerClass": "standings-divider-relegation",
+          "dividerMinTeams": 6
+        },
+        {
+          "doPozice": "last",
+          "typ": "relegation",
+          "legenda": "Posl. Kvalifikace o 1. ligu",
+          "dividerAfter": null,
+          "dividerClass": null
+        }
+      ],
+      "prvni-liga-playoff": [
+        {
+          "doPozice": 4,
+          "typ": "playoff",
+          "legenda": "1.–4. Play-off",
+          "dividerAfter": "",
+          "dividerClass": "standings-divider-mid"
+        },
+        {
+          "doPozice": "last-1",
+          "typ": "",
+          "legenda": null,
+          "dividerAfter": "↓ Kvalifikace",
+          "dividerClass": "standings-divider-relegation",
+          "dividerMinTeams": 6
+        },
+        {
+          "doPozice": "last",
+          "typ": "relegation",
+          "legenda": "Posl. Kvalifikace o 1. ligu",
+          "dividerAfter": null,
+          "dividerClass": null
+        }
+      ]
+    },
+    "bodovaniInfo": {
+      "extraliga": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+      "baraze": "<strong>Bodování:</strong> Výhra 7:0, 6:1 = 3b · Výhra 5:2, 4:3 = 2b · Prohra 3:4, 2:5 = 1b · Prohra 1:6, 0:7 = 0b",
+      "prvni-liga-vychod": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+      "prvni-liga-zapad": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b",
+      "prvni-liga-playoff": "<strong>Bodování:</strong> Výhra (8:0–5:3) = 3b · Remíza (4:4) = 2b · Prohra (3:5–0:8) = 1b"
+    },
+    "serie": {
+      "extraliga": {
+        "celkemHer": 7,
+        "remizaPri": 4
+      },
+      "baraze": {
+        "celkemHer": 7,
+        "remizaPri": 4
+      },
+      "prvni-liga-vychod": {
+        "celkemHer": 8,
+        "remizaPri": 8
+      },
+      "prvni-liga-zapad": {
+        "celkemHer": 8,
+        "remizaPri": 8
+      },
+      "prvni-liga-playoff": {
+        "celkemHer": 9,
+        "remizaPri": 4
+      }
+    },
+    "format": {
+      "extraliga": {
+        "bodyNaSet": 11,
+        "viteznychSetuNaHru": 3,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ],
+        "maxBoduVSetu": 15
+      },
+      "prvni-liga-vychod": {
+        "bodyNaSet": 21,
+        "viteznychSetuNaHru": 2,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ],
+        "maxBoduVSetu": 30
+      },
+      "prvni-liga-zapad": {
+        "bodyNaSet": 21,
+        "viteznychSetuNaHru": 2,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ],
+        "maxBoduVSetu": 30
+      },
+      "prvni-liga-playoff": {
+        "bodyNaSet": 21,
+        "viteznychSetuNaHru": 2,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ],
+        "maxBoduVSetu": 30
+      },
+      "baraze": {
+        "bodyNaSet": 11,
+        "viteznychSetuNaHru": 3,
+        "disciplinCelkem": 8,
+        "discipliny": [
+          {
+            "nazev": "Mužská čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská čtyřhra",
+            "pocet": 1
+          },
+          {
+            "nazev": "Smíšená čtyřhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Mužská dvouhra",
+            "pocet": 2
+          },
+          {
+            "nazev": "Ženská dvouhra",
+            "pocet": 1
+          }
+        ],
+        "maxBoduVSetu": 15
+      }
+    }
+  },
+  "tymLoga": {
+    "TJ Sokol Klimkovice": "https://is.czechbadminton.cz/storage/v1/club-storage/c663ccb8-8c91-48a9-843d-5806235c97fc/TJ Sokol Klimkovice_300.png",
+    "BA Plzeň": "https://is.czechbadminton.cz/storage/v1/club-storage/cb01f34e-e3d4-4524-8602-ca20a5445d0c/IMG_2250.jpeg",
+    "SK Brno Slatina": "https://is.czechbadminton.cz/storage/v1/club-storage/cd50e67a-da4e-473b-994c-1c6e4899d581/sk brno slatina.png",
+    "SK Prosek Praha": "https://is.czechbadminton.cz/storage/v1/club-storage/d83110f0-4f2f-4bde-973e-2993c469117b/logoprosek.jpg",
+    "BK 1973 Benátky nad Jizerou": "https://is.czechbadminton.cz/storage/v1/club-storage/adae561f-18c8-4e15-97a4-21b2cb1bf35a/logo_badm_benatky.jpg",
+    "BK Meteor Praha": "https://is.czechbadminton.cz/storage/v1/club-storage/725ff791-9759-4230-aa29-3b4c0f017766/lg_full_long_ČZ.png",
+    "B.O. Chance Ostrava Sportclub": "https://is.czechbadminton.cz/storage/v1/club-storage/a2238579-73df-4799-9412-409fdd45d812/2.png",
+    "Badminton FSpS MU": "https://is.czechbadminton.cz/storage/v1/club-storage/f67e58e9-10ea-4ee9-b881-7bbc0844eaa8/logo02.png"
   }
 }
