@@ -66,7 +66,9 @@
   }
 
   function differs(old, merged) {
-    return Object.keys(merged).some((k) => JSON.stringify(old[k]) !== JSON.stringify(merged[k]));
+    // sjednoceni klicu - i zmizele pole (napr. neschvaleno po schvaleni) je zmena
+    const keys = new Set([...Object.keys(old), ...Object.keys(merged)]);
+    return [...keys].some((k) => JSON.stringify(old[k]) !== JSON.stringify(merged[k]));
   }
 
   // Volnejsi klic pro druhe kolo parovani: stejne utkani, disciplina a presne

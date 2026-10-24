@@ -628,6 +628,12 @@
 
             .view-toggle-btn { padding: 5px 10px; font-size: 0.75rem; }
         }
+        .table-neschvaleno {
+            margin-top: 6px;
+            font-size: 0.72rem;
+            color: var(--text2, #6b7280);
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -871,7 +877,8 @@
             const bodovani = (konfig.bodovaniInfo && konfig.bodovaniInfo[aktualni_soutez]) || '';
 
             document.getElementById('bodovaniInfo').innerHTML =
-                '<div class="standings-legenda">' + legenda + '</div>' + bodovani;
+                '<div class="standings-legenda">' + legenda + '</div>' + bodovani +
+                (Statistics.maNeschvalene(aktualni_soutez) ? '<div class="table-neschvaleno">* Zahrnuje i výsledky, které ještě čekají na schválení svazem.</div>' : '');
         }
 
         /* ── PLAYOFF HELPERS ─────────────────────────────────── */

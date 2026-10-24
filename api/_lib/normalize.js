@@ -13,6 +13,10 @@ function formatDatum(startDate) {
   return startDate.slice(0, 10); // "2026-03-29T10:00:00.000000" -> "2026-03-29"
 }
 
+function isApproved(match) {
+  return match.stateId === 'Approved' || match.stateName === 'Schváleno';
+}
+
 // Vrací 'domaci'/'hoste' (kdo skrečoval) nebo null.
 function detectSkrec(domaci, hoste, setsScore) {
   if (!!domaci === !!hoste) return null;
@@ -66,8 +70,10 @@ function normalizeGame(match, game) {
     tymDomaci: match.homeTeamName,
     tymHoste: match.awayTeamName,
   };
+  // Pole jen u neschvalenych - po schvaleni zmizi (computeDiff to bere jako zmenu).
+  if (!isApproved(match)) zapas.neschvaleno = true;
 
   return { zapas, warnings, sourceMatchId: match.id, sourceGameId: game.id };
 }
 
-module.exports = { normalizeGame, formatPlayers, formatDatum, detectSkrec };
+module.exports = { normalizeGame, formatPlayers, formatDatum, detectSkrec, isApproved };

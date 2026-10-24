@@ -57,7 +57,9 @@ const AdminSync = {
         if (rec.matched) reconciledLogos[rec.name] = url;
       });
       AdminData.mergeTymLoga(reconciledLogos);
-      statusEl.textContent = `Staženo ${result.matchCount} schválených zápasů z czechbadminton.cz.`;
+      const pending = result.pendingCount || 0;
+      statusEl.textContent = `Staženo ${result.matchCount} utkání z czechbadminton.cz` +
+        (pending ? ` (z toho ${pending} čeká na schválení - zapíšou se s označením „neschváleno“).` : '.');
       this.render();
     } catch (err) {
       statusEl.textContent = '❌ ' + err.message;

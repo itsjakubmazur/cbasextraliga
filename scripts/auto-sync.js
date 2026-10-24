@@ -75,6 +75,7 @@ async function syncSoutez(data, soutez, report) {
 
   const result = await syncCompetition(config);
   r.matchCount = result.matchCount;
+  r.pendingCount = result.pendingCount || 0;
   data.zapasy[soutez] = data.zapasy[soutez] || [];
   data.tymy[soutez] = data.tymy[soutez] || [];
 
@@ -145,10 +146,10 @@ function renderSummary(report) {
     lines.push(`⛔ ${report.blocked}`);
     return lines.join('\n') + '\n';
   }
-  lines.push('| Soutěž | Schválených utkání | Nové | Změněné | Beze změny | Přeskočeno | Zmizelé | Nové týmy | Loga |');
+  lines.push('| Soutěž | Utkání (čeká na schválení) | Nové | Změněné | Beze změny | Přeskočeno | Zmizelé | Nové týmy | Loga |');
   lines.push('|---|---|---|---|---|---|---|---|---|');
   report.souteze.forEach((r) => {
-    lines.push(`| ${r.soutez} | ${r.matchCount} | ${r.applied.new} | ${r.applied.changed} | ${r.unchanged} | ${r.skipped.length} | ${r.removed.length} | ${r.newTeams.join(', ') || '—'} | ${r.logos} |`);
+    lines.push(`| ${r.soutez} | ${r.matchCount}${r.pendingCount ? ` (${r.pendingCount})` : ''} | ${r.applied.new} | ${r.applied.changed} | ${r.unchanged} | ${r.skipped.length} | ${r.removed.length} | ${r.newTeams.join(', ') || '—'} | ${r.logos} |`);
   });
   lines.push('');
   report.errors.forEach((e) => lines.push(`❌ ${e}`));

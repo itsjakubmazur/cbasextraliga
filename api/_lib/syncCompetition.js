@@ -2,7 +2,11 @@
 // Sdílí ho admin endpoint api/sync/fetch.js i scripts/auto-sync.js, ať
 // ruční i automatický sync vidí přesně stejná data.
 const { fetchMatches, fetchGamesForMatch, fetchTeams } = require('./czechbadminton');
-const { normalizeGame } = require('./normalize');
+const { normalizeGame, isApproved } = require('./normalize');
+
+function isWaitingForApproval(m) {
+  return m.stateId === 'WaitForApproval' || m.stateName === 'Čeká na schválení';
+}
 
 const CONCURRENCY = 5;
 
@@ -21,18 +25,21 @@ async function mapWithConcurrency(items, limit, fn) {
 
 /**
  * config = jedna položka z tournamentConfig.json ({ tournamentId, competitions }).
- * Vrací { matchCount, candidates, warnings, teamLogos } - stejný tvar, jaký
+ * Vrací { matchCount, pendingCount, candidates, warnings, teamLogos } - stejný tvar, jaký
  * admin UI dostává z /api/sync/fetch.
  */
 async function syncCompetition(config) {
   const competitionEntries = Object.entries(config.competitions);
 
-  // 1) seznam schvalenych zapasu napric vsemi castmi souteze (zakladni cast + play-off apod.)
+  // 1) seznam schvalenych a na schvaleni cekajicich zapasu napric vsemi castmi
+  // souteze (zakladni cast + play-off apod.). "Ceka na schvaleni" uz ma v API
+  // kompletni vysledky i sestavy - zapisou se s priznakem neschvaleno, ktery
+  // zmizi, az svaz zapas schvali. "Odehrano" je rozpracovany zapis, ten se bere az pozdeji.
   const allMatches = [];
   for (const [competitionName, competitionId] of competitionEntries) {
     const matches = await fetchMatches(config.tournamentId, competitionId);
     matches
-      .filter((m) => m.stateName === 'Schváleno' || m.stateId === 'Approved')
+      .filter((m) => isApproved(m) || isWaitingForApproval(m))
       .forEach((m) => allMatches.push({ ...m, _competitionName: competitionName }));
   }
 
@@ -62,7 +69,8 @@ async function syncCompetition(config) {
     // loga jsou bonus - pokud selzou, sync jako celek by kvuli tomu nemel spadnout
   }
 
-  return { matchCount: allMatches.length, candidates, warnings, teamLogos };
+  const pendingCount = allMatches.filter((m) => !isApproved(m)).length;
+  return { matchCount: allMatches.length, pendingCount, candidates, warnings, teamLogos };
 }
 
 module.exports = { syncCompetition };

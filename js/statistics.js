@@ -82,6 +82,11 @@ const Statistics = {
         return zapas.domaci === 'SKREČ' || zapas.hoste === 'SKREČ';
     },
 
+    // Zapas z API ve stavu "Ceka na schvaleni" (scripts/auto-sync.js).
+    maNeschvalene(soutez) {
+        return (Data.zapasy[soutez] || []).some(z => z.neschvaleno);
+    },
+
     isNeodehrano(zapas) {
         const v = this.parseVysledek(zapas.vysledek);
         return v.domaci === 0 && v.hoste === 0 && !this.isSkrec(zapas);

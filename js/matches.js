@@ -71,7 +71,9 @@ const Matches = {
                 }).join('');
 
                 return '<tr class="' + rowCls + ' cursor-pointer" onclick="Matches.toggleDetail(\'utk-' + uIdx + '\')">' +
-                    '<td class="p-2 match-datum-cell">' + (u.datum || '–') + '</td>' +
+                    '<td class="p-2 match-datum-cell">' + (u.datum || '–') +
+                        (u.zapasy.some(z => z.neschvaleno) ? '<span class="match-pending-badge" title="Výsledek ještě čeká na schválení svazem">neschváleno</span>' : '') +
+                    '</td>' +
                     '<td class="p-2 match-tym-cell clickable" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.tymDomaci) + '\')">' + Statistics.escapeHtml(u.tymDomaci) + '</td>' +
                     '<td class="p-2 text-center match-score ' + vysledekClass + '">' + dV + ' : ' + hV + '</td>' +
                     '<td class="p-2 match-tym-cell clickable" onclick="event.stopPropagation();Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.tymHoste) + '\')">' + Statistics.escapeHtml(u.tymHoste) + '</td>' +

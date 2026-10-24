@@ -120,6 +120,7 @@ const Table = {
             '<div class="table-footer">' +
             '<div class="standings-legenda">' + legendaInfo + '</div>' +
             '<div class="table-bodovani">' + bodovaniInfo + '</div>' +
+            (Statistics.maNeschvalene(aktualni_soutez) ? '<div class="table-neschvaleno">* Zahrnuje i výsledky, které ještě čekají na schválení svazem.</div>' : '') +
             '</div>';
     }
 };

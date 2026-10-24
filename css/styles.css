@@ -2062,6 +2062,23 @@ body.dark-mode .standings-pos-num.pos-bronze { color: #fb923c; }
     border-top: 1px solid var(--border);
     margin-top: 4px;
 }
+.table-neschvaleno {
+    margin-top: 6px;
+    font-size: 0.72rem;
+    color: var(--text2);
+    font-style: italic;
+}
+.match-pending-badge {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--draw);
+    background: rgba(202,138,4,0.12);
+    border-radius: 4px;
+    padding: 1px 5px;
+    vertical-align: middle;
+}
 .table-bodovani {
     font-size: 0.68rem;
     color: var(--text2);

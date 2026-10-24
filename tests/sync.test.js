@@ -84,3 +84,9 @@ test('mapRound', () => {
   assert.equal(mapRound('o pořadí'), 'P5');
   assert.equal(mapRound('neco jineho'), null);
 });
+
+test('computeDiff: schvaleni zapasu (zmizi neschvaleno) je zmena', () => {
+  const rows = computeDiff([zapas({ id: 'api:m1:1', neschvaleno: true })], [zapas({ id: 'api:m1:1' })]);
+  assert.equal(rows[0].status, 'changed');
+  assert.equal('neschvaleno' in rows[0].candidate, false);
+});
