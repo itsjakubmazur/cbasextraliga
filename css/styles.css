@@ -3062,3 +3062,20 @@ body.dark-mode .match-detail-home, body.dark-mode .match-detail-away, body.dark-
 .roster-row-inactive .stats-name, .roster-row-inactive .stats-num { color: var(--muted); }
 .roster-table .stats-pos { width: 40px; padding-left: 16px; color: var(--text2); }
 .roster-back-btn { transform: rotate(180deg); }
+
+/* Okna týmu a hráče: neutrální souhrn, hlavní metrika v červeném */
+.modal-stats-bar { border-bottom: 1px solid var(--border); }
+.modal-stat-item, .modal-stat-item.win, .modal-stat-item.loss, .modal-stat-item.rate { color: var(--text); background: none; }
+.modal-stat-item .modal-stat-value { color: var(--text); font-variant-numeric: tabular-nums; }
+.modal-stat-label { font-size: 0.7rem; font-weight: 600; color: var(--text2); }
+.modal-stat-item.metric { background: var(--cba-red); }
+.modal-stat-item.metric .modal-stat-value, .modal-stat-item.metric .modal-stat-label { color: #fff; }
+.modal-section-title { font-size: 0.78rem; font-weight: 700; color: var(--text); }
+.modal-team-title { display: inline-flex; align-items: center; gap: 12px; }
+.modal-team-title .lt-logo { width: 44px; height: 44px; }
+.opponent-pill { background: none; border: 1px solid var(--border); color: var(--text); }
+.opponent-pill:hover { border-color: var(--text2); background: none; }
+.modal-stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 0; }
+.modal-stat-item.win .modal-stat-value, .modal-stat-item.loss .modal-stat-value, .modal-stat-item.rate .modal-stat-value,
+body.dark-mode .modal-stat-item.win .modal-stat-value, body.dark-mode .modal-stat-item.loss .modal-stat-value { color: var(--text); }
+.modal-stat-item.metric .modal-stat-value { color: #fff !important; }

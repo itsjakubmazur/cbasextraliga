@@ -37,7 +37,7 @@ const Modals = {
         const nejTym = Object.keys(s.tymy).length > 0 ? Object.entries(s.tymy).sort((a, b) => b[1] - a[1])[0][0] : '-';
 
         document.getElementById('modalHracJmeno').textContent = hrac;
-        document.getElementById('modalHracInfo').textContent = nejTym + ' · ' + s.zapasy + ' zápasů · ' + winRate + '% úspěšnost';
+        document.getElementById('modalHracInfo').textContent = nejTym + ', ' + Data.soutezNazvy[soutezProHrace];
 
         // Group matches by round
         const kolaMap = {};
@@ -99,7 +99,7 @@ const Modals = {
             '<div class="modal-stat-item"><div class="modal-stat-value">' + s.zapasy + '</div><div class="modal-stat-label">Zápasy</div></div>' +
             '<div class="modal-stat-item win"><div class="modal-stat-value">' + s.vyhry + '</div><div class="modal-stat-label">Výhry</div></div>' +
             '<div class="modal-stat-item loss"><div class="modal-stat-value">' + s.prohry + '</div><div class="modal-stat-label">Prohry</div></div>' +
-            '<div class="modal-stat-item rate"><div class="modal-stat-value">' + winRate + '%</div><div class="modal-stat-label">Úspěšnost</div></div>' +
+            '<div class="modal-stat-item metric"><div class="modal-stat-value">' + winRate.replace('.', ',') + ' %</div><div class="modal-stat-label">Úspěšnost</div></div>' +
             '</div>' +
             ((forma || nejSouperi) ?
                 '<div class="modal-section" style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;padding:10px 14px">' +
@@ -129,8 +129,8 @@ const Modals = {
         if (!t) return;
 
         const modal = document.getElementById('tymModal');
-        document.getElementById('modalTymNazev').textContent = tym;
-        document.getElementById('modalTymInfo').textContent = t.utkani + ' utkání · ' + t.vyhry + 'V / ' + t.prohry + 'P · ' + t.body + ' bodů';
+        document.getElementById('modalTymNazev').innerHTML = '<span class="modal-team-title">' + Table.logoHtml(tym) + '<span>' + Statistics.escapeHtml(tym) + '</span></span>';
+        document.getElementById('modalTymInfo').textContent = Data.soutezNazvy[soutezProTabulku] + ', ' + t.utkani + ' utkání';
 
         let zapasyTymu;
         if (App.aktualni_soutez.includes('prvni-liga')) {
@@ -181,10 +181,10 @@ const Modals = {
                 const rc = remiza ? '' : (vyhrano ? 'stats-win' : 'stats-loss');
                 return '<tr class="stats-row">' +
                     '<td class="stats-cell" style="color:var(--muted);font-size:0.68rem;white-space:nowrap">' + (i === 0 ? koloLabel : '') + '</td>' +
-                    '<td class="stats-cell stats-name clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.souper) + '\')">' + Statistics.escapeHtml(u.souper) + '</td>' +
-                    '<td class="stats-cell stats-num" style="color:var(--muted);font-size:0.68rem">' + (u.doma ? 'D' : 'V') + '</td>' +
-                    '<td class="stats-cell stats-num" style="font-weight:700">' + vyhrane + ':' + prohrane + '</td>' +
-                    '<td class="stats-cell stats-num ' + rc + '" style="font-weight:700">' + (remiza ? 'R' : (vyhrano ? 'V' : 'P')) + '</td>' +
+                    '<td class="stats-cell stats-name clickable" onclick="Modals.zobrazitDetailTymu(\'' + Statistics.escapeAttr(u.souper) + '\')"><span class="match-tym">' + Table.logoHtml(u.souper) + Statistics.escapeHtml(u.souper) + '</span></td>' +
+                    '<td class="stats-cell" style="color:var(--text2);font-size:0.74rem">' + (u.doma ? 'doma' : 'venku') + '</td>' +
+                    '<td class="stats-cell stats-num">' + Table.formaHtml([remiza ? 'd' : (vyhrano ? 'w' : 'l')], 1) + '</td>' +
+                    '<td class="stats-cell lt-metric">' + vyhrane + ':' + prohrane + '</td>' +
                     '</tr>';
             });
         }).join('');
@@ -215,26 +215,27 @@ const Modals = {
                     '<td class="stats-cell stats-num">' + st.zapasy + '</td>' +
                     '<td class="stats-cell stats-num stats-win">' + st.vyhry + '</td>' +
                     '<td class="stats-cell stats-num stats-loss">' + st.prohry + '</td>' +
-                    '<td class="stats-cell stats-num ' + (parseFloat(wr) >= 50 ? 'stats-winrate-good' : 'stats-winrate-bad') + '">' + wr + '%</td>' +
+                    '<td class="stats-cell lt-metric">' + wr.replace('.', ',') + ' %</td>' +
                     '</tr>';
             }).join('');
 
         document.getElementById('modalTymObsah').innerHTML =
             '<div class="modal-stats-bar">' +
-            '<div class="modal-stat-item win"><div class="modal-stat-value">' + (dv + hv) + '</div><div class="modal-stat-label">Výhry</div></div>' +
-            '<div class="modal-stat-item loss"><div class="modal-stat-value">' + (dp + hp) + '</div><div class="modal-stat-label">Prohry</div></div>' +
-            '<div class="modal-stat-item"><div class="modal-stat-value">' + dv + '/' + dp + '</div><div class="modal-stat-label">Doma V/P</div></div>' +
-            '<div class="modal-stat-item"><div class="modal-stat-value">' + hv + '/' + hp + '</div><div class="modal-stat-label">Venku V/P</div></div>' +
+            '<div class="modal-stat-item"><div class="modal-stat-value">' + t.vyhry + ':' + t.prohry + '</div><div class="modal-stat-label">Utkání V:P</div></div>' +
+            '<div class="modal-stat-item"><div class="modal-stat-value">' + (dv + hv) + ':' + (dp + hp) + '</div><div class="modal-stat-label">Zápasy V:P</div></div>' +
+            '<div class="modal-stat-item"><div class="modal-stat-value">' + dv + ':' + dp + '</div><div class="modal-stat-label">Doma</div></div>' +
+            '<div class="modal-stat-item"><div class="modal-stat-value">' + hv + ':' + hp + '</div><div class="modal-stat-label">Venku</div></div>' +
+            '<div class="modal-stat-item metric"><div class="modal-stat-value">' + t.body + '</div><div class="modal-stat-label">Body</div></div>' +
             '</div>' +
             '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:10px 14px 4px">Výsledky dle kola</div>' +
             '<table class="standings-table"><thead><tr class="standings-thead">' +
             '<th class="th-name" style="width:60px">Kolo</th><th class="th-name">Soupeř</th>' +
-            '<th class="th-num" style="width:28px"></th><th class="th-num">Výsl.</th><th class="th-num">Stav</th>' +
+            '<th class="th-name" style="width:60px"></th><th class="th-num"></th><th class="th-num lt-metric">Výsledek</th>' +
             '</tr></thead><tbody>' + teamMatchRows + '</tbody></table></div>' +
             '<div class="modal-section no-pad"><div class="modal-section-title" style="padding:10px 14px 6px">Hráči sezóny (' + Object.keys(hraci).length + ')</div>' +
             '<table class="standings-table"><thead><tr class="standings-thead">' +
             '<th class="th-pos">#</th><th class="th-name">Hráč</th>' +
-            '<th class="th-num">Z</th><th class="th-num">V</th><th class="th-num">P</th><th class="th-num">Win%</th>' +
+            '<th class="th-num">Z</th><th class="th-num">V</th><th class="th-num">P</th><th class="th-num lt-metric">Úspěšnost</th>' +
             '</tr></thead><tbody>' + hraciHtml + '</tbody></table></div>';
 
         document.body.classList.add('modal-open');

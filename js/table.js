@@ -163,10 +163,10 @@ const Table = {
         return '<span class="lt-logo lt-logo-empty">' + Statistics.escapeHtml(zkratka || '?') + '</span>';
     },
 
-    // forma = pole 'w'/'l'/'d' (nejstarší první); doplní se šedými na 5
-    formaHtml(forma) {
+    // forma = pole 'w'/'l'/'d' (nejstarší první); doplní se šedými na `pocet`
+    formaHtml(forma, pocet = 5) {
         const f = [...(forma || [])];
-        while (f.length < 5) f.unshift('e');
+        while (f.length < pocet) f.unshift('e');
         const pismeno = { w: 'V', l: 'P', d: 'R', e: '' };
         const popis = { w: 'výhra', l: 'prohra', d: 'remíza', e: '' };
         return '<span class="lt-form">' + f.map(x => '<span class="' + x + '"' + (popis[x] ? ' title="' + popis[x] + '"' : '') + '>' + pismeno[x] + '</span>').join('') + '</span>';
