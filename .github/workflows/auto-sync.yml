@@ -1,0 +1,96 @@
+name: Auto-sync z czechbadminton.cz
+
+on:
+  schedule:
+    - cron: '0 20 * * *' # 1x denne vecer (20:00 UTC = 21:00/22:00 v CR)
+  workflow_dispatch:
+    inputs:
+      new_season:
+        description: 'Založit novou sezónu (např. 2026/27) - archivuje aktuální ročník do historie. Prázdné = jen sync.'
+        required: false
+        default: ''
+      dry_run:
+        description: 'Dry-run (nic nezapisovat ani necommitovat)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: auto-sync
+  cancel-in-progress: false
+
+env:
+  ISSUE_TITLE: 'Auto-sync: zápasy k ruční kontrole'
+  REPORT_DIR: /tmp/auto-sync-report
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Sync
+        env:
+          NEW_SEASON: ${{ inputs.new_season }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898+github-actions[bot]@users.noreply.github.com'
+          args=(--report-dir "$REPORT_DIR")
+          [ -n "$NEW_SEASON" ] && args+=(--new-season "$NEW_SEASON")
+          [ "$DRY_RUN" = "true" ] && args+=(--dry-run)
+
+          # Admin publikuje pres GitHub API primo do main - kdyz mezitim
+          # pribyl commit, push selze; pak se sync pusti znovu nad cerstvym main.
+          for attempt in 1 2 3; do
+            node scripts/auto-sync.js "${args[@]}"
+            if git diff --quiet -- badminton-data.json; then
+              echo 'Beze změny, nic necommituji.'
+              break
+            fi
+            msg='Auto-sync: aktualizace z czechbadminton.cz'
+            [ -n "$NEW_SEASON" ] && msg="Auto-sync: nová sezóna $NEW_SEASON + aktualizace z czechbadminton.cz"
+            git commit -qm "$msg" -- badminton-data.json
+            if git push origin HEAD:main; then
+              break
+            fi
+            echo "Push selhal (pokus $attempt), znovu nad aktuálním main…"
+            git fetch -q origin main
+            git reset -q --hard origin/main
+            [ "$attempt" = 3 ] && exit 1
+          done
+
+      - name: Souhrn
+        if: always()
+        run: |
+          [ -f "$REPORT_DIR/summary.md" ] && cat "$REPORT_DIR/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          [ -s "$REPORT_DIR/issue.md" ] && { echo; cat "$REPORT_DIR/issue.md"; } >> "$GITHUB_STEP_SUMMARY"
+          true
+
+      - name: Issue k ruční kontrole
+        if: success() && !inputs.dry_run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          number=$(gh issue list --state open --limit 100 --json number,title \
+            --jq "map(select(.title == \"$ISSUE_TITLE\")) | .[0].number // empty")
+          if [ -s "$REPORT_DIR/issue.md" ]; then
+            body="$REPORT_DIR/issue.md"
+            echo -e "\n_Aktualizováno: $(date -u '+%Y-%m-%d %H:%M UTC') · [běh workflow]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)_" >> "$body"
+            if [ -n "$number" ]; then
+              gh issue edit "$number" --body-file "$body"
+            else
+              gh issue create --title "$ISSUE_TITLE" --body-file "$body"
+            fi
+          elif [ -n "$number" ]; then
+            gh issue close "$number" --comment 'Vše vyřešeno, auto-sync už nic nepřeskakuje.'
+          fi
