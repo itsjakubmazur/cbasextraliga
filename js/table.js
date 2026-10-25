@@ -81,7 +81,8 @@ const Table = {
                 '</tr>'
             );
 
-            const utkani = Statistics.utkaniTymu(tym, aktualni_soutez).slice(0, 4);
+            // všechna utkání základní části (každý s každým jednou = max. 7 v extralize, 8 v 1. lize)
+            const utkani = Statistics.utkaniTymu(tym, aktualni_soutez);
             const vysledky = utkani.map(u => {
                 const [, m, d] = (u.datum || '').split('-').map(Number);
                 return '<tr><td class="lt-kolo">' + esc(u.kolo) + ' kolo</td><td class="lt-misto">' + (u.doma ? 'doma' : 'venku') + '</td>' +
