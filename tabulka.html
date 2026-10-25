@@ -1148,7 +1148,8 @@
         // Automatická výška při vložení do cizí stránky (iframe): embed posílá
         // rodičovské stránce svou skutečnou výšku, ta podle ní nastaví iframe -
         // na mobilu se pak nescrolluje uvnitř tabulky, ale celou stránkou.
-        // Rodičovský kód: viz README / pokyny k embedu (zpráva 'cbas-embed-height').
+        // Rodičovský kód je v atributu onload iframu (stránky svazu nespouštějí
+        // vložené <script>): zaregistruje posluchač 'cbas-embed-height' a pošle 'cbas-embed-ping'.
         (function () {
             if (window.parent === window) return;
             let posledni = 0;
@@ -1158,6 +1159,11 @@
                 posledni = vyska;
                 window.parent.postMessage({ type: 'cbas-embed-height', height: vyska }, '*');
             };
+            // Rodičovská stránka se může zeptat až po načtení (posluchač v onload
+            // iframu) - pak odpovědět hned, i kdyby se výška mezitím nezměnila.
+            window.addEventListener('message', (e) => {
+                if (e.data && e.data.type === 'cbas-embed-ping') { posledni = 0; posli(); }
+            });
             if (window.ResizeObserver) new ResizeObserver(posli).observe(document.body);
             window.addEventListener('load', posli);
             window.addEventListener('resize', posli);
