@@ -45,7 +45,8 @@ const Table = {
         const tymy = Statistics.seraditTymyPodleTabulky(tabulkaData);
         const konfig = Data.getKonfigurace(App.aktualni_rocnik);
         const bodovani = (konfig.bodovani && konfig.bodovani[aktualni_soutez]) || Statistics._FALLBACK_BODOVANI.extraliga;
-        const jePrvniLiga = bodovani.remizaMozna;
+        // sloupec remíz: v 1. lize vždy, v extralize jen když remíza výjimečně nastala
+        const jePrvniLiga = bodovani.remizaMozna || tymy.some(t => tabulkaData[t].remizy > 0);
         const zonyConfig = (konfig.zony && konfig.zony[aktualni_soutez]) || [];
         const zony = this.vypocitejZony(tymy.length, zonyConfig);
         const zmeny = Statistics.vypocitejZmenyPozic(aktualni_soutez);

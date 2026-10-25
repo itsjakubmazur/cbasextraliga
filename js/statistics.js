@@ -108,25 +108,52 @@ const Statistics = {
         return team.split(',').map(h => h.trim()).filter(h => h);
     },
 
-    // Centralized sorting logic for league standings (used by Table and Playoff)
+    // Pořadí v tabulce podle rozpisu soutěží (III.4 / IV.4):
+    //   1. body, 2. vyhraná utkání, 3. rozdíl zápasů, 4. vzájemná utkání,
+    //   5. rozdíl setů, 6. rozdíl míčů (7. los - necháváme abecedně).
+    // Vzájemná utkání: mezi týmy shodnými v 1.-3. se spočítá minitabulka jen
+    // z jejich vzájemných utkání (body, pak rozdíl zápasů).
     seraditTymyPodleTabulky(tabulkaData) {
         const tymy = Object.keys(tabulkaData);
-        tymy.sort((a, b) => {
-            const tA = tabulkaData[a];
-            const tB = tabulkaData[b];
+        const zakladni = (a, b) => {
+            const tA = tabulkaData[a], tB = tabulkaData[b];
             if (tB.body !== tA.body) return tB.body - tA.body;
             if (tB.vyhry !== tA.vyhry) return tB.vyhry - tA.vyhry;
-            const rozdilZapasyA = tA.zapasyV - tA.zapasyP;
-            const rozdilZapasyB = tB.zapasyV - tB.zapasyP;
-            if (rozdilZapasyB !== rozdilZapasyA) return rozdilZapasyB - rozdilZapasyA;
-            const rozdilSetyA = tA.setyV - tA.setyP;
-            const rozdilSetyB = tB.setyV - tB.setyP;
-            if (rozdilSetyB !== rozdilSetyA) return rozdilSetyB - rozdilSetyA;
-            const rozdilBodyA = tA.bodyV - tA.bodyP;
-            const rozdilBodyB = tB.bodyV - tB.bodyP;
-            return rozdilBodyB - rozdilBodyA;
-        });
-        return tymy;
+            return (tB.zapasyV - tB.zapasyP) - (tA.zapasyV - tA.zapasyP);
+        };
+        const zbytek = (a, b) => {
+            const tA = tabulkaData[a], tB = tabulkaData[b];
+            const sety = (tB.setyV - tB.setyP) - (tA.setyV - tA.setyP);
+            if (sety !== 0) return sety;
+            const mice = (tB.bodyV - tB.bodyP) - (tA.bodyV - tA.bodyP);
+            if (mice !== 0) return mice;
+            return a.localeCompare(b, 'cs');
+        };
+        tymy.sort((a, b) => zakladni(a, b) || zbytek(a, b));
+
+        const utkani = tabulkaData._utkani || [];
+        if (!utkani.length) return tymy;
+        // skupiny shodné v kritériích 1.-3. přeřadit podle vzájemných utkání
+        const vysledek = [];
+        for (let i = 0; i < tymy.length;) {
+            let j = i + 1;
+            while (j < tymy.length && zakladni(tymy[i], tymy[j]) === 0) j++;
+            const skupina = tymy.slice(i, j);
+            if (skupina.length > 1) {
+                const vSkupine = new Set(skupina);
+                const mini = Object.fromEntries(skupina.map(t => [t, { body: 0, zapasy: 0 }]));
+                utkani.forEach(u => {
+                    if (!vSkupine.has(u.domaci) || !vSkupine.has(u.hoste)) return;
+                    mini[u.domaci].body += u.domaciBody; mini[u.hoste].body += u.hosteBody;
+                    mini[u.domaci].zapasy += u.domaciZapasy - u.hosteZapasy;
+                    mini[u.hoste].zapasy += u.hosteZapasy - u.domaciZapasy;
+                });
+                skupina.sort((a, b) => (mini[b].body - mini[a].body) || (mini[b].zapasy - mini[a].zapasy) || zbytek(a, b));
+            }
+            vysledek.push(...skupina);
+            i = j;
+        }
+        return vysledek;
     },
 
     // Centralized sorting logic for player stats (used by Players TOP3 and statistics table)
@@ -295,9 +322,10 @@ const Statistics = {
             if (zapas.tymDomaci !== tym && zapas.tymHoste !== tym) return;
             const klic = zapas.kolo + '-' + zapas.tymDomaci + '-' + zapas.tymHoste;
             if (!utkani[klic]) utkani[klic] = { kolo: parseInt(zapas.kolo) || 0, domaci: zapas.tymDomaci, d: 0, h: 0 };
+            if (this.isNeodehrano(zapas)) return;
+            // počítají se vyhrané dílčí zápasy (jako v tabulce), ne součet setů
             const v = this.parseVysledek(zapas.vysledek);
-            utkani[klic].d += v.domaci;
-            utkani[klic].h += v.hoste;
+            if (v.domaci > v.hoste) utkani[klic].d++; else if (v.hoste > v.domaci) utkani[klic].h++;
         });
         return Object.values(utkani)
             .filter(u => u.d + u.h > 0)
@@ -346,7 +374,9 @@ const Statistics = {
 
     // Cista funkce: kolik bodu do tabulky dostane domaci/hoste tym za utkani
     // s danym poctem vyhranych dilcich zapasu, podle konfigurace bodovani.
-    vypocitejBodyUtkani(domaciZapasy, hosteZapasy, bodovani) {
+    // sety/mice ({ domaciSety, hosteSety, domaciMice, hosteMice }) rozhodují
+    // remízu v extralize - rozpis soutěží III.3.
+    vypocitejBodyUtkani(domaciZapasy, hosteZapasy, bodovani, sety = null) {
         const out = { domaciBody: 0, hosteBody: 0, domaciVysledek: 'P', hosteVysledek: 'P' };
 
         if (bodovani.typ === 'win-draw-loss') {
@@ -363,7 +393,18 @@ const Statistics = {
             return out;
         }
 
-        // margin-tiered: body podle poctu vyhranych dilcich zapasu viteze
+        // margin-tiered: body podle poctu vyhranych dilcich zapasu viteze.
+        // Remíza (jen když se nějaký zápas neodehrál): "vítěz poměrem setů nebo
+        // míčů" 2 body, "poražený" 1 bod (rozpis III.3); úplná shoda 1:1.
+        if (domaciZapasy === hosteZapasy) {
+            out.domaciVysledek = 'R'; out.hosteVysledek = 'R';
+            const s = sety || {};
+            const rozdil = ((s.domaciSety || 0) - (s.hosteSety || 0)) || ((s.domaciMice || 0) - (s.hosteMice || 0));
+            if (rozdil > 0) { out.domaciBody = 2; out.hosteBody = 1; }
+            else if (rozdil < 0) { out.domaciBody = 1; out.hosteBody = 2; }
+            else { out.domaciBody = 1; out.hosteBody = 1; }
+            return out;
+        }
         const domaciVyhral = domaciZapasy > hosteZapasy;
         const vitezZapasy = domaciVyhral ? domaciZapasy : hosteZapasy;
         let vitezBody = 0, porazenyBody = 0;
@@ -384,6 +425,7 @@ const Statistics = {
     vypocitejTabulku(aktualni_soutez, doKola = null, konfig = null) {
         const tabulka = {};
         const utkani = {};
+        const odehranaUtkani = []; // pro kritérium vzájemných utkání
         const kfg = konfig || Data.getKonfigurace(App.aktualni_rocnik);
         const bodovani = (kfg.bodovani && kfg.bodovani[aktualni_soutez])
             || (aktualni_soutez.includes('prvni-liga') ? this._FALLBACK_BODOVANI.prvniLiga : this._FALLBACK_BODOVANI.extraliga);
@@ -436,7 +478,12 @@ const Statistics = {
                 hosteBody += bodyData.hosteBody;
             });
             
-            const vysledekUtkani = this.vypocitejBodyUtkani(domaciZapasy, hosteZapasy, bodovani);
+            // utkání, ve kterém se zatím nic neodehrálo (všechny zápasy 0:0), se nepočítá
+            if (domaciZapasy + hosteZapasy === 0) return;
+
+            const vysledekUtkani = this.vypocitejBodyUtkani(domaciZapasy, hosteZapasy, bodovani,
+                { domaciSety, hosteSety, domaciMice: domaciBody, hosteMice: hosteBody });
+            odehranaUtkani.push({ domaci, hoste, domaciZapasy, hosteZapasy, domaciBody: vysledekUtkani.domaciBody, hosteBody: vysledekUtkani.hosteBody });
             const domaciBodyTabulka = vysledekUtkani.domaciBody;
             const hosteBodyTabulka = vysledekUtkani.hosteBody;
 
@@ -477,6 +524,9 @@ const Statistics = {
             };
         });
 
+        // Vzájemná utkání pro kritérium č. 4 (seraditTymyPodleTabulky) - jako
+        // neenumerovatelná vlastnost, aby se nepletla do Object.keys / JSON.
+        Object.defineProperty(tabulka, '_utkani', { value: odehranaUtkani, enumerable: false });
         return tabulka;
     }
 };
