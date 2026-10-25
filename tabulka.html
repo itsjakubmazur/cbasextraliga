@@ -1144,5 +1144,27 @@
 
         nacistData();
     </script>
+    <script>
+        // Automatická výška při vložení do cizí stránky (iframe): embed posílá
+        // rodičovské stránce svou skutečnou výšku, ta podle ní nastaví iframe -
+        // na mobilu se pak nescrolluje uvnitř tabulky, ale celou stránkou.
+        // Rodičovský kód: viz README / pokyny k embedu (zpráva 'cbas-embed-height').
+        (function () {
+            if (window.parent === window) return;
+            let posledni = 0;
+            const posli = () => {
+                const vyska = Math.ceil(document.body.getBoundingClientRect().height);
+                if (Math.abs(vyska - posledni) < 2) return;
+                posledni = vyska;
+                window.parent.postMessage({ type: 'cbas-embed-height', height: vyska }, '*');
+            };
+            if (window.ResizeObserver) new ResizeObserver(posli).observe(document.body);
+            window.addEventListener('load', posli);
+            window.addEventListener('resize', posli);
+            // rozbalení týmu se animuje - poslat i po jeho doběhnutí
+            document.addEventListener('transitionend', posli);
+            setTimeout(posli, 300);
+        })();
+    </script>
 </body>
 </html>
