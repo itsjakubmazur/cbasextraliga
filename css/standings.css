@@ -182,3 +182,15 @@
 .widget .soutez-tab:hover, .widget .view-toggle-btn:hover { color: var(--text); background: none; }
 .widget .soutez-tab.active, .widget .view-toggle-btn.active { color: var(--cba-red); border-bottom-color: var(--cba-red); background: none; box-shadow: none; }
 .widget .card { border: 0; border-radius: 16px; box-shadow: var(--shadow); background: var(--surface); }
+
+/* Přepínání pohledů a soutěží: podtržení přejede, obsah se prolne */
+.lt-tabs-ink { position: relative; }
+.lt-tabs-ink > .active { border-bottom-color: transparent !important; }
+.lt-ink { position: absolute; left: 0; bottom: -2px; height: 2px; width: 0; background: var(--cba-red); pointer-events: none; }
+.lt-ink-ready .lt-ink { transition: transform 0.28s cubic-bezier(.2,.8,.2,1), width 0.28s cubic-bezier(.2,.8,.2,1); }
+.lt-enter { animation: ltEnter 0.22s ease-out both; }
+@keyframes ltEnter { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+    .lt-ink-ready .lt-ink { transition: none; }
+    .lt-enter { animation: none; }
+}

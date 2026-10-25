@@ -695,6 +695,8 @@
             zapasy = Data.zapasy;
             aktualizujBarazeBtn();
             zobrazitTabulku();
+            Table.posunPodtrzeni(document.querySelector('.soutez-tabs'));
+            Table.posunPodtrzeni(document.getElementById('viewToggle'));
         }
 
         function aktualizujBarazeBtn() {
@@ -714,6 +716,8 @@
             if      (aktualni_pohled === 'zakladni') zobrazitTabulku();
             else if (aktualni_pohled === 'playoff')  zobrazitPlayoff();
             else                                      zobrazitBaraze();
+            Table.posunPodtrzeni(document.querySelector('.soutez-tabs'));
+            Table.animujVstup(document.getElementById({ zakladni: 'tabulkaView', playoff: 'playoffView', baraze: 'barazeView' }[aktualni_pohled]));
         }
 
         function prepnoutPohled(pohled) {
@@ -727,6 +731,8 @@
             if      (pohled === 'zakladni') zobrazitTabulku();
             else if (pohled === 'playoff')  zobrazitPlayoff();
             else                             zobrazitBaraze();
+            Table.posunPodtrzeni(document.getElementById('viewToggle'));
+            Table.animujVstup(document.getElementById({ zakladni: 'tabulkaView', playoff: 'playoffView', baraze: 'barazeView' }[pohled]));
         }
 
         function parseVysledek(vysledek) {

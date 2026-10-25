@@ -142,6 +142,45 @@ const Table = {
         if (opts.animace !== false) this.animujPoradi(table, aktualni_soutez);
     },
 
+    _omezitPohyb() {
+        return typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    },
+
+    // Přepnutí pohledu/soutěže: nový obsah se krátce prolne (jen průhlednost,
+    // aby se nerozhodily pozice spojnic play-off pavouka).
+    animujVstup(el) {
+        if (!el || this._omezitPohyb()) return;
+        el.classList.remove('lt-enter');
+        void el.offsetWidth;
+        el.classList.add('lt-enter');
+    },
+
+    // Podtržení záložek přejede plynule na aktivní záložku.
+    posunPodtrzeni(tabs) {
+        if (!tabs) return;
+        const active = tabs.querySelector('.active');
+        if (!active || !active.offsetWidth) return;
+        let ink = tabs.querySelector(':scope > .lt-ink');
+        if (!ink) {
+            ink = document.createElement('span');
+            ink.className = 'lt-ink';
+            ink.setAttribute('aria-hidden', 'true');
+            tabs.appendChild(ink);
+            tabs.classList.add('lt-tabs-ink');
+        }
+        ink.style.width = active.offsetWidth + 'px';
+        ink.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+        if (!tabs.classList.contains('lt-ink-ready')) {
+            requestAnimationFrame(() => tabs.classList.add('lt-ink-ready'));
+        }
+        if (!this._inkHlidany) {
+            this._inkHlidany = true;
+            const vse = () => document.querySelectorAll('.lt-tabs-ink').forEach(t => this.posunPodtrzeni(t));
+            window.addEventListener('resize', vse);
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(vse);
+        }
+    },
+
     _toggle(table, i) {
         const det = table.querySelector('.lt-detail[data-for="' + i + '"] .lt-collapse');
         const row = table.querySelector('.lt-row[data-i="' + i + '"]');

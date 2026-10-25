@@ -12,6 +12,8 @@ const App = {
             this._buildRocnikSelector();
             this._navigovatZeHash(window.location.hash.replace('#', ''));
         }
+        // animace přepínání až po prvním vykreslení - při načtení stránky ne
+        this._pripraveno = true;
 
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark-mode');
@@ -363,6 +365,9 @@ const App = {
         this.aktualizovatPohledToggle();
 
         this.zobrazitData();
+        if (this._pripraveno) Table.animujVstup(document.getElementById('tabulkaPlayoffContainer'));
+        // podtržení až po zobrazení karty (skrytá karta nemá rozměry)
+        Table.posunPodtrzeni(document.getElementById('viewToggle'));
     },
 
     prepnoutPohled(pohled) {
@@ -390,6 +395,7 @@ const App = {
             document.getElementById('tabulkaPlayoffTitle').textContent = 'Baráž';
             barazeObsah.innerHTML = Playoff.renderBaraze();
         }
+        if (this._pripraveno) Table.animujVstup({ zakladni: tabulkaObsah, playoff: playoffObsah, baraze: barazeObsah }[pohled]);
     },
 
     aktualizovatPohledToggle() {
@@ -401,6 +407,7 @@ const App = {
         btnZakladni.classList.toggle('active', this.aktualni_pohled === 'zakladni');
         btnPlayoff.classList.toggle('active', this.aktualni_pohled === 'playoff');
         if (btnBaraze) btnBaraze.classList.toggle('active', this.aktualni_pohled === 'baraze');
+        Table.posunPodtrzeni(document.getElementById('viewToggle'));
 
         // Keep bottom nav in sync with the active view
         const bnavZakladni = document.getElementById('bnav-zakladni');
