@@ -662,7 +662,7 @@
 
         <!-- ── FOOTER ── -->
         <div class="w-footer">
-            <a href="index.html" target="_blank">Kompletní statistiky, výsledky a hráči</a>
+            <a href="index.html" target="_blank" id="odkazStatistiky">Kompletní statistiky, výsledky a hráči</a>
         </div>
     </div>
 
@@ -683,6 +683,28 @@
 
         let zapasy = {};
         let aktualni_soutez = 'extraliga';
+
+        // Volba ligy z adresy embedu:
+        //   ?soutez=vychod                 - po načtení ukázat 1. ligu Východ
+        //   ?souteze=vychod,zapad          - jen tyhle záložky (jedna = záložky se skryjí)
+        // Hodnoty: extraliga | vychod | zapad (nebo plné klíče prvni-liga-vychod/-zapad).
+        (function nastavitSoutezZAdresy() {
+            const KLICE = { extraliga: 'extraliga', vychod: 'prvni-liga-vychod', zapad: 'prvni-liga-zapad',
+                'prvni-liga-vychod': 'prvni-liga-vychod', 'prvni-liga-zapad': 'prvni-liga-zapad' };
+            const params = new URLSearchParams(location.search);
+            const povolene = (params.get('souteze') || '').split(',').map(x => KLICE[x.trim().toLowerCase()]).filter(Boolean);
+            if (povolene.length) {
+                document.querySelectorAll('.soutez-tab').forEach(t => {
+                    if (!povolene.includes(t.id.replace('tab-', ''))) t.remove();
+                });
+                if (povolene.length === 1) document.querySelector('.soutez-tabs').style.display = 'none';
+            }
+            const vychozi = KLICE[(params.get('soutez') || '').trim().toLowerCase()] || povolene[0];
+            if (vychozi && document.getElementById('tab-' + vychozi)) {
+                aktualni_soutez = vychozi;
+                document.querySelectorAll('.soutez-tab').forEach(t => t.classList.toggle('active', t.id === 'tab-' + vychozi));
+            }
+        })();
         let aktualni_pohled = 'zakladni';
 
         async function nacistData() {
@@ -694,6 +716,7 @@
             }
             zapasy = Data.zapasy;
             aktualizujBarazeBtn();
+            aktualizovatOdkaz();
             zobrazitTabulku();
             Table.posunPodtrzeni(document.querySelector('.soutez-tabs'));
             Table.posunPodtrzeni(document.getElementById('viewToggle'));
@@ -708,8 +731,15 @@
             }
         }
 
+        // odkaz pod tabulkou vede rovnou na zvolenou ligu na hlavním webu
+        function aktualizovatOdkaz() {
+            const a = document.getElementById('odkazStatistiky');
+            if (a) a.href = 'index.html#' + aktualni_soutez;
+        }
+
         function zmenitSoutez(soutez) {
             aktualni_soutez = soutez;
+            aktualizovatOdkaz();
             document.querySelectorAll('.soutez-tab').forEach(t => t.classList.remove('active'));
             document.getElementById('tab-' + soutez).classList.add('active');
             aktualizujBarazeBtn();
