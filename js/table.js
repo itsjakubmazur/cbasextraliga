@@ -100,9 +100,11 @@ const Table = {
                 '</div></div></div></td></tr>'
             );
 
-            if (z.dividerAfter !== null && z.dividerAfter !== undefined && (!z.dividerMinTeams || tymy.length > z.dividerMinTeams - 1)) {
+            const label = String(z.dividerAfter || '').replace('↓', '').trim();
+            // oddělovač bez popisku (1. liga pod 4. místem) by byl jen prázdný
+            // pruh - hranici zóny ukazuje barevný proužek u týmů a legenda
+            if (label && (!z.dividerMinTeams || tymy.length > z.dividerMinTeams - 1)) {
                 const cls = (z.dividerClass || '').includes('relegation') ? 'relegation' : 'playoff';
-                const label = String(z.dividerAfter || '').replace('↓', '').trim();
                 rows.push('<tr class="lt-divider ' + cls + '"><td colspan="' + colspan + '">' + esc(label) + '</td></tr>');
             }
         });
